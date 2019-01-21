@@ -2,12 +2,29 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const mysql = require('mysql');
+
+//Define your credentials for your local sql server
+const db = mysql.createConnection ({
+    host: 'localhost',
+    user: 'root',
+    password: 'password',
+    database: 'pantry'
+});
 
 
 //Initialize the application
 const app = express();
 
-//TODO setup database connections somewhere here
+// connect to database
+db.connect((err) => {
+    if (err) {
+        throw err;
+    }
+    console.log('Connected to database');
+});
+//This db variable can be accessed from anywhere
+global.db = db;
 
 //Loads the view engine and defines view folder
 app.set('views', path.join(__dirname, 'views'));
@@ -30,9 +47,13 @@ app.get('/', function(req, res){
     });
 });
 
-//Route files
+//anything that has to do with user data route it through /users
 const users = require('./routes/users');
 app.use('/users', users);
+
+//anything that has to do with recipe data route it through /recipe
+const recipes = require('./routes/recipes');
+app.use('/recipes', recipes);
 
 //Start listening on localhost/127.0.0.1 on port 3000
 app.listen(3000, function(){

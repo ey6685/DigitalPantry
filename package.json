@@ -15,5 +15,13 @@
     "express": "^4.16.4",
     "mysql": "^2.16.0",
     "pug": "^2.0.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ey6685/DigitalPantry.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ey6685/DigitalPantry/issues"
+  },
+  "homepage": "https://github.com/ey6685/DigitalPantry#readme"
 }
