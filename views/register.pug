@@ -1,0 +1,21 @@
+extends layout_template
+
+block content
+        .col-md-8.offset-md-4
+            //- This will print whatever you have sent from app.js
+            h1.mb-3 #{title}
+            //- TODO Create Register form
+            form(method='POST', action='/users/register')
+                .col-md-6.mb-3
+                    #form-group
+                        label Email:
+                        input.form-control(name='email', type='text')
+                    #form-group
+                        label Password:
+                        input.form-control(name='password', type='password')
+                    #form-group
+                        label Confirm Password:
+                        input.form-control(name='confirm_password', type='password')
+                    br
+                    input.btn.btn-primary(type='submit', value='Submit')
+            a(href='/Login') Already have an account?

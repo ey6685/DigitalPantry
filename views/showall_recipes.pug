@@ -1,0 +1,34 @@
+extends layout_template
+
+//- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
+
+block content
+    .col-md-12
+        br
+        br
+        h1.mb-3 #{title}
+        br
+        br
+        table.table.table-dark
+            caption Available recipes
+            thead
+                tr
+                    th(scope='col') Recipe ID
+                    th(scope='col') Pantry ID
+                    th(scope='col') Recipe name
+                    th(scope='col') Serving size
+                    th(scope='col') Ingredients needed
+                    th(scope='col') Action
+            tbody
+                for item in results
+                    tr
+                        th(scope='row')= item.recipeID
+                            td= item.pantryID
+                            td= item.recipeName
+                            td= item.servingSize
+                            td= item.ingredients
+                            td
+                                //- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
+                                a.btn.btn-danger.delete-recipe(href='#', data-id=item.recipeID) DELETE
+        form(method='GET', action='/recipes/add')
+            input.btn.btn-primary(type='submit', value='ADD RECIPES')
