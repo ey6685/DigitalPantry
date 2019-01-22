@@ -1,0 +1,27 @@
+{
+  "name": "foodPantry",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@mysql/xdevapi": "^8.0.13",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "mysql": "^2.16.0",
+    "pug": "^2.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ey6685/DigitalPantry.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ey6685/DigitalPantry/issues"
+  },
+  "homepage": "https://github.com/ey6685/DigitalPantry#readme"
+}

@@ -1,0 +1,22 @@
+extends layout_template
+
+//- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
+
+block content
+    h1 #{title}
+    
+    form(method='POST', action= '/ingredients/add')
+        #form-group
+            label Name:
+            input.form-control(name='name', type='text')
+        div.form-group
+            label Measurement:
+            input.form-control(name='measurement', type='text')
+        div.form-group
+            label Serving Size:
+            input.form-control(name='servingsize', type='text')
+        div.form-group
+            label Expiration:
+            input.form-control(name='expiration', type='text')
+        br
+        input.btn.btn-primary(type='submit', value='Submit')
