@@ -15,7 +15,7 @@ $(document).ready(function(){
             url:'/ingredients/remove/'+id,
             success:function(response){
                 //route user back to results
-                window.location.href('/ingredients/showall');
+                window.location.href = '/ingredients/showall';
             },
             error:function(err){
                 console.log("Could not delete: "+id);
