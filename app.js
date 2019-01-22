@@ -11,7 +11,7 @@ const db = mysql.createConnection ({
     host: 'localhost',
     user: 'root',
     password: 'password',
-    database: 'pantry'
+    database: 'good_database'
 });
 
 // const Sequelize = require('sequelize');
@@ -68,33 +68,6 @@ app.get('/', function(req, res){
     });
 });
 
-// //Ingredient Add Route
-// app.get('/ingredients/add', function(req,res){
-//     res.render('add_ingredient',{
-//         title:'Add Ingredient'
-//     });
-// });
-
-// //Add Submit POST Route
-// app.post('/ingredients/add', function(req,res){
-//     let ingredient = new ingredient();
-//     console.log("testing" + req.body.name);
-
-//     ingredient.name = req.body.name;
-//     ingredient.measurement = req.body.measurement;
-//     ingredient.servingsize = req.body.servingsize;
-//     ingredient.expiration = req.body.expiration;
-
-//     ingredient.save(function(err){
-//         if(err){
-//             console.log(err);
-//             return;
-//         } else{
-//             res.redirect('/');
-//         }
-//     });
-// });
-
 //Route files
 //anything that has to do with user data route it through /users
 const users = require('./routes/users');
@@ -103,6 +76,9 @@ app.use('/users', users);
 //anything that has to do with recipe data route it through /recipe
 const recipes = require('./routes/recipes');
 app.use('/recipes', recipes);
+
+const ingredient = require('./routes/ingredients');
+app.use('/ingredients', ingredient);
 
 //Start listening on localhost/127.0.0.1 on port 3000
 app.listen(3000, function(){

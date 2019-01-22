@@ -13,11 +13,12 @@ block content
             caption Available recipes
             thead
                 tr
-                    th(scope='col') #
-                    th(scope='col') Name
-                    th(scope='col') Size
-                    th(scope='col') Expiration date
-                    th(scope='col') Quantity
+                    th(scope='col') Recipe ID
+                    th(scope='col') Pantry ID
+                    th(scope='col') Recipe name
+                    th(scope='col') Serving size
+                    th(scope='col') Ingredients needed
+                    th(scope='col') Action
             tbody
                 for item in results
                     tr
@@ -26,3 +27,8 @@ block content
                             td= item.recipeName
                             td= item.servingSize
                             td= item.ingredients
+                            td
+                                //- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
+                                a.btn.btn-danger.delete-recipe(href='#', data-id=item.recipeID) DELETE
+        form(method='GET', action='/recipes/add')
+            input.btn.btn-primary(type='submit', value='ADD RECIPES')
