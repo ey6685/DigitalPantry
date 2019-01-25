@@ -27,9 +27,9 @@ router.get('/add', function(req, res){
 router.post('/add', function(req,res){
     //get parameters from request body
     const ing_name = req.body.name;
-    const ing_measurement = req.body.measurement;
-    const ing_serving_size = req.body.servingsize;
-    const ing_expiration = req.body.expiration;
+    const ing_measurement = req.body.quantity;
+    const ing_serving_size = req.body.size;
+    const ing_expiration = req.body.expirationDate;
     //Do crazy stuff here
     result = "'"+ing_name+"',"+ing_measurement+",'"+ing_expiration+"',"+ing_serving_size;
     db.query('INSERT INTO ingredients (ingredientName, size, expirationDate,qty) VALUES ('+result+')', function(err, results) {
