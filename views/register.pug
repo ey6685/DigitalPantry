@@ -1,6 +1,20 @@
 extends layout_template
 
 block content
+        //- This div will show the user if they have been registered or display an error
+        div
+            if success
+                div.alert-success(role='alert')
+                    h4.alert-heading Congratulations!
+                    p
+                        | You are a new user!
+            //- Show error based on the input validation
+            else
+                if errors
+                    div.alert-danger(role='alert')
+                        ul
+                            for error in errors
+                                li #{error.msg}
         .col-md-8.offset-md-4
             //- This will print whatever you have sent from app.js
             h1.mb-3 #{title}

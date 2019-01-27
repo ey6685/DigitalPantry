@@ -12,20 +12,46 @@ router.get('/login', function(req, res){
 //Get request to localhost:3000/users/register
 router.get('/register', function(req, res){
     //renders signin page with content 'Registration"
+    console.log("Session"+req.session);
     res.render('register',{
-        title:"Registration"
+        title:"Registration",
+        success:req.session.success,
+        errors:req.session.errors
     });
+    req.session.errors = null;
+    
 })
 
-//This will register a new user
-//TODO Clean up this, since this is a test
+//This will register a new user and add their credentials to the database
 router.post('/register', function(req,res){
+
+    req.check('email','Invalid email address').isEmail();
+    req.check('password','Password is invalid').isLength({min:4}).equals(req.body.confirm_password);
+
+    var errors = req.validationErrors();
+    if(errors){
+        req.session.errors = errors;
+        req.session.success = false;
+    }
+    else{
+        req.session.success = true;
+    }
+
     const u_name = req.body.email;
     const u_pass = req.body.password;
-    const u_pass_confirm = req.body.confirm_password;
-    user_data=u_name+','+u_pass+',5,'+u_pass_confirm;
+    user_data="('"+u_name+"','"+u_pass+"','"+"user"+"')";
+    console.log(user_data);
+    // result = "'"+ing_name+"',"+ing_measurement+",'"+ing_expiration+"',"+ing_serving_size;
 
-    res.send("New User added!");
+    db.query('INSERT INTO users (userName, pass, userType) VALUES '+user_data, function(err, results) {
+        if (err) throw err
+        //Render same page with newly added ingredient
+        // res.send("New user ")
+    });
+
+    //TODO redirect a user to a proper page
+    res.redirect('/users/register')
+
 })
 
 //TODO
