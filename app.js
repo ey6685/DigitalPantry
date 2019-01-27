@@ -3,6 +3,12 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
+const cookieParser = require('cookie-parser');
+const expressValidator = require('express-validator')
+const expressSession = require('express-session')
+
+//Initialize the application
+const app = express();
 
 //Initialize the application
 //Define your credentials for your local sql server
@@ -10,7 +16,7 @@ const db = mysql.createConnection ({
     host: 'localhost',
     user: 'root',
     password: 'password',
-    database: 'recipe'
+    database: 'good_database'
 });
 
 // const Sequelize = require('sequelize');
@@ -32,9 +38,6 @@ const db = mysql.createConnection ({
 //     .then(() => console.log('Database connected...'))
 //     .catch(err => console.log('Error: ' + err))
 
-
-//Initialize the application
-const app = express();
 
 
 // connect to database
@@ -59,10 +62,16 @@ app.use(express.static(path.join(__dirname,'public')));
 //Allows to get params from post requests 
 app.use(bodyParser.urlencoded({extended: false}));
 
+//This should be declared after body parser
+app.use(expressValidator());
+app.use(cookieParser());
+app.use(expressSession({secret:'pantry', saveUninitialized:false, resave:false}));
+
 
 //Get request to localhost:3000
 app.get('/', function(req, res){
     //renders index.pug with content "This is home page"
+    console.log(req.session);
     res.render('index',{
         title:'This is home page'
     });
