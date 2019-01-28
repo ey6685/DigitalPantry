@@ -1,9 +1,14 @@
 //Define variables for dependencies
 const express = require('express');
-const router = express.Router();
 const path = require('path');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
+const cookieParser = require('cookie-parser');
+const expressValidator = require('express-validator')
+const expressSession = require('express-session')
+
+//Initialize the application
+const app = express();
 
 //Initialize the application
 //Define your credentials for your local sql server
@@ -34,8 +39,6 @@ const db = mysql.createConnection ({
 //     .catch(err => console.log('Error: ' + err))
 
 
-//Initialize the application
-const app = express();
 
 // connect to database
 db.connect((err) => {
@@ -59,10 +62,16 @@ app.use(express.static(path.join(__dirname,'public')));
 //Allows to get params from post requests 
 app.use(bodyParser.urlencoded({extended: false}));
 
+//This should be declared after body parser
+app.use(expressValidator());
+app.use(cookieParser());
+app.use(expressSession({secret:'pantry', saveUninitialized:false, resave:false}));
+
 
 //Get request to localhost:3000
 app.get('/', function(req, res){
     //renders index.pug with content "This is home page"
+    console.log(req.session);
     res.render('index',{
         title:'This is home page'
     });
@@ -77,10 +86,16 @@ app.use('/users', users);
 const recipes = require('./routes/recipes');
 app.use('/recipes', recipes);
 
+app.get('/idk', function(req, res){
+    //renders index.pug with content "This is home page"
+    res.render('test');
+});
+
+
 const ingredient = require('./routes/ingredients');
 app.use('/ingredients', ingredient);
 
-//Start listening on localhost/127.0.0.1 on port 3000
+//Start listening on localhost or 127.0.0.1 on port 3000
 app.listen(3000, function(){
     console.log('Server started on port 3000');
 });
