@@ -5,8 +5,44 @@ const router = express.Router();
 router.get('/login', function(req, res){
     //renders signin page with content 'Sign In"
     res.render('signin',{
-        title:"Sign In"
+        title:"Sign In",
+        test:true
     });
+})
+
+//This will login a user based on theirc redentials
+router.post('/login', function(req, res){
+    req.check('email','Invalid email address').isEmail();
+    req.check('password','Password is invalid').isLength({min:4})
+
+    var validated = true;
+
+    var errors = req.validationErrors();
+    if(errors){
+        for (error in errors){
+            console.log(errors[error]);
+        }
+        validated = false;
+    }
+    else{
+            const u_name = req.body.email;
+            const u_pass = req.body.password;
+            // data = 'SELECT (userName,pass) FROM users WHERE userName="'+u_name+'" AND pass='+"'"+u_pass+"'";
+            // console.log("DATA:" + data);
+            db.query('SELECT * FROM users WHERE userName="'+u_name+'" AND pass="'+u_pass+'"', function(err, results) {
+                if (err) throw err
+                if(results > 0){
+                    validated = true;
+                }
+                else{
+                    validated = false;
+                }
+            })
+    }
+    res.render('signin',{
+        title: "Sign In",
+        test: validated
+    })
 })
 
 //Get request to localhost:3000/users/register

@@ -1,11 +1,19 @@
 extends layout_template
 
 block content
+        //- This div will show the user if they have been registered or display an error
+        if !test
+                div.alert-danger(role='alert')
+                        ul
+                                li No such user
+        else
+                div.alert-success(role='alert')
+                        h4.alert-heading You are signed in!
         .col-md-8.offset-md-4
             //- Below will print whatever you have sent from app.js
             h1.mb-3 #{title}
             //- TODO create signin form
-            form(method='POST', action='users/signin')
+            form(method='POST', action='/users/login')
                 .col-md-6.mb-3
                     #form-group
                             label Email:
