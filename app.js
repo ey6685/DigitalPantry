@@ -16,7 +16,7 @@ const db = mysql.createConnection ({
     host: 'localhost',
     user: 'root',
     password: 'password',
-    database: 'good_database'
+    database: 'dev_pantry'
 });
 
 // const Sequelize = require('sequelize');
@@ -88,7 +88,7 @@ app.use('/recipes', recipes);
 
 app.get('/idk', function(req, res){
     //renders index.pug with content "This is home page"
-    res.render('test');
+    res.render('sidebar_nav');
 });
 
 

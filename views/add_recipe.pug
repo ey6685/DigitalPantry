@@ -15,12 +15,12 @@ block content
                         input.form-control(name='recipeServingSize', type='text', placeholder='Serving Size = 2')
                 .form-row
                     .form-group.col-md-4
-                        input.form-control(name='ingredient[1]', type='text', placeholder='Ingredient = Chicken')
+                        input.form-control(name='ingredientProperties[1]', type='text', placeholder='Ingredient = Chicken')
                     .form-group.col-md-4
-                        input.form-control(name='quantity[1]', type='text', placeholder='Quantity = 2')
+                        input.form-control(name='ingredientProperties[1]', type='text', placeholder='Quantity = 2')
                     .form-group.col-md-4
                         .dropdown-inline
-                        select.form-control(name='measurement', required)
+                        select.form-control(name='ingredientProperties[1]', required)
                             option(value='') Measurement
                             option(value='bag') Bag
                             option(value='can') Can
@@ -41,13 +41,13 @@ block content
             let template = `
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <input class="form-control" name="ingredient[${i}]" type="text" placeholder="Ingredient = Chicken">
+                    <input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Ingredient = Chicken">
                 </div>
                 <div class="form-group col-md-4">
-                    <input class="form-control" name="quantity[${i}]" type="text" placeholder="Quantity = 2">
+                    <input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Quantity = 2">
                 </div>
                 <div class="dropdown-inline col-md-4">
-                    <select class="form-control" name="measurement" required="required">
+                    <select class="form-control" name="ingredientProperties[${i}]" required="required">
                         <option value="">Measurement</option>
                         <option value="bag">Bag</option>
                         <option value="can">Can</option>
