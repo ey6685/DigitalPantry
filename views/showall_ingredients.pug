@@ -10,7 +10,7 @@ block content
         br
         br
         table.table.table-dark
-            caption Available Ingredients
+            //-caption Available Ingredients
             thead
                 tr
                     th(scope='col') #
@@ -20,6 +20,29 @@ block content
                     th(scope='col') qty
                     th(scope='col') Action
             tbody
+                tr
+                    form(method= 'POST', action= '/ingredients/add', class= 'form')
+                        .form-row
+                            .form-group.col-md-2
+                                input.form-control(name='name', type='text', placeholder='Name = Tuna')
+                            .form-group.col-md-2
+                                input.form-control(name='size', type='text', placeholder='Size = 2')
+                            .form-group.col-md-4
+                                input.form-control(name='expirationDate', type='date')
+                            .form-group.col-md-3
+                                input.form-control(name='quantity', type='text', placeholder='Quantity = 2')
+                            //- .form-group.col-md-4
+                            //-     .dropdown-inline
+                            //-     select.form-control(name='measurement', required)
+                            //-         option(value='') Measurement
+                            //-         option(value='bag') Bag
+                            //-         option(value='can') Can
+                            //-         option(value='pound') Pound
+                            //-         option(value='ounce') Ounce
+                            //-         option(value='cup') Cup
+                            //-         option(value='tablespoon') Tablespoon
+                            //-         option(value='teaspoon') Teaspoon
+                            input.btn.btn-primary.col-md-1(type='submit', value='ADD', class='form-group')
                 for item in results
                     tr
                         th(scope='row') #
@@ -31,4 +54,4 @@ block content
                                 //- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
                                 a.btn.btn-danger.delete-ingredient(href='#', data-id=item.ingredientName) DELETE
         form(method='GET', action='/ingredients/add')
-            input.btn.btn-primary(type='submit', value='ADD INGREDIENTS')
+            input.btn.btn-primary(type='submit', value='ADD MULTIPLE INGREDIENTS')
