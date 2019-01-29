@@ -22,10 +22,10 @@ block content
             tbody
                 for item in results
                     tr
-                        th(scope='row')= item.recipeID
-                            td= item.pantryID
-                            td= item.recipeName
-                            td= item.servingSize
+                        th(scope='row')= item.recipe_id
+                            td= item.recipe_pantry_id
+                            td= item.recipe_name
+                            td= item.recipe_serving_size
                             td= item.ingredients
                             td
                                 //- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
