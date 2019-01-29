@@ -24,11 +24,9 @@ URL ENDPOINT: localhost:3000/recipes/add
 DESCRIPTION: This will render add recipe page with a form
 */
 router.get('/add', function(req, res){
-    //TODO uncomment bellow once add_recipe.pug has been added
-    // res.render('add_recipe.pug',{
-    //     title:"Add New Recipe"
-    // });
-    res.send('RENDER ADD RECIPE PAGE WITH FORM HERE');
+    res.render('add_recipe',{
+        title:"Add New Recipe"
+    });
 })
 
 
@@ -48,37 +46,66 @@ BODY_PARAMS:
 */
 router.post('/add', function(req, res){
     //recipe_name and recipe_size are unique form fields, so they do not require any recursion to grab all of them
-    console.log("Recipe Name: " + req.body.recipe_name);
-    console.log("Recipe Size: " + req.body.recipe_size);
+    const recipeName = req.body.recipeName;
+    const recipeServingSize = req.body.recipeServingSize
+
+    //***************************
+    //TODO add pantry ID here
+    //***************************
+
+    //Create entire query value
+    var query = "('" + recipeName + "','" + recipeServingSize + "')";
+    console.log("Recipe Name: " + recipeName);
+    console.log("Recipe Serving Size: " + recipeServingSize);
+    console.log("Insert into Recipe Query: " + query);
     //Insert Recipe name and size into a table first
-    db.query('insert into recipe (name) values ('+'"'+req.body.recipe_name+'"'+')', function(err, results) {
+    // db.query('insert into recipe (name) values ('+'"'+req.body.recipe_name+'"'+')', function(err, results) {
+    db.query('insert into recipes (recipe_name,recipe_serving_size) values ' + query, function(err, results) {
         if (err) throw err
-        //Render same page with newly added ingredient
         console.log("Recipe added sucessfully");
         console.log("results after adding a recipe: "+results);
         //Get id of the inserted row, this works because of auto increment set in the table
         recipe_id_inserted = results.insertId;
 
-        //Iterate over evry key_name inside JSON
+        //Iterate over every key_name inside JSON request
         for(var key in req.body) {
             //When Ingredient key_name is found
             //For every ingredient in recipe defined by user in the form do the following
-            if(key.includes("ingredient")){
+            if(key.includes("ingredientProperties")){
+                //Retrieve all values from request body
+                const ingredientName = req.body[key][0];
+                const ingredietQuantity = req.body[key][1];
+                const ingredientMeasurement = req.body[key][2];
+
+                //***************************
+                //TODO CHANGE THIS TO PASSED IN VALUE FROM THE FORM
+                const ingredientExpirationDate = "2000-10-10";
+                //***************************
+
+                query = "('"+ingredientName+"',"+ingredietQuantity+",'"+ingredientMeasurement+"','" + ingredientExpirationDate + "')";
+                console.log("Ingredient Name: " + ingredientName);
+                console.log("Ingredient Qty: " + ingredietQuantity);
+                console.log("Ingredient Measurement: " + ingredientMeasurement);
+                console.log("Insert into ingredients query: " + query);
                 //Insert ingredient into a Ingredients table
-                db.query('insert into ingredients (name) values ('+'"'+req.body[key][0]+'"'+')', function(err, results) {
+                db.query('insert into ingredients (ingredient_name,ingredient_total,ingredient_measurement,ingredient_expiration_date) values '+query, function(err, results) {
                     if (err) throw err
                     //Get inserted ingredient's row id, this works because auto-increment is set in the table
                     ingredients_ids_inserted = results.insertId;
-                    console.log("Ingredient ID: " + ingredients_ids_inserted);
-                    //Create values that will be inserted into recipe_ingredients table
+                    //Create values that will be inserted into recipe_ingredient table
                     //recipe_ingredients is what links ingredients to the recipe
                     values = recipe_id_inserted + ',' + ingredients_ids_inserted
-                    db.query('insert into recipe_ingredients (recipe_id,ingredient_id) values (' + values + ')', function(err, results) {
+                    query = "("+ingredients_ids_inserted + "," + ingredietQuantity + "," + recipe_id_inserted + ",'" + ingredientMeasurement + "')";
+
+                    //***************************
+                    //TODO add pantry ID here
+                    //***************************
+
+                    db.query('insert into recipe_ingredient (ingredient_id,recipe_id,recipe_ingredient_qty,recipe_ingredient_measurement) values ' + query, function(err, results) {
                         if (err) throw err
                     });
 
                 });
-                console.log("RECIPE ID: " + recipe_id_inserted);
             }
         //Repeat until all recipes have been parsed
         }
