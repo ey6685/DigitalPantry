@@ -24,11 +24,9 @@ URL ENDPOINT: localhost:3000/recipes/add
 DESCRIPTION: This will render add recipe page with a form
 */
 router.get('/add', function(req, res){
-    //TODO uncomment bellow once add_recipe.pug has been added
-    // res.render('add_recipe.pug',{
-    //     title:"Add New Recipe"
-    // });
-    res.send('RENDER ADD RECIPE PAGE WITH FORM HERE');
+    res.render('add_recipe.pug',{
+        title:"Add New Recipe"
+    });
 })
 
 
