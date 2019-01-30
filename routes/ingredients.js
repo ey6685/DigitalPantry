@@ -34,10 +34,14 @@ router.post('/add', function(req,res){
     result = "('"+ing_ingredient_name+"',"+ing_ingredient_total+",'"+ing_ingredient_measurement+"','"+ing_ingredient_expiration_date+"')";
     db.query('INSERT INTO ingredients (ingredient_name, ingredient_total, ingredient_measurement,ingredient_expiration_date) VALUES '+result, function(err, results) {
         if (err) throw err
+        /******************************************/
+        //Commented out these lines to temporarily
+        //fix the header issue********************/
+        /************************************** */
         //Render same page with newly added ingredient
-        res.render('add_ingredient',{
-            title:'Add Ingredient'
-        });
+        // res.render('add_ingredient',{
+        //     title:'Add Ingredient'
+        // });
     });
 
     res.redirect('/ingredients/showall');
