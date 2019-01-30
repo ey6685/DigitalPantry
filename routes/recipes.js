@@ -95,7 +95,8 @@ router.post('/add', function(req, res){
                     //Create values that will be inserted into recipe_ingredient table
                     //recipe_ingredients is what links ingredients to the recipe
                     values = recipe_id_inserted + ',' + ingredients_ids_inserted
-                    query = "("+ingredients_ids_inserted + "," + ingredietQuantity + "," + recipe_id_inserted + ",'" + ingredientMeasurement + "')";
+                    // query = "("+ingredients_ids_inserted + "," + ingredietQuantity + "," + recipe_id_inserted + ",'" + ingredientMeasurement + "')";
+                    query = "("+ingredients_ids_inserted + "," + recipe_id_inserted + "," + ingredietQuantity + ",'" + ingredientMeasurement + "')";
 
                     //***************************
                     //TODO add pantry ID here
@@ -114,7 +115,7 @@ router.post('/add', function(req, res){
     // res.send(req.body.ingredientName[1]);
     //This will respond with the parameters that you sent in your request
     //TODO redirect to another page
-    res.send(req.body);
+    res.redirect("showall");
 })
 
 
@@ -127,11 +128,15 @@ URL_PARAMS:
     id
 */
 //DELETE request to localhost:3000/recipes/remove
-//This will display all available recipes
+//this will delete recipe from database based on its ID
+
+//CURRENT BEHAVIOR
+//This will delete recipe from recipe table and from recipe ingredient table
+//HOWEVER it will not delete ingredient inside that recipe from ignredients table
+
 router.delete('/remove/:id', function(req, res){
-    //TODO logic to delete recipe from database
     const recipe = req.params.id;
-    const delete_query = "DELETE FROM recipes WHERE recipeID ='"+recipe+"'";
+    const delete_query = "DELETE FROM recipes WHERE recipe_id ='"+recipe+"'";
     db.query(delete_query, function(err, results) {
         if (err) throw err
         //Since AJAX under /js/main.js made a request we have to respond back

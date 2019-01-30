@@ -45,7 +45,7 @@ router.post('/add', function(req,res){
 
 router.delete('/remove/:id', function(req,res){
     const ingredient = req.params.id;
-    const delete_query = "DELETE FROM ingredients WHERE ingredientName ='"+ingredient+"'";
+    const delete_query = "DELETE FROM ingredients WHERE ingredient_name ='"+ingredient+"'";
     db.query(delete_query, function(err, results) {
         if (err) throw err
         //Since AJAX under /js/main.js made a request we have to respond back

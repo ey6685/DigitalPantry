@@ -29,6 +29,6 @@ block content
                             td= item.ingredients
                             td
                                 //- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
-                                a.btn.btn-danger.delete-recipe(href='#', data-id=item.recipeID) DELETE
+                                a.btn.btn-danger.delete-recipe(href='#', data-id=item.recipe_id) DELETE
         form(method='GET', action='/recipes/add')
             input.btn.btn-primary(type='submit', value='ADD RECIPES')
