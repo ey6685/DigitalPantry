@@ -22,6 +22,18 @@ router.get('/register', function(req, res){
     
 })
 
+//Get request to localhost:3000/users/login
+router.get('/dashboard', function(req, res){
+    //renders dashboard page with next expiring ingredient
+    db.query('SELECT * FROM ingredients ORDER BY ingredient_expiration_date LIMIT 1', function(err, results){
+        if (err) throw err
+        res.render('dashboard',{
+            title:"Dashboard",
+            results: results
+        });
+    });
+})
+
 //This will register a new user and add their credentials to the database
 router.post('/register', function(req,res){
 
