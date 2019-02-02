@@ -31,6 +31,8 @@ router.get('/dashboard', function(req, res){
         res.render('dashboard',{
             title:"Dashboard",
             results: results,
+            i_total: results[0]['ingredient_total'],
+            i_measurement: results[0]['ingredient_measurement'],
             i_name: results[0]['ingredient_name'],
             i_expire: moment(results[0]['ingredient_expiration_date']).format('LL')
         });
