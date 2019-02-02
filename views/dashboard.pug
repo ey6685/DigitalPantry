@@ -1,0 +1,18 @@
+extends layout_template
+
+block content
+    .col-md-12
+        br
+        br
+        h2.mb-3 Next Expiring Ingredient:
+        p
+            h3 #{i_total} #{i_measurement} of #{i_name} on #{(i_expire)}
+        br
+        div(class='card', style='width: 75%')
+            img.image(class='card-img-top', src='/images/chicken_noodle_soup.jpg', alt='Chicken Noodle Soup')
+            div(class='card-body')
+                h4(class='card-title') #{i_name}
+                p(class='card-text') Insert list of steps here.
+                br
+                button.btn.btn-secondary(type='button' onclick='view_recipe()') View Recipe
+                button.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
