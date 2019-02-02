@@ -26,18 +26,22 @@ router.get('/add', function(req, res){
 //This will add a new ingredient to available ingredients and update database
 router.post('/add', function(req,res){
     //get parameters from request body
-    const ing_name = req.body.name;
-    const ing_measurement = req.body.quantity;
-    const ing_serving_size = req.body.size;
-    const ing_expiration = req.body.expirationDate;
+    const ing_ingredient_name = req.body.ingredient_name;
+    const ing_ingredient_total = req.body.ingredient_total;
+    const ing_ingredient_measurement = req.body.ingredient_measurement;
+    const ing_ingredient_expiration_date = req.body.ingredient_expiration_date;
     //Do crazy stuff here
-    result = "'"+ing_name+"',"+ing_measurement+",'"+ing_expiration+"',"+ing_serving_size;
-    db.query('INSERT INTO ingredients (ingredientName, size, expirationDate,qty) VALUES ('+result+')', function(err, results) {
+    result = "('"+ing_ingredient_name+"',"+ing_ingredient_total+",'"+ing_ingredient_measurement+"','"+ing_ingredient_expiration_date+"')";
+    db.query('INSERT INTO ingredients (ingredient_name, ingredient_total, ingredient_measurement,ingredient_expiration_date) VALUES '+result, function(err, results) {
         if (err) throw err
+        /******************************************/
+        //Commented out these lines to temporarily
+        //fix the header issue********************/
+        /************************************** */
         //Render same page with newly added ingredient
-        res.render('add_ingredient',{
-            title:'Add Ingredient'
-        });
+        // res.render('add_ingredient',{
+        //     title:'Add Ingredient'
+        // });
     });
 
     res.redirect('/ingredients/showall');
@@ -45,7 +49,7 @@ router.post('/add', function(req,res){
 
 router.delete('/remove/:id', function(req,res){
     const ingredient = req.params.id;
-    const delete_query = "DELETE FROM ingredients WHERE ingredientName ='"+ingredient+"'";
+    const delete_query = "DELETE FROM ingredients WHERE ingredient_name ='"+ingredient+"'";
     db.query(delete_query, function(err, results) {
         if (err) throw err
         //Since AJAX under /js/main.js made a request we have to respond back
