@@ -8,21 +8,5 @@ block content
         br
         br
         table.table.table-dark  
-            thead
-                tr
-                    th(scope='col') #
-                    th(scope='col') Name
-                    th(scope='col') Total
-                    th(scope='col') Ingredient Measurement
-                    th(scope='col') Expiration Date
-                    th(scope='col') Action
-            tbody
-                for item in results
-                    tr
-                        th(scope='row') #
-                            td= item.ingredient_name
-                            td= item.ingredient_total
-                            td= item.ingredient_measurement
-                            td= item.ingredient_expiration_date
-                            td
-                                //-a.btn.btn-primary.view-recipe(href='#', data-id=item.ingredient.name) View Recipe
+            p
+                h1 Next expiring ingredient: #{i_name} on #{(i_expire)}

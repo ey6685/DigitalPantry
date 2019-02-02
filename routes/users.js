@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const moment = require('moment');
 
 //Get request to localhost:3000/users/login
 router.get('/login', function(req, res){
@@ -29,7 +30,9 @@ router.get('/dashboard', function(req, res){
         if (err) throw err
         res.render('dashboard',{
             title:"Dashboard",
-            results: results
+            results: results,
+            i_name: results[0]['ingredient_name'],
+            i_expire: moment(results[0]['ingredient_expiration_date']).format('LL')
         });
     });
 })
