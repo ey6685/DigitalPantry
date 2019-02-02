@@ -86,14 +86,14 @@ app.use('/users', users);
 const recipes = require('./routes/recipes');
 app.use('/recipes', recipes);
 
-app.get('/idk', function(req, res){
-    //renders index.pug with content "This is home page"
-    res.render('sidebar_nav');
-});
 
 //v1 of algorithm
 const algorithm = require('./routes/algorithm')
 app.use('/algorithm', algorithm);
+
+//v1 of algorithm no sequelize
+const test = require('./routes/test')
+app.use('/test', test);
 
 const ingredient = require('./routes/ingredients');
 app.use('/ingredients', ingredient);
