@@ -3,7 +3,7 @@ const db = require('../databaseMySQL.js');
 
 
 
-const Ingredients_in_Recipe = db.define('Ingredients_in_Recipe', {
+const recipe_ingredient = db.define('recipe_ingredient', {
     ingredient_id                 : {type: Sequelize.INTEGER},
     recipe_id                     : {type: Sequelize.INTEGER},
     recipe_ingredient_qty         : {type: Sequelize.FLOAT},
@@ -11,7 +11,11 @@ const Ingredients_in_Recipe = db.define('Ingredients_in_Recipe', {
     recipe_pantry_id              : {type: Sequelize.INTEGER}
 },
 {
-    timestamps: false
-});
-Ingredients_in_Recipe.removeAttribute('id');
-module.exports = Ingredients_in_Recipe;
+    //these are to stop sequelize to add timestaps fields
+    //and plurlized the table name, respectily 
+    timestamps: false,
+    freezeTableName:true
+},
+);
+recipe_ingredient.removeAttribute('id');
+module.exports = recipe_ingredient;

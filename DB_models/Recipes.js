@@ -15,7 +15,7 @@ const Recipes = db.define('recipes', {
         type: Sequelize.INTEGER,
         default: null
          },
-    pantry_id: {
+    recipe_pantry_id: {
         type: Sequelize.INTEGER
         },
 },

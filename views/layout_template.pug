@@ -1,6 +1,20 @@
 doctype html
 html
     head
+        //-Style for the sticky footer
+        style.
+            .footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+                box-shadow: 0 50vh 0 50vh #343a40;
+            }
+            .btn{
+                /*Adds button separation so they are not glued to each other*/
+                margin: 0px 10px 0px 0px;;
+            }
         title Digital Pantry
         link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
         script(defer='', src='https://use.fontawesome.com/releases/v5.0.13/js/solid.js', integrity='sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ', crossorigin='anonymous')
@@ -27,8 +41,10 @@ html
             //- block content will get replaced with another .pug file
             block content
             br
-            hr
-            footer.my-5.pt-5.text-muted.text-center.text-small
+            br
+            br
+            br
+            footer.footer.bg-dark.text-light
                 p.mb-1 © 2019 Digital Pantry
                 ul.list-inline
                     //- TODO link these to proper files
@@ -37,9 +53,6 @@ html
                     li.list-inline-item
                         a(href='#') Terms
                     li.list-inline-item
-                        a(href='#') Support
-        //- TODO include javascript files here
-        //- script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
-        //- script(src='/bower_components/bootstrap/js/dist/bootstrap/dropdown.js')
+                    a(href='#') Support
         script(src='/bower_components/jquery/dist/jquery.min.js')
         script(src="/js/main.js")
