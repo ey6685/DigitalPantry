@@ -49,3 +49,7 @@ $(document).ready(function(){
         })
     });
 });
+
+$(document).on('click','.delete-row',function() {
+    $(this).closest('.form-row').remove();
+});

@@ -18,7 +18,7 @@ block content
                         input.form-control(name='ingredientProperties[1]', type='text', placeholder='Ingredient = Chicken')
                     .form-group.col-md-4
                         input.form-control(name='ingredientProperties[1]', type='text', placeholder='Quantity = 2')
-                    .form-group.col-md-4
+                    .form-group.col-md-3
                         .dropdown-inline
                         select.form-control(name='ingredientProperties[1]', required)
                             option(value='') Measurement
@@ -30,9 +30,8 @@ block content
                             option(value='tablespoon') Tablespoon
                             option(value='teaspoon') Teaspoon
                 #recipe-container
-                button.btn.btn-secondary(onclick='addIngredient()', class='form-group') Add Ingredient
                 input.btn.btn-primary(type='submit', value='Submit', class='form-group')
-
+                button.btn.btn-secondary(type='button' onclick='addIngredient()', class='form-group') Add Ingredient
 
 
     script.
@@ -46,7 +45,7 @@ block content
                 <div class="form-group col-md-4">
                     <input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Quantity = 2">
                 </div>
-                <div class="dropdown-inline col-md-4">
+                <div class="dropdown-inline col-md-3">
                     <select class="form-control" name="ingredientProperties[${i}]" required="required">
                         <option value="">Measurement</option>
                         <option value="bag">Bag</option>
@@ -58,6 +57,9 @@ block content
                         <option value="teaspoon">Teaspoon</option>
                     </select>
                     </div>
+                <div class="form-group col-md-1 text-center">
+                    <button type="button" class="btn btn-danger delete-row" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
             </div>`;
             let container = document.getElementById('recipe-container');
             let element = document.createElement('element');
