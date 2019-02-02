@@ -25,7 +25,7 @@ block content
                         .form-row
                             .form-group.col-md-3
                                 input.form-control(name='ingredient_name', type='text', placeholder='Name = Tuna')
-                            .form-group.col-md-1
+                            .form-group.col-md-2
                                 input.form-control(name='ingredient_total', type='text', placeholder='Size = 2')
                             .form-group.col-md-2
                                 .dropdown-inline
@@ -38,9 +38,9 @@ block content
                                     option(value='cup') Cup
                                     option(value='tablespoon') Tablespoon
                                     option(value='teaspoon') Teaspoon
-                            .form-group.col-md-4
+                            .form-group.col-md-3
                                 input.form-control(name='ingredient_expiration_date', type='date')
-                            input.btn.btn-primary.col-md-2(type='submit', value='ADD', class='form-group')
+                            input.btn.btn-primary.col-md-1(type='submit', value='ADD', class='form-group')
                 for item in results
                     tr
                         th(scope='row') #
