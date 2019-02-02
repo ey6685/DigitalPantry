@@ -91,6 +91,9 @@ app.get('/idk', function(req, res){
     res.render('sidebar_nav');
 });
 
+//v1 of algorithm
+const algorithm = require('./routes/algorithm')
+app.use('/algorithm', algorithm);
 
 const ingredient = require('./routes/ingredients');
 app.use('/ingredients', ingredient);

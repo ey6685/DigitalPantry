@@ -14,7 +14,7 @@ const Ingredients = db.define('ingredients', {
     ingredient_name           : {type: Sequelize.STRING},
     ingredient_total          : {type: Sequelize.FLOAT},
     ingredient_measurement    : {type: Sequelize.STRING},
-    ingredient_exiration_date : {type: Sequelize.INTEGER},
+    ingredient_expiration_date : {type: Sequelize.INTEGER},
     },
     {  
         timestamps     : false
