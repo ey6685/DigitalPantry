@@ -79,10 +79,8 @@ app.use(flash())
 app.get('/', function(req, res){
     //renders signin.pug with content "Sign In"
     console.log(req.session);
-    req.flash('info', 'Flash is back!')
     res.render('signin',{
         title:'Sign In',
-        messages: req.flash('info')
     });
 });
 
