@@ -4,7 +4,7 @@ This file is suppsoed to suggest recipe to cook based on the expired ingredient,
 
 const express = require('express');
 const router = express.Router();
-var async = require('async');
+const async = require('async');
 
 router.get('/',function(req, res){
     global.recipeName = [];  

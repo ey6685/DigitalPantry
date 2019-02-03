@@ -6,6 +6,7 @@ const mysql = require('mysql');
 const cookieParser = require('cookie-parser');
 const expressValidator = require('express-validator')
 const expressSession = require('express-session')
+const flash = require('connect-flash');
 
 //Initialize the application
 const app = express();
@@ -65,15 +66,23 @@ app.use(bodyParser.urlencoded({extended: false}));
 //This should be declared after body parser
 app.use(expressValidator());
 app.use(cookieParser());
-app.use(expressSession({secret:'pantry', saveUninitialized:false, resave:false}));
+app.use(expressSession({secret:'pantry', saveUninitialized:false, resave:true}));
+app.use(require('connect-flash')());
+app.use(function(req,res,next){
+    res.locals.messages = require('express-messages')(req,res);
+    next();
+})
+app.use(flash())
 
 
 //Get request to localhost:3000
 app.get('/', function(req, res){
-    //renders index.pug with content "This is home page"
+    //renders signin.pug with content "Sign In"
     console.log(req.session);
-    res.render('index',{
-        title:'This is home page'
+    req.flash('info', 'Flash is back!')
+    res.render('signin',{
+        title:'Sign In',
+        messages: req.flash('info')
     });
 });
 
