@@ -1,6 +1,6 @@
--- MySQL dump 10.13  Distrib 8.0.14, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.15, for Win64 (x86_64)
 --
--- Host: localhost    Database: digital_pantry
+-- Host: 127.0.0.1    Database: digital_pantry
 -- ------------------------------------------------------
 -- Server version	8.0.14
 
@@ -21,7 +21,7 @@
 
 DROP TABLE IF EXISTS `ingredients`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `ingredients` (
   `ingredient_id` int(11) NOT NULL AUTO_INCREMENT,
   `ingredient_name` varchar(255) NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE `ingredients` (
   `ingredient_expiration_date` date NOT NULL,
   PRIMARY KEY (`ingredient_id`),
   UNIQUE KEY `unique_ingredient` (`ingredient_name`,`ingredient_measurement`,`ingredient_expiration_date`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `ingredients` (
 
 LOCK TABLES `ingredients` WRITE;
 /*!40000 ALTER TABLE `ingredients` DISABLE KEYS */;
-INSERT INTO `ingredients` VALUES (1,'checken',1,'can','2019-02-07'),(2,'black beans',1,'can','2019-02-08'),(3,'salsa',16,'oz','2019-02-10'),(4,'corn',1,'can','2019-02-10'),(5,'tortilla chips',1,'bag','2019-02-10'),(6,'condensed chicken soup',1,'can','2019-02-12'),(7,'mixed vegetables',1,'can','2019-02-10'),(8,'water',NULL,NULL,'9999-12-31');
+INSERT INTO `ingredients` VALUES (1,'chicken',1,'can','2019-02-07'),(2,'black beans',1,'can','2019-02-08'),(3,'salsa',16,'oz','2019-02-10'),(4,'corn',1,'can','2019-02-10'),(5,'tortilla chips',1,'bag','2019-02-10'),(6,'condensed chicken soup',1,'can','2019-02-12'),(7,'mixed vegetables',1,'can','2019-02-10'),(8,'water',NULL,NULL,'9999-12-31');
 /*!40000 ALTER TABLE `ingredients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -60,7 +60,7 @@ CREATE TABLE `recipe_ingredient` (
   KEY `recipe_id` (`recipe_id`),
   CONSTRAINT `recipe_ingredient_ibfk_1` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredients` (`ingredient_id`) ON DELETE CASCADE,
   CONSTRAINT `recipe_ingredient_ibfk_2` FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`recipe_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -85,8 +85,9 @@ CREATE TABLE `recipes` (
   `recipe_name` varchar(255) DEFAULT NULL,
   `recipe_serving_size` int(11) DEFAULT NULL,
   `recipe_pantry_id` int(11) DEFAULT NULL,
+  `recipe_directions` text,
   PRIMARY KEY (`recipe_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,7 +96,7 @@ CREATE TABLE `recipes` (
 
 LOCK TABLES `recipes` WRITE;
 /*!40000 ALTER TABLE `recipes` DISABLE KEYS */;
-INSERT INTO `recipes` VALUES (1,'black bean salsa',6,1),(2,'chicken noodle soup',4,1);
+INSERT INTO `recipes` VALUES (1,'black bean salsa',6,1,'#drain canned beans and corn#put them in a large bowl and mix together#serve on tortillas or with chips.'),(2,'chicken noodle soup',4,1,'#Put ingredients into a large bow together#Cover bowl, then microwave for 3 minutes on high#Serve hot with crackers or bread');
 /*!40000 ALTER TABLE `recipes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,7 +114,7 @@ CREATE TABLE `users` (
   `user_pantry_id` int(11) DEFAULT '1',
   `user_type` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,4 +135,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-28 12:31:07
+-- Dump completed on 2019-02-04 17:34:16
