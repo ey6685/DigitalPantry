@@ -72,7 +72,7 @@ app.use(function(req,res,next){
     res.locals.messages = require('express-messages')(req,res);
     next();
 })
-app.use(flash())
+app.use(flash());
 
 
 //Get request to localhost:3000
@@ -92,11 +92,6 @@ app.use('/users', users);
 //anything that has to do with recipe data route it through /recipe
 const recipes = require('./routes/recipes');
 app.use('/recipes', recipes);
-
-
-//v1 of algorithm
-const algorithm = require('./routes/algorithm')
-app.use('/algorithm', algorithm);
 
 //v1 of algorithm no sequelize
 const test = require('./routes/test')

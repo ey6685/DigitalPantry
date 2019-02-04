@@ -35,8 +35,7 @@ const op = sequelized.Op; //this does the handling
  
 //router.get is how we route her 
 //just useed for testing we can change this at anytime 
-router.get('/', function(req,res) 
-{ 
+async function directAlgorithm(){
 	////////////////////////////////////////////////////////////////// 
     //this is for most direct algorithm to find the item at the top/// 
     //of the list of expiring items and suggest the recipes        /// 
@@ -52,11 +51,11 @@ router.get('/', function(req,res)
 	///////////////////////////// 
 	//SELECT * FROM ingredients// 
 	///////////////////////////// 
-	ingredients.findAll({ 
-		where: {}, 
-		raw : true 
-	}) 
-	.then(ingredients_result =>{ 
+	let ingredients_result = await ingredients.findAll({
+		where: {},
+		raw: true
+	});
+		console.log("entered first then");
  
 		//get the data stored 
  
@@ -86,11 +85,11 @@ router.get('/', function(req,res)
 		//////////////////////////////////////////////////////////////////// 
 		//select * from recipe_ingredient where ingredient_id = closest_id// 
 		//////////////////////////////////////////////////////////////////// 
-		recipe_ingredient.findAll({ 
-			where: {}, 
-			raw: true 
-		}) 
-		.then(recipe_ingrdient_result =>{ 
+		let recipe_ingrdient_result = await recipe_ingredient.findAll({ // <------- CHANGE IS HERE
+			where: {},
+			raw: true
+		});
+			console.log("entered second then");
 			//////////////////////////////////////////////////////////////////////	 
 			//check out the recipe_ingredient table for matching ingredient id's// 
 			//when found store the recipe_id in the potential_recipe_ids.       // 
@@ -162,17 +161,22 @@ router.get('/', function(req,res)
 					//make sure there is at least 1 recipe we can make 
 					if(suggested_recipes.length)  
 						{ 
-							recipes.findAll({ 
-								where: {recipe_id: {[op.in]: suggested_recipes}} 
-							}) 
-							.then(recipes =>{ 
-								res.send(JSON.stringify(recipes)); 
-							}) 
+							let recipes_result = await recipes.findAll({ // <------- CHANGE IS HERE
+								where: {
+									recipe_id: {
+										[op.in]: suggested_recipes
+									}
+								}
+							})
+								console.log("entered third then");
+								someinfo = recipes_result;
+								return someinfo;
 						} 
 			}//end ofthe if's 
- 
-		})//end of recipe_ing promise 
-	})//end of ingredients promise		 
-})//end of router function 
- 
+		//end of recipe_ing promise 
+	//end of ingredients promise	 
+	console.log("End of alogorithm");
+}//end of router function 
+
 module.exports = router;
+module.exports.directAlgorithm = directAlgorithm;
