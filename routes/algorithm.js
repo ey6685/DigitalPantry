@@ -35,8 +35,7 @@ const op = sequelized.Op; //this does the handling
  
 //router.get is how we route her 
 //just useed for testing we can change this at anytime 
-router.get('/', function(req,res) 
-{ 
+function directAlgorithm(){ 
 	////////////////////////////////////////////////////////////////// 
     //this is for most direct algorithm to find the item at the top/// 
     //of the list of expiring items and suggest the recipes        /// 
@@ -165,14 +164,16 @@ router.get('/', function(req,res)
 							recipes.findAll({ 
 								where: {recipe_id: {[op.in]: suggested_recipes}} 
 							}) 
-							.then(recipes =>{ 
-								res.send(JSON.stringify(recipes)); 
+							.then(recipes =>{
+								console.log('returning');
+								return(JSON.stringify(recipes));
 							}) 
 						} 
 			}//end ofthe if's 
  
 		})//end of recipe_ing promise 
 	})//end of ingredients promise		 
-})//end of router function 
- 
+}//end of router function 
+
 module.exports = router;
+module.exports.directAlgorithm = directAlgorithm;

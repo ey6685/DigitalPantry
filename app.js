@@ -93,11 +93,6 @@ app.use('/users', users);
 const recipes = require('./routes/recipes');
 app.use('/recipes', recipes);
 
-
-//v1 of algorithm
-const algorithm = require('./routes/algorithm')
-app.use('/algorithm', algorithm);
-
 //v1 of algorithm no sequelize
 const test = require('./routes/test')
 app.use('/test', test);

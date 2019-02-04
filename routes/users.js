@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const moment = require('moment');
+const algorithm = require('./algorithm');
 
 //Get request to localhost:3000/users/login
 router.get('/login', function(req, res){
@@ -61,16 +62,21 @@ router.get('/dashboard', function(req, res){
     //renders dashboard page with next expiring ingredient
     db.query('SELECT * FROM ingredients ORDER BY ingredient_expiration_date LIMIT 1', function(err, results){
         if (err) throw err
+        var r_name = algorithm.directAlgorithm();
+        console.log(r_name);
         res.render('dashboard',{
             title:"Dashboard",
             results: results,
             i_total: results[0]['ingredient_total'],
             i_measurement: results[0]['ingredient_measurement'],
             i_name: results[0]['ingredient_name'],
-            i_expire: moment(results[0]['ingredient_expiration_date']).format('LL')
+            i_expire: moment(results[0]['ingredient_expiration_date']).format('LL'),
         });
+
     });
 })
+
+
 
 //This will register a new user and add their credentials to the database
 router.post('/register', function(req,res){
