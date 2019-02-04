@@ -72,7 +72,7 @@ app.use(function(req,res,next){
     res.locals.messages = require('express-messages')(req,res);
     next();
 })
-app.use(flash())
+app.use(flash());
 
 
 //Get request to localhost:3000

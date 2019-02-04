@@ -58,12 +58,12 @@ router.get('/register', function(req, res){
 })
 
 //Get request to localhost:3000/users/login
-router.get('/dashboard', function(req, res){
+router.get('/dashboard', async function(req, res){
+    //pulls algorithm results from directAlgorithm into r_results
+    var r_results = await algorithm.directAlgorithm();
     //renders dashboard page with next expiring ingredient
     db.query('SELECT * FROM ingredients ORDER BY ingredient_expiration_date LIMIT 1', function(err, results){
         if (err) throw err
-        var r_name = algorithm.directAlgorithm();
-        console.log(r_name);
         res.render('dashboard',{
             title:"Dashboard",
             results: results,
@@ -71,6 +71,8 @@ router.get('/dashboard', function(req, res){
             i_measurement: results[0]['ingredient_measurement'],
             i_name: results[0]['ingredient_name'],
             i_expire: moment(results[0]['ingredient_expiration_date']).format('LL'),
+            //pulls recipe_name into r_name for referencing in dashboard
+            r_name: r_results[0]['recipe_name']
         });
 
     });
