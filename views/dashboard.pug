@@ -9,11 +9,30 @@ block content
         p
             h3 #{i_total} #{i_measurement} of #{i_name} on #{(i_expire)}
         br
-        div(class='card', style='width: 75%')
-            img.image(class='card-img-top', src='/images/chicken_noodle_soup.jpg', alt='Chicken Noodle Soup')
-            div(class='card-body')
-                h4(class='card-title') #{r_name}
-                p(class='card-text') Insert list of steps here.
-                br
-                button.btn.btn-secondary(type='button' onclick='view_recipe()') View Recipe
-                button.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
+        div.bg-light(class='container-fluid' class='rounded')
+            h2.mb-3 Recommended Recipes:
+            div(class='row')
+                div(style='width: 30%')
+                    div(class='card')
+                        img.image(class='card-img-top', src='/images/chicken_noodle_soup.jpg', alt='Chicken Noodle Soup')
+                        div(class='card-body')
+                            h4(class='card-title') #{r_name}
+                            p(class='card-text') Insert list of steps here.
+                            br
+                            button.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
+                div(style='width: 30%')
+                    div(class='card')
+                        img.image(class='card-img-top', src='/images/chicken_stir_fry.jpg', alt='Chicken Noodle Soup')
+                        div(class='card-body')
+                            h4(class='card-title') Chicken Stir-Fry
+                            p(class='card-text') Insert list of steps here.
+                            br
+                            button.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
+                div(style='width: 30%')
+                    div(class='card')
+                        img.image(class='card-img-top', src='/images/chicken_pot_pie.jpg', alt='Chicken Noodle Soup')
+                        div(class='card-body')
+                            h4(class='card-title') Chicken Pot Pie
+                            p(class='card-text') Insert list of steps here.
+                            br
+                            button.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
