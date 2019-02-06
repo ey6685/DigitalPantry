@@ -20,8 +20,8 @@ const Recipes = db.define('recipes', {
         },
     recipe_directions: {
         type: Sequelize.TEXT
-    }
-    recipe_image_path{
+    },
+    recipe_image_path: {
         type: Sequelize.TEXT
     }
 },
