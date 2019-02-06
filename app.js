@@ -21,7 +21,8 @@ const db = mysql.createConnection ({
     host: 'localhost',
     user: 'root',
     password: 'password',
-    database: 'digital_pantry'
+    database: 'digital_pantry',
+    multipleStatements:true
 });
 
 // const Sequelize = require('sequelize');
