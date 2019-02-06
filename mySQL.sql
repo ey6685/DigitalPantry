@@ -27,7 +27,7 @@ CREATE TABLE `ingredients` (
   `ingredient_name` varchar(255) NOT NULL,
   `ingredient_total` float DEFAULT '1',
   `ingredient_measurement` varchar(32) DEFAULT NULL,
-  `ingredient_expiration_date` date NOT NULL,
+  `ingredient_expiration_date` date ,
   PRIMARY KEY (`ingredient_id`),
   UNIQUE KEY `unique_ingredient` (`ingredient_name`,`ingredient_measurement`,`ingredient_expiration_date`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -86,6 +86,7 @@ CREATE TABLE `recipes` (
   `recipe_serving_size` int(11) DEFAULT NULL,
   `recipe_pantry_id` int(11) DEFAULT NULL,
   `recipe_directions` text,
+  `recipe_image_path` text,
   PRIMARY KEY (`recipe_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -96,7 +97,7 @@ CREATE TABLE `recipes` (
 
 LOCK TABLES `recipes` WRITE;
 /*!40000 ALTER TABLE `recipes` DISABLE KEYS */;
-INSERT INTO `recipes` VALUES (1,'black bean salsa',6,1,'#drain canned beans and corn#put them in a large bowl and mix together#serve on tortillas or with chips.'),(2,'chicken noodle soup',4,1,'#Put ingredients into a large bow together#Cover bowl, then microwave for 3 minutes on high#Serve hot with crackers or bread');
+INSERT INTO `recipes` VALUES (1,'black bean salsa',6,1,'#drain canned beans and corn#put them in a large bowl and mix together#serve on tortillas or with chips.',NULL),(2,'chicken noodle soup',4,1,'#Put ingredients into a large bow together#Cover bowl, then microwave for 3 minutes on high#Serve hot with crackers or bread',NULL);
 /*!40000 ALTER TABLE `recipes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -135,4 +136,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-04 17:34:16
+-- Dump completed on 2019-02-05  3:21:27
