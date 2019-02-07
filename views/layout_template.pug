@@ -29,13 +29,16 @@ html
                 button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
                     span.navbar-toggler-icon
                 #navbarCollapse.collapse.navbar-collapse
-                    ul.navbar-nav.mr-auto
-                        li.nav-item.active
-                            a.nav-link(href='/users/login')
-                                | Sign In
-                        li.nnav-item.active
-                            a.nav-link(href='/users/register')
-                                | Register
+                    if !user
+                        ul.navbar-nav.mr-auto
+                            li.nnav-item.active
+                                a.nav-link(href='/users/register')
+                                    | Register
+                    else
+                        ul.navbar-nav.mr-auto
+                            li.nnav-item.active
+                                a.nav-link(href='/users/logout')
+                                    | Logout
         .container
             br
             //- block content will get replaced with another .pug file

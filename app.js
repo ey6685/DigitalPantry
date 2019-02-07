@@ -7,6 +7,10 @@ const cookieParser = require('cookie-parser');
 const expressValidator = require('express-validator')
 const expressSession = require('express-session')
 const flash = require('connect-flash');
+const passport = require('passport');
+
+
+
 
 //Initialize the application
 const app = express();
@@ -61,18 +65,42 @@ app.set('view engine', 'pug');
 app.use(express.static(path.join(__dirname,'public')));
 
 //Allows to get params from post requests 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 //This should be declared after body parser
 app.use(expressValidator());
+
+//Allows for parsing cookies
 app.use(cookieParser());
-app.use(expressSession({secret:'pantry', saveUninitialized:false, resave:true}));
+
+//Sessiong management with cookies
+//Parsing/validation
+//saveUnitialized: false - session cookie will not be stored unless physically modified
+//saveUnitialized: true - forces session cookie to be stored in any case
+//Secret - used to set sessionID cookie
+//Resave - forces the session to be saved back to the session store, even if the session was never modified during the request. 
+app.use(expressSession({secret:'pantry', saveUninitialized:true, resave:false}));
+
+//Initialize passport authetication module
+app.use(passport.initialize());
+app.use(passport.session());
+
+//connect-flash is used for displaying quick messages, like the ones you get when you enter wrong password or and empty field
 app.use(require('connect-flash')());
 app.use(function(req,res,next){
     res.locals.messages = require('express-messages')(req,res);
     next();
-})
+});
 app.use(flash());
+
+//Define Global Vars
+app.use(function(req,res,next){
+    //If user is not authenticated this variable will be null
+    //Used to determine the state the user is in
+    res.locals.user = req.user || null
+    next();
+});
 
 
 //Get request to localhost:3000
@@ -99,6 +127,7 @@ app.use('/test', test);
 
 const ingredient = require('./routes/ingredients');
 app.use('/ingredients', ingredient);
+
 
 //Start listening on localhost or 127.0.0.1 on port 3000
 app.listen(3000, function(){
