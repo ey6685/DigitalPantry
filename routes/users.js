@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const moment = require('moment');
 const algorithm = require('./algorithm');
+const User = require('../DB_models/users');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
 
 //Get request to localhost:3000/users/login
 router.get('/login', function(req, res){
@@ -12,40 +15,108 @@ router.get('/login', function(req, res){
     });
 })
 
+//Set up LocalStrategy of how users will be authenticated
+//Accepts username and password form the signin.pug
+passport.use(new LocalStrategy(async function(username, password, done) {
+    //First find if user exists
+    let userData = await User.getUserByEmail(username);
+        if(!userData){
+            //If user not found by email return Unknown User
+            return done(null,false,{message:'Unknown User'});
+        }
+        else{
+            //If user found
+
+            /*
+            COMPARE PASSWORD HASHES
+            Grab 'password' from the form
+            Apply hash defined in DB_models/Users.js to the password
+            Compare hashed password 'userData.pass' from the database with entered password
+            */
+            User.comparePassword(password,userData.pass,function(err, isMatch){
+                //if error throw error
+                if(err) throw err;
+                //If hashes match
+                if(isMatch){
+                    return done(null,userData);
+                }
+                //If hashes dont match print invalid password
+                else{
+                    return done(null,false,{message:'Invalid Password'});
+                }
+            });
+        }
+}));
+
+//serialized user instance 
+//Create cookies for sessions management
+//This allows for using login credentials once for a single request and then keeping the user authenticated without making requests with same credentials
+//Creates a cookie with user credentials
+passport.serializeUser(function(user, done) {
+    done(null, user.user_id);
+});
+
+//Invalidates the cookie based on the userId
+passport.deserializeUser(async function(id, done) {
+    try{
+        let userData = await User.getUserById(id);
+        done(null,userData);
+    }
+    catch(err){
+        throw err;
+    }    
+  });
+
+//Does user authentication
+//If success redirect to /users/dashboard
+//If failure keep user at the login with proper message of what went wrong
+router.post('/login',
+    passport.authenticate('local',{
+        successRedirect:'/users/dashboard',
+        failureRedirect:'/users/login',
+        successFlash:'Welcome!',
+        failureFlash:true
+    })
+);
+
+//------------
+//DEPRECATED METHOD
+//PLAIN TEXT AUTHENTICATION
+//------------
+
 //This will login a user based on theirc redentials
-router.post('/login', function(req, res){
+// router.post('/login', function(req, res){
+//     req.checkBody('email','Username is required').notEmpty();
+//     req.checkBody('password','Password is required').notEmpty();
 
-    req.checkBody('email','Username is required').notEmpty();
-    req.checkBody('password','Password is required').notEmpty();
+//     let errors = req.validationErrors();
 
-    let errors = req.validationErrors();
-
-    if(errors){
-        res.render('signin',{
-            title:"Sign In",
-            errors:errors
-        });
-    }
-    else{
-        const u_email = req.body.email;
-        const u_pass = req.body.password;
-        // data = 'SELECT (userName,pass) FROM users WHERE userName="'+u_name+'" AND pass='+"'"+u_pass+"'";
-        // console.log("DATA:" + data);
-        db.query('SELECT * FROM users WHERE email="'+u_email+'" AND pass="'+u_pass+'"', function(err, results) {
-            if (results.length > 0) {
-                req.flash("success", "Welcome");
-                res.redirect('/users/dashboard');
-            }
-            else{
-                customErr = "User not found";
-                req.flash("error", "No such user");
-                res.redirect('/users/login');
-            }
-        });
-    }
+//     if(errors){
+//         res.render('signin',{
+//             title:"Sign In",
+//             errors:errors
+//         });
+//     }
+//     else{
+//         const u_email = req.body.email;
+//         const u_pass = req.body.password;
+//         // data = 'SELECT (userName,pass) FROM users WHERE userName="'+u_name+'" AND pass='+"'"+u_pass+"'";
+//         // console.log("DATA:" + data);
+//         db.query('SELECT * FROM users WHERE email="'+u_email+'" AND pass="'+u_pass+'"', function(err, results) {
+//             if (results.length > 0) {
+//                 req.flash("success", "Welcome");
+//                 res.redirect('/users/dashboard');
+//             }
+//             else{
+//                 customErr = "User not found";
+//                 req.flash("error", "No such user");
+//                 res.redirect('/users/login');
+//             }
+//         });
+//     }
 
     
-})
+// })
 
 //Get request to localhost:3000/users/register
 router.get('/register', function(req, res){
@@ -58,7 +129,7 @@ router.get('/register', function(req, res){
 })
 
 //Get request to localhost:3000/users/login
-router.get('/dashboard', async function(req, res){
+router.get('/dashboard',async function(req, res){
     //pulls algorithm results from directAlgorithm into r_results
     var r_results = await algorithm.directAlgorithm();
     //renders dashboard page with next expiring ingredient
@@ -106,37 +177,82 @@ router.post('/register', function(req,res){
             errors:errors
         });
     }
+    //METHOD BELOW IS DEPRECATED PLAIN TEXT AUTHENTICATION
     //if no errors
+    // else{
+    //     //Get user's email
+    //     const u_name = req.body.email;
+    //     //Get user's password
+    //     const u_pass = req.body.password;
+    //     //Prepare user's data for SQL INSERT
+    //     user_data="('"+u_name+"','"+u_pass+"','"+"user"+"')";
+
+    //     //Add new user to database
+    //     db.query('INSERT INTO users (email, pass, user_type) VALUES '+user_data, function(err, results) {
+    //         //If error on insert into database
+    //         if (err){ 
+    //             //prepare error message for user
+    //             req.flash("error", "Could not add user to database");
+    //             //show message on registration page
+    //             res.redirect('/users/register');
+    //             //Log the error to console
+    //             console.log(err);
+    //         }
+    //         //If successful insert
+    //         else{
+    //             //Prepare message for user
+    //             req.flash("success", "Welcome");
+    //             //Redirect user to their dashboard
+    //             res.redirect('/users/dashboard');
+    //         }
+    //     });
+    // }
+
+    //ENCRYPTED AUTHENTICATION
+    //Creates a user and hashes their password into database
     else{
         //Get user's email
-        const u_name = req.body.email;
+        const email = req.body.email;
         //Get user's password
-        const u_pass = req.body.password;
-        //Prepare user's data for SQL INSERT
-        user_data="('"+u_name+"','"+u_pass+"','"+"user"+"')";
-
-        //Add new user to database
-        db.query('INSERT INTO users (email, pass, user_type) VALUES '+user_data, function(err, results) {
-            //If error on insert into database
-            if (err){ 
-                //prepare error message for user
-                req.flash("error", "Could not add user to database");
-                //show message on registration page
-                res.redirect('/users/register');
-                //Log the error to console
-                console.log(err);
-            }
-            //If successful insert
-            else{
-                //Prepare message for user
-                req.flash("success", "Welcome");
-                //Redirect user to their dashboard
-                res.redirect('/users/dashboard');
-            }
+        const password = req.body.password;
+        //Instantiate new user model defined in DB_models/Users.js
+        var newUser = new User({
+            email: email,
+            pass: password,
+            //TODO add pantryID
+            userType: "admin"
         });
+
+        //Call create function from DB_models/Users.js
+        User.createUser(newUser, function(err, user){
+            if (err) throw err;
+        });
+
+        //Upon sucessful creating take user to the dashboard
+        req.flash("success", "Welcome");
+        res.redirect('/users/dashboard');
     }
 
-})
+});
+
+router.get('/logout', function(req,res){
+    req.logOut();
+    req.flash("success","You are logged out");
+    res.locals.user = null;
+    res.redirect('/users/login');
+});
+
+//Function to call from any route to check if user is authenticated
+//This needs to be used for verification of user privilleges
+function checkAuthentication(req,res,next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    else{
+        req.flash('error', 'You are not logged in');
+        res.redirect('/users/login');
+    }
+}
 
 //TODO
 //Remove user with DELETE
