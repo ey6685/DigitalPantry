@@ -1,19 +1,41 @@
 extends layout_template
 
 block content
-    != messages('message', locals)
-    .col-md-12
-        br
-        br
-        h2.mb-3 Next Expiring Ingredient:
-        p
-            h3 #{i_total} #{i_measurement} of #{i_name} on #{(i_expire)}
-        br
-        div(class='card', style='width: 75%')
-            img.image(class='card-img-top', src='/images/chicken_noodle_soup.jpg', alt='Chicken Noodle Soup')
-            div(class='card-body')
-                h4(class='card-title') #{r_name}
-                p(class='card-text') Insert list of steps here.
-                br
-                button.btn.btn-secondary(type='button' onclick='view_recipe()') View Recipe
-                button.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
+    //- != messages('message', locals)
+    //- .col-md-12
+    br
+    br
+    div.bg-secondary(class='container-fluid', class='rounded')
+        h2.mb-3.text-white Next Expiring Ingredient:
+            h3.mb-3.text-white #{i_total} #{i_measurement} of #{i_name} on #{(i_expire)}
+    br
+    div.bg-dark(class='container-fluid', class='rounded')
+        h4.text-dark .
+        h2.mb-3.text-white Recommended Recipes:
+        div(class='row')
+            div(class='col-4')
+                div(class='card', style='width: 100%', class='card h-100')
+                    img.image(class='card-img-top', src='/images/chicken_noodle_soup.jpg', alt='Chicken Noodle Soup')
+                    div(class='card-body')
+                        h4(class='card-title') #{r_name}
+                        p(class='card-text') #{r_steps}
+                        br
+                        button.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
+            div(class='col-4')
+                div(class='card', style='width: 100%', class='card h-100')
+                    img.image(class='card-img-top', src=+stir_fry_image, alt='Chicken Noodle Soup')
+                    div(class='card-body')
+                        h4(class='card-title') Chicken Stir-Fry
+                        p(class='card-text') Insert list of steps here.
+                        br
+                    div(class='card-foot', padding='.75rem')
+                        button.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
+            div(class='col-4')
+                div(class='card', style='width: 100%', class='card h-100')
+                    img.image(class='card-img-top', src='/images/chicken_pot_pie.jpg', alt='Chicken Noodle Soup')
+                    div(class='card-body')
+                        h4(class='card-title') Chicken Pot Pie
+                        p(class='card-text') Insert list of steps here.
+                        br
+                        button.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
+        h4.text-dark .

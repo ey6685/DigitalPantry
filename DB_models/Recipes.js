@@ -18,6 +18,12 @@ const Recipes = db.define('recipes', {
     recipe_pantry_id: {
         type: Sequelize.INTEGER
         },
+    recipe_directions: {
+        type: Sequelize.TEXT
+    },
+    recipe_image_path: {
+        type: Sequelize.TEXT
+    }
 },
     {  
     timestamps     : false
