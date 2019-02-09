@@ -1,8 +1,17 @@
-extends layout_template
+extends user_view_template
 
 //- NOTE: CSS FOR BUTTONS IS LOCATED UNDER THE layout_template
 
 block content
+    style.
+        .card-container{
+            padding-top:10px;
+            padding-bottom:20px;
+        }
+        .btn_card{
+                /*Defines CSS for butons on the dashboard*/
+                margin: 0px 10px 10px 10px;
+            }
     //- != messages('message', locals)
     //- .col-md-12
     //- Stores a variable passed in, which defines an image path
@@ -10,11 +19,10 @@ block content
     br
     br
     div.bg-secondary(class='container-fluid', class='rounded')
-        h2.mb-3.text-white Next Expiring Ingredient:
+        h2.text-white Next Expiring Ingredient:
             h3.mb-3.text-white #{i_total} #{i_measurement} of #{i_name} on #{(i_expire)}
     br
-    div.bg-dark(class='container-fluid', class='rounded')
-        h4.text-dark .
+    div.bg-dark.card-container(class='container-fluid', class='rounded')
         h2.mb-3.text-white Recommended Recipes:
         div(class='row')
             div(class='col-4')
@@ -48,4 +56,3 @@ block content
                     div(class='card-foot', padding='.75rem')
                         //- btn_card is a custom class used for CSS for buttons
                         button.btn_card.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
-        h4.text-dark .

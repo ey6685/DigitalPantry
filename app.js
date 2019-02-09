@@ -113,6 +113,10 @@ app.get('/', function(req, res){
     });
 });
 
+app.get('/test',function(req,res){
+    res.render('user_view_template');
+});
+
 //Route files
 //anything that has to do with user data route it through /users
 const users = require('./routes/users');

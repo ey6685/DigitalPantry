@@ -1,0 +1,70 @@
+doctype html
+html
+    head
+        style.
+            .footer {
+                position: fixed;
+                left: 0;
+                height:60px;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+                box-shadow: 0 50vh 0 50vh #343a40;
+            }
+            .sidebar-sticky {
+                position:absolute;
+                float:left;
+                /*height is 100% - the footer height*/
+                height: 100%;
+                padding-top: 5px;
+                padding-right: 10px;
+                padding-left:10px;
+                box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+            }
+            main{
+                margin-bottom:100px;
+            }
+            .nav-link{
+                color:white;
+            }
+            i{
+                padding-left:5px;
+            }
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+    body
+        .sidebar-sticky.bg-secondary.text-white
+            h2 Digital Pantry
+            hr
+            ul.nav.flex-column
+                li.nav-item
+                    a.nav-link(href='/users/dashboard') Dashboard 
+                        i.fa.fa-tachometer
+                li.nav-item
+                    a.nav-link(href='/recipes/showall') Recipes
+                        i.fa.fa-spoon
+                li.nav-item
+                    a.nav-link(href='/ingredients/showall') Ingredients
+                        i.fa.fa-spoon
+                li.nav-item
+                    a.nav-link(href='#') Manage Users
+                        i.fa.fa-user-o
+                li.nav-item
+                    a.nav-link(href='/') Logout 
+                        i.fa.fa-sign-out
+        .containter
+            main.ml-sm-auto.col-lg-10.px-4(role='main')
+                block content
+            footer.footer.bg-dark.text-light
+                p.mb-1 © 2019 Digital Pantry
+                ul.list-inline
+                    //- TODO link these to proper files
+                    li.list-inline-item
+                        a(href='#') Privacy
+                    li.list-inline-item
+                        a(href='#') Terms
+                    li.list-inline-item
+                        a(href='#') Support
+        script(src='/bower_components/jquery/dist/jquery.min.js')
+        script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
+        script(src="/js/main.js")
