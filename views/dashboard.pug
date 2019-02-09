@@ -1,8 +1,12 @@
 extends layout_template
 
+//- NOTE: CSS FOR BUTTONS IS LOCATED UNDER THE layout_template
+
 block content
     //- != messages('message', locals)
     //- .col-md-12
+    //- Stores a variable passed in, which defines an image path
+    - image= stir_fry_imaage
     br
     br
     div.bg-secondary(class='container-fluid', class='rounded')
@@ -18,18 +22,22 @@ block content
                     img.image(class='card-img-top', src='/images/chicken_noodle_soup.jpg', alt='Chicken Noodle Soup')
                     div(class='card-body')
                         h4(class='card-title') #{r_name}
-                        p(class='card-text') #{r_steps}
-                        br
-                        button.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
+                        //- For each steps inside of the array of steps
+                        for step in r_steps
+                            p(class='card-text')= step
+                    div(class='card-foot', padding='.75rem')
+                        //- btn_card is a custom class used for CSS for buttons
+                        button.btn_card.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
             div(class='col-4')
                 div(class='card', style='width: 100%', class='card h-100')
-                    img.image(class='card-img-top', src=+stir_fry_image, alt='Chicken Noodle Soup')
+                    img.image(class='card-img-top', src=image, alt='Chicken Noodle Soup')
                     div(class='card-body')
                         h4(class='card-title') Chicken Stir-Fry
                         p(class='card-text') Insert list of steps here.
                         br
                     div(class='card-foot', padding='.75rem')
-                        button.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
+                        //- btn_card is a custom class used for CSS for buttons
+                        button.btn_card.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
             div(class='col-4')
                 div(class='card', style='width: 100%', class='card h-100')
                     img.image(class='card-img-top', src='/images/chicken_pot_pie.jpg', alt='Chicken Noodle Soup')
@@ -37,5 +45,7 @@ block content
                         h4(class='card-title') Chicken Pot Pie
                         p(class='card-text') Insert list of steps here.
                         br
-                        button.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
+                    div(class='card-foot', padding='.75rem')
+                        //- btn_card is a custom class used for CSS for buttons
+                        button.btn_card.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
         h4.text-dark .

@@ -80,16 +80,3 @@ module.exports.comparePassword = function(candidatePassword, hash, callback){
         callback(null, isMatch);
     });
 }
-
-//Function to call from any route to check if user is authenticated
-//This needs to be used for verification of user privilleges
-function checkAuthentication(req,res,next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    else{
-        req.flash('error', 'You are not logged in');
-        res.redirect('/users/login');
-    }
-}
-module.exports.checkAuthentication = checkAuthentication;
