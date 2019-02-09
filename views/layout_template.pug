@@ -12,8 +12,13 @@ html
                 box-shadow: 0 50vh 0 50vh #343a40;
             }
             .btn{
-                /*Adds button separation so they are not glued to each other*/
-                margin: 0px 10px 0px 0px;;
+                /*Adds button separation so they are not glued to each other
+                Used for the signin and register pages*/
+                margin: 0px 10px 0px 0px;
+            }
+            .btn_card{
+                /*Defines CSS for butons on the dashboard*/
+                margin: 0px 10px 10px 10px;
             }
         title Digital Pantry
         link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
@@ -58,4 +63,5 @@ html
                     li.list-inline-item
                     a(href='#') Support
         script(src='/bower_components/jquery/dist/jquery.min.js')
+        script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
         script(src="/js/main.js")

@@ -135,6 +135,8 @@ router.get('/dashboard',async function(req, res){
     var r_results = await algorithm.directAlgorithm();
     var rid = r_results[0]['recipe_id'];
     var r_steps = await steps.recipe_direction_parser(rid);
+    //Split String by the demiliter so we can get all individual steps
+    var r_steps_array = r_steps.split('${<br>}')
     console.log('done getting steps');
     var stir_fry_image = '/images/chicken_stir_fry.jpg';
     console.log(stir_fry_image);
@@ -150,7 +152,8 @@ router.get('/dashboard',async function(req, res){
             i_expire: moment(results[0]['ingredient_expiration_date']).format('LL'),
             //pulls recipe_name into r_name for referencing in dashboard
             r_name: r_results[0]['recipe_name'],
-            r_steps: r_steps,
+            r_steps: r_steps_array,
+            //Send individual recipe steps inside the array
             stir_fry_imaage: stir_fry_image
         });
 
