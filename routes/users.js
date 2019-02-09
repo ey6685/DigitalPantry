@@ -64,7 +64,9 @@ router.get('/dashboard', async function(req, res){
     var r_results = await algorithm.directAlgorithm();
     var rid = r_results[0]['recipe_id'];
     var r_steps = await steps.recipe_direction_parser(rid);
-    console.log('done getting steps');    
+    console.log('done getting steps');
+    var stir_fry_image = '/images/chicken_stir_fry.jpg';
+    console.log(stir_fry_image);
     //renders dashboard page with next expiring ingredient
     db.query('SELECT * FROM ingredients ORDER BY ingredient_expiration_date LIMIT 1', function(err, results){
         if (err) throw err
@@ -77,7 +79,8 @@ router.get('/dashboard', async function(req, res){
             i_expire: moment(results[0]['ingredient_expiration_date']).format('LL'),
             //pulls recipe_name into r_name for referencing in dashboard
             r_name: r_results[0]['recipe_name'],
-            r_steps: r_steps
+            r_steps: r_steps,
+            stir_fry_imaage: stir_fry_image
         });
 
     });
