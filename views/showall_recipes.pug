@@ -1,16 +1,15 @@
-extends layout_template
+extends user_view_template
 
 //- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
 
 block content
-    .col-md-12
-        br
-        br
-        h1.mb-3 #{title}
-        br
+    br
+    br
+    br
+    div(class='container-fluid', class='rounded', style='width: 80%')
+        h1 #{title}
         br
         table.table.table-dark
-            caption Available recipes
             thead
                 tr
                     th(scope='col') Recipe ID

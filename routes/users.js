@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const moment = require('moment');
 const algorithm = require('./algorithm');
-const steps = require('../recipe_direction_parser')
-const User = require('../DB_models/users');
+const steps = require('../recipe_direction_parser');
+const User = require('../DB_models/Users');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 
@@ -131,16 +131,21 @@ router.get('/register', function(req, res){
 
 //Get request to localhost:3000/users/login
 router.get('/dashboard',async function(req, res){
-    //pulls algorithm results from directAlgorithm into r_results
-    var r_results = await algorithm.directAlgorithm();
-    var rid = r_results[0]['recipe_id'];
-    var r_steps = await steps.recipe_direction_parser(rid);
-    //Split String by the demiliter so we can get all individual steps
-    var r_steps_array = r_steps.split('${<br>}')
-    console.log('done getting steps');
-    var stir_fry_image = '/images/chicken_stir_fry.jpg';
-    console.log(stir_fry_image);
-    //renders dashboard page with next expiring ingredient
+    //Jon//pulls algorithm results from directAlgorithm into recipe_results
+    //Jon//then parses recipe id into var recipe_id
+    var recipe_results = await algorithm.directAlgorithm();
+    var recipe_id = recipe_results[0]['recipe_id'];
+    //Jon//pulls recipes steps from recipe_direction_parser by the recipe_id
+    //Oskars//then splits string by the delimeter so we can get all the individual steps
+    var recipe_steps = await steps.recipe_direction_parser(recipe_id);
+    var recipe_steps_array = recipe_steps.split('${<br>}');
+
+    //var cookit = cookit.cook_it(id);
+
+    //Grab relative image path for 2nd and 3rd recipe cards
+    var chicken_stir_fry_image = '/images/chicken_stir_fry.jpg';
+    var chicken_pot_pie_image = '/images/chicken_pot_pie.jpg';
+    //Jon//renders dashboard page with next expiring ingredient
     db.query('SELECT * FROM ingredients ORDER BY ingredient_expiration_date LIMIT 1', function(err, results){
         if (err) throw err
         res.render('dashboard',{
@@ -150,11 +155,13 @@ router.get('/dashboard',async function(req, res){
             i_measurement: results[0]['ingredient_measurement'],
             i_name: results[0]['ingredient_name'],
             i_expire: moment(results[0]['ingredient_expiration_date']).format('LL'),
-            //pulls recipe_name into r_name for referencing in dashboard
-            r_name: r_results[0]['recipe_name'],
-            r_steps: r_steps_array,
+            //pulls recipe_name into recipe_name for referencing in dashboard
+            recipe_name: recipe_results[0]['recipe_name'],
+            recipe_steps: recipe_steps_array,
             //Send individual recipe steps inside the array
-            stir_fry_imaage: stir_fry_image
+            stir_fry_image: chicken_stir_fry_image,
+            pot_pie_image: chicken_pot_pie_image,
+            //cook_it: cookit
         });
 
     });
