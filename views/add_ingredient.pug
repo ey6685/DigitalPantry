@@ -1,28 +1,32 @@
-extends layout_template
+extends user_view_template
 
 //- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
 
 block content
-    h1 #{title}
-    
-    tbody
-        tr
-            form(method= 'POST', action= '/ingredients/add', class= 'well form-inline')
-                .form-inline
-                    input.form-control(name='name', type='text', placeholder='Name = Tuna')
-                .form-inline
-                    input.form-control(name='size', type='text', placeholder='Size = 2')
-                //- .dropdown
-                //- select.form-control(name='measurement', required)
-                //-     option(value='') Measurement
-                //-     option(value='pound') Pound
-                //-     option(value='ounce') Ounce
-                //-     option(value='cup') Cup
-                //-     option(value='tablespoon') Tablespoon
-                //-     option(value='teaspoon') Teaspoon
-                //-     option(value='can') Can
-                .form-inline
-                    input.form-control(name='expirationDate', type='date')
-                .form-inline
-                    input.form-control(name='quantity', type='text', placeholder='Quantity = 2')
-                input.btn.btn-primary(type='submit', value='Submit')
+    br
+    br
+    br
+    div(class='container-fluid', class='rounded', style='width: 80%')
+        h1 #{title}
+        br
+        tbody
+            tr
+                form(method= 'POST', action= '/ingredients/add', class= 'well form-inline')
+                    .form-inline
+                        input.form-control(name='name', type='text', placeholder='Name = Tuna')
+                    .form-inline
+                        input.form-control(name='size', type='text', placeholder='Size = 2')
+                    //- .dropdown
+                    //- select.form-control(name='measurement', required)
+                    //-     option(value='') Measurement
+                    //-     option(value='pound') Pound
+                    //-     option(value='ounce') Ounce
+                    //-     option(value='cup') Cup
+                    //-     option(value='tablespoon') Tablespoon
+                    //-     option(value='teaspoon') Teaspoon
+                    //-     option(value='can') Can
+                    .form-inline
+                        input.form-control(name='expirationDate', type='date')
+                    .form-inline
+                        input.form-control(name='quantity', type='text', placeholder='Quantity = 2')
+                    input.btn.btn-primary(type='submit', value='Submit')
