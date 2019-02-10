@@ -17,8 +17,6 @@ html
                 /*height is 100% - the footer height*/
                 height: 100%;
                 padding-top: 5px;
-                padding-right: 10px;
-                padding-left:10px;
                 box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
             }
             main{
@@ -27,8 +25,25 @@ html
             .nav-link{
                 color:white;
             }
+            hr{
+                background-color:white;
+                margin-bottom:0px !important;
+                border-bottom:0px !important;
+                padding-bottom:0px !important;
+            }
+            .nav-item{
+                padding-right:10px;
+                padding-left:10px;
+                border-bottom:1px solid black;
+            }
+            .fa-spoon{
+                margin-left:5px;
+                padding-right:10px;
+                width:30px;
+            }
             i{
-                padding-left:5px;
+                padding-right:15px;
+                width:35px;
             }
         link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
         link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
@@ -38,20 +53,25 @@ html
             hr
             ul.nav.flex-column
                 li.nav-item
-                    a.nav-link(href='/users/dashboard') Dashboard 
+                    a.nav-link(href='/users/dashboard')
                         i.fa.fa-tachometer
+                        | Dashboard 
                 li.nav-item
-                    a.nav-link(href='/recipes/showall') Recipes
+                    a.nav-link(href='/recipes/showall')
                         i.fa.fa-spoon
+                        | Recipes
                 li.nav-item
-                    a.nav-link(href='/ingredients/showall') Ingredients
+                    a.nav-link(href='/ingredients/showall')
                         i.fa.fa-spoon
+                        | Ingredients
                 li.nav-item
-                    a.nav-link(href='#') Manage Users
+                    a.nav-link(href='#') 
                         i.fa.fa-user-o
+                        | Manage Users
                 li.nav-item
-                    a.nav-link(href='/') Logout 
+                    a.nav-link(href='/users/logout')
                         i.fa.fa-sign-out
+                        | Logout
         .containter
             main.ml-sm-auto.col-lg-10.px-4(role='main')
                 block content
