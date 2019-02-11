@@ -1,69 +1,73 @@
-extends layout_template
+extends user_view_template
 
 //- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
 
 block content
-    h1 #{title}
-    
-    tbody
-        tr
-            form(method= 'POST', action= '/recipes/add', class= 'form')
-                .form-row
-                    .form-group.col-md-4
-                        input.form-control(name='recipeName', type='text', placeholder='Recipe = Chicken Soup')
-                    .form-group.col-md-4
-                        input.form-control(name='recipeServingSize', type='text', placeholder='Serving Size = 2')
-                .form-row
-                    .form-group.col-md-4
-                        input.form-control(name='ingredientProperties[1]', type='text', placeholder='Ingredient = Chicken')
-                    .form-group.col-md-4
-                        input.form-control(name='ingredientProperties[1]', type='text', placeholder='Quantity = 2')
-                    .form-group.col-md-3
-                        .dropdown-inline
-                        select.form-control(name='ingredientProperties[1]', required)
-                            option(value='') Measurement
-                            option(value='bag') Bag
-                            option(value='can') Can
-                            option(value='pound') Pound
-                            option(value='ounce') Ounce
-                            option(value='cup') Cup
-                            option(value='tablespoon') Tablespoon
-                            option(value='teaspoon') Teaspoon
-                #recipe-container
-                input.btn.btn-primary(type='submit', value='Submit', class='form-group')
-                button.btn.btn-secondary(type='button' onclick='addIngredient()', class='form-group') Add Ingredient
+    br
+    br
+    br
+    div(class='container-fluid', class='rounded', style='width: 80%')
+        h1 #{title}
+        br
+        tbody
+            tr
+                form(method= 'POST', action= '/recipes/add', class= 'form')
+                    .form-row
+                        .form-group.col-md-4
+                            input.form-control(name='recipeName', type='text', placeholder='Recipe = Chicken Soup')
+                        .form-group.col-md-4
+                            input.form-control(name='recipeServingSize', type='text', placeholder='Serving Size = 2')
+                    .form-row
+                        .form-group.col-md-4
+                            input.form-control(name='ingredientProperties[1]', type='text', placeholder='Ingredient = Chicken')
+                        .form-group.col-md-4
+                            input.form-control(name='ingredientProperties[1]', type='text', placeholder='Quantity = 2')
+                        .form-group.col-md-3
+                            .dropdown-inline
+                            select.form-control(name='ingredientProperties[1]', required)
+                                option(value='') Measurement
+                                option(value='bag') Bag
+                                option(value='can') Can
+                                option(value='pound') Pound
+                                option(value='ounce') Ounce
+                                option(value='cup') Cup
+                                option(value='tablespoon') Tablespoon
+                                option(value='teaspoon') Teaspoon
+                    #recipe-container
+                    input.btn.btn-primary(type='submit', value='Submit', class='form-group')
+                    button.btn.btn-secondary(type='button' onclick='addIngredient()', class='form-group') Add Ingredient
 
 
-    script.
-        let i = 2;
-            function addIngredient(){
-            let template = `
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Ingredient = Chicken">
-                </div>
-                <div class="form-group col-md-4">
-                    <input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Quantity = 2">
-                </div>
-                <div class="dropdown-inline col-md-3">
-                    <select class="form-control" name="ingredientProperties[${i}]" required="required">
-                        <option value="">Measurement</option>
-                        <option value="bag">Bag</option>
-                        <option value="can">Can</option>
-                        <option value="pound">Pound</option>
-                        <option value="ounce">Ounce</option>
-                        <option value="cup">Cup</option>
-                        <option value="tablespoon">Tablespoon</option>
-                        <option value="teaspoon">Teaspoon</option>
-                    </select>
+        script.
+            let i = 2;
+                function addIngredient(){
+                let template = `
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Ingredient = Chicken">
                     </div>
-                <div class="form-group col-md-1 text-center">
-                    <button type="button" class="btn btn-danger delete-row" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                </div>
-            </div>`;
-            let container = document.getElementById('recipe-container');
-            let element = document.createElement('element');
-            element.innerHTML = template;
-            container.appendChild(element);
-            i++
-        }
+                    <div class="form-group col-md-4">
+                        <input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Quantity = 2">
+                    </div>
+                    <div class="dropdown-inline col-md-3">
+                        <select class="form-control" name="ingredientProperties[${i}]" required="required">
+                            <option value="">Measurement</option>
+                            <option value="bag">Bag</option>
+                            <option value="can">Can</option>
+                            <option value="pound">Pound</option>
+                            <option value="ounce">Ounce</option>
+                            <option value="cup">Cup</option>
+                            <option value="tablespoon">Tablespoon</option>
+                            <option value="teaspoon">Teaspoon</option>
+                        </select>
+                        </div>
+                    <div class="form-group col-md-1 text-center">
+                        <button type="button" class="btn btn-danger delete-row" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                </div>`;
+                let container = document.getElementById('recipe-container');
+                let element = document.createElement('element');
+                element.innerHTML = template;
+                container.appendChild(element);
+                i++
+            }

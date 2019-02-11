@@ -39,7 +39,7 @@ CREATE TABLE `ingredients` (
 
 LOCK TABLES `ingredients` WRITE;
 /*!40000 ALTER TABLE `ingredients` DISABLE KEYS */;
-INSERT INTO `ingredients` VALUES (1,'chicken',1,'can','2019-02-07'),(2,'black beans',1,'can','2019-02-08'),(3,'salsa',16,'oz','2019-02-10'),(4,'corn',1,'can','2019-02-10'),(5,'tortilla chips',1,'bag','2019-02-10'),(6,'condensed chicken soup',1,'can','2019-02-12'),(7,'mixed vegetables',1,'can','2019-02-10'),(8,'water',NULL,NULL,'9999-12-31');
+INSERT INTO `ingredients` VALUES (1,'Chicken',1,'Can','2019-02-07'),(2,'Black beans',1,'Can','2019-02-08'),(3,'Salsa',16,'oz','2019-02-10'),(4,'Corn',1,'Can','2019-02-10'),(5,'Tortilla Chips',1,'Bag','2019-02-10'),(6,'Condensed Chicken Soup',1,'Can','2019-02-12'),(7,'Mixed vegetables',1,'Can','2019-02-10'),(8,'Water',NULL,NULL,'9999-12-31');
 /*!40000 ALTER TABLE `ingredients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -69,7 +69,7 @@ CREATE TABLE `recipe_ingredient` (
 
 LOCK TABLES `recipe_ingredient` WRITE;
 /*!40000 ALTER TABLE `recipe_ingredient` DISABLE KEYS */;
-INSERT INTO `recipe_ingredient` VALUES (3,1,1,'can',1),(4,1,1,'can',1),(2,1,16,'oz',1),(5,1,1,'bag',1),(6,2,1,'can',1),(8,2,1,'can',1),(7,2,1,'can',1),(1,2,1,'can',1);
+INSERT INTO `recipe_ingredient` VALUES (3,1,1,'Can',1),(4,1,1,'Can',1),(2,1,16,'Oz',1),(5,1,1,'Bag',1),(6,2,1,'Can',1),(8,2,1,'Can',1),(7,2,1,'Can',1),(1,2,1,'Can',1);
 /*!40000 ALTER TABLE `recipe_ingredient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,7 +97,7 @@ CREATE TABLE `recipes` (
 
 LOCK TABLES `recipes` WRITE;
 /*!40000 ALTER TABLE `recipes` DISABLE KEYS */;
-INSERT INTO `recipes` VALUES (1,'black bean salsa',6,1,'#drain canned beans and corn#put them in a large bowl and mix together#serve on tortillas or with chips.',NULL),(2,'chicken noodle soup',4,1,'#Put ingredients into a large bow together#Cover bowl, then microwave for 3 minutes on high#Serve hot with crackers or bread',NULL);
+INSERT INTO `recipes` VALUES (1,'Black bean salsa',6,1,'#Drain canned beans and corn#Put them in a large bowl and mix together#Serve on tortillas or with chips.',NULL),(2,'Chicken noodle soup',4,1,'#Put ingredients into a large bow together#Cover bowl, then microwave for 3 minutes on high#Serve hot with crackers or bread',NULL);
 /*!40000 ALTER TABLE `recipes` ENABLE KEYS */;
 UNLOCK TABLES;
 
