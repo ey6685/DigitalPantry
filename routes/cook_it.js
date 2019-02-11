@@ -37,118 +37,123 @@ const op = require('sequelize').Op;
 ///////////////start of the cook it function//////////////
 function cook_it(recipe_id)
 {
-    ingredients_id_array = new Array();// used in the query for ingredients
-    new_inv              = new Array();//used to keep track of the new amount to store in DB 
-   
-   
-    //query
-    //select * from recipe_ingredients 
-    //where
-    //recipe_id = 'recipe_id';
-    ingredients_in_recipe.findAll({
-        where: {recipe_id: recipe_id}
-    })
-    .then(IiR_results =>{
-        IiR_results.forEach(index=>{
-            // console.log(index.ingredient_id)
-            ingredients_id_array.push(index.ingredient_id);
-        });
-
-        //query
-        //select * from ingredients
-        //where
-        //ingredient_id
-        ingredients_t.findAll({
-            where:{ ingredient_id: {[op.in]: ingredients_id_array}}
-        })
-        .then(ingredient_results =>{
-            //now that we have the data that we are looking at
-            //we need to check our inventory for the ingredients
-
-
-            flag_can_cook =true;//flip if we cant cook the food. most likey due to an ingredteitn not being in stock
-            
-            //loop through and match the ids so we can find if we have it
-            //if we have it log the differece in the total
-            for(var i=0; i< ingredient_results.length; i++)
-            {
-                // console.log("outer for:" + (i+1));
-                for(var o=0;o < IiR_results.length; o++)
-                {
-                   
-                   
-                    if(IiR_results[o].ingredient_id == ingredient_results[i].ingredient_id)
-                    {
-                                              
-                        if(IiR_results[i].recipe_ingredient_qty <= ingredient_results[o].ingredient_total || ingredient_results[o].ingredient_total == null)
-                            {
-                                //now that we have match the ids of the ingredients and that we have it log 
-                                //the differcne in new_nav by pushing it on to that array
-
-                                new_inv.push(ingredient_results[i].ingredient_total - IiR_results[o].recipe_ingredient_qty);
-                                //stop this iteration of the loop
-                                break;
-                            }
-                            else
-                            {
-                                //send to the console that the flag was fipped
-                                ////////////////NOTE/////////////////////////
-                                //we may want to make this error render to //
-                                //the page later if you guys want. for p2? //
-                                //maybe?                                   //
-                                /////////////////////////////////////////////
-                                console.log("flag fipped: canNOT cook");
-                                flag_can_cook = false;
-                            }
-                    }//end of id check
-
-                }//end of nested for
-
-            }//end of outer for
-            console.log(flag_can_cook);
-            if(flag_can_cook)
-            {
-                //now that we have the ingredients in the inv and have the differice in what we have and what we
-                //need stored in new_inv 
-                //noramlly i would of used sequlized but i needed to update more than one
-                //row at a time and it was just easiery to build the query string and send it as
-                //raw sql
-                //therefore the next block of code is just bulding the string
-                //if the inv is 0 we also change the expritation date to null to 
-                //to take it out of the inv for later finding the next expiring ing
-                let query_str = "";
-
-                if(ingredients_id_array.length == new_inv.length)
-                {
-                    for(let i = 0; i<ingredients_id_array.length; i++)
-                    {
-                        if(new_inv>0)
-                        {
-                            query_str += "UPDATE ingredients SET ingredient_total = " + new_inv[i] + " WHERE ingredient_id = " + ingredients_id_array[i] + "'; ";
-                        }else
-                        {
-                            query_str += "UPDATE ingredients SET ingredient_total = 0, ingredient_expiration_date = null WHERE ingredient_id = " + ingredients_id_array[i] + "; ";
-                            new_inv[i] = null;
-                        }
-                    }
-                    db.query(query_str,(err,result) =>{
-                        if(err) throw err;
-                        console.log("queryed db success");
-                     }
-
-                    );
-                    
-                }
-                else
-                {
-                    console.log("Opps something went wrong!")
-                }
-            }
-        })
-    })
-
-
+    try{
+        ingredients_id_array = new Array();// used in the query for ingredients
+        new_inv              = new Array();//used to keep track of the new amount to store in DB 
     
+    
+        //query
+        //select * from recipe_ingredients 
+        //where
+        //recipe_id = 'recipe_id';
+        ingredients_in_recipe.findAll({
+            where: {recipe_id: recipe_id}
+        })
+        .then(IiR_results =>{
+            IiR_results.forEach(index=>{
+                // console.log(index.ingredient_id)
+                ingredients_id_array.push(index.ingredient_id);
+            });
+
+            //query
+            //select * from ingredients
+            //where
+            //ingredient_id
+            ingredients_t.findAll({
+                where:{ ingredient_id: {[op.in]: ingredients_id_array}}
+            })
+            .then(ingredient_results =>{
+                //now that we have the data that we are looking at
+                //we need to check our inventory for the ingredients
+
+
+                flag_can_cook =true;//flip if we cant cook the food. most likey due to an ingredteitn not being in stock
+                
+                //loop through and match the ids so we can find if we have it
+                //if we have it log the differece in the total
+                for(var i=0; i< ingredient_results.length; i++)
+                {
+                    // console.log("outer for:" + (i+1));
+                    for(var o=0;o < IiR_results.length; o++)
+                    {
+                    
+                    
+                        if(IiR_results[o].ingredient_id == ingredient_results[i].ingredient_id)
+                        {
+                                                
+                            if(IiR_results[i].recipe_ingredient_qty <= ingredient_results[o].ingredient_total || ingredient_results[o].ingredient_total == null)
+                                {
+                                    //now that we have match the ids of the ingredients and that we have it log 
+                                    //the differcne in new_nav by pushing it on to that array
+
+                                    new_inv.push(ingredient_results[i].ingredient_total - IiR_results[o].recipe_ingredient_qty);
+                                    //stop this iteration of the loop
+                                    break;
+                                }
+                                else
+                                {
+                                    //send to the console that the flag was fipped
+                                    ////////////////NOTE/////////////////////////
+                                    //we may want to make this error render to //
+                                    //the page later if you guys want. for p2? //
+                                    //maybe?                                   //
+                                    /////////////////////////////////////////////
+                                    console.log("flag fipped: canNOT cook");
+                                    flag_can_cook = false;
+                                }
+                        }//end of id check
+
+                    }//end of nested for
+
+                }//end of outer for
+                console.log(flag_can_cook);
+                if(flag_can_cook)
+                {
+                    //now that we have the ingredients in the inv and have the differice in what we have and what we
+                    //need stored in new_inv 
+                    //noramlly i would of used sequlized but i needed to update more than one
+                    //row at a time and it was just easiery to build the query string and send it as
+                    //raw sql
+                    //therefore the next block of code is just bulding the string
+                    //if the inv is 0 we also change the expritation date to null to 
+                    //to take it out of the inv for later finding the next expiring ing
+                    let query_str = "";
+
+                    if(ingredients_id_array.length == new_inv.length)
+                    {
+                        for(let i = 0; i<ingredients_id_array.length; i++)
+                        {
+                            if(new_inv>0)
+                            {
+                                query_str += "UPDATE ingredients SET ingredient_total = " + new_inv[i] + " WHERE ingredient_id = " + ingredients_id_array[i] + "'; ";
+                            }else
+                            {
+                                query_str += "UPDATE ingredients SET ingredient_total = 0, ingredient_expiration_date = null WHERE ingredient_id = " + ingredients_id_array[i] + "; ";
+                                new_inv[i] = null;
+                            }
+                        }
+                        db.query(query_str,(err,result) =>{
+                            if(err) throw err;
+                            console.log("queryed db success");
+                        }
+
+                        );
+                        
+                    }
+                    else
+                    {
+                        console.log("Opps something went wrong!")
+                    }
+                }
+            })
+        })
+    }
+    catch(err)
+    {
+        res.send("<h1>ERROR:" + err +"</h1><br><h2>please hit the browser's back button and reload the page.<br>if this is the 2nd time you are here please contact your systems admin and inform them of the error.</h2><br><h3>have a nice day user:)");
+    }
+
+        
 
 }
 
