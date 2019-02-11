@@ -19,43 +19,58 @@ router.get('/showall', async function(req, res){
     //         results: results
     //     })
     //   })
-    var recipe_res = await recipe_t.findAll({});
-    var IiR_res = await IiR_t.findAll({});
-    //make string array that we will be storeing the ingredient  sting
-    var ingredient_list = new Array(recipe_res.length).fill('');
+    try{
+        var recipe_res = await recipe_t.findAll({});
+        var IiR_res = await IiR_t.findAll({});
+        //make string array that we will be storeing the ingredient  sting
+        var ingredient_list = new Array(recipe_res.length).fill('');
+        
+    
+
+
 
     //grabs the ingredient names for the ingredients tables for each recipe id
     //and stores them in to ingredients list in a formated str where
     //each ingredient is seperated by a #
-    var ing_res;
-    console.log('starting for loop');
-    for(var i = 0; i < IiR_res.length; i++)
-    {
-        ing_res = await ingredient_t.findAll({
-            attributes: ['ingredient_name'],
-            where: {
-                ingredient_id: IiR_res[i].ingredient_id
-            }
-        });
-        if(!ingredient_list[IiR_res[i].recipe_id-1] == "")
-            ingredient_list[IiR_res[i].recipe_id-1] +="#";
-        ingredient_list[IiR_res[i].recipe_id-1] += ing_res[0].ingredient_name + "," + IiR_res[i].recipe_ingredient_qty +" " +IiR_res[i].recipe_ingredient_measurement;
-    }
+    
+        var ing_res;
+        console.log('starting for loop');
+        for(var i = 0; i < IiR_res.length; i++)
+        {
+            ing_res = await ingredient_t.findAll({
+                attributes: ['ingredient_name'],
+                where: {
+                    ingredient_id: IiR_res[i].ingredient_id
+                }
+            });
+            if(!ingredient_list[IiR_res[i].recipe_id-1] == "")
+                ingredient_list[IiR_res[i].recipe_id-1] +="#";
+            ingredient_list[IiR_res[i].recipe_id-1] += ing_res[0].ingredient_name + "," + IiR_res[i].recipe_ingredient_qty +" " +IiR_res[i].recipe_ingredient_measurement;
+        }
 
-    //now to take the ingredient_list array and make it 2d by spliting the columns
-    //into rows where the # tag is
+        //now to take the ingredient_list array and make it 2d by spliting the columns
+        //into rows where the # tag is
 
-     for(var i = 0; i<ingredient_list.length; i++)
-    {
-       ingredient_list[i] = ingredient_list[i].split('#');
+        for(var i = 0; i<ingredient_list.length; i++)
+        {
+        ingredient_list[i] = ingredient_list[i].split('#');
+        }
+    
+    
+    
+
+        res.render('showall_recipes',{
+            title: "Your Recipes",
+            results: recipe_res,
+            ingredients: ingredient_list
+        })
     }
- 
-    res.render('showall_recipes',{
-        title: "Your Recipes",
-        results: recipe_res,
-        ingredients: ingredient_list
+    catch(err)
+    {
+        res.send("<h1>ERROR:" + err +"</h1><br><h2>please hit the browser's back button and reload the page.<br>if this is the 2nd time you are here please contact your systems admin and inform them of the error.</h2><br><h3>have a nice day user:)");
+    }
     })
-})
+
     
 
 /*
