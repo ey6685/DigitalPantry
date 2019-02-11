@@ -1,16 +1,15 @@
-extends layout_template
+extends user_view_template
 
 //- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
 
 block content
-    .col-md-12
-        br
-        br
-        h1.mb-3 #{title}
-        br
+    br
+    br
+    br
+    div(class='container-fluid', class='rounded', style='width: 80%')
+        h1 #{title}
         br
         table.table.table-dark
-            caption Available recipes
             thead
                 tr
                     th(scope='col') Recipe ID
@@ -20,13 +19,17 @@ block content
                     th(scope='col') Ingredients needed
                     th(scope='col') Action
             tbody
-                for item in results
+                for item,i in results
                     tr
                         th(scope='row')= item.recipe_id
                             td= item.recipe_pantry_id
                             td= item.recipe_name
                             td= item.recipe_serving_size
-                            td= item.ingredients
+                            td
+                                select(style="width: 100%;")
+                                    option(value="0") Show Ingredient
+                                    for o in ingredients[i]
+                                        option(value="#{o}") #{o}
                             td
                                 //- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
                                 a.btn.btn-danger.delete-recipe(href='#', data-id=item.recipe_id) DELETE

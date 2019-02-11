@@ -1,19 +1,65 @@
-extends layout_template
+extends user_view_template
+
+//- NOTE: CSS FOR BUTTONS IS LOCATED UNDER THE layout_template
 
 block content
-    != messages('message', locals)
-    .col-md-12
+    style.
+        .card-container{
+            padding-top:10px;
+            padding-bottom:20px;
+        }
+        .btn_card{
+                /*Defines CSS for butons on the dashboard*/
+                margin: 0px 10px 10px 10px;
+            }
+    //- != messages('message', locals)
+    //- .col-md-12
+    //- Stores a variable passed in, which defines an image path
+    - card1_image= recipe_image_path
+    - card2_image= stir_fry_image
+    - card3_image= pot_pie_image
+    - rid_variable= rid
+    br
+    br
+    br
+    div(class='container-fluid', class='rounded', style='width: 80%')
+        div.bg-secondary(class='rounded', class='col-12')
+            h2.text-white Next Expiring Ingredient:
+                h3.mb-3.text-white #{i_total} #{i_measurement} of #{i_name} on #{(i_expire)}
         br
-        br
-        h2.mb-3 Next Expiring Ingredient:
-        p
-            h3 #{i_total} #{i_measurement} of #{i_name} on #{(i_expire)}
-        br
-        div(class='card', style='width: 75%')
-            img.image(class='card-img-top', src='/images/chicken_noodle_soup.jpg', alt='Chicken Noodle Soup')
-            div(class='card-body')
-                h4(class='card-title') #{r_name}
-                p(class='card-text') Insert list of steps here.
-                br
-                button.btn.btn-secondary(type='button' onclick='view_recipe()') View Recipe
-                button.btn.btn-primary(type='submit' onclick='view_recipe()') Cook It!
+        div.bg-dark.card-container(class='container-fluid', class='rounded')
+            h4.text-dark .
+            h2.mb-3.text-white Recommended Recipes:
+            div(class='row')
+                div(class='col-4')
+                    div(class='card', style='width: 100%', class='card h-100')
+                        img.image(class='card-img-top', src=card1_image, alt='Chicken Noodle Soup')
+                        div(class='card-body')
+                            h4(class='card-title') #{recipe_name}
+                            //- For each steps inside of the array of steps
+                            for step in recipe_steps
+                                p(class='card-text')= step
+                        div(class='card-foot', padding='.75rem')
+                            //- btn_card is a custom class used for CSS for buttons
+                            button.btn_card.btn.btn-primary(recipe-id=rid, id='card-one', type='button', style='width: 93%') Cook It!
+                div(class='col-4')
+                    div(class='card', style='width: 100%', class='card h-100')
+                        img.image(class='card-img-top', src=card2_image, alt='Chicken Stir Fry')
+                        div(class='card-body')
+                            h4(class='card-title') Chicken Stir-Fry
+                            p(class='card-text') Insert list of steps here.
+                            br
+                        div(class='card-foot', padding='.75rem')
+                            //- btn_card is a custom class used for CSS for buttons
+                            button.btn_card.btn.btn-primary(type='submit' onclick='view_recipe()', style='width: 93%') Cook It!
+                div(class='col-4')
+                    div(class='card', style='width: 100%', class='card h-100')
+                        img.image(class='card-img-top', src=card3_image, alt='Chicken Pot Pie')
+                        div(class='card-body')
+                            h4(class='card-title') Chicken Pot Pie
+                            p(class='card-text') Insert list of steps here.
+                            br
+                        div(class='card-foot', padding='.75rem')
+                            //- btn_card is a custom class used for CSS for buttons
+                            button.btn_card.btn.btn-primary(type='submit' onclick='view_recipe()', style='width: 93%') Cook It!
+            h4.text-dark .

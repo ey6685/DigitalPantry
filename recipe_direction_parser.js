@@ -43,7 +43,7 @@ function recipe_direction_parser(recipe_id)
             {
                 //the start of a new step
                 counting_pound_sign += 1;
-                returning_string += "\n" + counting_pound_sign + ".)";
+                returning_string += "${<br>}" + counting_pound_sign + ".)";
             }
             else
             {

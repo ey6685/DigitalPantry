@@ -69,7 +69,7 @@ CREATE TABLE `recipe_ingredient` (
 
 LOCK TABLES `recipe_ingredient` WRITE;
 /*!40000 ALTER TABLE `recipe_ingredient` DISABLE KEYS */;
-INSERT INTO `recipe_ingredient` VALUES (3,1,1,'can',1),(4,1,1,'can',1),(2,1,16,'oz',1),(5,1,1,'bag',1),(6,2,1,'can',1),(8,2,1,'can',1),(7,2,1,'can',1),(1,2,1,'can',1);
+INSERT INTO `recipe_ingredient` VALUES (3,1,1,'Can',1),(4,1,1,'Can',1),(2,1,16,'Oz',1),(5,1,1,'Bag',1),(6,2,1,'Can',1),(8,2,1,'Can',1),(7,2,1,'Can',1),(1,2,1,'Can',1);
 /*!40000 ALTER TABLE `recipe_ingredient` ENABLE KEYS */;
 UNLOCK TABLES;
 

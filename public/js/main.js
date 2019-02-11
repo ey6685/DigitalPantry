@@ -1,3 +1,6 @@
+//CREATED BY OSKARS DAUKSTS
+//THIS FILE HAS ALL THE JQUERY AND AJAX CALLS
+
 //DELETE ingredient request
 //On document ready start
 $(document).ready(function(){
@@ -50,6 +53,33 @@ $(document).ready(function(){
     });
 });
 
+//Delete extra rows if any from add_reipe
 $(document).on('click','.delete-row',function() {
+    //delete closest row
     $(this).closest('.form-row').remove();
+});
+
+//Cook it button logic
+//Uses ingredients based on the recipe chosen
+//Updates dashboard
+$(document).ready(function(){
+    $('#card-one').on('click', function(e){
+        //get button object clicked
+        $target = $(e.target);
+        //get data-id value from the button, which is recipe ID
+        const id = ($target.attr('recipe-id'));
+        console.log(id);
+        //Start AJAX
+        $.ajax({
+            type:'GET',
+            url:'/users/cook/'+id,
+            success:function(response){
+                //Reload the page to update cards
+                location.reload();
+            },
+            error:function(err){
+                console.log("Could not delete: "+id);
+            }
+        });
+    });
 });
