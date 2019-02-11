@@ -68,7 +68,7 @@ $(document).ready(function(){
         $target = $(e.target);
         //get data-id value from the button, which is recipe ID
         const id = ($target.attr('recipe-id'));
-
+        console.log(id);
         //Start AJAX
         $.ajax({
             type:'GET',

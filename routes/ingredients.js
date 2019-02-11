@@ -5,7 +5,7 @@ const router = express.Router();
 //GET request to localhost:3000/users/login
 router.get('/showall', function(req, res){
     //renders showall_recipes with all the available ingredients
-    db.query('SELECT * FROM ingredients', function(err, results) {
+    db.query('SELECT * FROM ingredients WHERE ingredient_expiration_date IS NOT null', function(err, results) {
         if (err) throw err
         res.render('showall_ingredients',{
             title:"Your Ingredients",

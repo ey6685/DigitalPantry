@@ -3,7 +3,6 @@ extends user_view_template
 //- NOTE: CSS FOR BUTTONS IS LOCATED UNDER THE layout_template
 
 block content
-    script(src='../cook_it.js')
     style.
         .card-container{
             padding-top:10px;
@@ -16,8 +15,10 @@ block content
     //- != messages('message', locals)
     //- .col-md-12
     //- Stores a variable passed in, which defines an image path
+    - card1_image= recipe_image_path
     - card2_image= stir_fry_image
     - card3_image= pot_pie_image
+    - rid_variable= rid
     br
     br
     br
@@ -32,7 +33,7 @@ block content
             div(class='row')
                 div(class='col-4')
                     div(class='card', style='width: 100%', class='card h-100')
-                        img.image(class='card-img-top', src='/images/chicken_noodle_soup.jpg', alt='Chicken Noodle Soup')
+                        img.image(class='card-img-top', src=card1_image, alt='Chicken Noodle Soup')
                         div(class='card-body')
                             h4(class='card-title') #{recipe_name}
                             //- For each steps inside of the array of steps
@@ -62,12 +63,3 @@ block content
                             //- btn_card is a custom class used for CSS for buttons
                             button.btn_card.btn.btn-primary(type='submit' onclick='view_recipe()', style='width: 93%') Cook It!
             h4.text-dark .
-
-
-    script.
-            include './cook_it';
-            let rid = recipe_id;
-                function do_cook_it(){
-                    cook_it.cook_it(rid);
-                }
-            }
