@@ -11,7 +11,14 @@ html
                 text-align: center;
                 box-shadow: 0 50vh 0 50vh #343a40;
             }
+            .nav{
+                top:0;
+                bottom:0;
+                position:fixed;
+                width:200px;
+            }
             .sidebar-sticky {
+                padding-top:50px;
                 position:absolute;
                 float:left;
                 /*height is 100% - the footer height*/
@@ -36,6 +43,10 @@ html
                 padding-left:10px;
                 border-bottom:1px solid black;
             }
+            .header{
+                text-align:center;
+                font-size:25px;
+            }
             .fa-spoon{
                 margin-left:5px;
                 padding-right:10px;
@@ -48,30 +59,31 @@ html
         link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
         link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
     body
-        .sidebar-sticky.bg-secondary.text-white
-            h2 Digital Pantry
-            hr
-            ul.nav.flex-column
-                li.nav-item
-                    a.nav-link(href='/users/dashboard')
-                        i.fa.fa-tachometer
-                        | Dashboard 
-                li.nav-item
-                    a.nav-link(href='/recipes/showall')
-                        i.fa.fa-spoon
-                        | Recipes
-                li.nav-item
-                    a.nav-link(href='/ingredients/showall')
-                        i.fa.fa-spoon
-                        | Ingredients
-                li.nav-item
-                    a.nav-link(href='#') 
-                        i.fa.fa-user-o
-                        | Manage Users
-                li.nav-item
-                    a.nav-link(href='/users/logout')
-                        i.fa.fa-sign-out
-                        | Logout
+        .nav
+            .sidebar-sticky.bg-secondary.text-white
+                ul.nav.flex-column
+                li.header Digital Pantry
+                    hr
+                    li.nav-item
+                        a.nav-link(href='/users/dashboard')
+                            i.fa.fa-tachometer
+                            | Dashboard 
+                    li.nav-item
+                        a.nav-link(href='/recipes/showall')
+                            i.fa.fa-spoon
+                            | Recipes
+                    li.nav-item
+                        a.nav-link(href='/ingredients/showall')
+                            i.fa.fa-spoon
+                            | Ingredients
+                    li.nav-item
+                        a.nav-link(href='#') 
+                            i.fa.fa-user-o
+                            | Manage Users
+                    li.nav-item
+                        a.nav-link(href='/users/logout')
+                            i.fa.fa-sign-out
+                            | Logout
         .containter
             main.ml-sm-auto.col-lg-10.px-4(role='main')
                 block content
