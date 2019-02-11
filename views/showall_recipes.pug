@@ -19,13 +19,17 @@ block content
                     th(scope='col') Ingredients needed
                     th(scope='col') Action
             tbody
-                for item in results
+                for item,i in results
                     tr
                         th(scope='row')= item.recipe_id
                             td= item.recipe_pantry_id
                             td= item.recipe_name
                             td= item.recipe_serving_size
-                            td= item.ingredients
+                            td
+                                select(style="width: 100%;")
+                                    option(value="0") Show Ingredient
+                                    for o in ingredients[i]
+                                        option(value="#{o}") #{o}
                             td
                                 //- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
                                 a.btn.btn-danger.delete-recipe(href='#', data-id=item.recipe_id) DELETE
