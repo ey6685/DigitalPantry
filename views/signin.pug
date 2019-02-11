@@ -1,25 +1,31 @@
 extends layout_template
 
 block content
-        != messages('message', locals)
-        if errors
-                for error in errors
-                        div(class='alert alert-danger') #{error.msg}
-        //- This div will show the user if they have been registered or display an error
-        .col-md-8.offset-md-4
-            //- Below will print whatever you have sent from app.js
-            h1.mb-3 #{title}
-            //- TODO create signin form
-            form(method='POST', action='/users/login')
-                .col-md-6.mb-3
-                    #form-group
-                            label Email:
-                            input.form-control(name='username', type='text')
-                    #form-group
-                        label Password:
-                        input.form-control(name='password', type='password')
-                        br
-                        input.btn.btn-primary(type='submit', value='Submit')
-                        a(href='/users/register') Don't have an account?
-
-                         
+	!= messages('message', locals)
+	if errors
+		for error in errors
+			div(class='alert alert-danger') #{error.msg}
+	br
+	div(class='container-fluid', class='rounded', style='width: 80%')
+		//- This div will show the user if they have been registered or display an error
+		.col-md-8.offset-md-4
+		//- Below will print whatever you have sent from app.js
+		div.bg-secondary(class='rounded', class='col-12')
+			h6.text-secondary .
+			h1.text-center.text-white.mb-3 #{title}
+			div.bg-dark.card-container(class='container-fluid', class='rounded', style='width: 100%')
+				div(class='row')
+				h6.text-dark .
+					div.mx-auto(class='col-8')
+						form(method='POST', action='/users/login')
+							#form-group
+								label.text-white Email:
+								input.form-control(name='username', type='text')
+							#form-group
+								label.text-white Password:
+								input.form-control(name='password', type='password')
+								br
+								input.btn.btn-primary(type='submit', value='Submit')
+								a(href='/users/register') Don't have an account?
+				h4.text-dark .
+			h4.text-secondary .
