@@ -52,10 +52,13 @@ async function directAlgorithm(){
 	//SELECT * FROM ingredients// 
 	///////////////////////////// 
 	let ingredients_result = await ingredients.findAll({
-		where: {},
+		where: {
+			ingredient_total:{
+				[op.ne]:0
+			}
+		},
 		raw: true
 	});
-		console.log("entered first then");
  
 		//get the data stored 
  
@@ -89,7 +92,6 @@ async function directAlgorithm(){
 			where: {},
 			raw: true
 		});
-			console.log("entered second then");
 			//////////////////////////////////////////////////////////////////////	 
 			//check out the recipe_ingredient table for matching ingredient id's// 
 			//when found store the recipe_id in the potential_recipe_ids.       // 
@@ -116,7 +118,7 @@ async function directAlgorithm(){
 			///change this output to display on the page in/// 
 			////////////////////////////////////////////////// 
 			{ 
-				res.send("there is no recipes for your next expiring ingredients :(") 
+				res.send("there is no recipes for your next expiring ingredients :(")
 			} 
 			 
 			//if we found 1+ recipes 
@@ -168,14 +170,12 @@ async function directAlgorithm(){
 									}
 								}
 							})
-								console.log("entered third then");
 								someinfo = recipes_result;
 								return someinfo;
 						} 
 			}//end ofthe if's 
 		//end of recipe_ing promise 
 	//end of ingredients promise	 
-	console.log("End of alogorithm");
 }//end of router function 
 
 module.exports = router;

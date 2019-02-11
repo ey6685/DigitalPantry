@@ -40,7 +40,7 @@ block content
                                 p(class='card-text')= step
                         div(class='card-foot', padding='.75rem')
                             //- btn_card is a custom class used for CSS for buttons
-                            button.btn_card.btn.btn-primary(type='button', onclick='do_cook_it()', style='width: 93%') Cook It!
+                            button.btn_card.btn.btn-primary(recipe-id=rid, id='card-one', type='button', style='width: 93%') Cook It!
                 div(class='col-4')
                     div(class='card', style='width: 100%', class='card h-100')
                         img.image(class='card-img-top', src=card2_image, alt='Chicken Stir Fry')
