@@ -273,7 +273,6 @@ router.post("/register", function(req, res) {
     });
 
     //Upon sucessful creating take user to the dashboard
-    req.flash("success", "Welcome");
     res.redirect("/users/dashboard");
   }
 });
