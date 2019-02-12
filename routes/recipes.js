@@ -3,9 +3,19 @@ const router = express.Router();
 const recipe_t = require('../DB_models/Recipes');
 const ingredient_t = require('../DB_models/Ingredients')
 const IiR_t = require('../DB_models/recipe_ingredient');
-const op = require("sequelize").Op;
+const multer = require('multer');
 
-
+//defines where to store image
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, __dirname + '/../public/images/')
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname)
+    }
+  })
+  //create an upload function using configuration above
+  const upload = multer({storage: storage})
 /*
 TYPE: GET
 URL ENDPOINT: localhost:3000/recipes/showall
@@ -99,23 +109,37 @@ BODY_PARAMS:
         ingredient_size
         ingredient_expiration_date
 */
-router.post('/add', function(req, res){
+//calls upload function for images
+router.post('/add',upload.single("image") , async function(req, res){
+    console.log(req.file);
+    if (req.file) {
+        console.log('Uploading file...');
+        console.log('File Uploaded Successfully');
+    } else {
+        console.log('No File Uploaded');
+        console.log('File Upload Failed');
+    }
     //recipe_name and recipe_size are unique form fields, so they do not require any recursion to grab all of them
     const recipeName = req.body.recipeName;
     const recipeServingSize = req.body.recipeServingSize
+    var recipeDirections = req.body.recipeDirections;
+    var replaceNewLine = "#";
+    for (char in recipeDirections){
+        replaceNewLine = replaceNewLine.concat(recipeDirections[char].replace('\r','').replace('\n','#'));
+    }
 
     //***************************
     //TODO add pantry ID here
     //***************************
 
     //Create entire query value
-    var query = "('" + recipeName + "','" + recipeServingSize + "')";
+    var query = "('" + recipeName + "','" + recipeServingSize + "','" + replaceNewLine + "')";
     console.log("Recipe Name: " + recipeName);
     console.log("Recipe Serving Size: " + recipeServingSize);
     console.log("Insert into Recipe Query: " + query);
     //Insert Recipe name and size into a table first
     // db.query('insert into recipe (name) values ('+'"'+req.body.recipe_name+'"'+')', function(err, results) {
-    db.query('insert into recipes (recipe_name,recipe_serving_size) values ' + query, function(err, results) {
+    await db.query('insert into recipes (recipe_name,recipe_serving_size,recipe_directions) values ' + query, async function(err, results) {
         if (err) throw err
         console.log("Recipe added sucessfully");
         console.log("results after adding a recipe: "+results);
@@ -143,7 +167,7 @@ router.post('/add', function(req, res){
                 console.log("Ingredient Measurement: " + ingredientMeasurement);
                 console.log("Insert into ingredients query: " + query);
                 //Insert ingredient into a Ingredients table
-                db.query('insert into ingredients (ingredient_name,ingredient_total,ingredient_measurement,ingredient_expiration_date) values '+query, function(err, results) {
+                await db.query('insert into ingredients (ingredient_name,ingredient_total,ingredient_measurement,ingredient_expiration_date) values '+query, async function(err, results) {
                     if (err) throw err
                     //Get inserted ingredient's row id, this works because auto-increment is set in the table
                     ingredients_ids_inserted = results.insertId;
@@ -157,7 +181,7 @@ router.post('/add', function(req, res){
                     //TODO add pantry ID here
                     //***************************
 
-                    db.query('insert into recipe_ingredient (ingredient_id,recipe_id,recipe_ingredient_qty,recipe_ingredient_measurement) values ' + query, function(err, results) {
+                    await db.query('insert into recipe_ingredient (ingredient_id,recipe_id,recipe_ingredient_qty,recipe_ingredient_measurement) values ' + query, async function(err, results) {
                         if (err) throw err
                     });
 
@@ -168,8 +192,8 @@ router.post('/add', function(req, res){
     });
 
     // res.send(req.body.ingredientName[1]);
-    //This will respond with the parameters that you sent in your request
-    //TODO redirect to another page
+    // This will respond with the parameters that you sent in your request
+    // TODO redirect to another page
     res.redirect("showall");
 })
 
