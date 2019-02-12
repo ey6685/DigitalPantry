@@ -1,18 +1,22 @@
 const express = require('express');
 const router = express.Router();
+const moment = require('moment');
 
 //Render page with data from database
 //GET request to localhost:3000/users/login
 router.get('/showall', function(req, res){
     //renders showall_recipes with all the available ingredients
     db.query('SELECT * FROM ingredients WHERE ingredient_expiration_date IS NOT null', function(err, results) {
+        for (key in results){
+            results[key]['ingredient_expiration_date'] = moment(results[key]['ingredient_expiration_date']).format('LL');
+        }
         if (err) throw err
         res.render('showall_ingredients',{
             title:"Your Ingredients",
             results: results
         });
-    })
-})
+    });
+});
 
 //Render page with a form for adding a new ingredient
 //GET request to localhost:3000/ingredients/add
