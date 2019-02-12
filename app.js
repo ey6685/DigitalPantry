@@ -10,8 +10,6 @@ const flash = require('connect-flash');
 const passport = require('passport');
 
 
-
-
 //Initialize the application
 const app = express();
 
