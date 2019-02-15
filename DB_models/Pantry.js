@@ -49,7 +49,7 @@ module.exports = Pantry;
 
 
 
-///testing code
+///testing code////////////////////////////////////////
 
 // Pantry.create({
 //     pantry_name: "test default values"
@@ -61,3 +61,4 @@ module.exports = Pantry;
 //     // recipes_cooked_month            : 10,
 //     // recipes_cooked_YTD              : 10
 // });
+/////////////////////////////////////////////////////
