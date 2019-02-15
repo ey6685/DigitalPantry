@@ -50,7 +50,8 @@ router.get('/showall', async function(req, res){
             ing_res = await ingredient_t.findAll({
                 attributes: ['ingredient_name'],
                 where: {
-                    ingredient_id: IiR_res[i].ingredient_id
+                    //ingredient_id: IiR_res[i].ingredient_id
+                    ingredient_name: IiR_res[i].recipe_ingredient_used
                 }
             });
             if(!ingredient_list[IiR_res[i].recipe_id-1] == "")
