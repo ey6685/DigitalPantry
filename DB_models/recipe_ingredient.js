@@ -5,10 +5,11 @@ const db = require('../databaseMySQL.js');
 
 const recipe_ingredient = db.define('recipe_ingredient', {
     ingredient_id                 : {type: Sequelize.INTEGER},
-    recipe_id                     : {type: Sequelize.INTEGER},
+    
     recipe_ingredient_qty         : {type: Sequelize.FLOAT},
     recipe_ingredient_measurement : {type: Sequelize.STRING},
-    recipe_pantry_id              : {type: Sequelize.INTEGER}
+    recipe_pantry_id              : {type: Sequelize.INTEGER},
+    recipe_ingredient_used        : {type: Sequelize.STRING}
 },
 {
     //these are to stop sequelize to add timestaps fields
