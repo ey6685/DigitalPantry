@@ -180,7 +180,7 @@ async function directAlgorithm(){
 			}
 			catch(err)
 			{
-				res.send("<h1>ERROR:" + err +"</h1><br><h2>please hit the browser's back button and reload the page.<br>if this is the 2nd time you are here please contact your systems admin and inform them of the error.</h2><br><h3>have a nice day user:)");
+				console.log("something went wrong");
 			}
 }//end of router function 
 
