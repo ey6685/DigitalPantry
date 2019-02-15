@@ -13,7 +13,6 @@ router.get("/login", function(req, res) {
   //renders signin page with content 'Sign In"
   res.render("signin", {
     title: "Sign In",
-    test: true
   });
 });
 
@@ -77,7 +76,6 @@ router.post(
   passport.authenticate("local", {
     successRedirect: "/users/dashboard",
     failureRedirect: "/users/login",
-    successFlash: "Welcome!",
     failureFlash: true
   })
 );
@@ -275,7 +273,6 @@ router.post("/register", function(req, res) {
     });
 
     //Upon sucessful creating take user to the dashboard
-    req.flash("success", "Welcome");
     res.redirect("/users/dashboard");
   }
 });

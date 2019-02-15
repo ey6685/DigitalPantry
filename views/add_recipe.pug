@@ -3,43 +3,76 @@ extends user_view_template
 //- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
 
 block content
-    br
-    br
+    style.
+        img{
+            display:none;
+        }
     br
     br
     div(class='container-fluid', class='rounded', style='width: 80%')
         h1 #{title}
+        hr
         br
-        tbody
-            tr
-                form(method= 'POST', action= '/recipes/add', class= 'form')
-                    .form-row
-                        .form-group.col-md-4
-                            input.form-control(name='recipeName', type='text', placeholder='Recipe = Chicken Soup')
-                        .form-group.col-md-4
-                            input.form-control(name='recipeServingSize', type='text', placeholder='Serving Size = 2')
-                    .form-row
-                        .form-group.col-md-4
-                            input.form-control(name='ingredientProperties[1]', type='text', placeholder='Ingredient = Chicken')
-                        .form-group.col-md-4
-                            input.form-control(name='ingredientProperties[1]', type='text', placeholder='Quantity = 2')
-                        .form-group.col-md-3
-                            .dropdown-inline
-                            select.form-control(name='ingredientProperties[1]', required)
-                                option(value='') Measurement
-                                option(value='bag') Bag
-                                option(value='can') Can
-                                option(value='pound') Pound
-                                option(value='ounce') Ounce
-                                option(value='cup') Cup
-                                option(value='tablespoon') Tablespoon
-                                option(value='teaspoon') Teaspoon
-                    #recipe-container
-                    input.btn.btn-primary(type='submit', value='Submit', class='form-group')
-                    button.btn.btn-secondary(type='button' onclick='addIngredient()', class='form-group') Add Ingredient
+        form(method= 'POST', action= '/recipes/add', class= 'form', enctype="multipart/form-data")
+            .form-row
+                .form-group.col-md-4
+                    input.form-control(name='recipeName', type='text', placeholder='Recipe = Chicken Soup')
+                .form-group.col-md-4
+                    input.form-control(name='recipeServingSize', type='text', placeholder='Serving Size = 2')
+            .form-row
+                .form-group.col-md-4
+                    input.form-control(name='ingredientProperties[1]', type='text', placeholder='Ingredient = Chicken')
+                .form-group.col-md-4
+                    input.form-control(name='ingredientProperties[1]', type='text', placeholder='Quantity = 2')
+                .form-group.col-md-3
+                    .dropdown-inline
+                    select.form-control(name='ingredientProperties[1]', required)
+                        option(value='') Measurement
+                        option(value='bag') Bag
+                        option(value='can') Can
+                        option(value='pound') Pound
+                        option(value='ounce') Ounce
+                        option(value='cup') Cup
+                        option(value='tablespoon') Tablespoon
+                        option(value='teaspoon') Teaspoon
+            #recipe-container
+            button.btn.btn-secondary(type='button' onclick='addIngredient()', class='form-group') Add Ingredient
+            .form-row
+                .col-md-7
+                    br
+                    h3 Add Instructions
+                    hr
+                    br
+                    .form-group
+                        textarea.form-control(name='recipeDirections', placeholder= 'Describe first step\nDescribe second step \nContinue with each step on new line', rows='8')
+                .col-md-1
+                .col-md-4
+                    br
+                    h3 Add An Image
+                    hr
+                    br
+                    .form-group
+                        img#output
+                    .form-group
+                        input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)')
+            input.btn.btn-primary(type='submit', value='Submit', class='form-group')
+                
 
 
         script.
+            //break
+            var textAreas = document.getElementsByTagName('textarea');
+            Array.prototype.forEach.call(textAreas, function(elem) {
+                elem.placeholder = elem.placeholder.replace(/\\n/g, '\n');
+            });
+            var loadFile = function(event) {
+                            var output = document.getElementById('output');
+                            output.src = URL.createObjectURL(event.target.files[0]);
+                            output.classList.add("img-thumbnail");
+                            document.getElementById("output").style.display = 'block';
+                            document.getElementById("output").style.width = '200px';
+                            document.getElementById("output").style.height = '200px';
+                            }
             let i = 2;
                 function addIngredient(){
                 let template = `
