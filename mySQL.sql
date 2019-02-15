@@ -27,7 +27,7 @@ CREATE TABLE `ingredients` (
   `ingredient_name` varchar(255) NOT NULL,
   `ingredient_total` float DEFAULT '1',
   `ingredient_measurement` varchar(32) DEFAULT NULL,
-  `ingredient_expiration_date` date ,
+  `ingredient_expiration_date` date DEFAULT NULL,
   PRIMARY KEY (`ingredient_id`),
   UNIQUE KEY `unique_ingredient` (`ingredient_name`,`ingredient_measurement`,`ingredient_expiration_date`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -39,8 +39,38 @@ CREATE TABLE `ingredients` (
 
 LOCK TABLES `ingredients` WRITE;
 /*!40000 ALTER TABLE `ingredients` DISABLE KEYS */;
-INSERT INTO `ingredients` VALUES (1,'Chicken',1,'Can','2019-02-07'),(2,'Black Beans',1,'Can','2019-02-08'),(3,'Salsa',16,'oz','2019-02-10'),(4,'Corn',1,'Can','2019-02-10'),(5,'Tortilla Chips',1,'Bag','2019-02-10'),(6,'Condensed Chicken Soup',1,'Can','2019-02-12'),(7,'Mixed vegetables',1,'Can','2019-02-10'),(8,'Water',NULL,NULL,'9999-12-31');
+INSERT INTO `ingredients` VALUES (1,'Chicken',1,'Can','2019-02-07'),(2,'Black beans',1,'Can','2019-02-08'),(3,'Salsa',16,'oz','2019-02-10'),(4,'Corn',1,'Can','2019-02-10'),(5,'Tortilla Chips',1,'Bag','2019-02-10'),(6,'Condensed Chicken Soup',1,'Can','2019-02-10'),(7,'Mixed vegetables',1,'Can','2019-02-10'),(8,'Water',99,NULL,NULL);
 /*!40000 ALTER TABLE `ingredients` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pantry`
+--
+
+DROP TABLE IF EXISTS `pantry`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `pantry` (
+  `pantry_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pantry_name` tinytext,
+  `pantry_ingredients_used_month` int(11) DEFAULT NULL,
+  `pantry_ingredients_wasted_month` int(11) DEFAULT NULL,
+  `pantry_ingredients_used_YTD` int(11) DEFAULT NULL,
+  `pantry_ingredients_wasted_YTD` int(11) DEFAULT NULL,
+  `recipes_cooked_month` int(11) DEFAULT NULL,
+  `recipes_cooked_YTD` int(11) DEFAULT NULL,
+  PRIMARY KEY (`pantry_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pantry`
+--
+
+LOCK TABLES `pantry` WRITE;
+/*!40000 ALTER TABLE `pantry` DISABLE KEYS */;
+INSERT INTO `pantry` VALUES (1,'Jon\'s Food n Go',0,0,0,0,0,0);
+/*!40000 ALTER TABLE `pantry` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -51,14 +81,12 @@ DROP TABLE IF EXISTS `recipe_ingredient`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `recipe_ingredient` (
-  `ingredient_id` int(11) DEFAULT NULL,
   `recipe_id` int(11) DEFAULT NULL,
   `recipe_ingredient_qty` float DEFAULT '1',
   `recipe_ingredient_measurement` varchar(32) DEFAULT NULL,
   `recipe_pantry_id` int(11) DEFAULT NULL,
-  KEY `ingredient_id` (`ingredient_id`),
+  `recipe_ingredient_used` varchar(32) DEFAULT NULL,
   KEY `recipe_id` (`recipe_id`),
-  CONSTRAINT `recipe_ingredient_ibfk_1` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredients` (`ingredient_id`) ON DELETE CASCADE,
   CONSTRAINT `recipe_ingredient_ibfk_2` FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`recipe_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -69,7 +97,7 @@ CREATE TABLE `recipe_ingredient` (
 
 LOCK TABLES `recipe_ingredient` WRITE;
 /*!40000 ALTER TABLE `recipe_ingredient` DISABLE KEYS */;
-INSERT INTO `recipe_ingredient` VALUES (3,1,1,'Can',1),(4,1,1,'Can',1),(2,1,16,'Oz',1),(5,1,1,'Bag',1),(6,2,1,'Can',1),(8,2,1,'Can',1),(7,2,1,'Can',1),(1,2,1,'Can',1);
+INSERT INTO `recipe_ingredient` VALUES (1,1,'Can',1,'Black beans'),(1,1,'Can',1,'Corn'),(1,16,'Oz',1,'Salsa'),(1,1,'Bag',1,'Tortilla Chips'),(2,1,'Can',1,'Condensed Chicken Soup'),(2,1,'Can',1,'Water'),(2,1,'Can',1,'Mixed vegetables'),(2,1,'Can',1,'Chicken');
 /*!40000 ALTER TABLE `recipe_ingredient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,7 +125,7 @@ CREATE TABLE `recipes` (
 
 LOCK TABLES `recipes` WRITE;
 /*!40000 ALTER TABLE `recipes` DISABLE KEYS */;
-INSERT INTO `recipes` VALUES (1,'Black Bean Salsa',6,1,'#Drain canned beans and corn#Put them in a large bowl and mix together#Serve on tortillas or with chips.','/images/bean_salsa.jpg'),(2,'Chicken Noodle Soup',4,1,'#Put ingredients into a large bow together#Cover bowl, then microwave for 3 minutes on high#Serve hot with crackers or bread','/images/chicken_noodle_soup.jpg');
+INSERT INTO `recipes` VALUES (1,'Black bean salsa',6,1,'#Drain canned beans and corn#Put them in a large bowl and mix together#Serve on tortillas or with chips.',NULL),(2,'Chicken noodle soup',4,1,'#Put ingredients into a large bow together#Cover bowl, then microwave for 3 minutes on high#Serve hot with crackers or bread','/images/chicken_noodle_soup.jpg');
 /*!40000 ALTER TABLE `recipes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -136,4 +164,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-05  3:21:27
+-- Dump completed on 2019-02-15  0:52:45
