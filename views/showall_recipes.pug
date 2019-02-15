@@ -1,8 +1,12 @@
 extends user_view_template
 
-//- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
 
 block content
+    //- Style used for removing different border color within a table
+    style.
+        .table-dark th, .table-dark td, .table-dark thead th{
+            border-color: inherit;
+        }
     br
     br
     br
@@ -10,29 +14,40 @@ block content
     div(class='container-fluid', class='rounded', style='width: 80%')
         h1 #{title}
         br
-        table.table.table-dark(class='rounded')
-            thead
-                tr
-                    th(scope='col') Recipe ID
-                    th(scope='col') Pantry ID
-                    th(scope='col') Recipe name
-                    th(scope='col') Serving size
-                    th(scope='col') Ingredients needed
-                    th(scope='col') Action
-            tbody
-                for item,i in results
+        table.table.rounded.table-hover.table-dark
+                thead
                     tr
-                        th(scope='row')= item.recipe_id
+                        th(scope='col') 
+                        th(scope='col') Recipe ID
+                        th(scope='col') Pantry ID
+                        th(scope='col') Recipe name
+                        th(scope='col') Serving size
+                        th(scope='col') Action
+                tbody
+                    for item,i in results
+                        //- variable below is used to define clickable table row
+                        - row= '#group-of-rows-' + i
+                        //- variable below is used for linking the clickable table row with the drop-down row
+                        - row2= 'group-of-rows-' + i
+                        tr.clickable(data-toggle='collapse', data-target=row)
+                            td
+                                i.fa.fa-plus
+                            td= item.recipe_id
                             td= item.recipe_pantry_id
                             td= item.recipe_name
                             td= item.recipe_serving_size
                             td
-                                select(style="width: 100%;")
-                                    option(value="0") Show Ingredient
-                                    for o in ingredients[i]
-                                        option(value="#{o}") #{o}
-                            td
                                 //- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
                                 a.btn.btn-danger.delete-recipe(href='#', data-id=item.recipe_id) DELETE
+                        //- Body of a drop-down row with ID linked to the parent row
+                        tbody(id=row2).collapse.bg-secondary.text-white
+                            tr
+                                td(rowspan='15').align-middle.border-right.text-center
+                                    b
+                                        | Ingredients
+                            
+                            for ingredient in ingredients[i]
+                                tr
+                                    td(colspan='5') #{ingredient}
         form(method='GET', action='/recipes/add')
             input.btn.btn-primary(type='submit', value='ADD RECIPES')
