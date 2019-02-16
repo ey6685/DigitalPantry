@@ -1,0 +1,13 @@
+///////////////////////////////////////////////////////////////////////////////
+//this file is the main function(like in c) that calls all the cogs in this  //
+//this main function is to find the expiring ingredients within the user set //
+//window and find recipes that are the best fit to use those ingredients     //
+///////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////inputs/////////////////////////////////////////////////////////////
+//today's date: date : take from computer, later? report to a master clock                //
+//the window  : date : taken from the user, how far away for $today"s date we need to look//
+//pantry id   : int  : to limit the search through all the recipes                        //
+////////////////////////////////////////////////////////////////////////////////////////////
+
+//requires
