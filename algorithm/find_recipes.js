@@ -4,7 +4,7 @@
 //ingredient name : string
 
 
-//returns: an array of recipe_ids
+//outputs: an array of recipe_ids
 
 //requires
 const recipe_ingredient_t = require("../DB_models/recipe_ingredient");
@@ -15,7 +15,8 @@ const op = require('sequelize').Op;
 
 async function find_recipes(exp_ingredient)
 {
-    if(exp_ingredient != null)
+    console.log("staring find_recipe with " + exp_ingredient);
+    if(exp_ingredient != "")
     {  
         //find the recipe ids and how much is needed of where it is
         try

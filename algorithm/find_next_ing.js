@@ -4,6 +4,9 @@
 //inputs
 //--system date
 
+//output
+//--a JSON object of the next exipiring object
+
 //requires
 const ingredient_t = require('../DB_models/Ingredients');
 const op = require('sequelize').Op;
@@ -12,8 +15,8 @@ async function next_exp_ingredient()
 {   //seting up date
     try{
         var date = new Date();
-        var month = date.getMonth();
-        var day = date.getDate();
+        var month = date.getMonth() +1 ;
+        var day = date.getDate()-1;
         var year = date.getFullYear();
         var local_date = year + '-' + month + '-' + day;
         // console.log(local_date);
