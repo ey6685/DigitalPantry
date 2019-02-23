@@ -6,7 +6,7 @@ const steps = require('../recipe_direction_parser');
 const User = require('../DB_models/Users');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const cook_it = require('../functions/cook_it');
+const cook_it = require('../cook_it/cook_it2');
 const next_ing = require('../algorithm/find_next_ing');
 const found_recipes = require('../algorithm/find_recipes');
 const recipe_t = require('../DB_models/Recipes');
@@ -207,7 +207,15 @@ router.get('/dashboard',async function(req, res){
 
 router.get('/cook/:id', async function(req,res){
   const recipe = req.params.id;
-  var info = await cook_it.cook_it(recipe)
+  ////////////////////////////////////
+  //how do we get panty_id and scale?//
+  //the function will work but wont //
+  //scale higher than one and wont //
+  //report the metrics with out it//
+  //////////////////////////////////
+  /////////<<TO DO>>////////////////
+  ///////////////////////////////////
+  var info = await cook_it.cook_it2(recipe)
   console.log("REFRESH!");
   res.redirect(req.get('referer'));
 });

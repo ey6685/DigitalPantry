@@ -15,6 +15,7 @@
 //inputs:                                                        //
 //1.) recipe_id                                                  //
 //2.) pantry_id                                                  //
+//3.) scale                                                      //
 //                                                               //
 //outputs: none                                                  //
 //                                                               //
@@ -44,7 +45,7 @@ const pantry_t  = require('../DB_models/Pantry');
 // });
 
 ///////////////////////////////////////////////////////////////////
-async function cook_it2(recipe_id,pantry_id)
+async function cook_it2(recipe_id,pantry_id, scale)
 {
     //if no pantry id we wont log the ingredients but still cook
     //if no recipe id throw err.
@@ -52,13 +53,26 @@ async function cook_it2(recipe_id,pantry_id)
     {
        if(recipe_id == null)
         {
-            throw "no reicpe id";
+            throw "no reicpe id";   
+        }
+        else if(typeof recipe_id == 'number')
+        {
+            throw "data passed to recipe_id is not a number";
         }
         //findf all the ingredients we need to cook
         var ingredients_in_recipe = await recipe_ingredient_t.findAll({
             attributes: ['recipe_ingredient_used', 'recipe_ingredient_qty', 'recipe_ingredient_measurement'],
             where: {recipe_id: recipe_id}
         })
+        if (scale == null)
+        {
+            console.log("no scale provided: seting scale to 1");
+            scale = 1;
+        }
+        else if (typeof scale == 'number')
+        {
+            throw "data provide as scale is not a number"
+        }
         var current_ingredient;
         var num_ingredients_cooked = 0;
         var do_it_flag = true;//flip if you cant cook it
@@ -80,11 +94,11 @@ async function cook_it2(recipe_id,pantry_id)
             //if not flip flag
             if(current_ingredient.ingredient_measurement == ingredients_in_recipe[i].recipe_ingredient_measurement)
             {
-                if(current_ingredient.ingredient_total >= ingredients_in_recipe[i].recipe_ingredient_qty)
+                if(current_ingredient.ingredient_total >= ingredients_in_recipe[i].recipe_ingredient_qty * scale)
                 {
-                    num_ingredients_cooked++;
+                    num_ingredients_cooked += scale;
                     if(current_ingredient.ingredient_total - ingredients_in_recipe[i].recipe_ingredient_qty == 0)
-                         query_str += "UPDATE ingredients SET ingredient_total = 0, ingredient_expiration_date = null WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used + "';";
+                         query_str += "UPDATE ingredients SET ingredient_total = 0, ingredient_expiration_date = null WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used * scale + "';";
                     else
                     query_str += "UPDATE ingredients SET ingredient_total = " +current_ingredient.ingredient_total - ingredients_in_recipe[i].recipe_ingredient_qty + ", WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used + "';";
                 }
@@ -158,4 +172,4 @@ async function cook_it2(recipe_id,pantry_id)
 }
 
 //testing code
-cook_it2(2,1);
+// cook_it2(2,1);
