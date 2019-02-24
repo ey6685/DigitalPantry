@@ -13,7 +13,7 @@ const Ingredients = db.define('ingredients', {
                                  
     ingredient_name           : {type: Sequelize.STRING},
     ingredient_total          : {type: Sequelize.FLOAT},
-    ingredient_measurement    : {type: Sequelize.ENUM("tsp.","tbsp.","fl oz","cup","quart","ml","lb","oz")},
+    ingredient_measurement    : {type: Sequelize.STRING},
     ingredient_expiration_date : {type: Sequelize.DATE},
     ingredient_image_path     : {type: Sequelize.TEXT}
     },

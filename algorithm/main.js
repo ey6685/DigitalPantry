@@ -8,7 +8,6 @@
 //today's date: date : take from computer, later? report to a master clock                //
 //the window  : date : taken from the user, how far away for $today"s date we need to look//
 //pantry id   : int  : to limit the search through all the recipes                        //
-//scale       :
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////outputs///////////////////////////////////////
@@ -19,7 +18,7 @@ const ingredient_finder = require('./find_ingredients');
 const recipe_id_finder  = require('./find_recipes')
 const recipe_t = require('../DB_models/Recipes');
 const op = require('sequelize').Op;
-async function main(window, pantry_id, scale)
+async function main(window)
 {
     //first check the window date
     //if it is null just assume the window is today
@@ -33,27 +32,6 @@ async function main(window, pantry_id, scale)
         window = year + "-" + month + "-" + day;
         console.log("no window date provide, using: " + window);
     }
-    //checking pantry id
-    if(pantry_id == null)
-    {
-        throw "no pantry id"
-    }
-    else if(typeof pantry_id != "number")
-    {
-        throw "pantry id not a number";
-    }
-
-    //checking scale
-    if(scale == null)
-    {
-        scale = 1;
-    }
-    else if (typeof scale != "number")
-    {
-        console.log("scale not a number assuming 1");
-        scale = 1;
-    }
-    
     try
     {
         //finding all the ingredients the expire between today and the window

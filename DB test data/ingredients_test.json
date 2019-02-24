@@ -3,64 +3,56 @@
 		"ingredient_id" : 1,
 		"ingredient_name" : "Chicken",
 		"ingredient_total" : 1,
-		"ingredient_measurement" : "lb",
-		"ingredient_expiration_date" : "2019-02-07",
-		"ingredient_image_path" : null
+		"ingredient_measurement" : "Can",
+		"ingredient_expiration_date" : "2019-02-07"
 	},
 	{
 		"ingredient_id" : 2,
 		"ingredient_name" : "Black beans",
 		"ingredient_total" : 1,
-		"ingredient_measurement" : "oz",
-		"ingredient_expiration_date" : "2019-02-08",
-		"ingredient_image_path" : null
+		"ingredient_measurement" : "Can",
+		"ingredient_expiration_date" : "2019-02-08"
 	},
 	{
 		"ingredient_id" : 3,
 		"ingredient_name" : "Salsa",
 		"ingredient_total" : 16,
 		"ingredient_measurement" : "oz",
-		"ingredient_expiration_date" : "2019-02-10",
-		"ingredient_image_path" : null
+		"ingredient_expiration_date" : "2019-02-10"
 	},
 	{
 		"ingredient_id" : 4,
 		"ingredient_name" : "Corn",
 		"ingredient_total" : 1,
-		"ingredient_measurement" : "oz",
-		"ingredient_expiration_date" : "2019-02-10",
-		"ingredient_image_path" : null
+		"ingredient_measurement" : "Can",
+		"ingredient_expiration_date" : "2019-02-10"
 	},
 	{
 		"ingredient_id" : 5,
 		"ingredient_name" : "Tortilla Chips",
 		"ingredient_total" : 1,
-		"ingredient_measurement" : "oz",
-		"ingredient_expiration_date" : "2019-02-10",
-		"ingredient_image_path" : null
+		"ingredient_measurement" : "Bag",
+		"ingredient_expiration_date" : "2019-02-10"
 	},
 	{
 		"ingredient_id" : 6,
 		"ingredient_name" : "Condensed Chicken Soup",
 		"ingredient_total" : 1,
-		"ingredient_measurement" : "oz",
-		"ingredient_expiration_date" : "2019-02-10",
-		"ingredient_image_path" : null
+		"ingredient_measurement" : "Can",
+		"ingredient_expiration_date" : "2019-02-10"
 	},
 	{
 		"ingredient_id" : 7,
 		"ingredient_name" : "Mixed vegetables",
 		"ingredient_total" : 1,
-		"ingredient_measurement" : "oz",
-		"ingredient_expiration_date" : "2019-02-10",
-		"ingredient_image_path" : null
+		"ingredient_measurement" : "Can",
+		"ingredient_expiration_date" : "2019-02-10"
 	},
 	{
 		"ingredient_id" : 8,
 		"ingredient_name" : "Water",
 		"ingredient_total" : 99,
 		"ingredient_measurement" : null,
-		"ingredient_expiration_date" : null,
-		"ingredient_image_path" : null
+		"ingredient_expiration_date" : null
 	}
 ]

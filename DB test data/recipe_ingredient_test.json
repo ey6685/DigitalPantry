@@ -2,56 +2,56 @@
 	{
 		"recipe_id" : 1,
 		"recipe_ingredient_qty" : 1,
-		"recipe_ingredient_measurement" : "oz",
+		"recipe_ingredient_measurement" : "Can",
 		"recipe_pantry_id" : 1,
 		"recipe_ingredient_used" : "Black beans"
 	},
 	{
 		"recipe_id" : 1,
 		"recipe_ingredient_qty" : 1,
-		"recipe_ingredient_measurement" : "oz",
+		"recipe_ingredient_measurement" : "Can",
 		"recipe_pantry_id" : 1,
 		"recipe_ingredient_used" : "Corn"
 	},
 	{
 		"recipe_id" : 1,
 		"recipe_ingredient_qty" : 16,
-		"recipe_ingredient_measurement" : "oz",
+		"recipe_ingredient_measurement" : "Oz",
 		"recipe_pantry_id" : 1,
 		"recipe_ingredient_used" : "Salsa"
 	},
 	{
 		"recipe_id" : 1,
 		"recipe_ingredient_qty" : 1,
-		"recipe_ingredient_measurement" : "oz",
+		"recipe_ingredient_measurement" : "Bag",
 		"recipe_pantry_id" : 1,
 		"recipe_ingredient_used" : "Tortilla Chips"
 	},
 	{
 		"recipe_id" : 2,
 		"recipe_ingredient_qty" : 1,
-		"recipe_ingredient_measurement" : "oz",
+		"recipe_ingredient_measurement" : "Can",
 		"recipe_pantry_id" : 1,
 		"recipe_ingredient_used" : "Condensed Chicken Soup"
 	},
 	{
 		"recipe_id" : 2,
 		"recipe_ingredient_qty" : 1,
-		"recipe_ingredient_measurement" : "oz",
+		"recipe_ingredient_measurement" : "Can",
 		"recipe_pantry_id" : 1,
 		"recipe_ingredient_used" : "Water"
 	},
 	{
 		"recipe_id" : 2,
 		"recipe_ingredient_qty" : 1,
-		"recipe_ingredient_measurement" : "oz",
+		"recipe_ingredient_measurement" : "Can",
 		"recipe_pantry_id" : 1,
 		"recipe_ingredient_used" : "Mixed vegetables"
 	},
 	{
 		"recipe_id" : 2,
 		"recipe_ingredient_qty" : 1,
-		"recipe_ingredient_measurement" : "oz",
+		"recipe_ingredient_measurement" : "Can",
 		"recipe_pantry_id" : 1,
 		"recipe_ingredient_used" : "Chicken"
 	}

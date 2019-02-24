@@ -69,7 +69,7 @@ async function cook_it2(recipe_id,pantry_id, scale)
             console.log("no scale provided: seting scale to 1");
             scale = 1;
         }
-        else if (typeof scale != 'number')
+        else if (typeof scale == 'number')
         {
             throw "data provide as scale is not a number"
         }
