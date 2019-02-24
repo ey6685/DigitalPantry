@@ -2,6 +2,7 @@
 
 //inputs
 //ingredient name : string
+//scale           : int
 
 
 //outputs: an array of recipe_ids
@@ -13,8 +14,17 @@ const recipe_t = require('../DB_models/Recipes');
 const op = require('sequelize').Op;
 
 
-async function find_recipes(exp_ingredient)
+async function find_recipes(exp_ingredient,scale)
 {
+    //check scale if none provided assume 1
+    if(scale == null)
+    {
+        scale = 1;
+    }
+    else if(typeof scale != "number")
+    {
+        scale = 1;
+    }
     console.log("staring find_recipe with " + exp_ingredient);
     if(exp_ingredient != "")
     {  
@@ -104,7 +114,7 @@ async function find_recipes(exp_ingredient)
                             if(this_ingredient[p].ingredient_measurement == ingredients_maybe[i][o].recipe_ingredient_measurement)
                                 {
                                     console.log(this_ingredient[p].ingredient_total + ' <= ' + ingredients_maybe[i][o].recipe_ingredient_qty );
-                                    if(this_ingredient[p].ingredient_total < ingredients_maybe[i][o].recipe_ingredient_qty)
+                                    if(this_ingredient[p].ingredient_total < ingredients_maybe[i][o].recipe_ingredient_qty *scale)
                                     {
                                         if(p == this_ingredient.length-1)
                                         {
