@@ -15,7 +15,8 @@ const Ingredients = db.define('ingredients', {
     ingredient_total          : {type: Sequelize.FLOAT},
     ingredient_measurement    : {type: Sequelize.STRING},
     ingredient_expiration_date : {type: Sequelize.DATE},
-    ingredient_image_path     : {type: Sequelize.TEXT}
+    ingredient_image_path     : {type: Sequelize.TEXT},
+    ingredient_weight         : {type: Sequelize.INTEGER}
     },
     {  
         timestamps     : false

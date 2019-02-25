@@ -75,7 +75,7 @@ async function main(window)
             }
         })
 
-        // console.log(JSON.stringify(returning_recipes));
+        console.log(JSON.stringify(returning_recipes));
         return returning_recipes;
     }
     catch(err)
@@ -85,4 +85,4 @@ async function main(window)
 
 }
 //testing code
-main();
+main("2019-02-19",1,1);
