@@ -51,6 +51,7 @@ router.post('/add', function(req,res){
     res.redirect('/ingredients/showall');
 })
 
+//remove ingredient by id
 router.delete('/remove/:id', function(req,res){
     const ingredient = req.params.id;
     const delete_query = "DELETE FROM ingredients WHERE ingredient_name ='"+ingredient+"'";
@@ -59,6 +60,23 @@ router.delete('/remove/:id', function(req,res){
         //Since AJAX under /js/main.js made a request we have to respond back
         res.send("Success");
     });
+
+})
+
+//remove ingredient by name
+router.delete('/remove/recipe_ingredient/:name', function(req,res){
+    const ingredient = req.params.name;
+    console.log("REMOVING");
+    console.log(ingredient);
+    //Since no cascading is set up have to do it manually
+    //delete ingredient from recipe_ingredient table
+    const delete_query = "DELETE FROM recipe_ingredient WHERE recipe_ingredient_used ='"+ingredient+"'";
+    db.query(delete_query, function(err){
+        if (err) throw err
+        //Since AJAX under /js/main.js made a request we have to respond back
+    });
+    console.log("DONE");
+    res.send("Success");
 
 })
 
