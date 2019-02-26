@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const moment = require('moment');
+const ingredient_t = require('../DB_models/Ingredients');
 
 //Render page with data from database
 //GET request to localhost:3000/users/login

@@ -31,14 +31,16 @@ block content
                             .form-group.col-md-3
                                 .dropdown-inline
                                 select.form-control(name='ingredient_measurement', required)
-                                    option(value='') Measurement
-                                    option(value='bag') Bag
-                                    option(value='can') Can
-                                    option(value='pound') Pound
-                                    option(value='ounce') Ounce
+                                    option(value='') Container Measurement
+                                    option(value='tsp.') Teaspoon
+                                    option(value='tbsp.') Tablespoon
+                                    option(value='fl oz') Fluid Ounce
                                     option(value='cup') Cup
-                                    option(value='tablespoon') Tablespoon
-                                    option(value='teaspoon') Teaspoon
+                                    option(value='cup') Cup
+                                    option(value='quart') Quart
+                                    option(value='ml') Millilitter
+                                    option(value='lb') Pound
+                                    option(value='oz') Dry Ounce
                             .form-group.col-md-4
                                 input.form-control(name='ingredient_expiration_date', type='date')
                             input.btn.btn-primary.col-md-2(type='submit', value='ADD', class='form-group')
