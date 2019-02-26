@@ -19,7 +19,7 @@ const Pantry = db.define("pantry_stats",
     {
         pantry_id:{
         type: Sequelize.INTEGER,
-        autoIncrement: true,
+        
         primarykey: true
         },
 
@@ -28,9 +28,9 @@ const Pantry = db.define("pantry_stats",
         },
 
 
-        pantry_month: {
-        type: Sequelize.ENUM("January","February","March","April","May","June","July","August","September","October","November","December")
-        },
+        // pantry_month: {
+        // type: Sequelize.ENUM("January","February","March","April","May","June","July","August","September","October","November","December")
+        // },
 
         pantry_monthy_exipred_ingredients:{
             type: Sequelize.INTEGER      
@@ -45,7 +45,7 @@ const Pantry = db.define("pantry_stats",
         freezeTableName: true
     }        
 );
-
+Pantry.removeAttribute('id');
 module.exports = Pantry;
 
 
