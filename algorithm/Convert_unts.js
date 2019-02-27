@@ -1,6 +1,11 @@
 /*
-File: Convert_units_raw
+File: Convert_units
 Created by: Patrick Veltri
+*/
+
+/*
+/////////////////////////////////////////////////////////////////////////////////////
+Function 1: converter raw
 
 inputs:
 1)# to be converted
@@ -12,12 +17,22 @@ outputs:
 returns:
 1)float of the # passed to this function that has been converted to 
 2)0 if can not convert
+
+descrition:
+after checking to make sure allthe data is there,give a raw double to ofa conversion
+of the unit. NOTE this is for db checking. 
+//////NOT//////
+/////FOR//////
+/////FRONT////
+////END//////
+The second funtion in this file is for the front end
 */
+
 
 /////requires////
 const ing_t = require('../DB_models/Ingredients');
 
-async function converter_raw(num, unit, con_unit)
+function converter_raw(num, unit, con_unit)
 {
     try{
         //checking data
@@ -40,7 +55,7 @@ async function converter_raw(num, unit, con_unit)
 
             switch(unit){
                 case "tsp.":
-                    if(con_unit == "tbsp.")       return (num * 3);
+                    if(con_unit == "tbsp.")       return (num / 3.0);
                    
                     else if(con_unit == "cup")   return (num * 0.0208333333);
 
@@ -58,7 +73,7 @@ async function converter_raw(num, unit, con_unit)
                     break;
 
                 case "tbsp.":
-                    if(con_unit == "tsp.")                           return (num / 3.0);
+                    if(con_unit == "tsp.")                           return (num * 3.0);
 
                     else if(con_unit =="cup")                        return (num / 16.0);
 
@@ -129,6 +144,8 @@ async function converter_raw(num, unit, con_unit)
 
                     else if(con_unit == "cup") return (num * 8.115);
 
+                    else return 0;
+
             }
         }
         else
@@ -144,14 +161,91 @@ async function converter_raw(num, unit, con_unit)
         return 0;
     }
 }
+module.exports.converter_raw = converter_raw;
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+function 2: converter_whole
+
+inputs:
+1)number to covert
+2)that numbers unit
+3)unit to covert to
+
+returns:2d array
+====================
+|int | larger unit |
+====================
+|int | smaller unit|
+====================
+
+/////or///////
+just a converted number if the covert is less than 1 or converted to a whole number
 
 
-console.log(converter_raw(1, "tbsp.", "tsp." ));
-console.log((converter_raw(1, "tbsp.", "cup" )))
-console.log((converter_raw(1, "tbsp.", "lb" )))
-console.log((converter_raw(1, "tbsp.", "oz" )))
-console.log((converter_raw(1, "tbsp.", "ml" )))
-console.log((converter_raw(1, "tbsp.", "quart" )))
-// console.log(converter_raw(1, "tsp.", "tbsp." ))
-// console.log(converter_raw(1, "tsp.", "tbsp." ))
-// console.log(converter_raw(1, "tsp.", "tbsp." ))
+///THIS///
+////IS///
+///FOR//
+///FRONT////
+///END DISPLACES////
+*/
+
+async function converter_whole(num,unit,con_unit)
+{
+    try{
+        //checking data
+        if(num == null) throw "need num";
+
+        if(unit == null) throw "need First unit";
+        else if(typeof unit != "string") throw "need string input for first unit";
+
+        if(con_unit == null) throw "need to convert to";
+        else if(typeof con_unit != "string") throw "need a string input";
+
+        if(unit == con_unit) return num;
+        ///done checking data
+
+        var converted_num = await converter_raw(num,unit,con_unit)
+
+        //check if converter_raw came back bad
+        if(converted_num == 0)
+            throw "converter_raw fail";
+        else if(converted_num < 1)
+            return (parseFloat(converted_num).toFixed(2)); //keep it to two descible points
+
+            console.log("raw: " + converted_num+con_unit) ;
+
+            //take the raw convert into two parts
+            //the whole and the decibel
+            var whole_part = await parseInt(converted_num);
+            var decibel_part = converted_num - whole_part;
+
+            //if no need to convert decibel part.
+            if(decibel_part == 0)
+                return  whole_part;
+            // console.log('whole: ' + whole_part + "\ndeci: " + decibel_part);
+
+            decibel_part = await converter_raw(decibel_part,con_unit,unit);
+
+            // console.log(decibel_part.toFixed(2) +" "+ unit);
+
+            //build the return array
+            return_array = [
+                            [whole_part,con_unit],
+                             [decibel_part, unit]
+                          ]
+
+            // console.log(return_array[0][0] + return_array[0][1]);
+
+    }
+    catch(err)
+    {
+        console.log(err)
+        return 0;
+    }
+}
+module.exports.converter_whole = converter_whole;
+
+//test code
+// converter_whole(9.5,"tsp.","tbsp.")
