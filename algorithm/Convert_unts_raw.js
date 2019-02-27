@@ -1,5 +1,5 @@
 /*
-File: Convert_units
+File: Convert_units_raw
 Created by: Patrick Veltri
 
 inputs:
@@ -17,7 +17,7 @@ returns:
 /////requires////
 const ing_t = require('../DB_models/Ingredients');
 
-async function Converter(num, unit, con_unit)
+async function converter_raw(num, unit, con_unit)
 {
     try{
         //checking data
@@ -40,7 +40,7 @@ async function Converter(num, unit, con_unit)
 
             switch(unit){
                 case "tsp.":
-                    if(con_unit == "tbsp")       return (num * 3);
+                    if(con_unit == "tbsp.")       return (num * 3);
                    
                     else if(con_unit == "cup")   return (num * 0.0208333333);
 
@@ -91,7 +91,9 @@ async function Converter(num, unit, con_unit)
 
                     break;
 
-                   
+                default:
+                    return 0;
+                    break;
             }
 
         }
@@ -119,7 +121,13 @@ async function Converter(num, unit, con_unit)
                 case "fl oz":
                     if(con_unit =="ml") return (num * 29.5735);
 
-                    if(con_unit == "quart") return (num * 0.03125);
+                    else if(con_unit == "quart") return (num * 0.03125);
+
+                    else if(con_unit == "tsp.") return (num * 6);
+
+                    else if(con_unit == "tbsp.") return (num * 2);
+
+                    else if(con_unit == "cup") return (num * 8.115);
 
             }
         }
@@ -138,4 +146,12 @@ async function Converter(num, unit, con_unit)
 }
 
 
-Converter();
+console.log(converter_raw(1, "tbsp.", "tsp." ));
+console.log((converter_raw(1, "tbsp.", "cup" )))
+console.log((converter_raw(1, "tbsp.", "lb" )))
+console.log((converter_raw(1, "tbsp.", "oz" )))
+console.log((converter_raw(1, "tbsp.", "ml" )))
+console.log((converter_raw(1, "tbsp.", "quart" )))
+// console.log(converter_raw(1, "tsp.", "tbsp." ))
+// console.log(converter_raw(1, "tsp.", "tbsp." ))
+// console.log(converter_raw(1, "tsp.", "tbsp." ))
