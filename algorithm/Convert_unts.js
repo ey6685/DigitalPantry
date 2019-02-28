@@ -226,7 +226,7 @@ async function converter_whole(num,unit,con_unit)
                 return  whole_part;
             // console.log('whole: ' + whole_part + "\ndeci: " + decibel_part);
 
-            decibel_part = await converter_raw(decibel_part,con_unit,unit);
+            decibel_part = await parseFloat(parseFloat(converter_raw(decibel_part,con_unit,unit)).toFixed(1));
 
             // console.log(decibel_part.toFixed(2) +" "+ unit);
 
@@ -236,7 +236,7 @@ async function converter_whole(num,unit,con_unit)
                              [decibel_part, unit]
                           ]
 
-            // console.log(return_array[0][0] + return_array[0][1]);
+            console.log(return_array);
 
     }
     catch(err)
@@ -248,4 +248,4 @@ async function converter_whole(num,unit,con_unit)
 module.exports.converter_whole = converter_whole;
 
 //test code
-// converter_whole(9.5,"tsp.","tbsp.")
+converter_whole(11,"tsp.","tbsp.");
