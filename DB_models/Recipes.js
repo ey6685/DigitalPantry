@@ -23,6 +23,9 @@ const Recipes = db.define('recipes', {
     },
     recipe_image_path: {
         type: Sequelize.TEXT
+    },
+    recipe_sharable:{
+        type: Sequelize.INTEGER
     }
 },
     {  

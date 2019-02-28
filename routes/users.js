@@ -1,12 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const moment = require('moment');
-const algorithm = require('./algorithm');
+
 const steps = require('../recipe_direction_parser');
 const User = require('../DB_models/Users');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const cook_it = require('../functions/cook_it');
+const cook_it = require('../cook_it/cook_it2');
+const next_ing = require('../algorithm/find_next_ing');
+const found_recipes = require('../algorithm/find_recipes');
+const recipe_t = require('../DB_models/Recipes');
+const op = require('sequelize').Op;
 
 //Get request to localhost:3000/users/login
 router.get("/login", function(req, res) {
@@ -131,60 +135,87 @@ router.get("/register", function(req, res) {
 router.get('/dashboard',async function(req, res){
     //Jon//pulls algorithm results from directAlgorithm into recipe_results
     //Jon//then parses recipe id into var recipe_id
-    var recipe_results = await algorithm.directAlgorithm();
-    var recipe_id = recipe_results[0]['recipe_id'];
-    //Jon//pulls recipes steps from recipe_direction_parser by the recipe_id
-    //Oskars//then splits string by the delimeter so we can get all the individual steps
-    var recipe_steps = await steps.recipe_direction_parser(recipe_id);
-    var recipe_steps_array = recipe_steps.split('${<br>}');
+    try
+    {
 
-    //var cookit = cookit.cook_it(id);
+      var results = await next_ing.next_exp_ingredient();
+      console.log(JSON.stringify(results));
+      var results2 = await found_recipes.find_recipes(results.ingredient_name);
+      var recipe_id = results2[0];
+      console.log(results2);
+      // var recipe_results = await recipe_t.findOne({where:{recipe_id: recipe_id}});
+      // console.log(JSON.stringify(recipe_results));
+      //Jon//pulls recipes steps from recipe_direction_parser by the recipe_id
+      //Oskars//then splits string by the delimeter so we can get all the individual steps
+      var recipe_steps = await steps.recipe_direction_parser(recipe_id);
+      var recipe_steps_array = recipe_steps.split('${<br>}');
+      var recipe_info = await recipe_t.findAll({
+        where: {recipe_id: {[op.in]: results2}}
+      })
 
-    //Grab relative image path for 2nd and 3rd recipe cards
-    var chicken_stir_fry_image = '/images/chicken_stir_fry.jpg';
-    var chicken_pot_pie_image = '/images/chicken_pot_pie.jpg';
-    //Jon//renders dashboard page with next expiring ingredient
-    db.query('SELECT * FROM ingredients WHERE ingredient_expiration_date IS NOT null ORDER BY ingredient_expiration_date LIMIT 1', function(err, results){
-      if (err) throw err
-      results= results,
-      i_total= results[0]['ingredient_total'],
-      i_measurement= results[0]['ingredient_measurement'],
-      i_name= results[0]['ingredient_name'],
-      i_expire= moment(results[0]['ingredient_expiration_date']).format('LL'),
-      //pulls recipe_name into recipe_name for referencing in dashboard
-      recipe_name= recipe_results[0]['recipe_name'],
-      recipe_steps= recipe_steps_array,
-      rid= recipe_id,
-      //Send individual recipe steps inside the array
+      //var cookit = cookit.cook_it(id);
 
-      db.query("SELECT recipe_image_path FROM recipes WHERE recipe_id = '"+recipe_id+"'", function (err, results2){
-          if (err) throw err
-          console.log(results2);
-          console.log(results2.recipe_image_path);
-          res.render('dashboard',{
-              title:"Dashboard",
-              results: results,
-              i_total: i_total,
-              i_measurement: i_measurement,
-              i_name: i_name,
-              i_expire: i_expire,
-              //pulls recipe_name into recipe_name for referencing in dashboard
-              recipe_name: recipe_name,
-              recipe_steps: recipe_steps,
-              rid: rid,
-              recipe_image_path: results2[0]['recipe_image_path'],
-              //Send individual recipe steps inside the array
-              stir_fry_image: chicken_stir_fry_image,
-              pot_pie_image: chicken_pot_pie_image,
-              //cook_it: cookit
-          });
-      });
-    });
+      //Grab relative image path for 2nd and 3rd recipe cards
+      var chicken_stir_fry_image = '/images/chicken_stir_fry.jpg';
+      var chicken_pot_pie_image = '/images/chicken_pot_pie.jpg';
+      //Jon//renders dashboard page with next expiring ingredient
+      // results = await.
+      // db.query('SELECT * FROM ingredients WHERE ingredient_expiration_date IS NOT null ORDER BY ingredient_expiration_date LIMIT 1', function(err, results)
+      // {
+      //   if (err) throw err
+        // results= results,
+        
+        i_total= results['ingredient_total'],
+        i_measurement= results['ingredient_measurement'],
+        i_name= results['ingredient_name'],
+        i_expire= moment(results['ingredient_expiration_date']).format('LL'),
+        //pulls recipe_name into recipe_name for referencing in dashboard
+        
+        recipe_name= recipe_info[0]['recipe_name'],
+        recipe_steps= recipe_steps_array,
+        rid= recipe_id,
+      
+        //Send individual recipe steps inside the array
+
+        // db.query("SELECT recipe_image_path FROM recipes WHERE recipe_id = '"+recipe_id+"'", function (err, results2){
+        //     if (err) throw err
+        //     console.log(results2);
+        //     console.log(results2.recipe_image_path);
+            res.render('dashboard',{
+                title:"Dashboard",
+                results: results,
+                i_total: i_total,
+                i_measurement: i_measurement,
+                i_name: i_name,
+                i_expire: i_expire,
+                //pulls recipe_name into recipe_name for referencing in dashboard
+                recipe_name: recipe_name,
+                recipe_steps: recipe_steps,
+                rid: rid,
+                recipe_image_path: recipe_info[0]['recipe_image_path'],
+                //Send individual recipe steps inside the array
+                stir_fry_image: chicken_stir_fry_image,
+                pot_pie_image: chicken_pot_pie_image,
+                //cook_it: cookit
+            });
+
+    }
+    catch(err){
+      console.log("routes/users/dashboard err: " + err);
+    }  
 })
 
 router.get('/cook/:id', async function(req,res){
   const recipe = req.params.id;
-  var info = await cook_it.cook_it(recipe)
+  ////////////////////////////////////
+  //how do we get panty_id and scale?//
+  //the function will work but wont //
+  //scale higher than one and wont //
+  //report the metrics with out it//
+  //////////////////////////////////
+  /////////<<TO DO>>////////////////
+  ///////////////////////////////////
+  var info = await cook_it.cook_it2(recipe)
   console.log("REFRESH!");
   res.redirect(req.get('referer'));
 });

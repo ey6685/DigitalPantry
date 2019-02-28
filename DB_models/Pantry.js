@@ -9,42 +9,43 @@ const db = require('../databaseMySQL');
 
 
 //db table
-//_______________________________________________________________________________________
-//|pantry_id| pantry_name| pantry_ingredients_used_month| pantry_ingredients_wasted_month| ---->
-//---------------------------------------------------------------------------------------
-//|pantry_ingredients_used_YTD| pantry_ingredients_wasted_YTD| recipes_cooked_month| recipes_cooked_YTD
-//------------------------------------------------------------------------------------------------------
+/*
+=================================================================================================================================================================
+|pantry_id: int PK| pantry_name: varchar(32)| pantry_month: EMUN("all the months")| pantry_monthy_exipred_ingredients: int| pantry_monthy_total_exipred: int|
+=================================================================================================================================================================
+*/
 
-
-const Pantry = db.define("pantry", 
+const Pantry = db.define("pantry_stats", 
     {
-    pantry_id                       : {type: Sequelize.INTEGER,
-                                       primaryKey: true,
-                                       autoIncrement: true},
+        pantry_id:{
+        type: Sequelize.INTEGER,
+        
+        primarykey: true
+        },
 
-    pantry_name                     : {type: Sequelize.STRING},
+        pantry_name:{
+            type: Sequelize.STRING
+        },
 
-    pantry_ingredients_used_month   : {type: Sequelize.INTEGER,
-                                       defaultValue: 0},
-    pantry_ingredients_wasted_month : {type: Sequelize.INTEGER,
-                                       defaultValue: 0},
 
-    pantry_ingredients_used_YTD     : {type: Sequelize.INTEGER,
-                                       defaultValue: 0},
-    pantry_ingredients_wasted_YTD   : {type: Sequelize.INTEGER,
-                                       defaultValue: 0},
+        // pantry_month: {
+        // type: Sequelize.ENUM("January","February","March","April","May","June","July","August","September","October","November","December")
+        // },
 
-    recipes_cooked_month            : {type: Sequelize.INTEGER,
-                                       defaultValue: 0},
-    recipes_cooked_YTD              : {type: Sequelize.INTEGER,
-                                       defaultValue: 0}
+        pantry_monthy_exipred_ingredients:{
+            type: Sequelize.INTEGER      
+        },
+
+        pantry_monthy_total_exipred: {
+            type: Sequelize.INTEGER
+        }
     },
     {
         timestamps     : false,
         freezeTableName: true
     }        
 );
-
+Pantry.removeAttribute('id');
 module.exports = Pantry;
 
 
