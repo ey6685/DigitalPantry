@@ -52,7 +52,7 @@ CREATE TABLE `community_recipes` (
   `c_recipe_name` varchar(32) NOT NULL,
   `c_recipe_serving_size` float NOT NULL,
   `c_recipe_directions` tinytext,
-  `c_reciep_image_path` tinytext,
+  `c_recipe_image_path` tinytext,
   PRIMARY KEY (`c_recipe_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -63,6 +63,8 @@ CREATE TABLE `community_recipes` (
 
 LOCK TABLES `community_recipes` WRITE;
 /*!40000 ALTER TABLE `community_recipes` DISABLE KEYS */;
+INSERT INTO `community_recipes` VALUES (1, 'Black Bean Salsa', 6, '#Drain canned beans and corn#Put them in a large bowl and mix together#Serve on tortillas or with chips.','/images/bean_salsa.jpg');
+INSERT INTO `community_recipes` VALUES (2, 'Chicken Noodle Soup', 4, '#Put ingredients into a large bow together#Cover bowl, then microwave for 3 minutes on high#Serve hot with crackers or bread','/images/chicken_noodle_soup.jpg');
 /*!40000 ALTER TABLE `community_recipes` ENABLE KEYS */;
 UNLOCK TABLES;
 

@@ -57,6 +57,40 @@ function recipe_direction_parser(recipe_id)
     })
 }
 
+//Added by Oskars Dauksts
+//Taken and modified from the above method
+function parse_recipe_directions_by_string(recipe_direction)
+{
+    //takes in the recipe direction as a string
+
+    var counting_pound_sign = 1;
+    var returning_string = "";
+
+    for (var i=0; i< recipe_direction.length; i++)
+    {
+        if(i == 0)
+        {   
+            //starting the string with step one
+            returning_string += "1.)";
+        }
+        else if (recipe_direction[i] == '#')
+        {
+            //the start of a new step
+            counting_pound_sign += 1;
+            returning_string += "${<br>}" + counting_pound_sign + ".)";
+        }
+        else
+        {
+            //just adding the next character
+            returning_string += recipe_direction[i];
+        }
+    }//end of for loop
+    console.log(returning_string);
+
+    return (returning_string);
+}
+
+module.exports.parse_recipe_directions_by_string = parse_recipe_directions_by_string;
 module.exports.recipe_direction_parser = recipe_direction_parser;
 ///test function call
 //recipe_direction_parser(1);

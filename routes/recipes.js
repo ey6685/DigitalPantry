@@ -4,6 +4,7 @@ const recipe_t = require('../DB_models/Recipes');
 const ingredient_t = require('../DB_models/Ingredients')
 const IiR_t = require('../DB_models/recipe_ingredient');
 const multer = require('multer');
+const steps = require('../recipe_direction_parser');
 
 //defines where to store image
 const storage = multer.diskStorage({
@@ -16,6 +17,7 @@ const storage = multer.diskStorage({
   })
   //create an upload function using configuration above
   const upload = multer({storage: storage})
+
 /*
 TYPE: GET
 URL ENDPOINT: localhost:3000/recipes/showall
@@ -82,7 +84,29 @@ router.get('/showall', async function(req, res){
     }
     })
 
-    
+/*
+TYPE: GET
+URL ENDPOINT: localhost:3000/recipes/showCumunityRecipes
+DESCRIPTION: This will display all recipes withing the community
+*/
+router.get('/showCommunityRecipes', function(req,res){
+    query = 'SELECT * FROM community_recipes';
+    recipe_steps_array = []
+    db.query(query, async function(err, results) {
+        if (err) throw err;
+        for (every_recipe_directions in results){
+            var recipe_steps = await steps.parse_recipe_directions_by_string(results[every_recipe_directions].c_recipe_directions);
+            recipe_steps_array.push(recipe_steps.split('${<br>}'));
+        }
+        res.render('comunity_recipes',{
+            title:"Community Recipes",
+            //TODO Send image path in array
+            recipe_image_path:results[1].c_reciep_image_path,
+            recipe_steps:recipe_steps_array,
+            data:results
+        });
+    });
+})
 
 /*
 TYPE: GET

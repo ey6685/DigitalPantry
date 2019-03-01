@@ -1,0 +1,39 @@
+extends user_view_template
+block content
+    style.
+        .btn_card{
+            /*Defines CSS for butons on the dashboard*/
+            width: 93%;
+            margin: 0px 10px 10px 10px;
+        }
+    br
+    br
+    h1 #{title}
+    br
+    .form-row
+        .form-group.col-md-2
+            input.form-control.mr-sm-2(type='text', placeholder='Search')
+        .form-group.col-md-2
+            .dropdown
+                select.form-control(name='SortBar')
+                    option(value='') Sort By
+                    option(value='') Sort 1
+                    option(value='') Sort 2
+        .form-group.col-md-2
+            input.btn.btn-primary(type='submit', value='Share Recipe')
+        .form-group.col-md-2
+            input.btn.btn-primary(type='submit', value='Copy Multiple')
+    br
+    .form-row
+        for recipe,i in data
+            - recipe_image= recipe.c_recipe_image_path
+            .form-group.col-md-3
+                div(class='card', class='card h-100')
+                    img.image(class='card-img-top', src=recipe_image, alt='Recipe 1 Image')
+                    div(class='card-body')
+                        h4(class='card-title') #{recipe.c_recipe_name}
+                        //- For each steps inside of the array of steps
+                        for step in recipe_steps[i]
+                            p(class='card-text')= step
+                    div(class='card-foot', padding='.75rem')
+                        button.btn_card.btn.btn-primary(id='card'+i, type='button') Copy recipe
