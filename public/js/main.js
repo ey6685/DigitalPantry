@@ -59,6 +59,138 @@ $(document).on('click','.delete-row',function() {
     $(this).closest('.form-row').remove();
 });
 
+$(document).on('click','.delete-current-ingredient',function() {
+    //Get id of the recipe that is being edited
+    recipe_id_being_edited = $(this).attr('data-id');
+    //Get ingredient name that is being removed
+    ingredient_name = $("#ingredient-name").attr('placeholder');
+    row = $(this).closest('.form-row')
+
+    $.ajax({
+        type:'DELETE',
+        //This route is defined under ingredients.js
+        url:'/ingredients/remove/recipe_ingredient/'+ingredient_name,
+        //If ingredient has been removed remove the ingredient row
+        success:function(){
+            row.remove();
+            //Remove whole row
+        },
+        error:function(err){
+            console.log(err);
+            console.log("Could not delete: "+ingredient_name);
+        }
+    });
+});
+
+//This will trigger when user tries to edit a recipe
+$('#editRecipe').on('show.bs.modal', function (event) {
+    // Button that triggered the display card
+    var button = $(event.relatedTarget)
+    //Get the recipe row based on the button clicked and its closest tr element
+    $recipeRow = button.closest('tr').children();
+    //Based on the button click it will get data-target id of the row and find the drop down this ide points to
+    $recipeRowDataTarget = $(button.closest('tr').attr('data-target')).children();
+    var ingredientList = []
+    //for each ingredient that the recipe contains
+    for (element in $recipeRowDataTarget){
+        //Do not get 'Ingredients' label
+        if(element != 0){
+            //Do not get empty or undefined cells
+            if($recipeRowDataTarget[element].innerText != undefined){
+                //push results into an array
+                ingredientList.push($recipeRowDataTarget[element].innerText);
+            }
+        }
+    }
+    var values = [];
+    //For each element in the recipe row array
+    for (child in $recipeRow){
+        //for each cell get its index
+        var cellIndex = $recipeRow[child].cellIndex;
+        //Only get RecipeName and ServingSize and RecipeID values based on the cell index of the table
+        if(cellIndex == 1 || cellIndex == 3 || cellIndex == 4){
+            values.push($recipeRow[child].innerText);
+        }
+    }
+    //At this point we have 
+        //Recipe name and serving size
+        //Recipe ingredients
+
+    //Now lets populate the form with recipe and ingredient data
+    //Get the form card object so we can modify values inside the form per each recipe
+    var modal = $(this);
+    //Populate recipe general information
+    //Set header of the overlay form
+    $('h4').text('Editing Recipe - ' + values[1]);
+    $('h4').addClass("data-id");
+    //Set placeholders inside input box with a value of recipe name that it currently has
+    modal.find('#recipe-name').attr('placeholder', values[1]);
+    modal.find('#recipe-name').attr('name', "currentName:"+values[0]);
+    //Set placeholders inside input box with a value of recipe serving size that it currently has
+    modal.find('#serving-size').attr('placeholder', values[2]);
+    modal.find('#serving-size').attr('name', "currentServSize:"+values[2]);
+    //Set form html to nothing so it can be updated with new recipe selected
+    //This is in case user closes the form overlay and opens it back up
+    //Otherwise the form will keep adding rows non stop
+    $('#ingredient-rows').html("");
+    $('#dynamic-ingredient-row').html("");
+    //Populate ingredient rows
+    for(ingredient in ingredientList){
+        //split Ingredient name and QtyMeasurement
+        var ingredientsSplit = (ingredientList[ingredient].split(','));
+        //get ingredientName
+        let ingredientName = ingredientsSplit[0];
+        //split measurement and qty into 2 separate fields
+        var ingredientQtyAndMeasurement = ingredientsSplit[1].split(' ');
+        //get Qty
+        let ingredientQty = ingredientQtyAndMeasurement[0];
+        //get measurement
+        let ingredientMeasurement = ingredientQtyAndMeasurement[1].toLowerCase();
+        console.log(ingredientMeasurement);
+        //Create a row for an ingredient
+        $ingredientRow = `
+        <div class="form-row">
+            <div class="form-group col-4">
+                <input class="form-control" name="$1" id="ingredient-name" type="text" placeholder="$1" />
+            </div>
+            <div class="form-group col-3">
+                <input class="form-control" name="$2" id="ingredient-qty" type="text" placeholder="$2" />
+            </div>
+            <div class="form-group col-4">
+                <select name="$3" class="form-control id="measurement">
+                    <option value="">Measurement</option>
+                    <option value="bag">Bag</option>
+                    <option value="can">Can</option>
+                    <option value="oz">Oz</option>
+                    <option value="pound">Pound</option>
+                    <option value="ounce">Ounce</option>
+                    <option value="cup">Cup</option>
+                    <option value="tablespoon">Tablespoon</option>
+                    <option value="teaspoon">Teaspoon</option>
+                </select>
+            </div>
+            <div class="form-group col-1">
+                <button type="button" data-id="{3}" class="btn btn-danger delete-current-ingredient">X</button>
+            </div>
+        </div>`;
+        //Replace name with correct value
+        $ingredientRow = $ingredientRow.replace('$1', ingredientName);
+        //Replace placeholders with correct values
+        $ingredientRow = $ingredientRow.replace('$1', ingredientName);
+        //Replace name with correct value
+        $ingredientRow = $ingredientRow.replace('$2', ingredientName);
+        //Replace placeholders with correct values
+        $ingredientRow = $ingredientRow.replace('$2', ingredientQty);
+        $ingredientRow = $ingredientRow.replace('$3', ingredientName);
+        //Replace data-id with an id of a recipe. This will to remove ingredients from database
+        $ingredientRow = $ingredientRow.replace('{3}', values[0]);
+        //shows what measurement has already been selected for that specific ingredient
+        $ingredientRow = $ingredientRow.replace('value="'+ingredientMeasurement+'"', value="'+ingredientMeasurement+' selected");
+        $('#ingredient-rows').append($ingredientRow);
+    }
+    
+});
+
 //Cook it button logic
 //Uses ingredients based on the recipe chosen
 //Updates dashboard
