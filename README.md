@@ -39,3 +39,11 @@ create database digital_pantry;
 mysql -u <your_username> -p digital_pantry < mySQL.sql
 //It will promnt you for your password
 ```
+
+**Run project**
+```
+//Inside DigitalPantry directory, run
+nodemon app.js
+
+//In browser navigate to localhost:3000
+```
