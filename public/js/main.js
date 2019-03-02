@@ -222,6 +222,7 @@ $(document).on('click','.saveRecipe',function() {
     //Get id of the community recipe clicked
     $card_id = $(this).closest('.card').attr('id');
 
+    //Send ajax request with recipe ID that is being copied
     $.ajax({
         type:'POST',
         url:'/users/saveCommunityRecipe',
@@ -231,7 +232,7 @@ $(document).on('click','.saveRecipe',function() {
             location.reload();
         },
         error:function(err){
-            console.log("Could not delete: "+id);
+            console.log("Could not copy recipe");
         }
     });
 });

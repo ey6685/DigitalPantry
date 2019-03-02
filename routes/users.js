@@ -321,24 +321,26 @@ router.post('/saveCommunityRecipe', async function(req,res){
   var recipe_id_to_be_copied = req.body['community_recipe_id'];
   //get current user id, so we know which pantry to add recipe to
   var current_user_id = req.session.passport['user'];
-  //get pantry ID that user belongs to
+  //Query for pantry ID that user belongs to
   await db.query("SELECT * FROM users WHERE user_id="+current_user_id, function(err, results){
       if(err) throw err;
+      //Asssign the pantry that the user belons to
       users_pantry_id = results[0]['user_pantry_id'];
-      //Get recipe information from community recipe database
+      //Get single recipe information from community recipe database
       query = "SELECT c_recipe_name,c_recipe_serving_size,c_recipe_directions,c_recipe_image_path FROM community_recipes WHERE c_recipe_id="+recipe_id_to_be_copied+";";
       db.query(query, async function(err, results) {
         if (err) throw err;
+        //assign all the information needed from the recipe
         var recipe_name = results[0]['c_recipe_name'];
         var recipe_serving_size = results[0]['c_recipe_serving_size'];
         var recipe_directions = results[0]['c_recipe_directions'];
         var recipe_image = results[0]['c_recipe_image_path'];
         combined_values = "('"+recipe_name+"',"+recipe_serving_size+",'"+recipe_directions+"','"+recipe_image+"',"+users_pantry_id+");";
+        //Insert copied recipe into pantry's recipes
         query = "INSERT INTO recipes  (recipe_name, recipe_serving_size, recipe_directions, recipe_image_path,recipe_pantry_id) VALUES "+combined_values;
         db.query(query,function(err){
           if (err) throw err;
-            console.log(query);
-            console.log("INSERTING INTO DATABASE");
+            //respond to AJAX POST request
             res.send("Success");
         })
       })

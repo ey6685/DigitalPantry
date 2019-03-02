@@ -12,7 +12,7 @@ block content
     br
     .form-row
         .form-group.col-md-2
-            input.form-control.mr-sm-2(type='text', placeholder='Search')
+            input.form-control.mr-sm-2(id='filterInput', onkeyup='myFunction()', type='text', placeholder='Search')
         .form-group.col-md-2
             .dropdown
                 select.form-control(name='SortBar')
@@ -21,8 +21,6 @@ block content
                     option(value='') Sort 2
         .form-group.col-md-2
             input.btn.btn-primary(type='submit', value='Share Recipe')
-        .form-group.col-md-2
-            input.btn.btn-primary(type='submit', value='Copy Multiple')
     br
     .form-row
         for recipe,i in data
@@ -37,3 +35,24 @@ block content
                             p(class='card-text')= step
                     div(class='card-foot', padding='.75rem')
                         button.btn_card.btn.btn-primary(class='saveRecipe', id='card'+i, type='button') Copy recipe
+
+    script.
+        function myFunction() {
+            // Declare variables
+            var input, filter, div, i, txtValue;
+            input = document.getElementById('filterInput');
+            filter = input.value.toUpperCase();
+            card_names = document.getElementsByTagName('h4');
+            div = document.getElementsByClassName('col-md-3');
+
+            // Loop through all list items, and hide those who don't match the search query
+            for (i = 0; i < div.length; i++) {
+                txtValue = card_names[i].textContent || card_names[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    div[i].style.display = "";
+                } 
+                else {
+                    div[i].style.display = "none";
+                }
+            }
+        }
