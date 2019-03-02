@@ -5,7 +5,7 @@ const ingredient_t = require('../DB_models/Ingredients')
 const IiR_t = require('../DB_models/recipe_ingredient');
 const multer = require('multer');
 const steps = require('../recipe_direction_parser');
-
+const users_route = require('./users');
 //defines where to store image
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -91,6 +91,9 @@ DESCRIPTION: This will display all recipes withing the community
 */
 router.get('/showCommunityRecipes', function(req,res){
     query = 'SELECT * FROM community_recipes';
+    console.log("Session");
+    //Prints user id stored in the session. Can be used to determine which pantry user belongs to
+    // console.log(req.session.passport['user']);
     recipe_steps_array = []
     db.query(query, async function(err, results) {
         if (err) throw err;

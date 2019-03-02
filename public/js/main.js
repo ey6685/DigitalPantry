@@ -215,3 +215,23 @@ $(document).ready(function(){
         });
     });
 });
+
+
+//Save community recipe
+$(document).on('click','.saveRecipe',function() {
+    //Get id of the community recipe clicked
+    $card_id = $(this).closest('.card').attr('id');
+
+    $.ajax({
+        type:'POST',
+        url:'/users/saveCommunityRecipe',
+        data: { "community_recipe_id" : $card_id },
+        success:function(response){
+            //Reload the page to update cards
+            location.reload();
+        },
+        error:function(err){
+            console.log("Could not delete: "+id);
+        }
+    });
+});

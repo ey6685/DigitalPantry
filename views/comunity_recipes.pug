@@ -28,12 +28,12 @@ block content
         for recipe,i in data
             - recipe_image= recipe.c_recipe_image_path
             .form-group.col-md-3
-                div(class='card', class='card h-100')
-                    img.image(class='card-img-top', src=recipe_image, alt='Recipe 1 Image')
+                div(id=recipe.c_recipe_id, class='card', class='h-100')
+                    img.image(class='card-img-top', src=recipe_image, alt='image')
                     div(class='card-body')
                         h4(class='card-title') #{recipe.c_recipe_name}
                         //- For each steps inside of the array of steps
                         for step in recipe_steps[i]
                             p(class='card-text')= step
                     div(class='card-foot', padding='.75rem')
-                        button.btn_card.btn.btn-primary(id='card'+i, type='button') Copy recipe
+                        button.btn_card.btn.btn-primary(class='saveRecipe', id='card'+i, type='button') Copy recipe
