@@ -52,7 +52,7 @@ CREATE TABLE `community_recipes` (
   `c_recipe_name` varchar(32) NOT NULL,
   `c_recipe_serving_size` float NOT NULL,
   `c_recipe_directions` tinytext,
-  `c_reciep_image_path` tinytext,
+  `c_recipe_image_path` tinytext,
   PRIMARY KEY (`c_recipe_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -83,7 +83,7 @@ CREATE TABLE `ingredients` (
   `ingredient_weight` int(11) DEFAULT NULL,
   PRIMARY KEY (`ingredient_id`),
   UNIQUE KEY `unique_ingredient` (`ingredient_name`,`ingredient_measurement`,`ingredient_expiration_date`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,7 +92,7 @@ CREATE TABLE `ingredients` (
 
 LOCK TABLES `ingredients` WRITE;
 /*!40000 ALTER TABLE `ingredients` DISABLE KEYS */;
-INSERT INTO `ingredients` VALUES (1,'Chicken',1,'lb','2019-02-07',NULL,NULL),(2,'Black beans',1,'oz','2019-02-08',NULL,NULL),(3,'Salsa',16,'oz','2019-02-10',NULL,NULL),(4,'Corn',1,'oz','2019-02-10',NULL,NULL),(5,'Tortilla Chips',1,'oz','2019-02-10',NULL,NULL),(6,'Condensed Chicken Soup',1,'oz','2019-02-10',NULL,NULL),(7,'Mixed vegetables',1,'oz','2019-02-10',NULL,NULL),(8,'Water',99,NULL,NULL,NULL,NULL);
+INSERT INTO `ingredients` VALUES (1,'Chicken',1,'lb','2019-02-07',NULL,NULL),(2,'Black beans',1,'oz','2019-02-08',NULL,NULL),(3,'Salsa',16,'oz','2019-02-10',NULL,NULL),(4,'Corn',1,'oz','2019-02-10',NULL,NULL),(5,'Tortilla Chips',1,'oz','2019-02-10',NULL,NULL),(6,'Condensed Chicken Soup',1,'oz','2019-02-10',NULL,NULL),(7,'Mixed vegetables',1,'oz','2019-02-10',NULL,NULL),(8,'Water',99,NULL,NULL,NULL,NULL),(18,'test',1,'tsp.','3000-12-12',NULL,NULL);
 /*!40000 ALTER TABLE `ingredients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -269,4 +269,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-25 18:52:53
+-- Dump completed on 2019-03-01 20:03:50
