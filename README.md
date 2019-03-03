@@ -15,9 +15,9 @@ sudo /usr/local/mysql/support-files/mysql.server start
 ```
 
 **Start mySQL Server - Windows**
--download installer (https://dev.mysql.com/downloads/installer/)
--run it
--add the folder ~\MySQL Server 8.0\bin\ to system PATH variables
+- Download MySQL installer (https://dev.mysql.com/downloads/installer/)
+- Run it
+- Add the folder ~\MySQL Server 8.0\bin\ to system PATH variables
 
 **Configure project**
 ```
