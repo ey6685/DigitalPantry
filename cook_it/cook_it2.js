@@ -81,6 +81,7 @@ async function cook_it2(recipe_id,pantry_id, scale)
         //check inv for needed ingredient
         for(var i =0; i<ingredients_in_recipe.length; i++)
         {
+            console.log("///////////////////////////////////////////\n" + query_str + "\n///////////////////////////////////////////\n");
             //select ingredient_total, ingredient_measurement from ingredients
             //where
             current_ingredient = await ingredient_t.findOne({
@@ -99,9 +100,9 @@ async function cook_it2(recipe_id,pantry_id, scale)
                 {
                     num_ingredients_cooked += scale;
                     if(current_ingredient.ingredient_total - ingredients_in_recipe[i].recipe_ingredient_qty == 0)
-                         query_str += "UPDATE ingredients SET ingredient_total = 0, ingredient_expiration_date = null WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used  + "';";
+                         query_str += "UPDATE ingredients SET ingredient_total = 0, ingredient_expiration_date = null WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used  + "'; ";
                     else
-                    query_str += "UPDATE ingredients SET ingredient_total = " +current_ingredient.ingredient_total - ingredients_in_recipe[i].recipe_ingredient_qty + ", WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used + "';";
+                    query_str += "UPDATE ingredients SET ingredient_total = " +await parseFloat(current_ingredient.ingredient_total - ingredients_in_recipe[i].recipe_ingredient_qty) + " WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used + "'; ";
                 }
                 else
                 {
@@ -125,7 +126,7 @@ async function cook_it2(recipe_id,pantry_id, scale)
                         if(current_ingredient.ingredient_total - converted == 0)
                             query_str += "UPDATE ingredients SET ingredient_total = 0, ingredient_expiration_date = null WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used  + "';";
                         else
-                        query_str += "UPDATE ingredients SET ingredient_total = " + await parseFloat(current_ingredient.ingredient_total - converted) + ", WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used + "';";
+                        query_str += "UPDATE ingredients SET ingredient_total = " + await parseFloat(current_ingredient.ingredient_total - converted) + " WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used + "';";
                     }
                     else
                     {
@@ -136,7 +137,7 @@ async function cook_it2(recipe_id,pantry_id, scale)
                 // console.log("///////////////////////////////////////////\n" + query_str + "\n///////////////////////////////////////////\n");
                 }
                 else{
-                    // console.log("can't covert the units:" + ingredients_in_recipe[i].ingredient_measurement + " to " + current_ingredient.ingredient_measurement);
+                    console.log("can't covert the units:" + ingredients_in_recipe[i].ingredient_measurement + " to " + current_ingredient.ingredient_measurement);
                     do_it_flag= false;
                     break;
                 }
@@ -181,8 +182,10 @@ async function cook_it2(recipe_id,pantry_id, scale)
                 )
 
             }
-
+            console.log("======================================\n");
+            console.log("FINAL QUERY_STR\n");
             console.log(query_str);
+            console.log("======================================\n");
             db.query(query_str,(err,results) =>{
                 if(err) throw err;
                 console.log("cook_it_complete!");
