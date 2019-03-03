@@ -5,6 +5,7 @@
 **Prerequisites:**
 - [mysql server](https://dev.mysql.com/doc/mysql-getting-started/en/#mysql-getting-started-installing)
 - [NodeJS](https://nodejs.org/en/download/)
+- [git](https://git-scm.com/downloads)
 
 **Start mySQL Server - MacOS**
 - Navigate to /system preferences/mySQL/ and click start server
@@ -12,6 +13,11 @@
 ```
 sudo /usr/local/mysql/support-files/mysql.server start
 ```
+
+**Start mySQL Server - Windows**
+-download installer (https://dev.mysql.com/downloads/installer/)
+-run it
+-add the folder ~\MySQL Server 8.0\bin\ to system PATH variables
 
 **Configure project**
 ```
