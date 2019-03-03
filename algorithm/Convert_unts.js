@@ -45,6 +45,12 @@ function converter_raw(num, unit, con_unit)
         else if(typeof con_unit != "string") throw "need a string input";
 
         if(unit == con_unit) return num;
+
+        if(unit == null || con_unit == null) 
+        {
+            console.log("water, most likely\n");
+            return num;
+        }
         ///done checking data
         
         //now to check if we can convert the units
@@ -248,4 +254,4 @@ async function converter_whole(num,unit,con_unit)
 module.exports.converter_whole = converter_whole;
 
 //test code
-converter_whole(11,"tsp.","tbsp.");
+// converter_whole(11,"tsp.","tbsp.");

@@ -92,7 +92,7 @@ CREATE TABLE `ingredients` (
 
 LOCK TABLES `ingredients` WRITE;
 /*!40000 ALTER TABLE `ingredients` DISABLE KEYS */;
-INSERT INTO `ingredients` VALUES (1,'Chicken',1,'lb','2019-02-07',NULL,NULL),(2,'Black beans',1,'oz','2019-02-08',NULL,NULL),(3,'Salsa',16,'oz','2019-02-10',NULL,NULL),(4,'Corn',1,'oz','2019-02-10',NULL,NULL),(5,'Tortilla Chips',1,'oz','2019-02-10',NULL,NULL),(6,'Condensed Chicken Soup',1,'oz','2019-02-10',NULL,NULL),(7,'Mixed vegetables',1,'oz','2019-02-10',NULL,NULL),(8,'Water',99,NULL,NULL,NULL,NULL),(18,'test',1,'tsp.','3000-12-12',NULL,NULL);
+INSERT INTO `ingredients` VALUES (1,'Chicken',1,'lb','2019-02-07',NULL,NULL),(2,'Black beans',1,'oz','2019-02-08',NULL,NULL),(3,'Salsa',16,'oz','2019-02-10',NULL,NULL),(4,'Corn',1,'oz','2019-02-10',NULL,NULL),(5,'Tortilla Chips',1,'oz','2019-02-10',NULL,NULL),(6,'Condensed Chicken Soup',1,'oz','2019-02-10',NULL,NULL),(7,'Mixed vegetables',1,'oz','2019-02-10',NULL,NULL),(8,'Water',99,'oz',NULL,NULL,NULL),(18,'test',1,'tsp.','3000-12-12',NULL,NULL);
 /*!40000 ALTER TABLE `ingredients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -217,7 +217,7 @@ DROP TABLE IF EXISTS `sequelizemeta`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `sequelizemeta` (
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`name`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -269,4 +269,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-01 20:03:50
+-- Dump completed on 2019-03-02 19:40:25

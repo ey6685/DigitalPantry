@@ -29,7 +29,7 @@
 const recipe_ingredient_t = require('../DB_models/recipe_ingredient');
 const ingredient_t = require('../DB_models/Ingredients');
 const pantry_t  = require('../DB_models/Pantry');
-
+const converter = require('../algorithm/Convert_unts');
 
 
 //db connection for testing
@@ -64,6 +64,7 @@ async function cook_it2(recipe_id,pantry_id, scale)
             attributes: ['recipe_ingredient_used', 'recipe_ingredient_qty', 'recipe_ingredient_measurement'],
             where: {recipe_id: recipe_id}
         })
+        console.log(JSON.stringify(ingredients_in_recipe));
         if (scale == null)
         {
             console.log("no scale provided: seting scale to 1");
@@ -88,17 +89,17 @@ async function cook_it2(recipe_id,pantry_id, scale)
                     ingredient_name: ingredients_in_recipe[i].recipe_ingredient_used
                 }
             })
-
+            // console.log("============================\n" + JSON.stringify(current_ingredient) + "\n=================================\n");
             //if they measurement == then compare the totals
             //if not convert them if possible
             //if not flip flag
             if(current_ingredient.ingredient_measurement == ingredients_in_recipe[i].recipe_ingredient_measurement)
             {
-                if(current_ingredient.ingredient_total >= ingredients_in_recipe[i].recipe_ingredient_qty * scale)
+                if(current_ingredient.ingredient_total >= await parseFloat(ingredients_in_recipe[i].recipe_ingredient_qty * scale))
                 {
                     num_ingredients_cooked += scale;
                     if(current_ingredient.ingredient_total - ingredients_in_recipe[i].recipe_ingredient_qty == 0)
-                         query_str += "UPDATE ingredients SET ingredient_total = 0, ingredient_expiration_date = null WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used * scale + "';";
+                         query_str += "UPDATE ingredients SET ingredient_total = 0, ingredient_expiration_date = null WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used  + "';";
                     else
                     query_str += "UPDATE ingredients SET ingredient_total = " +current_ingredient.ingredient_total - ingredients_in_recipe[i].recipe_ingredient_qty + ", WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used + "';";
                 }
@@ -106,15 +107,41 @@ async function cook_it2(recipe_id,pantry_id, scale)
                 {
                     // console.log("dont have enough of " + ingredients_in_recipe[i].recipe_ingredient_measurement);
                     do_it_flag = false;
+                    // console.log("flag flipped: ", current_ingredient.ingredient_name);
                     break;
                 }
 
             }
 
-            //else{
-                //convert units
+            else{
+               // convert units
                 //if they cannot flip flag
-            // }
+                var converted = await converter.converter_raw(ingredients_in_recipe[i].recipe_ingredient_qty * scale,ingredients_in_recipe[i].recipe_ingredient_measurement,current_ingredient.ingredient_measurement);
+                if(converted != 0)
+                {
+                    if(current_ingredient.ingredient_total >= converted)
+                    {
+                        num_ingredients_cooked += scale;
+                        if(current_ingredient.ingredient_total - converted == 0)
+                            query_str += "UPDATE ingredients SET ingredient_total = 0, ingredient_expiration_date = null WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used  + "';";
+                        else
+                        query_str += "UPDATE ingredients SET ingredient_total = " + await parseFloat(current_ingredient.ingredient_total - converted) + ", WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used + "';";
+                    }
+                    else
+                    {
+                        do_it_flag = false;
+                        console.log("flag flipped: ", ingredients_in_recipe[i].recipe_ingredient_used);
+                        break;
+                    }
+                // console.log("///////////////////////////////////////////\n" + query_str + "\n///////////////////////////////////////////\n");
+                }
+                else{
+                    // console.log("can't covert the units:" + ingredients_in_recipe[i].ingredient_measurement + " to " + current_ingredient.ingredient_measurement);
+                    do_it_flag= false;
+                    break;
+                }
+            }
+
         }//end of for loop
         
         //now that we have our string, and the flag is not flipped
@@ -155,11 +182,14 @@ async function cook_it2(recipe_id,pantry_id, scale)
 
             }
 
-
+            console.log(query_str);
             db.query(query_str,(err,results) =>{
                 if(err) throw err;
                 console.log("cook_it_complete!");
             })
+        }
+        else{
+            console.log("cant cook it.");
         }
         
 
@@ -171,5 +201,6 @@ async function cook_it2(recipe_id,pantry_id, scale)
     }
 }
 
+module.exports.cook_it2 = cook_it2;
 //testing code
 // cook_it2(2,1);
