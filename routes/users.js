@@ -16,7 +16,7 @@ const op = require('sequelize').Op;
 router.get("/login", function(req, res) {
   //renders signin page with content 'Sign In"
   res.render("signin", {
-    title: "Sign In",
+    title: "Log In",
   });
 });
 
@@ -59,6 +59,7 @@ passport.use(
 //This allows for using login credentials once for a single request and then keeping the user authenticated without making requests with same credentials
 //Creates a cookie with user credentials
 passport.serializeUser(function(user, done) {
+  //We can stuff more stuff into session here by declaring a new varialbe and passing it into done() intead of user.user_id
   done(null, user.user_id);
 });
 
@@ -125,14 +126,14 @@ router.post(
 //Get request to localhost:3000/users/register
 router.get("/register", function(req, res) {
   //renders signin page with content 'Registration"
-  console.log("Session" + req.session);
+  console.log(req.session);
   res.render("register", {
     title: "Registration"
   });
 });
 
 //Get request to localhost:3000/users/login
-router.get('/dashboard',async function(req, res){
+router.get('/dashboard',checkAuthentication,async function(req, res){
     //Jon//pulls algorithm results from directAlgorithm into recipe_results
     //Jon//then parses recipe id into var recipe_id
     try
@@ -205,7 +206,7 @@ router.get('/dashboard',async function(req, res){
     }  
 })
 
-router.get('/cook/:id', async function(req,res){
+router.get('/cook/:id', checkAuthentication,async function(req,res){
   const recipe = req.params.id;
   ////////////////////////////////////
   //how do we get panty_id and scale?//
@@ -308,11 +309,42 @@ router.post("/register", function(req, res) {
   }
 });
 
-router.get("/logout", function(req, res) {
+router.get("/logout",function(req, res) {
   req.logOut();
   req.flash("success", "You are logged out");
   res.locals.user = null;
   res.redirect("/users/login");
+});
+
+router.post('/saveCommunityRecipe', async function(req,res){
+  //get recipe id that user is trying to copy into their pantry
+  var recipe_id_to_be_copied = req.body['community_recipe_id'];
+  //get current user id, so we know which pantry to add recipe to
+  var current_user_id = req.session.passport['user'];
+  //Query for pantry ID that user belongs to
+  await db.query("SELECT * FROM users WHERE user_id="+current_user_id, function(err, results){
+      if(err) throw err;
+      //Asssign the pantry that the user belons to
+      users_pantry_id = results[0]['user_pantry_id'];
+      //Get single recipe information from community recipe database
+      query = "SELECT c_recipe_name,c_recipe_serving_size,c_recipe_directions,c_recipe_image_path FROM community_recipes WHERE c_recipe_id="+recipe_id_to_be_copied+";";
+      db.query(query, async function(err, results) {
+        if (err) throw err;
+        //assign all the information needed from the recipe
+        var recipe_name = results[0]['c_recipe_name'];
+        var recipe_serving_size = results[0]['c_recipe_serving_size'];
+        var recipe_directions = results[0]['c_recipe_directions'];
+        var recipe_image = results[0]['c_recipe_image_path'];
+        combined_values = "('"+recipe_name+"',"+recipe_serving_size+",'"+recipe_directions+"','"+recipe_image+"',"+users_pantry_id+");";
+        //Insert copied recipe into pantry's recipes
+        query = "INSERT INTO recipes  (recipe_name, recipe_serving_size, recipe_directions, recipe_image_path,recipe_pantry_id) VALUES "+combined_values;
+        db.query(query,function(err){
+          if (err) throw err;
+            //respond to AJAX POST request
+            res.send("Success");
+        })
+      })
+  });
 });
 
 //Function to call from any route to check if user is authenticated
@@ -328,5 +360,4 @@ function checkAuthentication(req, res, next) {
 
 //TODO
 //Remove user with DELETE
-
 module.exports = router;

@@ -4,7 +4,8 @@ const recipe_t = require('../DB_models/Recipes');
 const ingredient_t = require('../DB_models/Ingredients')
 const IiR_t = require('../DB_models/recipe_ingredient');
 const multer = require('multer');
-
+const steps = require('../recipe_direction_parser');
+const users_route = require('./users');
 //defines where to store image
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -16,6 +17,7 @@ const storage = multer.diskStorage({
   })
   //create an upload function using configuration above
   const upload = multer({storage: storage})
+
 /*
 TYPE: GET
 URL ENDPOINT: localhost:3000/recipes/showall
@@ -82,7 +84,31 @@ router.get('/showall', async function(req, res){
     }
     })
 
-    
+/*
+TYPE: GET
+URL ENDPOINT: localhost:3000/recipes/showComunityRecipes
+DESCRIPTION: This will display all recipes withing the community
+*/
+router.get('/showCommunityRecipes', function(req,res){
+    query = 'SELECT * FROM community_recipes';
+    console.log("Session");
+    //Prints user id stored in the session. Can be used to determine which pantry user belongs to
+    // console.log(req.session.passport['user']);
+    recipe_steps_array = []
+    db.query(query, async function(err, results) {
+        if (err) throw err;
+        for (every_recipe_directions in results){
+            var recipe_steps = await steps.parse_recipe_directions_by_string(results[every_recipe_directions].c_recipe_directions);
+            recipe_steps_array.push(recipe_steps.split('${<br>}'));
+        }
+        console.log(results);
+        res.render('comunity_recipes',{
+            title:"Community Recipes",
+            recipe_steps:recipe_steps_array,
+            data:results
+        });
+    });
+})
 
 /*
 TYPE: GET
@@ -197,6 +223,50 @@ router.post('/add',upload.single("image") , async function(req, res){
     // TODO redirect to another page
     res.redirect("showall");
 })
+
+
+//Get all available recipes that a single pantry has
+//Returns a JSON result
+router.get('/getPantryRecipes', function(req, res){
+    console.log(req.session.passport['user']);
+    //get id of the currently logged in user
+    var user_id = req.session.passport['user'];
+    //query all recipes which are availabel to this user
+    query = 'SELECT * FROM recipes WHERE recipe_pantry_id = (SELECT user_pantry_id FROM users WHERE user_id='+user_id+');';
+    db.query(query, function(err, results){
+        if (err) throw err;
+        //return JSON data
+        res.json(results);
+    });
+})
+
+
+//Share a recipe into community
+router.post('/share', async function(req, res){
+    share_query="UPDATE recipes SET recipe_sharable=1 WHERE recipe_name='"+req.body.recipe_name+"';";
+    await db.query(share_query, function(err, results){
+        if (err) throw err;
+        console.log(results);
+    });
+    await db.query("SELECT * FROM recipes WHERE recipe_name='"+req.body.recipe_name+"';", async function(err, results){
+        if (err) throw err;
+        var r_name = results[0].recipe_name;
+        var r_serving_size = results[0].recipe_serving_size;
+        var r_directions = results[0].recipe_directions;
+        var r_image_path = results[0].recipe_image_path
+        values = "('"+r_name+"',"+r_serving_size+",'"+r_directions+"','"+r_image_path+"');"
+        add_to_community_query="INSERT INTO community_recipes (c_recipe_name,c_recipe_serving_size,c_recipe_directions,c_recipe_image_path) VALUES " + values;
+        console.log(add_to_community_query);
+        await db.query(add_to_community_query, function(err, results){
+            if (err) throw err;
+            console.log("Recipe Shared to Community");
+        })
+    })
+    res.send("success");
+})
+
+
+
 
 
 router.post('/edit', function(req, res){

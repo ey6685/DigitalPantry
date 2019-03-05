@@ -215,3 +215,80 @@ $(document).ready(function(){
         });
     });
 });
+
+
+//Save community recipe
+$(document).on('click','.saveRecipe',function() {
+    //Get id of the community recipe clicked
+    $card_id = $(this).closest('.card').attr('id');
+
+    //Send ajax request with recipe ID that is being copied
+    $.ajax({
+        type:'POST',
+        url:'/users/saveCommunityRecipe',
+        data: { "community_recipe_id" : $card_id },
+        success:function(response){
+            //Reload the page to update cards
+            location.reload();
+        },
+        error:function(err){
+            console.log("Could not copy recipe");
+        }
+    });
+});
+
+//When user clicks share recipes while on the community page
+//Populate the overlay form with the recipes they already have
+$('#shareForm').on('show.bs.modal', function (event) {
+    //set overlay form to empty
+    $('#recipe-content').html("");
+    $.ajax({
+        type:'GET',
+        url:'/recipes/getPantryRecipes/',
+        success:function(response){
+            //For each recipe in list
+            //Add logic not to show recipes that are already shared
+            $.each(response, function(index, value){
+                console.log(response);
+                recipe_format = '<div class="individual-recipe"><div class="media"><img style="width: 30%" class="mr-3" src="$1" alt="Generic placeholder image"><div class="media-body"><h5 class="mt-0">$2</h5>$3</div></div></div><br>'
+                //if an image for the recipe does not exist
+                if (value.recipe_image_path == null){
+                    recipe_format = recipe_format.replace('$1',"/images/placeholder.jpg");
+                }
+                else{
+                //set image
+                recipe_format = recipe_format.replace('$1',value.recipe_image_path);
+                }
+                //set recipe name
+                recipe_format = recipe_format.replace('$2',value.recipe_name);
+                //set recipe directions
+                recipe_format = recipe_format.replace("$3",value.recipe_directions);
+                //add to the page
+                $('#recipe-content').append(recipe_format);
+            })
+        },
+        error:function(err){
+            console.log("Could not get recipes");
+        },
+    });
+})
+
+//Share recipe
+//Once user selects which recipe to share run this
+$(document).on('click','.individual-recipe',function() {
+    //get recipe name that was clicked
+    $recipe_name = $(this).find('h5')[0].innerText;
+    
+    //Send request to API for setting this recipe as sharable recipe
+    $.ajax({
+        type:'POST',
+        url:'/recipes/share',
+        data: { "recipe_name" : $recipe_name },
+        success:function(response){
+            console.log("Recipe: " + $recipe_name + " was shared");
+        },
+        error:function(err){
+            console.log("Could not share recipe to the community");
+        }
+    });
+})
