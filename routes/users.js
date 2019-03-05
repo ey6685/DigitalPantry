@@ -16,7 +16,7 @@ const op = require('sequelize').Op;
 router.get("/login", function(req, res) {
   //renders signin page with content 'Sign In"
   res.render("signin", {
-    title: "Sign In",
+    title: "Log In",
   });
 });
 

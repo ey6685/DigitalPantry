@@ -6,13 +6,31 @@ block content
             width: 93%;
             margin: 0px 10px 10px 10px;
         }
+        .individual-recipe{
+            padding:3px;
+        }
+        .individual-recipe:hover{
+            background-color: #a2f02d;
+            color:black;
+        }
     br
     br
     h1 #{title}
     br
+    //- Overlay form start. In other words edit recipe form
+    #shareForm.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true')
+        .modal-dialog.modal-dialog-centered.modal-lg(role='document')
+            .modal-content
+                .modal-header.modal-title 
+                    h5 Select a recipe to share
+                .modal-body
+                    .container-fluid
+                        #recipe-content
+                .modal-footer
+                    button.btn.btn-primary(type='button', data-dismiss='modal') Close
     .form-row
         .form-group.col-md-2
-            input.form-control.mr-sm-2(id='filterInput', onkeyup='myFunction()', type='text', placeholder='Search')
+            input.form-control.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search')
         .form-group.col-md-2
             .dropdown
                 select.form-control(id='sortBar', name='SortBar', onchange='sortList()')
@@ -20,10 +38,12 @@ block content
                         option(value='1') Sort A-Z
                         option(value='2') Sort Z-A
         .form-group.col-md-2
-            input.btn.btn-primary(type='submit', value='Share Recipe')
+            input.btn.btn-primary(data-toggle='modal', type='button', value='Share Your Recipe', data-target='#shareForm')
     br
     .form-row
+        //-for each recipe in data
         for recipe,i in data
+            //-get recipe image
             - recipe_image= recipe.c_recipe_image_path
             .form-group.col-md-3
                 div(id=recipe.c_recipe_id, class='card', class='h-100')
@@ -37,21 +57,28 @@ block content
                         button.btn_card.btn.btn-primary(class='saveRecipe', id='card'+i, type='button') Copy recipe
 
     script.
-        function myFunction() {
+        //This will trigger once user stars to type text into a search bar
+        function search() {
             // Declare variables
             var input, filter, div, i, txtValue;
+            //get the search bar input
             input = document.getElementById('filterInput');
+            //Set all letters to upper case
             filter = input.value.toUpperCase();
+            //get all card names
             card_names = document.getElementsByTagName('h4');
+            //get all cards
             div = document.getElementsByClassName('col-md-3');
 
             // Loop through all list items, and hide those who don't match the search query
             for (i = 0; i < div.length; i++) {
                 txtValue = card_names[i].textContent || card_names[i].innerText;
                 if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    //show
                     div[i].style.display = "";
                 } 
                 else {
+                    //hide
                     div[i].style.display = "none";
                 }
             }
