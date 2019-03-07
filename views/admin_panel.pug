@@ -6,10 +6,25 @@ block content
     if errors
         for error in errors
             div(class='alert alert-danger') #{error.msg}
+    .row
+        .col-md-3
+            img.img-thumbnail.img-fluid.rounded-circle(id='pantry-image', src='/images/placeholder.jpg', alt='Pantry Image')
+        .col-md-9
+            h1 #{title}
+            hr
+            br
+            .row
+                .col-md-6
+                    h4#name(style='border-bottom:1px solid black', onfocusout='cancelEdit()') Pantry Name
+                .btn#edit-btn.btn-primary(role='button', aria-disabled='false', onclick='edit()') Edit
+                .btn#save-btn.btn-success.disabled(role='button', aria-disabled='true') Save
+            br
+            .row
+                .col-md-6
+                    input#imgupload(type='file', name='image', accept='image/*', onchange='loadFile(event)', style='display:none')
+                    button#OpenImgUpload Image Upload
     br
-    h1 #{title}
-    hr
-    br
+    //-reset password overlay
     #resetForm.modal.fade(tabindex='-1', role='dialog', aria-hidden='true')
         .modal-dialog.modal-dialog-centered.modal(role='document')
             .modal-content
@@ -29,6 +44,7 @@ block content
                     .modal-footer
                         button.btn.btn-primary(type='button', data-dismiss='modal') Cancel
                         input.btn.btn-primary(type='submit', value='Submit')
+    //-Change privilege overlay
     #changePrivilege.modal.fade(tabindex='-1', role='dialog',aria-hidden='true')
         .modal-dialog.modal-dialog-centered.modal(role='document')
             .modal-content
@@ -49,6 +65,15 @@ block content
     h4 Active users
     hr
     br
+    .form-row
+        .form-group.col-md-2
+            input.form-control.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search')
+        .form-group.col-md-2
+            .dropdown
+                select.form-control(id='sortBar', name='SortBar', onchange='sortList()')
+                        option(value='0') Sort By
+                        option(value='1') Sort A-Z
+                        option(value='2') Sort Z-A
     table.table.table-dark(class='rounded')
             //-caption Available Ingredients
             thead
@@ -60,8 +85,8 @@ block content
                     th(scope='col') Remove User
             tbody
                 for item in userData
-                    tr(data-id=item.user_id)
-                        td= item.email
+                    tr(class='value-row', data-id=item.user_id)
+                        td.user-name= item.email
                         td= item.user_type
                         td
                             a.btn.btn-danger(data-toggle='modal', data-target='#changePrivilege') Change Privilege
@@ -86,3 +111,92 @@ block content
             .col-md-2
                 button.btn.btn-primary(type='submit') Add User
             
+    script.
+        function edit(){
+            document.getElementById('name').setAttribute("contenteditable", "true");
+            document.getElementById('name').focus()
+            document.getElementById('edit-btn').classList.add("disabled");
+            document.getElementById('save-btn').classList.remove("disabled");
+        }
+        function cancelEdit(){
+            document.getElementById('name').setAttribute("contenteditable", "false");
+            document.getElementById('edit-btn').classList.remove("disabled");
+            document.getElementById('save-btn').classList.add("disabled");
+        }
+        var loadFile = function(event) {
+            //Get 
+            var output = document.getElementById('pantry-image');
+            output.src = URL.createObjectURL(event.target.files[0]);
+        }
+        //This will trigger once user stars to type text into a search bar
+        function search() {
+            // Declare variables
+            var input, filter, row, i, txtValue;
+            //get the search bar input
+            input = document.getElementById('filterInput');
+            //Set all letters to upper case
+            filter = input.value.toUpperCase();
+            //get all table values where user name is stored
+            table_cell = document.getElementsByClassName('user-name');
+            //get individual rows, this is what will get hidden
+            row = document.getElementsByClassName('value-row');
+
+            // Loop through all list items, and hide those who don't match the search query
+            for (i = 0; i < row.length; i++) {
+                txtValue = table_cell[i].textContent || table_cell[i].innerText;
+                console.log(txtValue);
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    //show
+                    row[i].style.display = "";
+                } 
+                else {
+                    //hide
+                    row[i].style.display = "none";
+                }
+            }
+        }
+        //Function based on sort select dropdown box
+        function sortList() {
+            var list, i, switching, b, shouldSwitch;
+            //get all cards
+            list = document.getElementsByClassName('value-row');
+            switching = true;
+            var e = document.getElementById("sortBar");
+            var optionValue = e.options[e.selectedIndex].value;
+            /* Make a loop that will continue until
+            no switching has been done: */
+            while (switching && optionValue != 0) {
+                // Start by saying: no switching is done:
+                switching = false;
+                b = document.getElementsByClassName('user-name');
+                // Loop through all list items:
+                for (i = 0; i < (b.length - 1); i++) {
+                    //Initial condition (no switches)
+                    shouldSwitch = false;
+                    /* Check if the next item should
+                    switch place with the current item: */
+                    //If sort by A-Z is selected
+                    if(optionValue == 1){
+                        if (b[i].innerHTML.toLowerCase() > b[i + 1].innerHTML.toLowerCase()) {
+                            /* If next item is alphabetically lower than current item,
+                            mark as a switch and break the loop: */
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    //If sort by Z-A is selected
+                    else if(optionValue == 2){
+                        if (b[i].innerHTML.toLowerCase() < b[i + 1].innerHTML.toLowerCase()) {
+                            /* If next item is alphabetically higher than current item,
+                            mark as a switch and break the loop: */
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                    if (shouldSwitch) {
+                            list[i].parentNode.insertBefore(list[i + 1], list[i]);
+                            switching = true;
+                    }
+            }
+        }

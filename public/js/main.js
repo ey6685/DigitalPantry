@@ -336,3 +336,5 @@ $('#resetForm').on('show.bs.modal', function (event) {
 
     $(this).find('form').attr('action', '/users/resetPassword/'+user_id);
 })
+
+$('#OpenImgUpload').click(function(){ $('#imgupload').trigger('click'); });
