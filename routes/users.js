@@ -100,21 +100,17 @@ router.get("/register", function(req, res) {
 
 router.get("/adminPanel", async function(req, res){
   var current_user_id = req.session.passport['user'];
-  query="SELECT (user_pantry_id) FROM users WHERE user_id="+current_user_id+";";
-  console.log(query);
+  //Find which pantry user is from
+  pantry_id="(SELECT (user_pantry_id) FROM users WHERE user_id="+current_user_id+")";
+  //Find all users in that pantry and not the current user
+  query="SELECT * FROM users WHERE user_pantry_id="+pantry_id+" AND user_id!="+current_user_id+";";
   db.query(query, function(err, results){
     if (err) throw err;
-    console.log(results[0].user_pantry_id);
-    query="SELECT * FROM users WHERE user_pantry_id="+results[0].user_pantry_id+";";
-    console.log(query);
-    db.query(query, function(err, results){
-      if (err) throw err;
-      res.render("admin_panel",{
-        title:"Admin Panel",
-        userData:results
-      })
+    res.render("admin_panel",{
+      title:"Admin Panel",
+      userData:results
     })
-  });
+  })
 })
 
 //Get request to localhost:3000/users/login
@@ -322,16 +318,16 @@ router.post('/add', function(req, res){
     pass: user_password,
     user_type:user_type,
     //TODO figure out how to assign pantry IDs
-    user_pantry_id:2
+    user_pantry_id:1
   });
 
   //Call create function from DB_models/Users.js
-  User.createUser(newUser, function(err, user) {
-    if (err) throw err;
+  User.createUser(newUser, function() {
+    req.flash("success", "User added!");
+    console.log("SHOWING PAGE");
+    res.redirect("/users/adminPanel");
   });
 
-  req.flash("success", "User added! Please refresh the page.");
-  res.redirect("/users/adminPanel");
 })
 
 //Delete user from admin panel
