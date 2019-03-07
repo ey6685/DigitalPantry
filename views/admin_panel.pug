@@ -1,0 +1,88 @@
+extends user_view_template
+
+block content
+    br
+    != messages('message', locals)
+    if errors
+        for error in errors
+            div(class='alert alert-danger') #{error.msg}
+    br
+    h1 #{title}
+    hr
+    br
+    #resetForm.modal.fade(tabindex='-1', role='dialog', aria-hidden='true')
+        .modal-dialog.modal-dialog-centered.modal(role='document')
+            .modal-content
+                .modal-header.modal-title 
+                    h5 Reset password
+                form(method='POST', action='/user/resetPassword')
+                    .modal-body
+                        .container
+                            .row.justify-content-md-center
+                                .form-group
+                                    label Enter new password:
+                                    input#new-password.form-control(name='password', type='password', placeholder="Password")
+                            .row.justify-content-md-center
+                                .form-group
+                                    label Confirm password:
+                                    input#confirm-password.form-control(name='confirmPassword',type='password', placeholder="Password")
+                    .modal-footer
+                        button.btn.btn-primary(type='button', data-dismiss='modal') Cancel
+                        input.btn.btn-primary(type='submit', value='Submit')
+    #changePrivilege.modal.fade(tabindex='-1', role='dialog',aria-hidden='true')
+        .modal-dialog.modal-dialog-centered.modal(role='document')
+            .modal-content
+                .modal-header.modal-title 
+                    h5 Change privilege
+                form(method='POST', action='/users/changePrivilege')
+                    .modal-body
+                        label Set new privilege
+                        .container
+                            .row.justify-content-md-center
+                                select.form-control(name='userType', required)
+                                    option(value='administrator') Administrator
+                                    option(value='volunteer') Volunteer
+                    .modal-footer
+                        button.btn.btn-primary(type='button', data-dismiss='modal') Cancel
+                        input.btn.btn-primary(type='submit', value='Change')
+    br
+    h4 Active users
+    hr
+    br
+    table.table.table-dark(class='rounded')
+            //-caption Available Ingredients
+            thead
+                tr
+                    th(scope='col') User name
+                    th(scope='col') User type
+                    th(scope='col') Change Privilege
+                    th(scope='col') Reset Password
+                    th(scope='col') Remove User
+            tbody
+                for item in userData
+                    tr(data-id=item.user_id)
+                        td= item.email
+                        td= item.user_type
+                        td
+                            a.btn.btn-danger(data-toggle='modal', data-target='#changePrivilege') Change Privilege
+                        td
+                            a.btn.btn-danger(data-toggle='modal', data-target='#resetForm') Reset
+                        td
+                            a.btn.btn-danger(class="delete-user", data-id=item.user_id) DELETE
+    h4 Add new users
+    hr
+    br
+    form(method= 'POST', action= '/users/add', class= 'form')
+        .form-row
+            .col-md-3
+                input.form-control(name='userName', type='text', placeholder='Username')
+            .col-md-3
+                .dropdown-inline
+                select.form-control(name='userType', required)
+                    option(value='administrator') Administrator
+                    option(value='volunteer') Volunteer
+            .col-md-3
+                input.form-control(name='password', autocomplete="password", type='password', placeholder="Password")
+            .col-md-2
+                button.btn.btn-primary(type='submit') Add User
+            

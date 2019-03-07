@@ -53,6 +53,33 @@ $(document).ready(function(){
     });
 });
 
+
+//DELETE user
+//Triggered by a delete button on admin panel
+$(document).ready(function(){
+    //Once DELETE button is clicked on showall_ingredients.pug trigger
+    $('.delete-user').click(function(e){
+        //get button object clicked
+        $target = $(e.target);
+        //get data-id from the button
+        const id = ($target.attr('data-id'));
+
+        // Start AJAX
+        $.ajax({
+            type:'DELETE',
+            //This route is defined under ingredients.js
+            url:'/users/delete/'+id,
+            success:function(response){
+                //route user back to results
+                window.location.href = '/users/adminPanel';
+            },
+            error:function(err){
+                console.log("Could not delete: "+id);
+            }
+        })
+    });
+});
+
 //Delete extra rows if any from add_reipe
 $(document).on('click','.delete-row',function() {
     //delete closest row
@@ -291,4 +318,21 @@ $(document).on('click','.individual-recipe',function() {
             console.log("Could not share recipe to the community");
         }
     });
+})
+
+
+//Once admin clicks change privillege on admin panel this gets called
+$('#changePrivilege').on('show.bs.modal', function (event) {
+    $button = $(event.relatedTarget);
+    user_id = $button.closest('tr').attr('data-id');
+
+    $(this).find('form').attr('action', '/users/changePrivilege/'+user_id);
+})
+
+//Once adming click reset password on admin panel this gets called
+$('#resetForm').on('show.bs.modal', function (event) {
+    $button = $(event.relatedTarget);
+    user_id = $button.closest('tr').attr('data-id');
+
+    $(this).find('form').attr('action', '/users/resetPassword/'+user_id);
 })

@@ -11,6 +11,7 @@ const next_ing = require('../algorithm/find_next_ing');
 const found_recipes = require('../algorithm/find_recipes');
 const recipe_t = require('../DB_models/Recipes');
 const op = require('sequelize').Op;
+const bcrypt = require('bcryptjs');
 
 //Get request to localhost:3000/users/login
 router.get("/login", function(req, res) {
@@ -63,6 +64,7 @@ passport.serializeUser(function(user, done) {
   done(null, user.user_id);
 });
 
+
 //Invalidates the cookie based on the userId
 passport.deserializeUser(async function(id, done) {
   try {
@@ -72,6 +74,7 @@ passport.deserializeUser(async function(id, done) {
     throw err;
   }
 });
+
 
 //Does user authentication
 //If success redirect to /users/dashboard
@@ -85,43 +88,6 @@ router.post(
   })
 );
 
-//------------
-//DEPRECATED METHOD
-//PLAIN TEXT AUTHENTICATION
-//------------
-
-//This will login a user based on theirc redentials
-// router.post('/login', function(req, res){
-//     req.checkBody('email','Username is required').notEmpty();
-//     req.checkBody('password','Password is required').notEmpty();
-
-//     let errors = req.validationErrors();
-
-//     if(errors){
-//         res.render('signin',{
-//             title:"Sign In",
-//             errors:errors
-//         });
-//     }
-//     else{
-//         const u_email = req.body.email;
-//         const u_pass = req.body.password;
-//         // data = 'SELECT (userName,pass) FROM users WHERE userName="'+u_name+'" AND pass='+"'"+u_pass+"'";
-//         // console.log("DATA:" + data);
-//         db.query('SELECT * FROM users WHERE email="'+u_email+'" AND pass="'+u_pass+'"', function(err, results) {
-//             if (results.length > 0) {
-//                 req.flash("success", "Welcome");
-//                 res.redirect('/users/dashboard');
-//             }
-//             else{
-//                 customErr = "User not found";
-//                 req.flash("error", "No such user");
-//                 res.redirect('/users/login');
-//             }
-//         });
-//     }
-
-// })
 
 //Get request to localhost:3000/users/register
 router.get("/register", function(req, res) {
@@ -131,6 +97,25 @@ router.get("/register", function(req, res) {
     title: "Registration"
   });
 });
+
+router.get("/adminPanel", async function(req, res){
+  var current_user_id = req.session.passport['user'];
+  query="SELECT (user_pantry_id) FROM users WHERE user_id="+current_user_id+";";
+  console.log(query);
+  db.query(query, function(err, results){
+    if (err) throw err;
+    console.log(results[0].user_pantry_id);
+    query="SELECT * FROM users WHERE user_pantry_id="+results[0].user_pantry_id+";";
+    console.log(query);
+    db.query(query, function(err, results){
+      if (err) throw err;
+      res.render("admin_panel",{
+        title:"Admin Panel",
+        userData:results
+      })
+    })
+  });
+})
 
 //Get request to localhost:3000/users/login
 router.get('/dashboard',checkAuthentication,async function(req, res){
@@ -253,36 +238,6 @@ router.post("/register", function(req, res) {
       errors: errors
     });
   }
-  //METHOD BELOW IS DEPRECATED PLAIN TEXT AUTHENTICATION
-  //if no errors
-  // else{
-  //     //Get user's email
-  //     const u_name = req.body.email;
-  //     //Get user's password
-  //     const u_pass = req.body.password;
-  //     //Prepare user's data for SQL INSERT
-  //     user_data="('"+u_name+"','"+u_pass+"','"+"user"+"')";
-
-  //     //Add new user to database
-  //     db.query('INSERT INTO users (email, pass, user_type) VALUES '+user_data, function(err, results) {
-  //         //If error on insert into database
-  //         if (err){
-  //             //prepare error message for user
-  //             req.flash("error", "Could not add user to database");
-  //             //show message on registration page
-  //             res.redirect('/users/register');
-  //             //Log the error to console
-  //             console.log(err);
-  //         }
-  //         //If successful insert
-  //         else{
-  //             //Prepare message for user
-  //             req.flash("success", "Welcome");
-  //             //Redirect user to their dashboard
-  //             res.redirect('/users/dashboard');
-  //         }
-  //     });
-  // }
 
   //ENCRYPTED AUTHENTICATION
   //Creates a user and hashes their password into database
@@ -295,7 +250,7 @@ router.post("/register", function(req, res) {
     var newUser = new User({
       email: email,
       pass: password,
-      //TODO add pantryID
+      //TODO still need to figure out stuff with how to assign pantry IDs???
       userType: "admin"
     });
 
@@ -346,6 +301,93 @@ router.post('/saveCommunityRecipe', async function(req,res){
       })
   });
 });
+
+//Add new user from admin panel
+router.post('/add', function(req, res){
+  var user_name = req.body.userName;
+  var user_type = req.body.userType;
+  switch(user_type){
+    case 'volunteer':
+      user_type = 'NP'
+      break;
+    case 'administrator':
+      user_type = 'P'
+      break;
+  }
+  var user_password = req.body.password;
+
+  //Instantiate new user model defined in DB_models/Users.js
+  var newUser = new User({
+    email: user_name,
+    pass: user_password,
+    user_type:user_type,
+    //TODO figure out how to assign pantry IDs
+    user_pantry_id:2
+  });
+
+  //Call create function from DB_models/Users.js
+  User.createUser(newUser, function(err, user) {
+    if (err) throw err;
+  });
+
+  req.flash("success", "User added! Please refresh the page.");
+  res.redirect("/users/adminPanel");
+})
+
+//Delete user from admin panel
+router.delete('/delete/:id', async function(req, res){
+  var query = "DELETE FROM users WHERE user_id="+req.params.id+";";
+  await db.query(query);
+  req.flash("success", "User deleted!");
+  res.send("success");
+})
+
+//Change user privilege from admin panel
+router.post('/changePrivilege/:id', function(req, res){
+  var user_type = req.body.userType;
+  //Change Volunteer or Administrator to N/NP for database insert
+  switch(user_type){
+    case 'volunteer':
+      user_type = 'NP'
+      break;
+    case 'administrator':
+      user_type = 'P'
+      break;
+  }
+  //get user id
+  var user_id = req.params.id;
+  //create database query
+  var query = "UPDATE users SET user_type='"+user_type+"' WHERE user_id="+user_id+";";
+  console.log(query);
+  db.query(query, function(err, results){
+    if (err) throw err;
+    else{
+      //Show message to user
+      req.flash("success", "Privilege change successful!");
+      res.redirect("/users/adminPanel");
+    }
+  })
+})
+
+
+//Reset users password and set a new password
+router.post('/resetPassword/:id', async function(req, res){
+  var user_id = req.params.id;
+  var user_password = req.body.password;
+
+  //generate salt
+  salt = bcrypt.genSaltSync(10)
+  //generate hash using the passed in password
+  var hash = bcrypt.hashSync(user_password,salt);
+
+  //update password in database
+  query = "UPDATE users SET pass='"+hash+"' WHERE user_id="+user_id+";";
+  db.query(query)
+
+  //Show message to user
+  req.flash("success", "Password reset successful!");
+  res.redirect("/users/adminPanel");
+})
 
 //Function to call from any route to check if user is authenticated
 //This needs to be used for verification of user privilleges
