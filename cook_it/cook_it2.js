@@ -1,209 +1,176 @@
-////////////////////////////////////////////////////////////
-//this file contains the function cook_it2. cook_it2 takes//
-//an int of the recipe id that we are cooking. then it    //
-//will check to make sure we can cook the recipe by       //
-//checking our inventory for the ingredients if we have   //
-//them then we can take out what we are using in the      //
-//from the ingredients table from our db.                 //
-//UPDATE:                                                 //
-//now it will log the number of ingredients you cooked    //
-//under your pantry                                       //
-////////////////////////////////////////////////////////////
+/*
+this file containt cookit2.5?
+
+description:
+this function will take a recipe_id and cook it. this meaning it will:
+1)check to see if the ingredients are still there(zeus forbid they are not)
+2)take the ingredients out
+3?)log stats if possible.
+
+inputs
+-int : recipe_id   : what are we cooking
+-int : pantry_id   : where you at
+-int : peopel fed  : how many people we are cooking for
 
 
-///////////////////////////////////////////////////////////////////
-//inputs:                                                        //
-//1.) recipe_id                                                  //
-//2.) pantry_id                                                  //
-//3.) scale                                                      //
-//                                                               //
-//outputs: none                                                  //
-//                                                               //
-//datebase updates:                                              //
-//1.)add # of ingredients cooked to pantry_ingredients_used_month//
-//2.)add # of ingredients cooded to pantry_ingredients_used_YTD  //
-///////////////////////////////////////////////////////////////////
+outputs
 
 
-/////////////requires//////////////////////////////////////////////
-const recipe_ingredient_t = require('../DB_models/recipe_ingredient');
-const ingredient_t = require('../DB_models/Ingredients');
-const pantry_t  = require('../DB_models/Pantry');
-const converter = require('../algorithm/Convert_unts');
+datebase updates:
+-the ingredients used taken out the database
+-?stats?
+*/
 
 
-//db connection for testing
-// const mysql = require('mysql');
 
-// // for testingset up my db connection
-// const db = mysql.createConnection ({
-//     host: 'localhost',
-//     user: 'root',
-//     password: 'password',
-//     database: 'digital_pantry',
-//     multipleStatements:true//may have to change this later for security.....(note for OSKARS)
-// });
+//requires
+const recipe_t = require('../DB_models/Recipes');
+const in_recipe_t = require('../DB_models/ingredients_in_a_recipe');
+const in_pantry_t = require('../DB_models/ingredients_in_pantry');
+const unit_converter = require('../algorithm/Convert_unts');
+const ing_totaler = require('../algorithm/total_of_ingredient');
 
-///////////////////////////////////////////////////////////////////
-async function cook_it2(recipe_id,pantry_id, scale)
+const mysql = require('mysql');
+const db = mysql.createConnection ({
+    host: 'localhost',
+    user: 'root',
+    password: 'password',
+    database: 'digital_pantry',
+    multipleStatements:true
+});
+
+
+//function
+async function cook_it2(recipe_id, pantry_id, people_to_fed)
 {
-    //if no pantry id we wont log the ingredients but still cook
-    //if no recipe id throw err.
-    try
-    {
-       if(recipe_id == null)
+    try{
+        //check data
+        var scale=0.0;
+        if(recipe_id == null)
         {
-            throw "no reicpe id";   
+            throw "no recipe id";
         }
         else if(typeof recipe_id != 'number')
         {
-            throw "data passed to recipe_id is not a number";
+            throw 'recipe_id not a number'
         }
-        //findf all the ingredients we need to cook
-        var ingredients_in_recipe = await recipe_ingredient_t.findAll({
-            attributes: ['recipe_ingredient_used', 'recipe_ingredient_qty', 'recipe_ingredient_measurement'],
-            where: {recipe_id: recipe_id}
-        })
-        console.log(JSON.stringify(ingredients_in_recipe));
-        if (scale == null)
+        
+        if(pantry_id == null)
         {
-            console.log("no scale provided: seting scale to 1");
-            scale = 1;
+            throw "no pantry_id";
         }
-        else if (typeof scale == 'number')
+        else if(typeof pantry_id != 'number')
         {
-            throw "data provide as scale is not a number"
+            throw "pantry_id not a number";
         }
-        var current_ingredient;
-        var num_ingredients_cooked = 0;
-        var do_it_flag = true;//flip if you cant cook it
-        var query_str = "";
-        //check inv for needed ingredient
-        for(var i =0; i<ingredients_in_recipe.length; i++)
-        {
-            console.log("///////////////////////////////////////////\n" + query_str + "\n///////////////////////////////////////////\n");
-            //select ingredient_total, ingredient_measurement from ingredients
-            //where
-            current_ingredient = await ingredient_t.findOne({
-                attributes: ['ingredient_total','ingredient_measurement'],
-                where: {
-                    ingredient_name: ingredients_in_recipe[i].recipe_ingredient_used
-                }
-            })
-            // console.log("============================\n" + JSON.stringify(current_ingredient) + "\n=================================\n");
-            //if they measurement == then compare the totals
-            //if not convert them if possible
-            //if not flip flag
-            if(current_ingredient.ingredient_measurement == ingredients_in_recipe[i].recipe_ingredient_measurement)
-            {
-                if(current_ingredient.ingredient_total >= await parseFloat(ingredients_in_recipe[i].recipe_ingredient_qty * scale))
-                {
-                    num_ingredients_cooked += scale;
-                    if(current_ingredient.ingredient_total - ingredients_in_recipe[i].recipe_ingredient_qty == 0)
-                         query_str += "UPDATE ingredients SET ingredient_total = 0, ingredient_expiration_date = null WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used  + "'; ";
-                    else
-                    query_str += "UPDATE ingredients SET ingredient_total = " +await parseFloat(current_ingredient.ingredient_total - ingredients_in_recipe[i].recipe_ingredient_qty) + " WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used + "'; ";
-                }
-                else
-                {
-                    // console.log("dont have enough of " + ingredients_in_recipe[i].recipe_ingredient_measurement);
-                    do_it_flag = false;
-                    // console.log("flag flipped: ", current_ingredient.ingredient_name);
-                    break;
-                }
 
+        if(people_to_fed == null || typeof people_to_fed != 'number')
+        {
+            scale=1;
+        }
+        else
+        {
+
+            //calc the scale to determin how much of the ingredients
+            var recipe_scale = await recipe_t.findOne({
+                attributes: ['recipe_people_it_feeds'],
+                where:{
+                    recipe_id : recipe_id
+                }
+            });
+            console.log("recipe_scale: " + JSON.stringify(recipe_scale));
+            scale = people_to_fed / recipe_scale.recipe_people_it_feeds;
+            if(people_to_fed < recipe_scale.recipe_people_it_feeds)
+                scale = 1;
+            else if(people_to_fed % recipe_scale.recipe_people_it_feeds >0)
+                scale++;
+        }
+        console.log("scale: " + scale + '\n');
+        //get the ingredients we need to cook
+        var ingredients_in_the_recipe = await in_recipe_t.findAll({
+            where:{
+                recipe_id: recipe_id,
+                pantry_id: pantry_id
             }
+        });
+        console.log("\n" + JSON.stringify(ingredients_in_the_recipe));
+        //make sure we got all the ing
+        var flag_have_all = true;
+        
+        //for every ingredinet in the recipe
+        //we need to check to see if we have it in stock
 
-            else{
-               // convert units
-                //if they cannot flip flag
-                var converted = await converter.converter_raw(ingredients_in_recipe[i].recipe_ingredient_qty * scale,ingredients_in_recipe[i].recipe_ingredient_measurement,current_ingredient.ingredient_measurement);
-                if(converted != 0)
+       // ingredients_in_the_recipe.forEach(async function(current)
+       for(var i = 0; i<ingredients_in_the_recipe.length; i++) 
+       {
+            //get the ingredintd inthe stock
+            var ing_in_stock;
+            console.log("adding " + ingredients_in_the_recipe[i].ingredient_id,pantry_id + " " + ingredients_in_the_recipe[i].ingredient_unit_of_measurement);
+            ing_in_stock = await ing_totaler.total_ingredients(ingredients_in_the_recipe[i].ingredient_id,pantry_id, ingredients_in_the_recipe[i].ingredient_unit_of_measurement)
+
+            if(ing_in_stock < ingredients_in_the_recipe[i].amount_of_ingredient_needed * scale)
+            {
+                console.log("flag flipped:{")
+                flag_have_all = false;  
+            }
+        }
+        
+        //if we have the ingredients in stock
+        console.log("flag: " + flag_have_all);
+        if(flag_have_all)
+        {  
+            var amount;
+            var query_str = "";
+            //await ingredients_in_the_recipe.forEach(async function(current)
+            for(var i=0; i<ingredients_in_the_recipe.length; i++)
+            {   
+                var amount_need = ingredients_in_the_recipe[i].amount_of_ingredient_needed * scale;
+                var current_ingredient = await in_pantry_t.findAll({
+                    where: {
+                        ingredient_id: ingredients_in_the_recipe[i].ingredient_id
+                    },
+                    order: ['ingredient_expiration_date']
+                });
+
+                
+                for(var o =0; o<current_ingredient.length; o++)
                 {
-                    if(current_ingredient.ingredient_total >= converted)
+                    amount = current_ingredient[o].ingredient_amount;
+                    //check units of measurement
+                    if(current_ingredient[o].ingredient_unit_of_measurement != ingredients_in_the_recipe[i].ingredient_unit_of_measurement)
                     {
-                        num_ingredients_cooked += scale;
-                        if(current_ingredient.ingredient_total - converted == 0)
-                            query_str += "UPDATE ingredients SET ingredient_total = 0, ingredient_expiration_date = null WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used  + "';";
-                        else
-                        query_str += "UPDATE ingredients SET ingredient_total = " + await parseFloat(current_ingredient.ingredient_total - converted) + " WHERE ingredient_name = '" + ingredients_in_recipe[i].recipe_ingredient_used + "';";
+                        amount = await unit_converter.converter_raw(amount, current_ingredient[o].ingredient_unit_of_measurement,ingredients_in_the_recipe[i].ingredient_unit_of_measurement);
                     }
-                    else
+
+                    if(amount >= amount_need)
                     {
-                        do_it_flag = false;
-                        console.log("flag flipped: ", ingredients_in_recipe[i].recipe_ingredient_used);
+                        query_str = query_str+  "UPDATE ingredients_in_pantry SET ingredient_amount = " + (current_ingredient[o].ingredient_amount - amount_need) + " WHERE ingredient_id = " + current_ingredient[o].ingredient_id + " AND ingredient_expiration_date = '" + current_ingredient[o].ingredient_expiration_date +"'; ";
                         break;
                     }
-                // console.log("///////////////////////////////////////////\n" + query_str + "\n///////////////////////////////////////////\n");
-                }
-                else{
-                    console.log("can't covert the units:" + ingredients_in_recipe[i].ingredient_measurement + " to " + current_ingredient.ingredient_measurement);
-                    do_it_flag= false;
-                    break;
-                }
-            }
-
-        }//end of for loop
-        
-        //now that we have our string, and the flag is not flipped
-        //if a pantry id is passed to us then
-        if(do_it_flag)
-        {
-            if(pantry_id)
-            {
-                //if the pantry id is passed to the function
-                //get the stats to update
-                var current_pantry = await pantry_t.findOne({
-                    attributes: ['pantry_ingredients_used_month', 'pantry_ingredients_used_YTD','recipes_cooked_month','recipes_cooked_YTD'],
-                    where:{
-                        pantry_id: pantry_id
-                    }
-                })
-                // console.log(JSON.stringify(current_pantry))
-                var new_used_month = current_pantry.pantry_ingredients_used_month + num_ingredients_cooked;
-                var new_used_YTD   = current_pantry.pantry_ingredients_used_YTD   + num_ingredients_cooked;
-
-                var new_recipes_month = current_pantry.recipes_cooked_month + 1;
-                var new_recipes_YTD   = current_pantry.recipes_cooked_YTD   + 1;
-                // console.log("new used mon: " + new_used_month);
-                // console.log("new used YTD: " + new_used_YTD);
-                // console.log("cooked month: " + new_recipes_month);
-                // console.log("cooked YTD  : " + new_recipes_YTD);
-                pantry_t.update({
-                    pantry_ingredients_used_month: new_used_month,
-                    pantry_ingredients_used_YTD  : new_used_YTD,
-                    recipes_cooked_month         : new_recipes_month,
-                    recipes_cooked_YTD           : new_recipes_YTD},
+                    else
                     {
-                        where: {
-                            pantry_id: pantry_id
-                        }
+                        amount_need -= current_ingredient[o].ingredient_amount;
+                        query_str = query_str+ "UPDATE ingredients_in_pantry SET ingredient_amount = 0 ingredient_expiration_date = null  WHERE ingredient_id = " + current_ingredient[o].ingredient_id + " AND ingredient_expiration_date = '" + current_ingredient[o].ingredient_expiration_date + "'; ";
                     }
-                )
 
+                }
+
+            
             }
-            console.log("======================================\n");
-            console.log("FINAL QUERY_STR\n");
-            console.log(query_str);
-            console.log("======================================\n");
-            db.query(query_str,(err,results) =>{
-                if(err) throw err;
-                console.log("cook_it_complete!");
-            })
-        }
-        else{
-            console.log("cant cook it.");
-        }
-        
+            //});//end of for each
+        }//end of checking if the flag has been fliped
+        console.log("the string:\n" +query_str);
+        db.query(query_str,(err,res)=>{
+            if(err) throw err;
+            console.log(JSON.stringify(res));
+        });
 
-        
     }
     catch(err)
     {
-        console.log("error in cook it 2: " + err);
+        console.log(err);
     }
 }
 
 module.exports.cook_it2 = cook_it2;
-//testing code
-// cook_it2(2,1);
+//cook_it2(1,1,1);

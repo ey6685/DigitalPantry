@@ -52,7 +52,7 @@ function converter_raw(num, unit, con_unit)
             return num;
         }
         ///done checking data
-        
+        console.log("coverting " +num+" " + unit + " to " + con_unit);
         //now to check if we can convert the units
         //aka if a unit is for a liquid or not
         if(unit == "tsp." || unit == "tbsp." || unit == "cup")
@@ -123,6 +123,7 @@ function converter_raw(num, unit, con_unit)
             //put in the universals from above
             if(unit == "lb" && con_unit == "oz")
             {
+                console.log((num * 16));
                 return (num * 16);
             }
             else if(unit == "oz" && con_unit == "lb")

@@ -37,15 +37,20 @@ async function total_ingredients(ing_id, pantry_id,unit)
         console.log(JSON.stringify(the_stock));
         //time to total
         var sum = 0.0;
-        the_stock.forEach(async function(current) {
+        await the_stock.forEach(async function(current) {
             if(unit == current.ingredient_unit_of_measurement)
             {
                 sum += current.ingredient_amount;
             }
             else
             {
-                var new_num = await parseFloat(unit_convert.converter_raw(current.ingredient_amount, current.ingredient_unit_of_measurement, unit));
-                sum += new_num;
+                // if(new_num == 0)
+                //     {
+                //         console.log("cont convert;");
+                //         return -1;
+                //     }
+                console.log(current.ingredient_amount + " " + current.ingredient_unit_of_measurement )
+                sum +=  await unit_convert.converter_raw(current.ingredient_amount, current.ingredient_unit_of_measurement, unit);
             }
         });
 
