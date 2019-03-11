@@ -11,7 +11,7 @@
 /////////////////////////////////////////
 
 /////////requires//////////////
-const recipe_ingredient_t = require('./DB_models/Recipes');
+const recipe_ingredient_t = require('.DB_models/recipe_variants.js');
 
 
 function recipe_direction_parser(recipe_id)

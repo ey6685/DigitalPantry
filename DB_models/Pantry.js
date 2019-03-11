@@ -5,17 +5,18 @@
 
 //reqires
 const Sequelize =  require('sequelize');
+const recipes = require('./Recipes');
 const db = require('../databaseMySQL');
 
 
 //db table
 /*
 =================================================================================================================================================================
-|pantry_id: int PK| pantry_name: varchar(32)| pantry_month: EMUN("all the months")| pantry_monthy_exipred_ingredients: int| pantry_monthy_total_exipred: int|
+|pantry_id: int PK| pantry_name: varchar(32)|
 =================================================================================================================================================================
 */
 
-const Pantry = db.define("pantry_stats", 
+const Pantry = db.define("pantry", 
     {
         pantry_id:{
         type: Sequelize.INTEGER,
@@ -26,26 +27,16 @@ const Pantry = db.define("pantry_stats",
         pantry_name:{
             type: Sequelize.STRING
         },
-
-
-        // pantry_month: {
-        // type: Sequelize.ENUM("January","February","March","April","May","June","July","August","September","October","November","December")
-        // },
-
-        pantry_monthy_exipred_ingredients:{
-            type: Sequelize.INTEGER      
-        },
-
-        pantry_monthy_total_exipred: {
-            type: Sequelize.INTEGER
-        }
     },
     {
         timestamps     : false,
         freezeTableName: true
     }        
 );
-Pantry.removeAttribute('id');
+
+//relations
+// Pantry.hasMany(recipes, {foreignKey: "pantry_id", sourceKey: "pantry_id"});
+
 module.exports = Pantry;
 
 

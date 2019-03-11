@@ -1,64 +1,101 @@
-//this file is to find the next expiring ingredient
-//this is utilized on the user dashboard
+/*
+this file is to find the next exipiring ingredient for the recommenting recipes
 
-//inputs
-//--system date
+inputs:
+---date from the system
 
-//output
-//--a JSON object of the next exipiring object
+output:
 
-//requires
-const ingredient_t = require('../DB_models/Ingredients');
+returns
+--id of ingredient that is expiring
+
+requires
+*/
+
+const ingredient_table           = require('../DB_models/Ingredients');
+const ingredient_in_pantry_table = require('../DB_models/ingredients_in_pantry');
 const op = require('sequelize').Op;
 
+
+//start of function
+
 async function next_exp_ingredient()
-{   //seting up date
-    try{
+{
+    //first we need the date
+    try
+    {
         var date = new Date();
         var month = date.getMonth() +1 ;
         var day = date.getDate()-1;
         var year = date.getFullYear();
         var local_date = year + '-' + month + '-' + day;
-        // console.log(local_date);
     }
     catch(err)
     {
-        console.log("something went wrong with date time geting\n" + err);
+        console.log("date err: " + err);
     }
 
-    try
+    try 
     {
-        //query the db for all not exipred ingredients
-        var ingredient_results = await ingredient_t.findAll({
-            where: {
+        //get the ingredients form the ingredients in pantry table that have an ex date
+        // that is today or greater.
+        var list_of_exp_ing = await ingredient_in_pantry_table.findAll({
+            where: 
+            {
                 ingredient_expiration_date: {
                     [op.gte]: local_date
                 },
                 ingredient_expiration_date: {
                     [op.ne]: null
                 }
-            }
-        })
-        var next = ingredient_results[0]
-        for(var i=1; i<ingredient_results.length;i++)
+            },
+            order: ["ingredient_expiration_date"],
+            // include: [{model: ingredient_table}]
+        });
+        
+        console.log(JSON.stringify(list_of_exp_ing));
+        //now to find the one with the greatest weight
+        var ex_date = list_of_exp_ing[0].ingredient_expiration_date;
+        var i = 0;
+
+        //now to get the weight of these ingredients to make sure we get rid of the best ingredient
+        var ing_ids = new Array();
+        do
         {
-            if(next.ingredient_expiration_date >= ingredient_results[i].ingredient_expiration_date)
-            {
-                next = ingredient_results[i];
-            }   
+            ing_ids.push(list_of_exp_ing[i].ingredient_id);
+            i++;
+        }while(list_of_exp_ing.ingredient_expiration_date <= ex_date && i<list_of_exp_ing.length);
+
+        //get the weights of the ingredients
+        var weights = await ingredient_table.findAll({
+            attributes:['ingredient_name', 'ingredient_id', 'ingredient_weight'],
+            where:{
+                ingredient_id : {
+                    [op.in] : ing_ids
+                    }
+                }
+        });
+        
+        //now to compare weights to 
+        var best_weight = weights[0];
+        for(var i = 1; i<weights.lenght; i++)
+        {
+            if(best_weight.ingredient_weight < weights[i].ingredient_weight)
+                best_weight = weights[i];
         }
-        // console.log(JSON.stringify(next));
-        return next;
-    }
-    catch(err)
-    {
+        
+        console.log(JSON.stringify(best_weight));
+
+        //return the ingredient id
+        return best_weight.ingredient_id;
+
+    } 
+    catch (err) {
         console.log(err);
     }
-
-    
 }
 
 module.exports.next_exp_ingredient = next_exp_ingredient;
 
-// //testting code
+//testing code
 // next_exp_ingredient();

@@ -55,7 +55,7 @@ async function cook_it2(recipe_id,pantry_id, scale)
         {
             throw "no reicpe id";   
         }
-        else if(typeof recipe_id == 'number')
+        else if(typeof recipe_id != 'number')
         {
             throw "data passed to recipe_id is not a number";
         }

@@ -4,7 +4,11 @@
 //This file contains a model for the Users table in SQL database
 //This file also contains functions required to communicate with the database
 
-
+/*
+==============================================================================
+username   | user_password | user_email |pantry_id
+varchar(32)| string        |  string    | int fk ref pantry
+*/
 const Sequelize = require('sequelize');
 const db = require('../databaseMySQL.js');
 const bcrypt = require('bcryptjs');
@@ -12,24 +16,20 @@ const bcrypt = require('bcryptjs');
 //CREATED BY PATRICK
 //Defines User model
 const Users = db.define('users', {
-    user_id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true},
-    email: {
+    username:{
+        type: Sequelize.STRING
+    },
+
+    user_password:{
+        type: Sequelize.STRING
+    },
+    user_email: {
         type: Sequelize.STRING,
-        
-        notNull: true,
     },
     
-    pass:{
-        type: Sequelize.STRING,
-        notNull: true},
+    
   
     user_pantry_id: {type: Sequelize.INTEGER},
-    
-    user_type: {
-        type: Sequelize.STRING},
 },
 {
     timestamps: false
@@ -57,20 +57,20 @@ module.exports.createUser = function(newUser, callback){
 //CREATED BY OSKARS
 //Retrieves the user by email
 module.exports.getUserByEmail = async function(username){
-    var results = await User.findOne({where:{email:username}});
+    var results = await User.findOne({where:{user_email:username}});
     // console.log(result);
     return results;
 }
 
 //CREATED BY OSKARS
 //Retrieves the user by ID
-module.exports.getUserById = async function(id){
-    console.log("Finding ID");
-    let results = await User.findById(id);
-    // console.log(results);
-    return results;
-    // return User.findById(id, callback);
-}
+// module.exports.getUserById = async function(id){
+//     console.log("Finding ID");
+//     let results = await User.findById(id);
+//     // console.log(results);
+//     return results;
+//     // return User.findById(id, callback);
+// }
 
 //CREATED BY OSKARS
 //Recieves a password that user has entered in the login form

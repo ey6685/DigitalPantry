@@ -1,156 +1,127 @@
 ///function to recommend recipes for the expiring ingredient
 
 //inputs
-//ingredient name : string
+//ingredient id
 
 
 //outputs: an array of recipe_ids
 
 //requires
-const recipe_ingredient_t = require("../DB_models/recipe_ingredient");
-const ingredient_t = require("../DB_models/Ingredients");
-const recipe_t = require('../DB_models/Recipes');
+
+const ingredients_in_a_recipe_t = require('../DB_models/ingredients_in_a_recipe');
+const ingredients_in_pantry_t = require('../DB_models/ingredients_in_pantry');
+const unit_convert = require('./Convert_unts');
 const op = require('sequelize').Op;
 
 
-async function find_recipes(exp_ingredient)
+async function find_recipes(exp_id,pantry_id)
 {
-    console.log("staring find_recipe with " + exp_ingredient);
-    if(exp_ingredient != "")
-    {  
-        //find the recipe ids and how much is needed of where it is
-        try
+    try{
+        var recommened_recipes= new Array();
+        console.log("starting find recipe with ingredient id: " + exp_id);
+        if(pantry_id == null) pantry_id = 1;
+        if(exp_id != null)
         {
-            var id_n_needed = await recipe_ingredient_t.findAll({
-                attributes: ['recipe_id', 'recipe_ingredient_qty', 'recipe_ingredient_measurement', 'recipe_ingredient_used'],
+            //find all the variant recipe ids that have the ingredieint
+            var recipe_ids = await ingredients_in_a_recipe_t.findAll({
+                attributes :['recipe_id'],
                 where:{
-                    recipe_ingredient_used: exp_ingredient
+                    ingredient_id: exp_id,
+                    pantry_id: pantry_id
                 }
             });
-        }
-        catch(err)
-        {
-            console.log(err);
-            return 0;
-        }
 
+            console.log(JSON.stringify("recipe ids: \n" + recipe_ids));
 
-        //check to see if we got anything from the db
-        if(id_n_needed.length <=0)
-        {
-            console.log("no recipes for " + exp_ingredient);
-            return 0;
-        }
+            var recipe_ids_array = new Array();
 
+            recipe_ids.forEach(ids => {
 
-        //now that we have the data and that something came back from the do we need to find out of we have all the
-        //ingredients in our inv
-        
-        //place to store the ingredints and amount needed
-        var ingredients_maybe = new Array();
-        
-        //find the rest of the needed ingredients
-        
-        //loop through and store the need ingredients in a 2d array
-        //first dim is each new recipe
-        //second dim is the ingredients needed for that recipe
-        for( var i =0; i<id_n_needed.length; i++)
-        {   
-            console.log("started:" + i);
-            try
+                recipe_ids_array.push(ids.recipe_id);
+            });
+            console.log("array of recipes : \n" + recipe_ids_array);
+
+            //new vars for for loops
+            var flag_have_needed_anmount = false//starts false will flip if we have the ingredents
+            var ingredents_from_pantry_data;//stores the db called data
+            var list_of_ingredients_in_recipe;//for what is needed in the recipes
+            var i = 0//counter for the loop
+            var total_amount_ingredient=0//for totaling if there are mult instances of the ingredient
+         
+            for(i; i<recipe_ids_array.length;i++)
             {
-                ingredients_maybe[i] = await recipe_ingredient_t.findAll({
-                    attributes: ['recipe_id', 'recipe_ingredient_qty', 'recipe_ingredient_measurement', 'recipe_ingredient_used'],
-                    where:{recipe_id: id_n_needed[i].recipe_id}});
-            }
-            catch(err)
-            {
-                console.log(err + "\nhappened at:" + JSON.stringify(id_n_needed[i]));
-                return 0;
-            }
-        }
-
-        // console.log("///////////////////////////////////\n" +JSON.stringify(ingredients_maybe) + "\n////////////////////////////////////////\n");
-        // console.log("length: " + ingredients_maybe[0].length);
-        var err_flag = true; //flip this if not enough ingredients or if err occors
-        var found_recipes_ids = new Array()
-        var this_ingredient;
-        try
-        {
-            for(var i =0; i<ingredients_maybe.length; i++)
-            {
-                err_flag = true;
-                // console.log('i: ' + i + ",length: " + ingredients_maybe[i].length );
-                for(var o = 0; o <  ingredients_maybe[i].length ;o++)
-                {
-                    try{
-                        this_ingredient = await ingredient_t.findAll(
-                            {
-                                attributes: ['ingredient_total','ingredient_measurement','ingredient_expiration_date'],
-                                where: {ingredient_name: ingredients_maybe[i][o].recipe_ingredient_used}
-                        })
-                        // console.log("lengnth: " + Object.keys(this_ingredient).length);
-                        //break the loop and dont log this recipe_id if the queary comes back with nothing
-                        
-                        if(this_ingredient == null )
-                        {
-                            console.log('no ingredient: ' + ingredients_maybe[i][o].ingredient_name + " in db");
-                            err_flag = false;
-                            break;
-                        }
-                        for(var p =0; p<this_ingredient.length; p++)
-                        {
-                                // console.log(this_ingredient[0].ingredient_measurement + '==' +ingredients_maybe[i][o].recipe_ingredient_measurement );
-                            if(this_ingredient[p].ingredient_measurement == ingredients_maybe[i][o].recipe_ingredient_measurement)
-                                {
-                                    console.log(this_ingredient[p].ingredient_total + ' <= ' + ingredients_maybe[i][o].recipe_ingredient_qty );
-                                    if(this_ingredient[p].ingredient_total < ingredients_maybe[i][o].recipe_ingredient_qty)
-                                    {
-                                        if(p == this_ingredient.length-1)
-                                        {
-                                        
-                                            err_flag =false;
-                                            console.log("p: " + p, ", lenght: " + this_ingredient.length-1);
-                                            console.log("flipped flag on " +  ingredients_maybe[i][o].recipe_ingredient_used);
-                                            break;
-                                        }
-                                    }
-                                }
-                        }///end of this_ingredient
-
+                //set start data
+                total_amount_ingredient = 0;
+                flag_have_needed_anmount = true;
+                console.log("///////////////////////////////////////\nrecipe_id: " + recipe_ids[i] )
+                //get a list of ingredients need for 
+                list_of_ingredients_in_recipe = await ingredients_in_a_recipe_t.findAll({
+                    attributes: ['ingredient_id','amount_of_ingredient_needed', 'ingredient_unit_of_measurement'],
+                    where:{
+                        recipe_id: recipe_ids_array[i],
+                        pantry_id: pantry_id
                     }
-                    catch(err)
+                });
+                console.log(JSON.stringify(list_of_ingredients_in_recipe));
+                //check each needed amount of the recipe and change the flag if we doent
+                for(var o=0; o< list_of_ingredients_in_recipe.length; o++)
+                {
+                    ingredents_from_pantry_data = await ingredients_in_pantry_t.findAll({
+                        attributes: ['ingredient_amount','ingredient_unit_of_measurement'],
+                        where: {
+                            ingredient_id: list_of_ingredients_in_recipe[o].ingredient_id,
+                            pantry_id: pantry_id
+                        }
+                    })
+
+                    total_amount_ingredient = 0;
+                    console.log(JSON.stringify(ingredents_from_pantry_data));
+                    for(var p=0; p<ingredents_from_pantry_data.length; p++)
                     {
-                        console.log(err);
-                    }//end of try/catch
+                        console.log("list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: " + list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement + ' == ' + ingredents_from_pantry_data[p].ingredient_unit_of_measurement);
+                        if(list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement == ingredents_from_pantry_data[p].ingredient_unit_of_measurement)
+                        {
+                            total_amount_ingredient += ingredents_from_pantry_data[p].ingredient_amount;
+                        }
+                        else
+                        {
+                            var new_amount;
+                            console.log("have to convert units");
+                            new_amount = await parseFloat(unit_convert.converter_raw(ingredents_from_pantry_data[p].ingredient_amount, ingredents_from_pantry_data[p].ingredient_unit_of_measurement,list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement));
+                            console.log(new_amount);
+                            if(new_amount != 0)
+                            {
+                                total_amount_ingredient += new_amount;
+                            }   
+                        }
+                        console.log("\ntotal: " + total_amount_ingredient + "\n");
+                    }//end of double nesst for loop
+                    // console.log("total_amount_ingredient: " + total_amount_ingredient + " < " +list_of_ingredients_in_recipe[o].amount_of_ingredient_needed);
+                    if(total_amount_ingredient < list_of_ingredients_in_recipe[o].amount_of_ingredient_needed)
+                    {
+                        console.log("cant cook, next\n");
+                        flag_have_needed_anmount =false;
+                        break;
+                    }
 
-                }//end of nest for
-                if(err_flag) //if we have all the ingredients, then add it to the return array
-                    found_recipes_ids.push(id_n_needed[i].recipe_id);
 
-            }//end of outer for
-            //get the rest of the data for the recipes
-            try{
-                return found_recipes_ids;
-
-            }
-            catch(err){
-                console.log(err);
-            }
+                }//end of nested for loop
+                if(flag_have_needed_anmount)
+                    {
+                        recommened_recipes.push(recipe_ids_array[i]);
+                    }
+                console.log("///////////////////////////////////////\n");
+            }//END OF FOR LOOP
             
-            return final_results;
-        }
-        catch(err)
-        {
-            console.log(err);
-        }
-    }//end of check to see if the function was passed a name.   
-    else
+            console.log((recommened_recipes));
+            return recommened_recipes;
+        }//end of if checking that we passed an id for ingfredients
+    }
+    catch(err)
     {
-        console.log("need to pass an ingredient name, thank you");
+        console.log(err);
     }
 }
 
 module.exports.find_recipes = find_recipes;
-//testing code
-// console.log(find_recipes("Chicken"));
+// find_recipes(1,1);
