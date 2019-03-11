@@ -1,6 +1,12 @@
 extends user_view_template
 
 block content
+    style.
+        .btn_card{
+            /*Defines CSS for butons on the dashboard*/
+            width: 93%;
+            margin: 0px 10px 10px 10px;
+        }
 
     div(class='container-fluid', class='rounded', style='width: 80%')
         h1 #{title}
@@ -39,10 +45,12 @@ block content
                 - ingredient_image= item.ingredient_image_path
                 .form-group.col-md-3
                     div(id=item.ingredient_id, class='card', class='h-100')
-                        img.image(class='card-img-top', src=ingredient_image, alt='image')
+                        img.image(class='card-img-top', src=ingredient_image, alt='image', class="h-50")
                         div(class='card-body')
                             h4(class='card-title') #{item.ingredient_name}
-                            //- For each steps inside of the array of steps
-                        div(class='card-foot', padding='.75rem')
-                            a.btn.btn-danger.delete-ingredient(href='#', data-id=item.ingredient_name) DELETE
+                            h5(class='card-text') Amount: #{item.ingredient_total} #{item.ingredient_measurement}
+                            h6(class='card-text') Expires: #{item.ingredient_expiration_date}
+                            
+                        div(class='card-foot')
+                            button.btn_card.btn.btn-primary.btn-danger.delete-ingredient(href='#', data-id=item.ingredient_name) DELETE
                             
