@@ -1,8 +1,8 @@
 //- This file displays error or success messages
 .messages
-    each type in Object.keys(messages)
-        each message in messages[type]
-            if type == 'error'
-                div(class='alert alert-danger') #{message}
-            else
-                div(class='alert alert-success') #{message}
+	each type in Object.keys(messages)
+		each message in messages[type]
+			if type == 'error'
+				div(class='alert alert-danger') #{message}
+			else
+				div(class='alert alert-success') #{message}

@@ -1,56 +1,53 @@
 /////////////////////////////////////////////
-//this file is for setting up an object to //
-//interact with our pantry table in the db.//
+// this file is for setting up an object to //
+// interact with our pantry table in the db.//
 /////////////////////////////////////////////
 
-//reqires
-const Sequelize =  require('sequelize');
+// reqires
+const Sequelize = require('sequelize');
 const db = require('../databaseMySQL');
 
-
-//db table
+// db table
 /*
 =================================================================================================================================================================
 |pantry_id: int PK| pantry_name: varchar(32)| pantry_month: EMUN("all the months")| pantry_monthy_exipred_ingredients: int| pantry_monthy_total_exipred: int|
 =================================================================================================================================================================
 */
 
-const Pantry = db.define("pantry_stats", 
-    {
-        pantry_id:{
-        type: Sequelize.INTEGER,
-        
-        primarykey: true
-        },
+const Pantry = db.define(
+  'pantry_stats',
+  {
+    pantry_id: {
+      type: Sequelize.INTEGER,
 
-        pantry_name:{
-            type: Sequelize.STRING
-        },
-
-
-        // pantry_month: {
-        // type: Sequelize.ENUM("January","February","March","April","May","June","July","August","September","October","November","December")
-        // },
-
-        pantry_monthy_exipred_ingredients:{
-            type: Sequelize.INTEGER      
-        },
-
-        pantry_monthy_total_exipred: {
-            type: Sequelize.INTEGER
-        }
+      primarykey: true
     },
-    {
-        timestamps     : false,
-        freezeTableName: true
-    }        
+
+    pantry_name: {
+      type: Sequelize.STRING
+    },
+
+    // pantry_month: {
+    // type: Sequelize.ENUM("January","February","March","April","May","June","July","August","September","October","November","December")
+    // },
+
+    pantry_monthy_exipred_ingredients: {
+      type: Sequelize.INTEGER
+    },
+
+    pantry_monthy_total_exipred: {
+      type: Sequelize.INTEGER
+    }
+  },
+  {
+    timestamps: false,
+    freezeTableName: true
+  }
 );
 Pantry.removeAttribute('id');
 module.exports = Pantry;
 
-
-
-///testing code////////////////////////////////////////
+// testing code////////////////////////////////////////
 
 // Pantry.create({
 //     pantry_name: "test default values"
