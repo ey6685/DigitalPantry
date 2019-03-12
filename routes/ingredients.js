@@ -19,6 +19,22 @@ router.get('/showall', function(req, res){
     });
 });
 
+//Render page with data from database
+//GET request to localhost:3000/users/login
+router.get('/expired', function(req, res){
+    //renders showall_recipes with all the available ingredients
+    db.query('SELECT * FROM ingredients WHERE ingredient_expiration_date IS NOT null AND ingredient_expiration_date < CURDATE() ', function(err, results) {
+        for (key in results){
+            results[key]['ingredient_expiration_date'] = moment(results[key]['ingredient_expiration_date']).format('LL');
+        }
+        if (err) throw err
+        res.render('expired_ingredients_np',{
+            title:"Your Ingredients",
+            results: results
+        });
+    });
+});
+
 //Render page with a form for adding a new ingredient
 //GET request to localhost:3000/ingredients/add
 router.get('/add', function(req, res){
