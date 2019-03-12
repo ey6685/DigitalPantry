@@ -1,63 +1,63 @@
 doctype html
 html
-    head
-        //-Style for the sticky footer
-        style.
-            .footer {
-                position: fixed;
-                left: 0;
-                bottom: 0;
-                width: 100%;
-                text-align: center;
-                box-shadow: 0 50vh 0 50vh #343a40;
-            }
-            .btn{
-                /*Adds button separation so they are not glued to each other
-                Used for the signin and register pages*/
-                margin: 0px 10px 0px 0px;
-            }
-        title Digital Pantry
-        link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
-        script(defer='', src='https://use.fontawesome.com/releases/v5.0.13/js/solid.js', integrity='sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ', crossorigin='anonymous')
-        script(defer='', src='https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js', integrity='sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY', crossorigin='anonymous')
+	head
+		//-Style for the sticky footer
+		style.
+			.footer {
+				position: fixed;
+				left: 0;
+				bottom: 0;
+				width: 100%;
+				text-align: center;
+				box-shadow: 0 50vh 0 50vh #343a40;
+			}
+			.btn{
+				/*Adds button separation so they are not glued to each other
+				Used for the signin and register pages*/
+				margin: 0px 10px 0px 0px;
+			}
+		title Digital Pantry
+		link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+		script(defer='', src='https://use.fontawesome.com/releases/v5.0.13/js/solid.js', integrity='sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ', crossorigin='anonymous')
+		script(defer='', src='https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js', integrity='sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY', crossorigin='anonymous')
 
-    body
-        //- Navigation section
-        //- TODO when window is small navigation should display a dropdown
-        //- Have to include some javascript files from bootstrap folder and i dont know which ones
-        nav.navbar.navbar-expand-md.navbar-dark.bg-dark
-                a.navbar-brand(href='/') Food Pantry
-                button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
-                    span.navbar-toggler-icon
-                #navbarCollapse.collapse.navbar-collapse
-                    if !user
-                        ul.navbar-nav.mr-auto
-                            li.nnav-item.active
-                                a.nav-link(href='/users/register')
-                                    | Register
-                    else
-                        ul.navbar-nav.mr-auto
-                            li.nnav-item.active
-                                a.nav-link(href='/users/logout')
-                                    | Logout
-        .container
-            br
-            //- block content will get replaced with another .pug file
-            block content
-            br
-            br
-            br
-            br
-            footer.footer.bg-dark.text-light
-                p.mb-1 © 2019 Digital Pantry
-                ul.list-inline
-                    //- TODO link these to proper files
-                    li.list-inline-item
-                        a(href='#') Privacy
-                    li.list-inline-item
-                        a(href='#') Terms
-                    li.list-inline-item
-                    a(href='#') Support
-        script(src='/bower_components/jquery/dist/jquery.min.js')
-        script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
-        script(src="/js/main.js")
+	body
+		//- Navigation section
+		//- TODO when window is small navigation should display a dropdown
+		//- Have to include some javascript files from bootstrap folder and i dont know which ones
+		nav.navbar.navbar-expand-md.navbar-dark.bg-dark
+			a.navbar-brand(href='/') Food Pantry
+			button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
+				span.navbar-toggler-icon
+			#navbarCollapse.collapse.navbar-collapse
+				if !user
+					ul.navbar-nav.mr-auto
+						li.nnav-item.active
+							a.nav-link(href='/users/register')
+								| Register
+				else
+					ul.navbar-nav.mr-auto
+						li.nnav-item.active
+							a.nav-link(href='/users/logout')
+								| Logout
+		.container
+			br
+			//- block content will get replaced with another .pug file
+			block content
+			br
+			br
+			br
+			br
+			footer.footer.bg-dark.text-light
+				p.mb-1 © 2019 Digital Pantry
+				ul.list-inline
+					//- TODO link these to proper files
+					li.list-inline-item
+						a(href='#') Privacy
+					li.list-inline-item
+						a(href='#') Terms
+					li.list-inline-item
+					a(href='#') Support
+		script(src='/bower_components/jquery/dist/jquery.min.js')
+		script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
+		script(src="/js/main.js")

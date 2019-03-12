@@ -1,36 +1,38 @@
 const Sequelize = require('sequelize');
 const db = require('../databaseMySQL.js');
 
-
-const Recipes = db.define('recipes', {
+const Recipes = db.define(
+  'recipes',
+  {
     recipe_id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true},
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     recipe_name: {
-        type: Sequelize.STRING
-         },
+      type: Sequelize.STRING
+    },
 
     recipe_serving_size: {
-        type: Sequelize.INTEGER,
-        default: null
-         },
+      type: Sequelize.INTEGER,
+      default: null
+    },
     recipe_pantry_id: {
-        type: Sequelize.INTEGER
-        },
+      type: Sequelize.INTEGER
+    },
     recipe_directions: {
-        type: Sequelize.TEXT
+      type: Sequelize.TEXT
     },
     recipe_image_path: {
-        type: Sequelize.TEXT
+      type: Sequelize.TEXT
     },
-    recipe_sharable:{
-        type: Sequelize.INTEGER
+    recipe_sharable: {
+      type: Sequelize.INTEGER
     }
-},
-    {  
-    timestamps     : false
-
-    });
+  },
+  {
+    timestamps: false
+  }
+);
 // Recipes.removeAttribute('id');
 module.exports = Recipes;

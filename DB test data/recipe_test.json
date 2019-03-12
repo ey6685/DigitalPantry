@@ -1,18 +1,18 @@
 [
-	{
-		"recipe_id" : 1,
-		"recipe_name" : "Black bean salsa",
-		"recipe_serving_size" : 6,
-		"recipe_pantry_id" : 1,
-		"recipe_directions" : "#Drain canned beans and corn#Put them in a large bowl and mix together#Serve on tortillas or with chips.",
-		"recipe_image_path" : null
-	},
-	{
-		"recipe_id" : 2,
-		"recipe_name" : "Chicken noodle soup",
-		"recipe_serving_size" : 4,
-		"recipe_pantry_id" : 1,
-		"recipe_directions" : "#Put ingredients into a large bow together#Cover bowl, then microwave for 3 minutes on high#Serve hot with crackers or bread",
-		"recipe_image_path" : "/images/chicken_noodle_soup.jpg"
-	}
+  {
+    "recipe_id": 1,
+    "recipe_name": "Black bean salsa",
+    "recipe_serving_size": 6,
+    "recipe_pantry_id": 1,
+    "recipe_directions": "#Drain canned beans and corn#Put them in a large bowl and mix together#Serve on tortillas or with chips.",
+    "recipe_image_path": null
+  },
+  {
+    "recipe_id": 2,
+    "recipe_name": "Chicken noodle soup",
+    "recipe_serving_size": 4,
+    "recipe_pantry_id": 1,
+    "recipe_directions": "#Put ingredients into a large bow together#Cover bowl, then microwave for 3 minutes on high#Serve hot with crackers or bread",
+    "recipe_image_path": "/images/chicken_noodle_soup.jpg"
+  }
 ]

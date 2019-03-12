@@ -1,9 +1,9 @@
 [
-	{
-		"user_id" : 1,
-		"email" : "test@test.test",
-		"pass" : "test",
-		"user_pantry_id" : 1,
-		"user_type" : "P"
-	}
+  {
+    "user_id": 1,
+    "email": "test@test.test",
+    "pass": "test",
+    "user_pantry_id": 1,
+    "user_type": "P"
+  }
 ]
