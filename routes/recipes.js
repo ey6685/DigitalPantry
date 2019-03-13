@@ -82,6 +82,25 @@ router.get('/showall', async function(req, res) {
   }
 });
 
+router.get('/showRecipes', function(req, res){
+    query = "SELECT * FROM recipes;";
+    recipe_steps_array = []
+    db.query(query, async function(err, results){
+        if (err) throw err;
+        console.log(results);
+        for (every_recipe_directions in results){
+            var recipe_steps = await steps.parse_recipe_directions_by_string(results[every_recipe_directions].recipe_directions);
+            recipe_steps_array.push(recipe_steps.split('${<br>}'));
+        }
+        console.log(recipe_steps_array);
+        res.render("showRecipes",{
+            title:"Your Recipes",
+            data: results,
+            recipe_steps:recipe_steps_array
+        })
+    })
+})
+
 /*
 TYPE: GET
 URL ENDPOINT: localhost:3000/recipes/showComunityRecipes
@@ -359,6 +378,7 @@ COMMENTS: This block gets executed by AJAX script located under public/js/main.j
 URL_PARAMS:
     id
 */
+<<<<<<< Updated upstream
 // DELETE request to localhost:3000/recipes/remove
 // this will delete recipe from database based on its ID
 
@@ -375,5 +395,24 @@ router.delete('/remove/:id', function(req, res) {
     res.send('Success');
   });
 });
+=======
+//DELETE request to localhost:3000/recipes/remove
+//this will delete recipe from database based on its ID
+
+//CURRENT BEHAVIOR
+//This will delete recipe from recipe table and from recipe ingredient table
+//HOWEVER it will not delete ingredient inside that recipe from ignredients table
+
+router.delete('/remove/:id', function(req, res){
+    const recipe = req.params.id;
+    const delete_query = "DELETE FROM recipes WHERE recipe_id ="+recipe+";";
+    console.log(delete_query);
+    db.query(delete_query, function(err, results) {
+        if (err) throw err
+        //Since AJAX under /js/main.js made a request we have to respond back
+        res.send("Success");
+    });
+})
+>>>>>>> Stashed changes
 
 module.exports = router;

@@ -37,6 +37,7 @@ $(document).ready(function() {
     // get data-id from the button
     const id = $target.attr('data-id');
 
+<<<<<<< Updated upstream
     // Start AJAX
     $.ajax({
       type: 'DELETE',
@@ -49,6 +50,22 @@ $(document).ready(function() {
       error: function(err) {
         console.log('Could not delete: ' + id);
       }
+=======
+        //Start AJAX
+        $.ajax({
+            type:'DELETE',
+            //This route is defined under ingredients.js
+            url:'/recipes/remove/'+id,
+            success:function(response){
+                //route user back to results
+                // window.location.href = '/recipes/showall';
+                location.reload();
+            },
+            error:function(err){
+                console.log("Could not delete: "+id);
+            }
+        })
+>>>>>>> Stashed changes
     });
   });
 });
