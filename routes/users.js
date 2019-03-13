@@ -12,6 +12,8 @@ const found_recipes = require('../algorithm/find_recipes');
 const recipe_t = require('../DB_models/Recipes');
 const op = require('sequelize').Op;
 const bcrypt = require('bcryptjs');
+const ing_table  = require('../DB_models/Ingredients');
+const ing_in_pan_table = require("../DB_models/ingredients_in_pantry");
 
 //Get request to localhost:3000/users/login
 router.get("/login", function(req, res) {
@@ -101,9 +103,9 @@ router.get("/register", function(req, res) {
 router.get("/adminPanel", async function(req, res){
   var current_user_id = req.session.passport['user'];
   //Find which pantry user is from
-  pantry_id="(SELECT (user_pantry_id) FROM users WHERE user_id="+current_user_id+")";
+  pantry_id="(SELECT (pantry_id) FROM users WHERE user_id="+current_user_id+")";
   //Find all users in that pantry and not the current user
-  query="SELECT * FROM users WHERE user_pantry_id="+pantry_id+" AND user_id!="+current_user_id+";";
+  query="SELECT * FROM users WHERE pantry_id="+pantry_id+" AND user_id!="+current_user_id+";";
   db.query(query, function(err, results){
     if (err) throw err;
     res.render("admin_panel",{
@@ -115,16 +117,17 @@ router.get("/adminPanel", async function(req, res){
 
 //Get request to localhost:3000/users/login
 router.get('/dashboard',checkAuthentication,async function(req, res){
+  // router.get('/dashboard',async function(req, res){
     //Jon//pulls algorithm results from directAlgorithm into recipe_results
     //Jon//then parses recipe id into var recipe_id
     try
     {
 
-      var results = await next_ing.next_exp_ingredient();
-      console.log(JSON.stringify(results));
-      var results2 = await found_recipes.find_recipes(results.ingredient_name);
+      var results = await next_ing.next_exp_ingredient();                                   //returns an int for the ingredient id of the next expiring ingredient
+      console.log(JSON.stringify("\nresults of finding next ingredient: " + results));        //send the info to the console for debuging
+      var results2 = await found_recipes.find_recipes(results);
       var recipe_id = results2[0];
-      console.log(results2);
+      console.log("\nrecipe: ids: \n" + results2);
       // var recipe_results = await recipe_t.findOne({where:{recipe_id: recipe_id}});
       // console.log(JSON.stringify(recipe_results));
       //Jon//pulls recipes steps from recipe_direction_parser by the recipe_id
@@ -138,7 +141,7 @@ router.get('/dashboard',checkAuthentication,async function(req, res){
       //var cookit = cookit.cook_it(id);
 
       //Grab relative image path for 2nd and 3rd recipe cards
-      var chicken_stir_fry_image = '/images/chicken_stir_fry.jpg';
+      var chicken_stir_fry_image = '/images/chicken.jpg';
       var chicken_pot_pie_image = '/images/chicken_pot_pie.jpg';
       //Jon//renders dashboard page with next expiring ingredient
       // results = await.
@@ -146,11 +149,24 @@ router.get('/dashboard',checkAuthentication,async function(req, res){
       // {
       //   if (err) throw err
         // results= results,
+        var ingredient_results = await ing_table.findOne({
+          where:{
+            ingredient_id: results
+          }
+        });
+        console.log(JSON.stringify(ingredient_results));
+        var additional_ingredient_results = await ing_in_pan_table.findAll({
+          where:{
+            ingredient_id: results
+          },
+          order: ['ingredient_expiration_date']
+
+        });
+        i_total= additional_ingredient_results[0]['ingredient_amount'],
+        i_measurement= additional_ingredient_results[0]['ingredient_unit_of_measurement'],
+        i_name= ingredient_results['ingredient_name'],
+        i_expire= moment(additional_ingredient_results[0]['ingredient_expiration_date']).format('LL'),
         
-        i_total= results['ingredient_total'],
-        i_measurement= results['ingredient_measurement'],
-        i_name= results['ingredient_name'],
-        i_expire= moment(results['ingredient_expiration_date']).format('LL'),
         //pulls recipe_name into recipe_name for referencing in dashboard
         
         recipe_name= recipe_info[0]['recipe_name'],
@@ -176,7 +192,7 @@ router.get('/dashboard',checkAuthentication,async function(req, res){
                 rid: rid,
                 recipe_image_path: recipe_info[0]['recipe_image_path'],
                 //Send individual recipe steps inside the array
-                stir_fry_image: chicken_stir_fry_image,
+                chicken_stir_fry_image: chicken_stir_fry_image,
                 pot_pie_image: chicken_pot_pie_image,
                 //cook_it: cookit
             });
@@ -267,6 +283,13 @@ router.get("/logout",function(req, res) {
   res.redirect("/users/login");
 });
 
+
+/*
+/////////////////////////////////////////////////////////////////////////////////
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>,>,><><><><><><><><
+HEY DO WE NEED THIS ANYMORE. THE COMMUNITY RECIPES ARE IN THE RECIPES TABLE.....
+*/
 router.post('/saveCommunityRecipe', async function(req,res){
   //get recipe id that user is trying to copy into their pantry
   var recipe_id_to_be_copied = req.body['community_recipe_id'];
@@ -304,10 +327,10 @@ router.post('/add', function(req, res){
   var user_type = req.body.userType;
   switch(user_type){
     case 'volunteer':
-      user_type = 'NP'
+      user_type = 'V'
       break;
     case 'administrator':
-      user_type = 'P'
+      user_type = 'A'
       break;
   }
   var user_password = req.body.password;

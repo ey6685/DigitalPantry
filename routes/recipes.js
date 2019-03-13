@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const recipe_t = require('../DB_models/Recipes');
 const ingredient_t = require('../DB_models/Ingredients')
-const IiR_t = require('../DB_models/recipe_ingredient');
+const IiR_t = require('../DB_models/ingredients_in_a_recipe');
+const op = require('sequelize').Op;
 const multer = require('multer');
 const steps = require('../recipe_direction_parser');
 const users_route = require('./users');
@@ -32,10 +33,21 @@ router.get('/showall', async function(req, res){
     //     })
     //   })
     try{
-        var recipe_res = await recipe_t.findAll({});
-        var IiR_res = await IiR_t.findAll({});
+        var recipe_res = await recipe_t.findAll({
+            // where:{
+            //     recipe_id: {
+            //         [op.notIn] : [null,'']
+                    
+            //     }
+            // }
+        });
+        console.log("the recipes: \n" + JSON.stringify(recipe_res));
+        console.log("length: " + recipe_res.length); 
+        // var IiR_res = await IiR_t.findAll({});
+        // console.log("Iir_res: \n" + JSON.stringify(IiR_res));
         //make string array that we will be storeing the ingredient  sting
         var ingredient_list = new Array(recipe_res.length).fill('');
+        console.log("starting ingreditents list: \n" + ingredient_list);
         
     
 
@@ -47,23 +59,31 @@ router.get('/showall', async function(req, res){
     
         var ing_res;
         console.log('starting for loop');
-        for(var i = 0; i < IiR_res.length; i++)
+        for(var i=0; i<recipe_res.length;i++)
         {
-            ing_res = await ingredient_t.findAll({
-                attributes: ['ingredient_name'],
-                where: {
-                    //ingredient_id: IiR_res[i].ingredient_id
-                    ingredient_name: IiR_res[i].recipe_ingredient_used
+            var IiR_res = await IiR_t.findAll({
+                where:{
+                    recipe_id: recipe_res[i].recipe_id
                 }
             });
-            if(!ingredient_list[IiR_res[i].recipe_id-1] == "")
-                ingredient_list[IiR_res[i].recipe_id-1] +="#";
-            ingredient_list[IiR_res[i].recipe_id-1] += ing_res[0].ingredient_name + "," + IiR_res[i].recipe_ingredient_qty +" " +IiR_res[i].recipe_ingredient_measurement;
+            console.log("\ningredients for recipe " + recipe_res[i].recipe_id +'\n' + JSON.stringify(IiR_res));
+            for(var o=0; o<IiR_res.length;o++)
+            {
+                var new_ingredient = await ingredient_t.findOne({
+                    attributes: ['ingredient_name'],
+                    where:{
+                        ingredient_id: IiR_res[o].ingredient_id
+                    }
+                });
+                if(ingredient_list[i] != '')
+                    ingredient_list[i] = ingredient_list[i] + "#";
+                ingredient_list[i] = ingredient_list[i]   + new_ingredient.ingredient_name + ", " + IiR_res[o].amount_of_ingredient_needed + " " + IiR_res[o].ingredient_unit_of_measurement; 
+            }
         }
 
         //now to take the ingredient_list array and make it 2d by spliting the columns
         //into rows where the # tag is
-
+        console.log("ingredients for recipe: " + JSON.stringify(ingredient_list));
         for(var i = 0; i<ingredient_list.length; i++)
         {
         ingredient_list[i] = ingredient_list[i].split('#');
@@ -89,16 +109,17 @@ TYPE: GET
 URL ENDPOINT: localhost:3000/recipes/showComunityRecipes
 DESCRIPTION: This will display all recipes withing the community
 */
-router.get('/showCommunityRecipes', function(req,res){
-    query = 'SELECT * FROM community_recipes';
+router.get('/showCommunityRecipes', async function(req,res){
+    query = 'SELECT * FROM recipes where sharable = 1;';
     console.log("Session");
     //Prints user id stored in the session. Can be used to determine which pantry user belongs to
     // console.log(req.session.passport['user']);
     recipe_steps_array = []
+    
     db.query(query, async function(err, results) {
         if (err) throw err;
         for (every_recipe_directions in results){
-            var recipe_steps = await steps.parse_recipe_directions_by_string(results[every_recipe_directions].c_recipe_directions);
+            var recipe_steps = await steps.parse_recipe_directions_by_string(results[every_recipe_directions].recipe_directions);
             recipe_steps_array.push(recipe_steps.split('${<br>}'));
         }
         console.log(results);
@@ -160,13 +181,13 @@ router.post('/add',upload.single("image") , async function(req, res){
     //***************************
 
     //Create entire query value
-    var query = "('" + recipeName + "','" + recipeServingSize + "','" + replaceNewLine + "')";
+    var query = "('" + recipeName + "','" + recipeServingSize + "','" + replaceNewLine + "', 1)";///change that last '1' to gettingthe pantry id
     console.log("Recipe Name: " + recipeName);
     console.log("Recipe Serving Size: " + recipeServingSize);
     console.log("Insert into Recipe Query: " + query);
     //Insert Recipe name and size into a table first
     // db.query('insert into recipe (name) values ('+'"'+req.body.recipe_name+'"'+')', function(err, results) {
-    await db.query('insert into recipes (recipe_name,recipe_serving_size,recipe_directions) values ' + query, async function(err, results) {
+    await db.query('insert into recipes (recipe_name,num_people_it_feeds,recipe_directions,pantry_id) values ' + query, async function(err, results) {
         if (err) throw err
         console.log("Recipe added sucessfully");
         console.log("results after adding a recipe: "+results);
@@ -179,50 +200,85 @@ router.post('/add',upload.single("image") , async function(req, res){
             //For every ingredient in recipe defined by user in the form do the following
             if(key.includes("ingredientProperties")){
                 //Retrieve all values from request body
-                const ingredientName = req.body[key][0];
-                const ingredietQuantity = req.body[key][1];
-                const ingredientMeasurement = req.body[key][2];
+                var ingredient_data_from_page =  req.body[key][1];
+                console.log("//////////////////////////////////////////\n" +JSON.stringify(ingredient_data_from_page) +"\n////////////////////////////////////\n");
+                // const ingredientName = req.body[key][0];
+                // const ingredientQuantity = req.body[key][1];
+                // const ingredientMeasurement = req.body[key][2];
 
-                //***************************
-                //TODO CHANGE THIS TO PASSED IN VALUE FROM THE FORM
-                const ingredientExpirationDate = "2000-10-10";
-                //***************************
+                const ingredientName = ingredient_data_from_page[0];
+                const ingredientQuantity = ingredient_data_from_page[1];
+                const ingredientMeasurement = ingredient_data_from_page[2];
+                console.log("adding ingredient to recipe: \n")// + ingredientQuantity+ " " +ingredientMeasurement+" of " + ingredientName);
+                console.log("ingredientName: " + ingredientName);
+                console.log("ingredientQTY: " + ingredientQuantity);
+                console.log("ingredientMeasurement: " + ingredientMeasurement);
 
-                query = "('"+ingredientName+"',"+ingredietQuantity+",'"+ingredientMeasurement+"','" + ingredientExpirationDate + "')";
-                console.log("Ingredient Name: " + ingredientName);
-                console.log("Ingredient Qty: " + ingredietQuantity);
-                console.log("Ingredient Measurement: " + ingredientMeasurement);
-                console.log("Insert into ingredients query: " + query);
-                //Insert ingredient into a Ingredients table
-                await db.query('insert into ingredients (ingredient_name,ingredient_total,ingredient_measurement,ingredient_expiration_date) values '+query, async function(err, results) {
-                    if (err) throw err
-                    //Get inserted ingredient's row id, this works because auto-increment is set in the table
-                    ingredients_ids_inserted = results.insertId;
-                    //Create values that will be inserted into recipe_ingredient table
-                    //recipe_ingredients is what links ingredients to the recipe
-                    values = recipe_id_inserted + ',' + ingredients_ids_inserted
-                    // query = "("+ingredients_ids_inserted + "," + ingredietQuantity + "," + recipe_id_inserted + ",'" + ingredientMeasurement + "')";
-                    query = "("+ingredients_ids_inserted + "," + recipe_id_inserted + "," + ingredietQuantity + ",'" + ingredientMeasurement + "')";
-
-                    //***************************
-                    //TODO add pantry ID here
-                    //***************************
-
-                    await db.query('insert into recipe_ingredient (ingredient_id,recipe_id,recipe_ingredient_qty,recipe_ingredient_measurement) values ' + query, async function(err, results) {
-                        if (err) throw err
-                    });
-
+                //find if the ingredient is in db
+                var final_ingredi_id;
+                var checking_ingr_t = await ingredient_t.findAll({
+                    where:{
+                        ingredient_name : ingredientName///start here
+                        //this is NULL...
+                    }
                 });
+                if(checking_ingr_t.length>0)
+                {
+                    final_ingredi_id = checking_ingr_t[0].ingredient_id;
+                }
+                else
+                {
+                    var new_ingredient = await ingredient_t.create({
+                        ingredient_name: ingredientName,
+                        //ingredient_weight : weight auto assign
+                        pantry_id: 1//need to get pantry id from session
+                    });
+                    final_ingredi_id = new_ingredient.ingredient_id;
+                }
+                var new_ingredient_slot = await IiR_t.create({
+                    ingredient_id : final_ingredi_id,
+                    recipe_id : recipe_id_inserted,
+                    ingredient_unit_of_measurement: ingredientMeasurement,
+                    pantry_id: 1,//change this to be from the session
+                    amount_of_ingredient_needed: ingredientQuantity
+                });
+                console.log("created ingredient slot: \n" + JSON.stringify(new_ingredient_slot));
+
+                // query = "('"+ingredientName+"',"+ingredietQuantity+",'"+ingredientMeasurement+"','" + ingredientExpirationDate + "')";
+                // console.log("Ingredient Name: " + ingredientName);
+                // console.log("Ingredient Qty: " + ingredietQuantity);
+                // console.log("Ingredient Measurement: " + ingredientMeasurement);
+                // console.log("Insert into ingredients query: " + query);
+                // //Insert ingredient into a Ingredients table
+                // await db.query('insert into ingredients (ingredient_name,ingredient_total,ingredient_measurement,ingredient_expiration_date) values '+query, async function(err, results) {
+                //     if (err) throw err
+                //     //Get inserted ingredient's row id, this works because auto-increment is set in the table
+                //     ingredients_ids_inserted = results.insertId;
+                //     //Create values that will be inserted into recipe_ingredient table
+                //     //recipe_ingredients is what links ingredients to the recipe
+                //     values = recipe_id_inserted + ',' + ingredients_ids_inserted
+                //     // query = "("+ingredients_ids_inserted + "," + ingredietQuantity + "," + recipe_id_inserted + ",'" + ingredientMeasurement + "')";
+                //     query = "("+ingredients_ids_inserted + "," + recipe_id_inserted + "," + ingredietQuantity + ",'" + ingredientMeasurement + "')";
+
+                //     //***************************
+                //     //TODO add pantry ID here
+                //     //***************************
+
+                    // await db.query('insert into recipe_ingredient (ingredient_id,recipe_id,amount_of_ingredient_needed,ingredient_unit_of_measurement) values ' + query, async function(err, results) {
+                    //     if (err) throw err
+                    // });
+
+    //             });
             }
-        //Repeat until all recipes have been parsed
+    //     //Repeat until all recipes have been parsed
         }
-    });
+    // });
 
     // res.send(req.body.ingredientName[1]);
     // This will respond with the parameters that you sent in your request
     // TODO redirect to another page
     res.redirect("showall");
-})
+})});
 
 
 //Get all available recipes that a single pantry has
@@ -232,7 +288,10 @@ router.get('/getPantryRecipes', function(req, res){
     //get id of the currently logged in user
     var user_id = req.session.passport['user'];
     //query all recipes which are availabel to this user
-    query = 'SELECT * FROM recipes WHERE recipe_pantry_id = (SELECT user_pantry_id FROM users WHERE user_id='+user_id+');';
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////hey oskars change this to pantry id to how we are finding it from the secceson//
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    query = 'SELECT * FROM recipes WHERE pantry_id = ' +pantry_id + "';";
     db.query(query, function(err, results){
         if (err) throw err;
         //return JSON data
@@ -243,25 +302,28 @@ router.get('/getPantryRecipes', function(req, res){
 
 //Share a recipe into community
 router.post('/share', async function(req, res){
-    share_query="UPDATE recipes SET recipe_sharable=1 WHERE recipe_name='"+req.body.recipe_name+"';";
+    share_query="UPDATE recipes SET sharable=1 WHERE recipe_name='"+req.body.recipe_name+"';";
     await db.query(share_query, function(err, results){
         if (err) throw err;
         console.log(results);
     });
-    await db.query("SELECT * FROM recipes WHERE recipe_name='"+req.body.recipe_name+"';", async function(err, results){
-        if (err) throw err;
-        var r_name = results[0].recipe_name;
-        var r_serving_size = results[0].recipe_serving_size;
-        var r_directions = results[0].recipe_directions;
-        var r_image_path = results[0].recipe_image_path
-        values = "('"+r_name+"',"+r_serving_size+",'"+r_directions+"','"+r_image_path+"');"
-        add_to_community_query="INSERT INTO community_recipes (c_recipe_name,c_recipe_serving_size,c_recipe_directions,c_recipe_image_path) VALUES " + values;
-        console.log(add_to_community_query);
-        await db.query(add_to_community_query, function(err, results){
-            if (err) throw err;
-            console.log("Recipe Shared to Community");
-        })
-    })
+
+    //note to others : dont really want to delete this chunch of code just in case, k thanks///////
+    
+    // await db.query("SELECT * FROM recipes WHERE recipe_name='"+req.body.recipe_name+"';", async function(err, results){
+    //     if (err) throw err;
+    //     var r_name = results[0].recipe_name;
+    //     var r_serving_size = results[0].recipe_serving_size;
+    //     var r_directions = results[0].recipe_directions;
+    //     var r_image_path = results[0].recipe_image_path
+    //     values = "('"+r_name+"',"+r_serving_size+",'"+r_directions+"','"+r_image_path+"');"
+    //     add_to_community_query="INSERT INTO community_recipes (c_recipe_name,c_recipe_serving_size,c_recipe_directions,c_recipe_image_path) VALUES " + values;
+    //     console.log(add_to_community_query);
+    //     await db.query(add_to_community_query, function(err, results){
+    //         if (err) throw err;
+    //         console.log("Recipe Shared to Community");
+    //     })
+    // })
     res.send("success");
 })
 
@@ -306,7 +368,7 @@ router.post('/edit', function(req, res){
                 query = query.replace(',', '');
             }
             else{
-                recipe_name_query_parameter = "recipe_serving_size=" + data[key];
+                recipe_name_query_parameter = "recipe_people_it_feeds=" + data[key];
                 //Replace $2 with new recipe name
                 query = query.replace('$2', recipe_name_query_parameter);
                 console.log(query);
@@ -338,14 +400,38 @@ URL_PARAMS:
 //This will delete recipe from recipe table and from recipe ingredient table
 //HOWEVER it will not delete ingredient inside that recipe from ignredients table
 
-router.delete('/remove/:id', function(req, res){
+router.delete('/remove/:id', async function(req, res){
     const recipe = req.params.id;
-    const delete_query = "DELETE FROM recipes WHERE recipe_id ='"+recipe+"'";
-    db.query(delete_query, function(err, results) {
-        if (err) throw err
-        //Since AJAX under /js/main.js made a request we have to respond back
+    // const delete_query = "DELETE FROM recipes WHERE recipe_id ='"+recipe+"'";
+    // db.query(delete_query, function(err, results) {
+    //     if (err) throw err
+
+    //first need to get rid of all the foriegn keys
+    try
+    {
+        var del_IiR = await IiR_t.destroy({
+            where:
+            {
+                recipe_id: recipe
+            }
+        });
+        console.log("delete from ingredients in a recipe table: \n" + JSON.stringify(del_IiR));
+        var del_recipe = await recipe_t.destroy({
+            where:{
+                recipe_id : recipe
+            }
+        });
+        console.log("delete from recieps table: \n" + JSON.stringify(del_recipe));
         res.send("Success");
-    });
+    }
+    catch(err)
+    {
+        console.log(err);
+        res.send("no?")// i dont know ajax calls............
+    }
+        //Since AJAX under /js/main.js made a request we have to respond back
+        
+    // });
 })
 
 module.exports = router;

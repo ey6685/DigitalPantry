@@ -34,7 +34,7 @@ const Users = db.define('users', {
 {
     timestamps: false
 });
-// Users.removeAttribute('id');
+Users.removeAttribute('id');
 
 var User = module.exports = Users;
 

@@ -18,7 +18,7 @@ async function find_recipes(exp_id,pantry_id)
 {
     try{
         var recommened_recipes= new Array();
-        console.log("starting find recipe with ingredient id: " + exp_id);
+        console.log("starting find recipe with ingredient id: " + exp_id+"\n");
         if(pantry_id == null) pantry_id = 1;
         if(exp_id != null)
         {
@@ -31,7 +31,7 @@ async function find_recipes(exp_id,pantry_id)
                 }
             });
 
-            console.log(JSON.stringify("recipe ids: \n" + recipe_ids));
+            console.log('\n' +JSON.stringify("recipe ids: " + recipe_ids));
 
             var recipe_ids_array = new Array();
 

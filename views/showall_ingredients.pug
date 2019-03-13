@@ -48,11 +48,11 @@ block content
                     tr
                         th(scope='row') #
                             td= item.ingredient_name
-                            td= item.ingredient_total
-                            td= item.ingredient_measurement
+                            td= item.ingredient_amount
+                            td= item.ingredient_unit_of_measurement
                             td= item.ingredient_expiration_date
                             td 
                                 //- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
-                                a.btn.btn-danger.delete-ingredient(href='#', data-id=item.ingredient_name) DELETE
+                                a.btn.btn-danger.delete-ingredient(href='#', data-id=item.ingredient_idrs)  DELETE
         form(method='GET', action='/ingredients/add')
             //-input.btn.btn-primary(type='submit', value='ADD MULTIPLE INGREDIENTS')

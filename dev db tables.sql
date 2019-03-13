@@ -142,6 +142,7 @@ CREATE TABLE `recipes` (
   `recipe_directions` text,
   `recipe_num_times_cooked` int(11) DEFAULT NULL,
   `pantry_id` int(11) DEFAULT NULL,
+  `num_people_it_feeds` int(11) DEFAULT '1',
   PRIMARY KEY (`recipe_id`),
   KEY `pantry_id` (`pantry_id`),
   CONSTRAINT `recipes_ibfk_1` FOREIGN KEY (`pantry_id`) REFERENCES `pantry` (`pantry_id`)
@@ -154,7 +155,7 @@ CREATE TABLE `recipes` (
 
 LOCK TABLES `recipes` WRITE;
 /*!40000 ALTER TABLE `recipes` DISABLE KEYS */;
-INSERT INTO `recipes` VALUES (1,'Chicken Noodle Soup',NULL,'put the stuff in a pot#boil for 12 days#serve cold',NULL,1),(2,'Chip n Beans',NULL,'put the stuff in a pot#boil for 12 days#serve cold',NULL,1);
+INSERT INTO `recipes` VALUES (1,'Chicken Noodle Soup',NULL,'put the stuff in a pot#boil for 12 days#serve cold',NULL,1,1),(2,'Chip n Beans',NULL,'put the stuff in a pot#boil for 12 days#serve cold',NULL,1,1);
 /*!40000 ALTER TABLE `recipes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -170,6 +171,7 @@ CREATE TABLE `users` (
   `user_password` text,
   `user_email` tinytext,
   `pantry_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_type` enum('A','V') DEFAULT 'A',
   PRIMARY KEY (`username`),
   KEY `pantry_id` (`pantry_id`),
   CONSTRAINT `pantry_id` FOREIGN KEY (`pantry_id`) REFERENCES `pantry` (`pantry_id`)
@@ -194,4 +196,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-10 14:38:39
+-- Dump completed on 2019-03-13 11:43:23

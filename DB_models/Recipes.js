@@ -35,7 +35,7 @@ const Recipes = db.define('recipes', {
         type: Sequelize.TEXT
     },
 
-    recipe_people_it_feeds: {
+    num_people_it_feeds: {
         type: Sequelize.INTEGER
     }
 

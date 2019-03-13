@@ -18,7 +18,7 @@ block content
                 .form-group.col-md-4
                     input.form-control(name='recipeName', type='text', placeholder='Recipe = Chicken Soup')
                 .form-group.col-md-4
-                    input.form-control(name='recipeServingSize', type='text', placeholder='Serving Size = 2')
+                    input.form-control(name='recipeServingSize', type='text', placeholder='Number of People This Feeds = 2')
             .form-row
                 .form-group.col-md-4
                     input.form-control(name='ingredientProperties[1]', type='text', placeholder='Ingredient = Chicken')
@@ -27,14 +27,16 @@ block content
                 .form-group.col-md-3
                     .dropdown-inline
                     select.form-control(name='ingredientProperties[1]', required)
-                        option(value='') Measurement
-                        option(value='bag') Bag
-                        option(value='can') Can
-                        option(value='pound') Pound
-                        option(value='ounce') Ounce
+                        option(value='') Container Measurement
+                        option(value='tsp.') Teaspoon
+                        option(value='tbsp.') Tablespoon
+                        option(value='fl oz') Fluid Ounce
                         option(value='cup') Cup
-                        option(value='tablespoon') Tablespoon
-                        option(value='teaspoon') Teaspoon
+                        option(value='cup') Cup
+                        option(value='quart') Quart
+                        option(value='ml') Millilitter
+                        option(value='lb') Pound
+                        option(value='oz') Dry Ounce
             #recipe-container
             button.btn.btn-secondary(type='button' onclick='addIngredient()', class='form-group') Add Ingredient
             .form-row

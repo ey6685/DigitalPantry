@@ -25,6 +25,10 @@ const recipe_ingredient = db.define('ingredients_in_a_recipe', {
         type: Sequelize.INTEGER,
         foreignKey: true
     },
+    pantry_id:{
+        type: Sequelize.INTEGER,
+        foreignKey: true
+    },
     
     amount_of_ingredient_needed: {
         type: Sequelize.FLOAT
