@@ -37,20 +37,6 @@ $(document).ready(function() {
     // get data-id from the button
     const id = $target.attr('data-id');
 
-<<<<<<< Updated upstream
-    // Start AJAX
-    $.ajax({
-      type: 'DELETE',
-      // This route is defined under ingredients.js
-      url: '/recipes/remove/' + id,
-      success: function(response) {
-        // route user back to results
-        window.location.href = '/recipes/showall';
-      },
-      error: function(err) {
-        console.log('Could not delete: ' + id);
-      }
-=======
         //Start AJAX
         $.ajax({
             type:'DELETE',
@@ -65,10 +51,8 @@ $(document).ready(function() {
                 console.log("Could not delete: "+id);
             }
         })
->>>>>>> Stashed changes
     });
   });
-});
 
 // DELETE user
 // Triggered by a delete button on admin panel
@@ -104,6 +88,7 @@ $(document).on('click', '.delete-row', function() {
     .remove();
 });
 
+// Delete ingredient inside the edit recipe overlay
 $(document).on('click', '.delete-current-ingredient', function() {
   // Get id of the recipe that is being edited
   recipe_id_being_edited = $(this).attr('data-id');
