@@ -101,6 +101,25 @@ router.get('/showRecipes', function(req, res){
     })
 })
 
+router.get('/showRecipes', function(req, res){
+    query = "SELECT * FROM recipes;";
+    recipe_steps_array = []
+    db.query(query, async function(err, results){
+        if (err) throw err;
+        console.log(results);
+        for (every_recipe_directions in results){
+            var recipe_steps = await steps.parse_recipe_directions_by_string(results[every_recipe_directions].recipe_directions);
+            recipe_steps_array.push(recipe_steps.split('${<br>}'));
+        }
+        console.log(recipe_steps_array);
+        res.render("showRecipes",{
+            title:"Your Recipes",
+            data: results,
+            recipe_steps:recipe_steps_array
+        })
+    })
+})
+
 /*
 TYPE: GET
 URL ENDPOINT: localhost:3000/recipes/showComunityRecipes
