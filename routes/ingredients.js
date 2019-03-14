@@ -24,16 +24,18 @@ router.get('/showall', function(req, res) {
   });
 });
 
-// Render page with a form for adding a new ingredient
+// Render page with a form for adding multiple ingredients
 // GET request to localhost:3000/ingredients/add
+// Created by: Jon
 router.get('/add', function(req, res) {
   res.render('add_ingredient', {
-    title: 'Add Ingredient'
+    title: 'Add Multiple Ingredients'
   });
 });
 
 // POST request to localhost:3000/ingredients/add
-// This will add a new ingredient to available ingredients and update database
+// This will add multiple ingredients to available ingredients and update database
+// Created by: Jon
 router.post('/add', function(req, res) {
   // get parameters from request body
   const ing_ingredient_name = req.body.ingredient_name;
