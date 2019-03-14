@@ -3,6 +3,7 @@ const router = express.Router();
 const moment = require('moment');
 const ingredient_t = require('../DB_models/Ingredients');
 const ing_in_stock = require('../DB_models/ingredients_in_pantry');
+const aw = require('../algorithm/auto_wieght');
 
 //Render page with data from database
 //GET request to localhost:3000/users/login
@@ -60,16 +61,17 @@ router.post('/add', async function(req,res){
         else
         {
             //add wieght asigning function call here
+            var new_weight = await aw.auto_wieght(ing_ingredient_name);
             new_ingredient = await ingredient_t.create({
                 ingredient_name: ing_ingredient_name,
-                //ingredient_weight: new_weight
+                ingredient_weight: new_weight
             });
             new_ing_id = new_ingredient.ingredient_id;
         }
 
         ing_in_stock.create({
             ingredient_id: new_ing_id,
-            //pantry_id : pantry_id,
+            pantry_id : 1,//change to get pantry id form the session
             ingredient_amount: ing_ingredient_total,
             ingredient_unit_of_measurement : ing_ingredient_measurement,
             ingredient_expiration_date : ing_ingredient_expiration_date
@@ -83,7 +85,7 @@ router.post('/add', async function(req,res){
 })
 
 //remove ingredient by id
-router.delete('/remove/:id/:ex', function(req,res){
+router.delete('/remove/#id&ex&unit', function(req,res){
     const ingredient = req.params.id;
     const ex_date = req.params.ex;
     const delete_query = "DELETE FROM ingredients WHERE ingredient_id ='"+ingredient+"' and ingredient_expiration_date= '" + ex_date +"';";

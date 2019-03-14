@@ -7,6 +7,7 @@ const op = require('sequelize').Op;
 const multer = require('multer');
 const steps = require('../recipe_direction_parser');
 const users_route = require('./users');
+const aw = require("../algorithm/auto_wieght");
 //defines where to store image
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -34,12 +35,7 @@ router.get('/showall', async function(req, res){
     //   })
     try{
         var recipe_res = await recipe_t.findAll({
-            // where:{
-            //     recipe_id: {
-            //         [op.notIn] : [null,'']
-                    
-            //     }
-            // }
+
         });
         console.log("the recipes: \n" + JSON.stringify(recipe_res));
         console.log("length: " + recipe_res.length); 
@@ -218,8 +214,8 @@ router.post('/add',upload.single("image") , async function(req, res){
                 var final_ingredi_id;
                 var checking_ingr_t = await ingredient_t.findAll({
                     where:{
-                        ingredient_name : ingredientName///start here
-                        //this is NULL...
+                        ingredient_name : ingredientName
+                        
                     }
                 });
                 if(checking_ingr_t.length>0)
@@ -228,9 +224,10 @@ router.post('/add',upload.single("image") , async function(req, res){
                 }
                 else
                 {
+                    var ingredient_weight = await aw.auto_wieght(ingredientName);
                     var new_ingredient = await ingredient_t.create({
                         ingredient_name: ingredientName,
-                        //ingredient_weight : weight auto assign
+                        ingredient_weight : ingredient_weight,
                         pantry_id: 1//need to get pantry id from session
                     });
                     final_ingredi_id = new_ingredient.ingredient_id;
