@@ -24,9 +24,48 @@ router.get('/showall', function(req, res) {
   });
 });
 
+// POST request to localhost:3000/ingredients/add
+// This will add a new ingredient to available ingredients and update database
+// Created by Jon
+// Last modified: 03/14/2019
+// Modified by: Jon
+// Modification:
+//  created route for single ingredient addition on View Ingredients page
+router.post('/showall', function(req, res) {
+  // get parameters from request body
+  const ingredientName = req.body.ingredient_name;
+  const ingredientQuantity = req.body.ingredient_total;
+  const ingredientMeasurement = req.body.ingredient_measurement;
+  const ingredientExpirationDate = req.body.ingredient_expiration_date;
+  // Do crazy stuff here
+  result =
+    "('" +
+    ingredientName +
+    "'," +
+    ingredientQuantity +
+    ",'" +
+    ingredientMeasurement +
+    "','" +
+    ingredientExpirationDate +
+    "')";
+  db.query(
+    'INSERT INTO ingredients (ingredient_name, ingredient_total, ingredient_measurement,ingredient_expiration_date) VALUES ' +
+      result,
+    function(err, results) {
+      if (err) throw err;
+    }
+  );
+
+  res.redirect('/ingredients/showall');
+});
+
 // Render page with a form for adding multiple ingredients
 // GET request to localhost:3000/ingredients/add
 // Created by: Jon
+// Last modified: 03/14/19
+// Modified by: Jon
+// Modification: Updated route to match new table schema
+//  updated route to accept multiple ingredient additions
 router.get('/add', function(req, res) {
   res.render('add_ingredient', {
     title: 'Add Multiple Ingredients'
