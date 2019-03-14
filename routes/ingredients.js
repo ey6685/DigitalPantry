@@ -50,6 +50,7 @@ router.post('/add', function(req, res) {
       const ingredientImagePath = 'NULL';
       const ingredientWeight = 'NULL';
 
+      // prettier-ignore
       query =
         "('" +
         ingredientName +
@@ -59,11 +60,11 @@ router.post('/add', function(req, res) {
         ingredientMeasurement +
         "','" +
         ingredientExpirationDate +
-        "'," +
+        "','" +
         ingredientImagePath +
-        ',' +
+        "'," +
         ingredientWeight +
-        ')';
+        ")";
       console.log('Ingredient Name: ' + ingredientName);
       console.log('Ingredient Qty: ' + ingredientQuantity);
       console.log('Ingredient Measurement: ' + ingredientMeasurement);
