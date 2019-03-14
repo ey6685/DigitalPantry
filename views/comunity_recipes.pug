@@ -18,7 +18,7 @@ block content
 	h1 #{title}
 	br
 	//- Overlay form start. In other words edit recipe form
-	#shareForm.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true')
+	#shareForm.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
 		.modal-dialog.modal-dialog-centered.modal-lg(role='document')
 			.modal-content
 				.modal-header.modal-title 
@@ -27,18 +27,18 @@ block content
 					.container-fluid
 						#recipe-content
 				.modal-footer
-					button.btn.btn-primary(type='button', data-dismiss='modal') Close
+					button.btn.btn-primary(type='button', data-dismiss='modal', class='form-group') Close
 	.form-row
 		.form-group.col-md-2
-			input.form-control.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search')
+			input.form-control.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
 		.form-group.col-md-2
 			.dropdown
-				select.form-control(id='sortBar', name='SortBar', onchange='sortList()')
+				select.form-control(id='sortBar', name='SortBar', onchange='sortList()', class='selection-drop')
 					option(value='0') Sort By
 					option(value='1') Sort A-Z
 					option(value='2') Sort Z-A
 		.form-group.col-md-2
-			input.btn.btn-primary(data-toggle='modal', type='button', value='Share Your Recipe', data-target='#shareForm')
+			input.btn.btn-primary(data-toggle='modal', type='button', value='Share Your Recipe', data-target='#shareForm', class='form-group')
 	br
 	.form-row
 		//-for each recipe in data
@@ -46,7 +46,7 @@ block content
 			//-get recipe image
 			- recipe_image= recipe.c_recipe_image_path
 			.form-group.col-md-3
-				div(id=recipe.c_recipe_id, class='card', class='h-100')
+				div(id=recipe.c_recipe_id, class='card', class='h-100', class='form-group')
 					img.image(class='card-img-top', src=recipe_image, alt='image')
 					div(class='card-body')
 						h4(class='card-title') #{recipe.c_recipe_name}

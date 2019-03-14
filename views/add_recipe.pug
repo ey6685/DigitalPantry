@@ -16,17 +16,17 @@ block content
 		form(method= 'POST', action= '/recipes/add', class= 'form', enctype="multipart/form-data")
 			.form-row
 				.form-group.col-md-4
-					input.form-control(name='recipeName', type='text', placeholder='Recipe = Chicken Soup')
+					input.form-control(name='recipeName', type='text', placeholder='Recipe = Chicken Soup', class= 'input-form')
 				.form-group.col-md-4
-					input.form-control(name='recipeServingSize', type='text', placeholder='Serving Size = 2')
+					input.form-control(name='recipeServingSize', type='text', placeholder='Serving Size = 2', class= 'input-form')
 			.form-row
 				.form-group.col-md-4
-					input.form-control(name='ingredientProperties[1]', type='text', placeholder='Ingredient = Chicken')
+					input.form-control(name='ingredientProperties[1]', type='text', placeholder='Ingredient = Chicken', class= 'input-form')
 				.form-group.col-md-4
-					input.form-control(name='ingredientProperties[1]', type='text', placeholder='Quantity = 2')
+					input.form-control(name='ingredientProperties[1]', type='text', placeholder='Quantity = 2', class= 'input-form')
 				.form-group.col-md-3
 					.dropdown-inline
-					select.form-control(name='ingredientProperties[1]', required)
+					select.form-control(name='ingredientProperties[1]', required, class= 'selection-drop')
 						option(value='') Measurement
 						option(value='bag') Bag
 						option(value='can') Can
@@ -44,7 +44,7 @@ block content
 					hr
 					br
 					.form-group
-						textarea.form-control(name='recipeDirections', placeholder= 'Describe first step\nDescribe second step \nContinue with each step on new line', rows='8')
+						textarea.form-control(name='recipeDirections', placeholder= 'Describe first step\nDescribe second step \nContinue with each step on new line', rows='8', class='form-group')
 				.col-md-1
 				.col-md-4
 					br
@@ -54,8 +54,8 @@ block content
 					.form-group
 						img#output
 					.form-group
-						input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)')
-			input.btn.btn-primary(type='submit', value='Submit', class='form-group')
+						input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='form-group')
+			input.btn.btn-primary(type='submit', value='Submit', class='form-group', class='form-group')
 
 
 
