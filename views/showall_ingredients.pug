@@ -22,7 +22,7 @@ block content
 					th(scope='col') Action
 			tbody
 				tr
-					form(method= 'POST', action= '/ingredients/add', class= 'form')
+					form(method= 'POST', action= '/ingredients/showall', class= 'form')
 						.form-row
 							.form-group.col-md-2
 								input.form-control(name='ingredient_name', type='text', placeholder='Name = Tuna')
@@ -55,4 +55,4 @@ block content
 								//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
 								a.btn.btn-danger.delete-ingredient(href='#', data-id=item.ingredient_name) DELETE
 		form(method='GET', action='/ingredients/add')
-			//-input.btn.btn-primary(type='submit', value='ADD MULTIPLE INGREDIENTS')
+			input.btn.btn-primary(type='submit', value='ADD MULTIPLE INGREDIENTS')

@@ -24,50 +24,103 @@ router.get('/showall', function(req, res) {
   });
 });
 
-// Render page with a form for adding a new ingredient
-// GET request to localhost:3000/ingredients/add
-router.get('/add', function(req, res) {
-  res.render('add_ingredient', {
-    title: 'Add Ingredient'
-  });
-});
-
 // POST request to localhost:3000/ingredients/add
 // This will add a new ingredient to available ingredients and update database
-router.post('/add', function(req, res) {
+// Created by Jon
+// Last modified: 03/14/2019
+// Modified by: Jon
+// Modification:
+//  created route for single ingredient addition on View Ingredients page
+router.post('/showall', function(req, res) {
   // get parameters from request body
-  const ing_ingredient_name = req.body.ingredient_name;
-  const ing_ingredient_total = req.body.ingredient_total;
-  const ing_ingredient_measurement = req.body.ingredient_measurement;
-  const ing_ingredient_expiration_date = req.body.ingredient_expiration_date;
+  const ingredientName = req.body.ingredient_name;
+  const ingredientQuantity = req.body.ingredient_total;
+  const ingredientMeasurement = req.body.ingredient_measurement;
+  const ingredientExpirationDate = req.body.ingredient_expiration_date;
   // Do crazy stuff here
   result =
     "('" +
-    ing_ingredient_name +
+    ingredientName +
     "'," +
-    ing_ingredient_total +
+    ingredientQuantity +
     ",'" +
-    ing_ingredient_measurement +
+    ingredientMeasurement +
     "','" +
-    ing_ingredient_expiration_date +
+    ingredientExpirationDate +
     "')";
   db.query(
     'INSERT INTO ingredients (ingredient_name, ingredient_total, ingredient_measurement,ingredient_expiration_date) VALUES ' +
       result,
     function(err, results) {
       if (err) throw err;
-      /******************************************/
-      // Commented out these lines to temporarily
-      // fix the header issue********************/
-      /************************************** */
-      // Render same page with newly added ingredient
-      // res.render('add_ingredient',{
-      //     title:'Add Ingredient'
-      // });
     }
   );
 
   res.redirect('/ingredients/showall');
+});
+
+// Render page with a form for adding multiple ingredients
+// GET request to localhost:3000/ingredients/add
+// Created by: Jon
+// Last modified: 03/14/19
+// Modified by: Jon
+// Modification: Updated route to match new table schema
+//  updated route to accept multiple ingredient additions
+router.get('/add', function(req, res) {
+  res.render('add_ingredient', {
+    title: 'Add Multiple Ingredients'
+  });
+});
+
+// POST request to localhost:3000/ingredients/add
+// This will add multiple ingredients to available ingredients and update database
+// Created by: Jon
+router.post('/add', function(req, res) {
+  // Iterate over every key_name inside JSON request
+  for (var key in req.body) {
+    // When Ingredient key_name is found
+    // For every ingredient in the form do the following
+    if (key.includes('ingredientProperties')) {
+      // Retrieve all values from request body
+      const ingredientName = req.body[key][0];
+      const ingredientQuantity = req.body[key][1];
+      const ingredientMeasurement = req.body[key][2];
+      const ingredientExpirationDate = req.body[key][3];
+      const ingredientImagePath = 'NULL';
+      const ingredientWeight = 'NULL';
+
+      // prettier-ignore
+      query =
+        "('" +
+        ingredientName +
+        "'," +
+        ingredientQuantity +
+        ",'" +
+        ingredientMeasurement +
+        "','" +
+        ingredientExpirationDate +
+        "','" +
+        ingredientImagePath +
+        "'," +
+        ingredientWeight +
+        ")";
+      console.log('Ingredient Name: ' + ingredientName);
+      console.log('Ingredient Qty: ' + ingredientQuantity);
+      console.log('Ingredient Measurement: ' + ingredientMeasurement);
+      console.log('Ingredient Expiration Date: ' + ingredientExpirationDate);
+      console.log('Insert into ingredients query: ' + query);
+
+      // Insert ingredient into Ingredients table
+      db.query(
+        'insert into ingredients (ingredient_name,ingredient_total,ingredient_measurement,ingredient_expiration_date,ingredient_image_path,ingredient_weight) values ' +
+          query,
+        function(err, results) {
+          if (err) throw err;
+        }
+      );
+    }
+  }
+  res.redirect('showall');
 });
 
 // remove ingredient by id
