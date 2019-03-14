@@ -24,37 +24,29 @@ router.get('/showall', function(req, res) {
   });
 });
 
-// POST request to localhost:3000/ingredients/add
-// This will add a new ingredient to available ingredients and update database
-// Created by Jon
-// Last modified: 03/14/2019
-// Modified by: Jon
-// Modification:
-//  created route for single ingredient addition on View Ingredients page
-router.post('/showall', function(req, res) {
-  // get parameters from request body
-  const ingredientName = req.body.ingredient_name;
-  const ingredientQuantity = req.body.ingredient_total;
-  const ingredientMeasurement = req.body.ingredient_measurement;
-  const ingredientExpirationDate = req.body.ingredient_expiration_date;
-  // Do crazy stuff here
-  result =
-    "('" +
-    ingredientName +
-    "'," +
-    ingredientQuantity +
-    ",'" +
-    ingredientMeasurement +
-    "','" +
-    ingredientExpirationDate +
-    "')";
-  db.query(
-    'INSERT INTO ingredients (ingredient_name, ingredient_total, ingredient_measurement,ingredient_expiration_date) VALUES ' +
-      result,
-    function(err, results) {
-      if (err) throw err;
-    }
-  );
+//Render page with data from database
+//GET request to localhost:3000/users/login
+router.get('/expired', function(req, res){
+    //renders showall_recipes with all the available ingredients
+    db.query('SELECT * FROM ingredients WHERE ingredient_expiration_date IS NOT null AND ingredient_expiration_date < CURDATE() ', function(err, results) {
+        for (key in results){
+            results[key]['ingredient_expiration_date'] = moment(results[key]['ingredient_expiration_date']).format('LL');
+        }
+        if (err) throw err
+        res.render('expired_ingredients_np',{
+            title:"Your Ingredients",
+            results: results
+        });
+    });
+});
+
+//Render page with a form for adding a new ingredient
+//GET request to localhost:3000/ingredients/add
+router.get('/add', function(req, res){
+    res.render('add_ingredient',{
+        title:'Add Ingredient'
+    });
+})
 
   res.redirect('/ingredients/showall');
 });

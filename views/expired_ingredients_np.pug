@@ -1,0 +1,117 @@
+extends user_view_template
+
+block content
+    style.
+        .btn_card{
+            /*Defines CSS for butons on the dashboard*/
+            width: 93%;
+            margin: 0px 10px 10px 10px;
+        }
+
+    div(class='container-fluid', class='rounded', style='width: 80%')
+        h1 Expired Ingredients
+        br
+
+
+        .form-row
+            .form-group.col-md-2
+                input.form-control.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search')
+            .form-group.col-md-2
+                .dropdown
+                    select.form-control(id='sortBar', name='SortBar', onchange='sortList()')
+                            option(value='0') Sort By
+                            option(value='1') Sort A-Z
+                            option(value='2') Sort Z-A
+
+
+        .form-row
+            //-for each ingredient in data
+            //for ingredient,i in data
+            for item in results
+                //-get recipe image
+                - ingredient_image= item.ingredient_image_path
+                .form-group.col-md-3
+                    div(id=item.ingredient_id, class='card', class='h-100')
+                        img.image(class='card-img-top', src=ingredient_image, alt='image', class="h-50")
+                        div(class='card-body')
+                            h4(class='card-title') #{item.ingredient_name}
+                            h5(class='card-text') Amount: #{item.ingredient_total} #{item.ingredient_measurement}
+                            h6(class='card-text') Expires: #{item.ingredient_expiration_date}
+                            
+                        div(class='card-foot')
+                            button.btn_card.btn.btn-primary.btn-danger.delete-ingredient(href='#', data-id=item.ingredient_name) DELETE
+
+
+        script.
+            //This will trigger once user stars to type text into a search bar
+            function search() {
+                // Declare variables
+                var input, filter, div, i, txtValue;
+                //get the search bar input
+                input = document.getElementById('filterInput');
+                //Set all letters to upper case
+                filter = input.value.toUpperCase();
+                //get all card names
+                card_names = document.getElementsByTagName('h4');
+                //get all cards
+                div = document.getElementsByClassName('col-md-3');
+
+                // Loop through all list items, and hide those who don't match the search query
+                for (i = 0; i < div.length; i++) {
+                    txtValue = card_names[i].textContent || card_names[i].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        //show
+                        div[i].style.display = "";
+                    } 
+                    else {
+                        //hide
+                        div[i].style.display = "none";
+                    }
+                }
+            }
+            //Function based on sort select dropdown box
+            function sortList() {
+                var list, i, switching, b, shouldSwitch;
+                //get all cards
+                list = document.getElementsByClassName("col-md-3");
+                switching = true;
+                var e = document.getElementById("sortBar");
+                var optionValue = e.options[e.selectedIndex].value;
+                /* Make a loop that will continue until
+                no switching has been done: */
+                while (switching && optionValue != 0) {
+                    // Start by saying: no switching is done:
+                    switching = false;
+                    b = document.getElementsByTagName('h4');
+                    // Loop through all list items:
+                    for (i = 0; i < (b.length - 1); i++) {
+                        //Initial condition (no switches)
+                        shouldSwitch = false;
+                        /* Check if the next item should
+                        switch place with the current item: */
+                        //If sort by A-Z is selected
+                        if(optionValue == 1){
+                            if (b[i].innerHTML.toLowerCase() > b[i + 1].innerHTML.toLowerCase()) {
+                                /* If next item is alphabetically lower than current item,
+                                mark as a switch and break the loop: */
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                        //If sort by Z-A is selected
+                        else if(optionValue == 2){
+                            if (b[i].innerHTML.toLowerCase() < b[i + 1].innerHTML.toLowerCase()) {
+                                /* If next item is alphabetically higher than current item,
+                                mark as a switch and break the loop: */
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                    }
+                        if (shouldSwitch) {
+                                list[i].parentNode.insertBefore(list[i + 1], list[i]);
+                                switching = true;
+                        }
+                }
+            }
+                            
