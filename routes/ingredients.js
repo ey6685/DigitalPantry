@@ -47,17 +47,23 @@ router.post('/add', function(req, res) {
       const ingredientQuantity = req.body[key][1];
       const ingredientMeasurement = req.body[key][2];
       const ingredientExpirationDate = req.body[key][3];
+      const ingredientImagePath = 'NULL';
+      const ingredientWeight = 'NULL';
 
       query =
         "('" +
         ingredientName +
         "'," +
         ingredientQuantity +
-        "'," +
+        ",'" +
         ingredientMeasurement +
-        "'," +
+        "','" +
         ingredientExpirationDate +
-        "')";
+        "'," +
+        ingredientImagePath +
+        ',' +
+        ingredientWeight +
+        ')';
       console.log('Ingredient Name: ' + ingredientName);
       console.log('Ingredient Qty: ' + ingredientQuantity);
       console.log('Ingredient Measurement: ' + ingredientMeasurement);
@@ -66,7 +72,7 @@ router.post('/add', function(req, res) {
 
       // Insert ingredient into Ingredients table
       db.query(
-        'insert into ingredients (ingredient_name,ingredient_total,ingredient_measurement,ingredient_expiration_date) values ' +
+        'insert into ingredients (ingredient_name,ingredient_total,ingredient_measurement,ingredient_expiration_date,ingredient_image_path,ingredient_weight) values ' +
           query,
         function(err, results) {
           if (err) throw err;
