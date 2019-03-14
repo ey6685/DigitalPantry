@@ -38,7 +38,7 @@ CREATE TABLE `ingredients` (
 
 LOCK TABLES `ingredients` WRITE;
 /*!40000 ALTER TABLE `ingredients` DISABLE KEYS */;
-INSERT INTO `ingredients` VALUES (1,'Chicken',3,NULL,NULL),(2,'Canned Black Beans',1,NULL,NULL),(3,'Carrot',3,NULL,NULL),(4,'Potato chips',1,NULL,NULL),(5,'Ground Pepper',0,NULL,NULL),(6,'Chicken Broth',3,NULL,NULL);
+INSERT INTO `ingredients` VALUES (1,'Chicken',3,'/public/images/chicken.jpg',NULL),(2,'Canned Black Beans',1,'/public/images/black_beans.jpg',NULL),(3,'Carrot',3,'/public/images/placeholder.jpg',NULL),(4,'Potato chips',1,'/public/images/placeholder.jpg',NULL),(5,'Ground Pepper',0,'/public/images/placeholder.jpg',NULL),(6,'Chicken Broth',3,'/public/images/placeholder.jpg',NULL);
 /*!40000 ALTER TABLE `ingredients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -143,6 +143,7 @@ CREATE TABLE `recipes` (
   `recipe_num_times_cooked` int(11) DEFAULT NULL,
   `pantry_id` int(11) DEFAULT NULL,
   `num_people_it_feeds` int(11) DEFAULT '1',
+  `sharable` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`recipe_id`),
   KEY `pantry_id` (`pantry_id`),
   CONSTRAINT `recipes_ibfk_1` FOREIGN KEY (`pantry_id`) REFERENCES `pantry` (`pantry_id`)
@@ -155,7 +156,7 @@ CREATE TABLE `recipes` (
 
 LOCK TABLES `recipes` WRITE;
 /*!40000 ALTER TABLE `recipes` DISABLE KEYS */;
-INSERT INTO `recipes` VALUES (1,'Chicken Noodle Soup',NULL,'put the stuff in a pot#boil for 12 days#serve cold',NULL,1,1),(2,'Chip n Beans',NULL,'put the stuff in a pot#boil for 12 days#serve cold',NULL,1,1);
+INSERT INTO `recipes` VALUES (1,'Chicken Noodle Soup','/images/chicken_noodle_soup.jpg','put the stuff in a pot#boil for 12 days#serve cold',NULL,1,1,0),(2,'Chip n Beans','/images/bean_salsa.jpg','put the stuff in a pot#boil for 12 days#serve cold',NULL,1,1,0);
 /*!40000 ALTER TABLE `recipes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -196,4 +197,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-13 11:43:23
+-- Dump completed on 2019-03-14 18:20:04

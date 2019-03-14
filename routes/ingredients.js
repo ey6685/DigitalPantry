@@ -3,7 +3,8 @@ const router = express.Router();
 const moment = require('moment');
 const ingredient_t = require('../DB_models/Ingredients');
 const ing_in_stock = require('../DB_models/ingredients_in_pantry');
-const aw = require('../algorithm/auto_wieght');
+const aw = require('../algorithm/auto_weight');
+
 
 //Render page with data from database
 //GET request to localhost:3000/users/login
@@ -60,8 +61,8 @@ router.post('/add', async function(req,res){
         }
         else
         {
-            //add wieght asigning function call here
-            var new_weight = await aw.auto_wieght(ing_ingredient_name);
+            //add weight asigning function call here
+            var new_weight = await aw.auto_weight(ing_ingredient_name);
             new_ingredient = await ingredient_t.create({
                 ingredient_name: ing_ingredient_name,
                 ingredient_weight: new_weight
@@ -85,16 +86,43 @@ router.post('/add', async function(req,res){
 })
 
 //remove ingredient by id
-router.delete('/remove/#id&ex&unit', function(req,res){
-    const ingredient = req.params.id;
-    const ex_date = req.params.ex;
-    const delete_query = "DELETE FROM ingredients WHERE ingredient_id ='"+ingredient+"' and ingredient_expiration_date= '" + ex_date +"';";
+router.delete('/remove/', async function(req,res){
+    const ingredient = req.body.id;
+    var ex_date = req.body.ex;
+    const unit = req.body.unit;
+    const qty = req.body.qty;
+    ex_date =  await new Date(ex_date);
+    ex_date = await moment(ex_date).format("YYYY-MM-DD");
+    // ex_date = await moment(ex_date).format("L");
+    // ex_date = await ex_date.split('/');
+    // ex_date = ex_date[2] + '-' + ex_date[1] + '-' + ex_date[0];
+    const delete_query = "DELETE FROM ingredients_in_pantry WHERE ingredient_id ='"+ingredient+"' and ingredient_expiration_date= '" + ex_date +"' and ingredient_unit_of_measurement= '" + unit +"' and ingredient_amount = '" + qty +"';";
     // db.query(delete_query, function(err, results) {
     //     if (err) throw err
     //     //Since AJAX under /js/main.js made a request we have to respond back
     //     res.send("Success");
     // });
-    console.log("\ningredient: " + ingredient + "\ndelete: " + delete_query);
+    
+    console.log("\ningredient id: " + ingredient + "\ndelete query: " + delete_query);
+
+    // ing_in_stock.destroy({
+    //     where:{
+    //         ingredient_id: ingredient,
+    //         ingredient_expiration_date: ex_date,
+    //         ingredient_unit_of_measurement: unit,
+    //         ingredient_amount : qty
+    //     }
+    // })
+    // .then(results => {
+    //     console.log(JSON.stringify(results));
+    //     res.send("Success");
+    // })
+    db.query(delete_query,results=>{
+        console.log(results);
+        res.send("success");
+    })
+
+
 
 })
 

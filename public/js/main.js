@@ -10,12 +10,22 @@ $(document).ready(function(){
         $target = $(e.target);
         //get data-id from the button
         const id = ($target.attr('data-id'));
+        const ex = ($target.attr('data-ex'));
+        const unit = ($target.attr('data-unit'));
+        const qty = ($target.attr('data-qty'));
 
+        console.log(id + "|" + ex + '|' + unit +'|' +qty);
         //Start AJAX
         $.ajax({
             type:'DELETE',
             //This route is defined under ingredients.js
-            url:'/ingredients/remove/'+id,
+            url:'/ingredients/remove/',
+            data:{
+                id  : id,
+                ex  : ex,
+                unit: unit,
+                qty : qty
+            },
             success:function(response){
                 //route user back to results
                 window.location.href = '/ingredients/showall';

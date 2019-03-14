@@ -7,7 +7,7 @@ const op = require('sequelize').Op;
 const multer = require('multer');
 const steps = require('../recipe_direction_parser');
 const users_route = require('./users');
-const aw = require("../algorithm/auto_wieght");
+const aw = require("../algorithm/auto_weight");
 //defines where to store image
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -224,7 +224,7 @@ router.post('/add',upload.single("image") , async function(req, res){
                 }
                 else
                 {
-                    var ingredient_weight = await aw.auto_wieght(ingredientName);
+                    var ingredient_weight = await aw.auto_weight(ingredientName);
                     var new_ingredient = await ingredient_t.create({
                         ingredient_name: ingredientName,
                         ingredient_weight : ingredient_weight,

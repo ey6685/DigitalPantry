@@ -1,6 +1,6 @@
 /*
-this file contains the function to scan names of ingredients and auto assign wieght to indredients.
-if the auto assign is wrong the user may edit the wieght with the editing functions
+this file contains the function to scan names of ingredients and auto assign weight to indredients.
+if the auto assign is wrong the user may edit the weight with the editing functions
 
 inputs
 1) string: name
@@ -8,12 +8,12 @@ inputs
 outputs
 
 return
-int: wieght
+int: weight
 
 requires
 */
 
-function auto_wieght(name)
+function auto_weight(name)
 {
     //data valadations
         if(name == null)
@@ -42,11 +42,11 @@ function auto_wieght(name)
             (name.includes("PICKEL"))
           )//then
         {
-            console.log("wieght assigned: 1");
+            console.log("weight assigned: 1");
             return 1;
         }
 
-    //wieght 2    
+    //weight 2    
     else if(
             (name.includes("CARROT"))
             ||
@@ -55,10 +55,10 @@ function auto_wieght(name)
             (name.includes("CUCUMBERS"))
            )//then
         {
-            console.log("wieght assigned: 2");
+            console.log("weight assigned: 2");
             return 2;
         }
-    //wieght 3
+    //weight 3
     else if(
         //MEATS
         //includes
@@ -85,16 +85,16 @@ function auto_wieght(name)
         (name.includes("FRUIT"))
     )//THEN
     {
-        console.log("wieght assigned: 3");
+        console.log("weight assigned: 3");
         return 3;
     }
     else
     {
         console.log("no keywords found!");   
-        console.log("wieght assigned: 1");
+        console.log("weight assigned: 1");
         return 1;
     }
     
 }
 
-module.exports.auto_wieght = auto_wieght;
+module.exports.auto_weight = auto_weight;
