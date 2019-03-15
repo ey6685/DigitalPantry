@@ -61,50 +61,49 @@ block content
                 
 
 
-
-		script.
-			// break
-			var textAreas = document.getElementsByTagName('textarea');
-			Array.prototype.forEach.call(textAreas, function(elem) {
-				elem.placeholder = elem.placeholder.replace(/\\n/g, '\n');
-			});
-			var loadFile = function(event) {
-				var output = document.getElementById('output');
-				output.src = URL.createObjectURL(event.target.files[0]);
-				output.classList.add("img-thumbnail");
-				document.getElementById("output").style.display = 'block';
-				document.getElementById("output").style.width = '200px';
-				document.getElementById("output").style.height = '200px';
-				}
-			let i = 2;
-				function addIngredient(){
-				let template = `
-				<div class="form-row">
-					<div class="form-group col-md-4">
-						<input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Ingredient = Chicken">
-					</div>
-					<div class="form-group col-md-4">
-						<input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Quantity = 2">
-					</div>
-					<div class="dropdown-inline col-md-3">
-						<select class="form-control" name="ingredientProperties[${i}]" required="required">
-							<option value="">Measurement</option>
-							<option value="bag">Bag</option>
-							<option value="can">Can</option>
-							<option value="pound">Pound</option>
-							<option value="ounce">Ounce</option>
-							<option value="cup">Cup</option>
-							<option value="tablespoon">Tablespoon</option>
-							<option value="teaspoon">Teaspoon</option>
-						</select>
-						</div>
-					<div class="form-group col-md-1 text-center">
-						<button type="button" class="btn btn-danger delete-row" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					</div>
-				</div>`;
-				let container = document.getElementById('recipe-container');
-				let element = document.createElement('element');
-				element.innerHTML = template;
-				container.appendChild(element);
-				i++
-			}
+        script.
+            //break
+            var textAreas = document.getElementsByTagName('textarea');
+            Array.prototype.forEach.call(textAreas, function(elem) {
+                elem.placeholder = elem.placeholder.replace(/\\n/g, '\n');
+            });
+            var loadFile = function(event) {
+                            var output = document.getElementById('output');
+                            output.src = URL.createObjectURL(event.target.files[0]);
+                            output.classList.add("img-thumbnail");
+                            document.getElementById("output").style.display = 'block';
+                            document.getElementById("output").style.width = '200px';
+                            document.getElementById("output").style.height = '200px';
+                            }
+            let i = 2;
+                function addIngredient(){
+                let template = `
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Ingredient = Chicken">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Quantity = 2">
+                    </div>
+                    <div class="dropdown-inline col-md-3">
+                        <select class="form-control" name="ingredientProperties[${i}]" required="required">
+                            <option value="">Measurement</option>
+                            <option value="bag">Bag</option>
+                            <option value="can">Can</option>
+                            <option value="pound">Pound</option>
+                            <option value="ounce">Ounce</option>
+                            <option value="cup">Cup</option>
+                            <option value="tablespoon">Tablespoon</option>
+                            <option value="teaspoon">Teaspoon</option>
+                        </select>
+                        </div>
+                    <div class="form-group col-md-1 text-center">
+                        <button type="button" class="btn btn-danger delete-row" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                </div>`;
+                let container = document.getElementById('recipe-container');
+                let element = document.createElement('element');
+                element.innerHTML = template;
+                container.appendChild(element);
+                i++
+            }
