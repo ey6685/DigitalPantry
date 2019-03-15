@@ -10,16 +10,17 @@ const Sequelize = require('sequelize');
 const pantry = require('./Pantry');
 const db = require('../databaseMySQL.js');
 
-
-const Recipes = db.define('recipes', {
+const Recipes = db.define(
+  'recipes',
+  {
     recipe_id: {
         type: Sequelize.INTEGER,
         primaryKey: true
     },
     
     recipe_name: {
-        type: Sequelize.STRING
-         },
+      type: Sequelize.STRING
+    },
 
     recipe_image_path: {
         type: Sequelize.INTEGER,

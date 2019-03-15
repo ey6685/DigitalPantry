@@ -10,15 +10,15 @@ const users_route = require('./users');
 const aw = require("../algorithm/auto_weight");
 //defines where to store image
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, __dirname + '/../public/images/')
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.originalname)
-    }
-  })
-  //create an upload function using configuration above
-  const upload = multer({storage: storage})
+  destination: function(req, file, cb) {
+    cb(null, __dirname + '/../public/images/');
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+// create an upload function using configuration above
+const upload = multer({ storage: storage });
 
 /*
 TYPE: GET
@@ -47,6 +47,9 @@ router.get('/showall', async function(req, res){
         
     
 
+    // grabs the ingredient names for the ingredients tables for each recipe id
+    // and stores them in to ingredients list in a formated str where
+    // each ingredient is seperated by a #
 
 
     //grabs the ingredient names for the ingredients tables for each recipe id
@@ -76,6 +79,16 @@ router.get('/showall', async function(req, res){
                 ingredient_list[i] = ingredient_list[i]   + new_ingredient.ingredient_name + ", " + IiR_res[o].amount_of_ingredient_needed + " " + IiR_res[o].ingredient_unit_of_measurement; 
             }
         }
+      });
+      if (!ingredient_list[IiR_res[i].recipe_id - 1] == '')
+        ingredient_list[IiR_res[i].recipe_id - 1] += '#';
+      ingredient_list[IiR_res[i].recipe_id - 1] +=
+        ing_res[0].ingredient_name +
+        ',' +
+        IiR_res[i].recipe_ingredient_qty +
+        ' ' +
+        IiR_res[i].recipe_ingredient_measurement;
+    }
 
         //now to take the ingredient_list array and make it 2d by spliting the columns
         //into rows where the # tag is
@@ -84,21 +97,33 @@ router.get('/showall', async function(req, res){
         {
         ingredient_list[i] = ingredient_list[i].split('#');
         }
-    
-    
-    
-
-        res.render('showall_recipes',{
-            title: "Your Recipes",
-            results: recipe_res,
-            ingredients: ingredient_list
+        console.log(recipe_steps_array);
+        res.render("showRecipes",{
+            title:"Your Recipes",
+            data: results,
+            recipe_steps:recipe_steps_array
         })
-    }
-    catch(err)
-    {
-        res.send("<h1>ERROR:" + err +"</h1><br><h2>please hit the browser's back button and reload the page.<br>if this is the 2nd time you are here please contact your systems admin and inform them of the error.</h2><br><h3>have a nice day user:)");
-    }
     })
+})
+
+router.get('/showRecipes', function(req, res){
+    query = "SELECT * FROM recipes;";
+    recipe_steps_array = []
+    db.query(query, async function(err, results){
+        if (err) throw err;
+        console.log(results);
+        for (every_recipe_directions in results){
+            var recipe_steps = await steps.parse_recipe_directions_by_string(results[every_recipe_directions].recipe_directions);
+            recipe_steps_array.push(recipe_steps.split('${<br>}'));
+        }
+        console.log(recipe_steps_array);
+        res.render("showRecipes",{
+            title:"Your Recipes",
+            data: results,
+            recipe_steps:recipe_steps_array
+        })
+    })
+})
 
 /*
 TYPE: GET
@@ -125,19 +150,19 @@ router.get('/showCommunityRecipes', async function(req,res){
             data:results
         });
     });
-})
+  });
+});
 
 /*
 TYPE: GET
 URL ENDPOINT: localhost:3000/recipes/add
 DESCRIPTION: This will render add recipe page with a form
 */
-router.get('/add', function(req, res){
-    res.render('add_recipe',{
-        title:"Add New Recipe"
-    });
-})
-
+router.get('/add', function(req, res) {
+  res.render('add_recipe', {
+    title: 'Add New Recipe'
+  });
+});
 
 /*
 TYPE: POST
@@ -153,28 +178,30 @@ BODY_PARAMS:
         ingredient_size
         ingredient_expiration_date
 */
-//calls upload function for images
-router.post('/add',upload.single("image") , async function(req, res){
-    console.log(req.file);
-    if (req.file) {
-        console.log('Uploading file...');
-        console.log('File Uploaded Successfully');
-    } else {
-        console.log('No File Uploaded');
-        console.log('File Upload Failed');
-    }
-    //recipe_name and recipe_size are unique form fields, so they do not require any recursion to grab all of them
-    const recipeName = req.body.recipeName;
-    const recipeServingSize = req.body.recipeServingSize
-    var recipeDirections = req.body.recipeDirections;
-    var replaceNewLine = "#";
-    for (char in recipeDirections){
-        replaceNewLine = replaceNewLine.concat(recipeDirections[char].replace('\r','').replace('\n','#'));
-    }
+// calls upload function for images
+router.post('/add', upload.single('image'), async function(req, res) {
+  console.log(req.file);
+  if (req.file) {
+    console.log('Uploading file...');
+    console.log('File Uploaded Successfully');
+  } else {
+    console.log('No File Uploaded');
+    console.log('File Upload Failed');
+  }
+  // recipe_name and recipe_size are unique form fields, so they do not require any recursion to grab all of them
+  const recipeName = req.body.recipeName;
+  const recipeServingSize = req.body.recipeServingSize;
+  var recipeDirections = req.body.recipeDirections;
+  var replaceNewLine = '#';
+  for (char in recipeDirections) {
+    replaceNewLine = replaceNewLine.concat(
+      recipeDirections[char].replace('\r', '').replace('\n', '#')
+    );
+  }
 
-    //***************************
-    //TODO add pantry ID here
-    //***************************
+  //***************************
+  //TODO add pantry ID here
+  //***************************
 
     //Create entire query value
     var query = "('" + recipeName + "','" + recipeServingSize + "','" + replaceNewLine + "', 1)";///change that last '1' to gettingthe pantry id
@@ -277,6 +304,23 @@ router.post('/add',upload.single("image") , async function(req, res){
     res.redirect("showall");
 })});
 
+// Get all available recipes that a single pantry has
+// Returns a JSON result
+router.get('/getPantryRecipes', function(req, res) {
+  console.log(req.session.passport['user']);
+  // get id of the currently logged in user
+  var user_id = req.session.passport['user'];
+  // query all recipes which are availabel to this user
+  query =
+    'SELECT * FROM recipes WHERE recipe_pantry_id = (SELECT user_pantry_id FROM users WHERE user_id=' +
+    user_id +
+    ');';
+  db.query(query, function(err, results) {
+    if (err) throw err;
+    // return JSON data
+    res.json(results);
+  });
+});
 
 //Get all available recipes that a single pantry has
 //Returns a JSON result
@@ -291,10 +335,12 @@ router.get('/getPantryRecipes', function(req, res){
     query = 'SELECT * FROM recipes WHERE pantry_id = ' +pantry_id + "';";
     db.query(query, function(err, results){
         if (err) throw err;
-        //return JSON data
-        res.json(results);
-    });
-})
+        console.log('Recipe Shared to Community');
+      });
+    }
+  );
+  res.send('success');
+});
 
 
 //Share a recipe into community
@@ -373,14 +419,26 @@ router.post('/edit', function(req, res){
         }
         
     }
-    db.query(query, function(err, results) {
-        if (err) throw err;
-        console.log("Values are updated");
-    })
-    res.send(req.body);
+    // Recipe serving size handling
+    if (key.includes('currentServSize')) {
+      if (data[key] == '') {
+        // If recipe serving size was not changed remove extra parameters from the query
+        query = query.replace('$2', '');
+        query = query.replace(',', '');
+      } else {
+        recipe_name_query_parameter = 'recipe_serving_size=' + data[key];
+        // Replace $2 with new recipe name
+        query = query.replace('$2', recipe_name_query_parameter);
+        console.log(query);
+      }
+    }
+  }
+  db.query(query, function(err, results) {
+    if (err) throw err;
+    console.log('Values are updated');
+  });
+  res.send(req.body);
 });
-
-
 
 /*
 TYPE: DELETE

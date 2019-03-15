@@ -1,8 +1,9 @@
-///function to recommend recipes for the expiring ingredient
+/// function to recommend recipes for the expiring ingredient
 
 //inputs
 //ingredient id
 
+// outputs: an array of recipe_ids
 
 //outputs: an array of recipe_ids
 
@@ -121,6 +122,10 @@ async function find_recipes(exp_id,pantry_id)
     {
         console.log(err);
     }
+  } // end of check to see if the function was passed a name.
+  else {
+    console.log('need to pass an ingredient name, thank you');
+  }
 }
 
 module.exports.find_recipes = find_recipes;

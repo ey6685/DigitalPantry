@@ -1,0 +1,56 @@
+extends user_view_template
+
+block content
+    style.
+        .btn_card{
+            /*Defines CSS for butons on the dashboard*/
+            width: 93%;
+            margin: 0px 10px 10px 10px;
+        }
+
+    div(class='container-fluid', class='rounded', style='width: 80%')
+        h1 #{title}
+        br
+       
+        tbody
+                tr
+                    form(method= 'POST', action= '/ingredients/add', class= 'form')
+                        .form-row
+                            .form-group.col-md-2
+                                input.form-control(name='ingredient_name', type='text', placeholder='Name = Tuna')
+                            .form-group.col-md-1
+                                input.form-control(name='ingredient_total', type='text', placeholder='Total = 2')
+                            .form-group.col-md-3
+                                .dropdown-inline
+                                select.form-control(name='ingredient_measurement', required)
+                                    option(value='') Container Measurement
+                                    option(value='tsp.') Teaspoon
+                                    option(value='tbsp.') Tablespoon
+                                    option(value='fl oz') Fluid Ounce
+                                    option(value='cup') Cup
+                                    option(value='cup') Cup
+                                    option(value='quart') Quart
+                                    option(value='ml') Millilitter
+                                    option(value='lb') Pound
+                                    option(value='oz') Dry Ounce
+                            .form-group.col-md-4
+                                input.form-control(name='ingredient_expiration_date', type='date')
+                            input.btn.btn-primary.col-md-2(type='submit', value='ADD', class='form-group')
+
+        .form-row
+            //-for each ingredient in data
+            //for ingredient,i in data
+            for item in results
+                //-get recipe image
+                - ingredient_image= item.ingredient_image_path
+                .form-group.col-md-3
+                    div(id=item.ingredient_id, class='card', class='h-100')
+                        img.image(class='card-img-top', src=ingredient_image, alt='image', class="h-50")
+                        div(class='card-body')
+                            h4(class='card-title') #{item.ingredient_name}
+                            h5(class='card-text') Amount: #{item.ingredient_total} #{item.ingredient_measurement}
+                            h6(class='card-text') Expires: #{item.ingredient_expiration_date}
+                            
+                        div(class='card-foot')
+                            button.btn_card.btn.btn-primary.btn-danger.delete-ingredient(href='#', data-id=item.ingredient_name) DELETE
+                            

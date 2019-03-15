@@ -1,6 +1,6 @@
 //AUTHORS:
-    //Patrick
-    //Oskars
+//Patrick
+//Oskars
 //This file contains a model for the Users table in SQL database
 //This file also contains functions required to communicate with the database
 
@@ -36,23 +36,23 @@ const Users = db.define('users', {
 });
 Users.removeAttribute('id');
 
-var User = module.exports = Users;
+var User = (module.exports = Users);
 
 //CREATED BY OSKARS
 //Creates user with a hash and saves it to the database
-module.exports.createUser = function(newUser, callback){
-    //Generate salt
-    bcrypt.genSalt(10, function(err, salt){
-        console.log(err);
-        //Hash password with the generated salt
-        bcrypt.hash(newUser.pass,salt, async function(err,hash){
-            console.log(err);
-            newUser.pass = hash;
-            await newUser.save();
-            callback(hash);
-        })
-    })
-}
+module.exports.createUser = function(newUser, callback) {
+  //Generate salt
+  bcrypt.genSalt(10, function(err, salt) {
+    console.log(err);
+    //Hash password with the generated salt
+    bcrypt.hash(newUser.pass, salt, async function(err, hash) {
+      console.log(err);
+      newUser.pass = hash;
+      await newUser.save();
+      callback(hash);
+    });
+  });
+};
 
 //CREATED BY OSKARS
 //Retrieves the user by email
@@ -72,12 +72,12 @@ module.exports.getUserByEmail = async function(username){
 //     // return User.findById(id, callback);
 // }
 
-//CREATED BY OSKARS
-//Recieves a password that user has entered in the login form
-//Hashes that password and compares to the hash inside the database
-module.exports.comparePassword = function(candidatePassword, hash, callback){
-    bcrypt.compare(candidatePassword, hash, function(err, isMatch){
-        if (err) throw err;
-        callback(null, isMatch);
-    });
-}
+// CREATED BY OSKARS
+// Recieves a password that user has entered in the login form
+// Hashes that password and compares to the hash inside the database
+module.exports.comparePassword = function(candidatePassword, hash, callback) {
+  bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
+    if (err) throw err;
+    callback(null, isMatch);
+  });
+};

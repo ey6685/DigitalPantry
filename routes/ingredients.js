@@ -26,13 +26,26 @@ router.get('/showall', function(req, res){
     });
 });
 
-//Render page with a form for adding a new ingredient
-//GET request to localhost:3000/ingredients/add
-router.get('/add', function(req, res){
-    res.render('add_ingredient',{
-        title:'Add Ingredient'
-    });
-})
+//Render page with data from database
+//GET request to localhost:3000/users/login
+router.get('/expiredAdmin', function(req, res) {
+  //renders showall_recipes with all the available ingredients
+  db.query(
+    'SELECT * FROM ingredients WHERE ingredient_expiration_date IS NOT null AND ingredient_expiration_date < CURDATE() ',
+    function(err, results) {
+      for (key in results) {
+        results[key]['ingredient_expiration_date'] = moment(
+          results[key]['ingredient_expiration_date']
+        ).format('LL');
+      }
+      if (err) throw err;
+      res.render('expiredAdmin_ingredients', {
+        title: 'Your Expired Ingredients',
+        results: results
+      });
+    }
+  );
+});
 
 //POST request to localhost:3000/ingredients/add
 //This will add a new ingredient to available ingredients and update database
@@ -126,21 +139,45 @@ router.delete('/remove/', async function(req,res){
 
 })
 
-//remove ingredient by name
-router.delete('/remove/recipe_ingredient/:name', function(req,res){
-    const ingredient = req.params.name;
-    console.log("REMOVING");
-    console.log(ingredient);
-    //Since no cascading is set up have to do it manually
-    //delete ingredient from recipe_ingredient table
-    const delete_query = "DELETE FROM recipe_ingredient WHERE recipe_ingredient_used ='"+ingredient+"'";
-    db.query(delete_query, function(err){
-        if (err) throw err
-        //Since AJAX under /js/main.js made a request we have to respond back
-    });
-    console.log("DONE");
-    res.send("Success");
+      // Insert ingredient into Ingredients table
+      db.query(
+        'insert into ingredients (ingredient_name,ingredient_total,ingredient_measurement,ingredient_expiration_date,ingredient_image_path,ingredient_weight) values ' +
+          query,
+        function(err, results) {
+          if (err) throw err;
+        }
+      );
+    }
+  }
+  res.redirect('showall');
+});
 
-})
+// remove ingredient by id
+router.delete('/remove/:id', function(req, res) {
+  const ingredient = req.params.id;
+  const delete_query = "DELETE FROM ingredients WHERE ingredient_name ='" + ingredient + "'";
+  db.query(delete_query, function(err, results) {
+    if (err) throw err;
+    // Since AJAX under /js/main.js made a request we have to respond back
+    res.send('Success');
+  });
+});
+
+// remove ingredient by name
+router.delete('/remove/recipe_ingredient/:name', function(req, res) {
+  const ingredient = req.params.name;
+  console.log('REMOVING');
+  console.log(ingredient);
+  // Since no cascading is set up have to do it manually
+  // delete ingredient from recipe_ingredient table
+  const delete_query =
+    "DELETE FROM recipe_ingredient WHERE recipe_ingredient_used ='" + ingredient + "'";
+  db.query(delete_query, function(err) {
+    if (err) throw err;
+    // Since AJAX under /js/main.js made a request we have to respond back
+  });
+  console.log('DONE');
+  res.send('Success');
+});
 
 module.exports = router;

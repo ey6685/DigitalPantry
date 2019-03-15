@@ -1,35 +1,81 @@
+//-
+	Template for navigation side-bar css
+	Created by: Jon
+	Date: 03/12/19
+	Last modified by: Jon
+	Date: 03/12/19
+	Overhaul to include multiple ingredient rowsextends user_view_template
+
 extends user_view_template
 
-//- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
-
 block content
-    br
-    br
-    br
-    div(class='container-fluid', class='rounded', style='width: 80%')
-        h1 #{title}
-        br
-        tbody
-            tr
-                form(method= 'POST', action= '/ingredients/add', class= 'well form-inline')
-                        .form-row
-                            .form-inline
-                                input.form-control(name='ingredient_name', type='text', placeholder='Name = Tuna')
-                            .form-inline
-                                input.form-control(name='ingredient_total', type='text', placeholder='Total = 2')
-                            .form-inline
-                                .dropdown-inline
-                                select.form-control(name='ingredient_measurement', required)
-                                    option(value='') Container Measurement
-                                    option(value='tsp.') Teaspoon
-                                    option(value='tbsp.') Tablespoon
-                                    option(value='fl oz') Fluid Ounce
-                                    option(value='cup') Cup
-                                    option(value='cup') Cup
-                                    option(value='quart') Quart
-                                    option(value='ml') Millilitter
-                                    option(value='lb') Pound
-                                    option(value='oz') Dry Ounce
-                            .form-inline
-                                input.form-control(name='ingredient_expiration_date', type='date')
-                                input.btn.btn-primary.col-md-2(type='submit', value='ADD', class='form-group')
+	br
+	br
+	br
+	br
+	div(class='container-fluid', class='rounded', style='width: 80%')
+		h1 #{title}
+		br
+		tbody
+			tr
+				form(method= 'POST', action= '/ingredients/add', class= 'form')
+					.form-row
+						.form-group.col-md-2
+							input.form-control(name='ingredientProperties[1]', type='text', placeholder='Name = Tuna')
+						.form-group.col-md-1
+							input.form-control(name='ingredientProperties[1]', type='text', placeholder='Total = 2')
+						.form-group.col-md-3
+							.dropdown-inline
+							select.form-control(name='ingredientProperties[1]', required)
+								option(value='') Measurement
+								option(value='tsp.') Teaspoon
+								option(value='tbsp.') Tablespoon
+								option(value='fl oz') Fluid Ounce
+								option(value='cup') Cup
+								option(value='quart') Quart
+								option(value='ml') Millilitre
+								option(value='lb') Pound
+								option(value='oz') Dry Ounce
+						.form-group.col-md-3
+							input.form-control(name='ingredientProperties[1]', type='date')
+					#ingredient-container
+					button.btn.btn-secondary(type='button' onclick='addIngredient()', class='form-group') Add Ingredient
+					input.btn.btn-primary.col-md-2(type='submit', value='Submit', class='form-group')
+
+		script.
+
+			let i = 2;
+				function addIngredient(){
+					let template = `
+					<div class="form-row">
+						<div class="form-group col-md-2">
+							<input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Name = Tuna" required="required">
+						</div>
+						<div class="form-group col-md-1">
+							<input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Total = 2" required="required">
+						</div>
+						<div class="dropdown-inline col-md-3">
+							<select class="form-control" name="ingredientProperties[${i}]" required="required">
+								<option value="">Measurement</option>
+								<option value="tsp.">Teaspoon</option>
+								<option value="tbsp.">Tablespoon</option>
+								<option value="fl oz">Fluid Ounce</option>
+								<option value="cup">Cup</option>
+								<option value="quart">Quart</option>
+								<option value="ml">Millilitre</option>
+								<option value="lb">Pound</option>
+								<option value="oz">Dry Ounce</option>
+							</select>
+						</div>
+						<div class="form-group col-md-3">
+							<input class="form-control" name="ingredientProperties[${i}]" type="date" required="required">
+						<div class="form-group col-md-1 text-center">
+							<button type="button" class="btn btn-danger delete-row" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						</div>
+					</div>`;
+					let container = document.getElementById('ingredient-container');
+					let element = document.createElement('element');
+					element.innerHTML = template;
+					container.appendChild(element);
+					i++
+				}

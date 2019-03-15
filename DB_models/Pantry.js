@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
-//this file is for setting up an object to //
-//interact with our pantry table in the db.//
+// this file is for setting up an object to //
+// interact with our pantry table in the db.//
 /////////////////////////////////////////////
 
 //reqires
@@ -8,8 +8,7 @@ const Sequelize =  require('sequelize');
 const recipes = require('./Recipes');
 const db = require('../databaseMySQL');
 
-
-//db table
+// db table
 /*
 =================================================================================================================================================================
 |pantry_id: int PK| pantry_name: varchar(32)|
@@ -28,10 +27,15 @@ const Pantry = db.define("pantry",
             type: Sequelize.STRING
         },
     },
-    {
-        timestamps     : false,
-        freezeTableName: true
-    }        
+
+    pantry_monthy_total_exipred: {
+      type: Sequelize.INTEGER
+    }
+  },
+  {
+    timestamps: false,
+    freezeTableName: true
+  }
 );
 
 //relations
@@ -39,9 +43,7 @@ const Pantry = db.define("pantry",
 
 module.exports = Pantry;
 
-
-
-///testing code////////////////////////////////////////
+// testing code////////////////////////////////////////
 
 // Pantry.create({
 //     pantry_name: "test default values"

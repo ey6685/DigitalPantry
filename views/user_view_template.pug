@@ -1,3 +1,10 @@
+//- Template for navigation side-bar css
+//- Created by: Oskars
+//- Date: 03/12/19
+//- Last modified by: Jon
+//- Date: 03/12/19
+//- Updated nav-bar routes
+
 doctype html
 html
     head
@@ -54,6 +61,12 @@ html
             i{
                 padding-right:15px;
                 width:35px;
+                color:white;
+            }
+            .symbol{
+                position:absolute;
+                bottom:60px;
+                color:white;
             }
         link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
         link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
@@ -66,15 +79,27 @@ html
                     li.nav-item
                         a.nav-link(href='/users/dashboard')
                             i.fa.fa-tachometer
-                            | Dashboard 
-                    li.nav-item
-                        a.nav-link(href='/recipes/showall')
-                            i.fa.fa-spoon
-                            | Recipes
+                            | Dashboard
                     li.nav-item
                         a.nav-link(href='/ingredients/showall')
                             i.fa.fa-spoon
-                            | Ingredients
+                            | View Ingredients
+                    li.nav-item
+                        a.nav-link(href='/ingredients/expired')
+                            i.fa.fa-spoon
+                            | View Expired Ingredients
+                    li.nav-item
+                        a.nav-link(href='/ingredients/add')
+                            i.fa.fa-spoon
+                            | Add Multiple Ingredients
+                    li.nav-item
+                        a.nav-link(href='/recipes/showall')
+                            i.fa.fa-spoon
+                            | View Recipes
+                    li.nav-item
+                        a.nav-link(href='/recipes/add')
+                            i.fa.fa-spoon
+                            | Add Recipe
                     li.nav-item
                         a.nav-link(href='/recipes/showCommunityRecipes')
                             i.fa.fa-cutlery
@@ -83,14 +108,12 @@ html
                         a.nav-link(href='/users/adminPanel')
                             i.fa.fa-user-o
                             | Admin Panel
-                    //- li.nav-item
-                    //-     a.nav-link(href='#') 
-                    //-         i.fa.fa-user-o
-                    //-         | Manage Users
                     li.nav-item
                         a.nav-link(href='/users/logout')
                             i.fa.fa-sign-out
                             | Logout
+                a.btn.symbol(href='/users/settings')
+                    i.fa.fa-cogs.fa-2x
         .containter
             main.ml-sm-auto.col-lg-10.px-4(role='main')
                 block content

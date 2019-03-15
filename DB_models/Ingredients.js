@@ -1,5 +1,5 @@
-//setting up the models for useing the database
-//this is the model for the  table ingredients the digital_pantry db
+// setting up the models for useing the database
+// this is the model for the  table ingredients the digital_pantry db
 
 
 /*
@@ -13,6 +13,10 @@ const Sequelize = require('sequelize');
 const ingredients_in_pantry = require('./ingredients_in_pantry');
 const db = require('../databaseMySQL.js');
 
+const Ingredients = db.define(
+  'ingredients',
+  {
+    ingredient_id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
 
 const Ingredients = db.define('ingredients', {
     ingredient_id             : {type: Sequelize.INTEGER,
