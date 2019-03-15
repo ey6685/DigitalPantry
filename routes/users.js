@@ -1,80 +1,77 @@
-const express = require('express');
-const router = express.Router();
-const moment = require('moment');
+const express = require('express')
 
-const steps = require('../recipe_direction_parser');
-const User = require('../DB_models/Users');
-const passport = require('passport');
-const LocalStrategy = require('passport-local');
-const cook_it = require('../cook_it/cook_it2');
-const next_ing = require('../algorithm/find_next_ing');
-const found_recipes = require('../algorithm/find_recipes');
-const recipe_t = require('../DB_models/Recipes');
-const op = require('sequelize').Op;
-const bcrypt = require('bcryptjs');
-const ing_table  = require('../DB_models/Ingredients');
-const ing_in_pan_table = require("../DB_models/ingredients_in_pantry");
+const router = express.Router()
+const moment = require('moment')
+const op = require('sequelize').Op
+const bcrypt = require('bcryptjs')
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
+
+const steps = require('../recipe_direction_parser')
+const User = require('../DB_models/Users')
+const cook_it = require('../cook_it/cook_it2')
+const next_ing = require('../algorithm/find_next_ing')
+const found_recipes = require('../algorithm/find_recipes')
+const recipe_t = require('../DB_models/Recipes')
+const ing_table  = require('../DB_models/Ingredients')
+const ing_in_pan_table = require('../DB_models/ingredients_in_pantry')
 
 // Get request to localhost:3000/users/login
-router.get('/login', function(req, res) {
+router.get('/login', function renderLoginPage(req, res) {
   // renders signin page with content 'Sign In"
   res.render('signin', {
     title: 'Log In'
-  });
-});
+  })
+})
 
 // Set up LocalStrategy of how users will be authenticated
 // Accepts username and password form the signin.pug
 passport.use(
-  new LocalStrategy(async function(username, password, done) {
+  new LocalStrategy(async function login(username, password, done) {
     // First find if user exists
-    let userData = await User.getUserByEmail(username);
+    const userData = await User.getUserByEmail(username)
     if (!userData) {
       // If user not found by email return Unknown User
-      return done(null, false, { message: 'Unknown User' });
-    } else {
-      // If user found
-
-      /*
-				COMPARE PASSWORD HASHES
-				Grab 'password' from the form
-				Apply hash defined in DB_models/Users.js to the password
-				Compare hashed password 'userData.pass' from the database with entered password
-				*/
-      User.comparePassword(password, userData.pass, function(err, isMatch) {
-        // if error throw error
-        if (err) throw err;
-        // If hashes match
-        if (isMatch) {
-          return done(null, userData);
-        }
-        // If hashes dont match print invalid password
-        else {
-          return done(null, false, { message: 'Invalid Password' });
-        }
-      });
+      return done(null, false, { message: 'Unknown User' })
     }
+    // Continue if user found
+    /*
+      COMPARE PASSWORD HASHES
+      Grab 'password' from the form
+      Apply hash defined in DB_models/Users.js to the password
+      Compare hashed password 'userData.pass' from the database with entered password
+      */
+    User.comparePassword(password, userData.user_password, function compare(err, isMatch) {
+      // if error throw error
+      if (err) throw err
+      // If hashes match
+      if (isMatch) {
+        return done(null, userData)
+      }
+      // If hashes dont match print invalid password
+      return done(null, false, { message: 'Invalid Password' })
+    })
   })
-);
+)
 
 // serialized user instance
 // Create cookies for sessions management
 // This allows for using login credentials once for a single request and then keeping the user authenticated without making requests with same credentials
 // Creates a cookie with user credentials
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function serialize(user, done) {
   // We can stuff more stuff into session here by declaring a new varialbe and passing it into done() intead of user.user_id
-  done(null, user.user_id);
-});
+  done(null, user.user_id)
+})
 
 // Invalidates the cookie based on the userId
-passport.deserializeUser(async function(id, done) {
+passport.deserializeUser(async function deserialize(id, done) {
   try {
-    let userData = await User.getUserById(id);
-    done(null, userData);
+    const userData = await User.getUserById(id)
+    done(null, userData)
   } catch (err) {
-    throw err;
+    throw err
   }
-});
+})
 
 // Does user authentication
 // If success redirect to /users/dashboard
@@ -86,42 +83,41 @@ router.post(
     failureRedirect: '/users/login',
     failureFlash: true
   })
-);
+)
 
 // Get request to localhost:3000/users/register
-router.get('/register', function(req, res) {
+router.get('/register', function showRegistrationPage(req, res) {
   // renders signin page with content 'Registration"
-  console.log(req.session);
   res.render('register', {
     title: 'Registration'
-  });
-});
+  })
+})
 
-router.get('/adminPanel', async function(req, res) {
-  var current_user_id = req.session.passport['user'];
-  //Find which pantry user is from
-  pantry_id="(SELECT (pantry_id) FROM users WHERE user_id="+current_user_id+")";
-  //Find all users in that pantry and not the current user
-  query="SELECT * FROM users WHERE pantry_id="+pantry_id+" AND user_id!="+current_user_id+";";
-  db.query(query, function(err, results){
-    if (err) throw err;
+router.get('/adminPanel', async function showAdminPanelPage(req, res) {
+  const currentUserId = req.session.passport['user']
+  // Find which pantry user is from
+  const pantryId = `(SELECT (pantry_id) FROM users WHERE user_id=${currentUserId};)`
+  // Find all users in that pantry and not the current user
+  const query = `SELECT * FROM users WHERE pantry_id=${pantryId} AND user_id!=${currentUserId};`
+  db.query(query, function sendQuery(err, results) {
+    if (err) throw err
     res.render('admin_panel', {
       title: 'Admin Panel',
       userData: results
-    });
-  });
-});
+    })
+  })
+})
 
-//Get request to localhost:3000/users/login
+// Get request to localhost:3000/users/login
 // router.get('/dashboard',checkAuthentication,async function(req, res){
- //Get request to localhost:3000/users/login
-router.get('/dashboard',checkAuthentication,async function(req, res){
+// Get request to localhost:3000/users/login
+router.get('/dashboard',async function(req, res){
+  console.log("PULLING UP DASHBOARD")
   // router.get('/dashboard',async function(req, res){
     //Jon//pulls algorithm results from directAlgorithm into recipe_results
     //Jon//then parses recipe id into var recipe_id
     // try
     // {
-
       var results = await next_ing.next_exp_ingredient();                                   //returns an int for the ingredient id of the next expiring ingredient
       console.log(JSON.stringify("\nresults of finding next ingredient: " + results));        //send the info to the console for debuging
       var results2 = await found_recipes.find_recipes(results);
@@ -219,20 +215,21 @@ router.get('/cook/:id', checkAuthentication, async function(req, res) {
 
 // This will register a new user and add their credentials to the database
 router.post('/register', function(req, res) {
+  console.log(req.body)
   // renders signin page with content 'Registration"
   // Checks that email field is not empty
-  req.checkBody('email', 'Username field is required').notEmpty();
+  req.checkBody('email', 'Username field is required').notEmpty()
   // Checks that email field has proper email format
-  req.checkBody('email', 'Invalid email format').isEmail();
+  req.checkBody('email', 'Invalid email format').isEmail()
   // Checks password field is not empty
-  req.checkBody('password', 'Password field is required').notEmpty();
-  req.checkBody('password', 'Password must be longer than 4 characters').isLength({ min: 4 });
-  req.checkBody('password', "Passwords don't match").matches(req.body.confirm_password);
+  req.checkBody('password', 'Password field is required').notEmpty()
+  req.checkBody('password', 'Password must be longer than 4 characters').isLength({ min: 4 })
+  req.checkBody('password', "Passwords don't match").matches(req.body.confirm_password)
   // Checks confirm password is not empty
-  req.checkBody('confirm_password', 'Confirm password field required').notEmpty();
+  req.checkBody('confirm_password', 'Confirm password field required').notEmpty()
 
   // Get all errors is any based on above validators
-  let errors = req.validationErrors();
+  let errors = req.validationErrors()
 
   // if errors exist
   if (errors) {
@@ -247,26 +244,30 @@ router.post('/register', function(req, res) {
   // Creates a user and hashes their password into database
   else {
     // Get user's email
-    const email = req.body.email;
+    const email = req.body.email
     // Get user's password
-    const password = req.body.password;
+    const password = req.body.password
     // Instantiate new user model defined in DB_models/Users.js
+    console.log("CREATING USER OBJECT")
     var newUser = new User({
-      email: email,
-      pass: password,
-      //TODO still need to figure out stuff with how to assign pantry IDs???
-      userType: 'admin'
-    });
+      user_email: email,
+      user_password: password,
+      pantry_id: 1
+    })
+    console.log(newUser)
+    console.log("USER OBJECT CREATED")
 
     // Call create function from DB_models/Users.js
-    User.createUser(newUser, function(err, user) {
-      if (err) throw err;
-    });
+    console.log("CALLING CREATE USER")
+    User.createUser(newUser, function(result) {
+      console.log("INSIDE CREATE USER")
+      console.log("RESULT HASH:" + result)
 
-    // Upon sucessful creating take user to the dashboard
-    res.redirect('/users/dashboard');
+      // Upon sucessful creating take user to the dashboard
+      res.redirect('/users/dashboard')
+    })
   }
-});
+})
 
 router.get('/logout', function(req, res) {
   req.logOut();
@@ -486,10 +487,9 @@ router.post('/changePassword', function changePassword(req, res) {
 function checkAuthentication(req, res, next) {
   if (req.isAuthenticated()) {
     return next()
-  } else {
-    req.flash('error', 'You are not logged in');
-    res.redirect('/users/login');
   }
+  req.flash('error', 'You are not logged in')
+  res.redirect('/users/login')
 }
 
 module.exports = router
