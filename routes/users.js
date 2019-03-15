@@ -60,6 +60,8 @@ passport.use(
 // Creates a cookie with user credentials
 passport.serializeUser(function serialize(user, done) {
   // We can stuff more stuff into session here by declaring a new varialbe and passing it into done() intead of user.user_id
+  console.log("SERIALIZING")
+  console.log(user)
   done(null, user.user_id)
 })
 

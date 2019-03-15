@@ -18,10 +18,13 @@ const db = require('../databaseMySQL.js')
 const Users = db.define(
   'users',
   {
+    user_id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true
+    },
     username: {
       type: Sequelize.STRING
     },
-
     user_password: {
       type: Sequelize.STRING
     },
