@@ -7,21 +7,21 @@ const ingredient_t = require('../DB_models/Ingredients');
 // GET request to localhost:3000/users/login
 router.get('/showall', function(req, res) {
   // renders showall_recipes with all the available ingredients
-  db.query('SELECT * FROM ingredients WHERE ingredient_expiration_date IS NOT null', function(
-    err,
-    results
-  ) {
-    for (key in results) {
-      results[key]['ingredient_expiration_date'] = moment(
-        results[key]['ingredient_expiration_date']
-      ).format('LL');
+  db.query(
+    'SELECT * FROM ingredients WHERE ingredient_expiration_date IS NOT null AND ingredient_expiration_date >= CURDATE() ',
+    function(err, results) {
+      for (key in results) {
+        results[key]['ingredient_expiration_date'] = moment(
+          results[key]['ingredient_expiration_date']
+        ).format('LL');
+      }
+      if (err) throw err;
+      res.render('showall_ingredients', {
+        title: 'Your Ingredients',
+        results: results
+      });
     }
-    if (err) throw err;
-    res.render('showall_ingredients', {
-      title: 'Your Ingredients',
-      results: results
-    });
-  });
+  );
 });
 
 // POST request to localhost:3000/ingredients/add
@@ -74,6 +74,27 @@ router.get('/expired', function(req, res) {
       if (err) throw err;
       res.render('expired_ingredients_np', {
         title: 'Your Ingredients',
+        results: results
+      });
+    }
+  );
+});
+
+//Render page with data from database
+//GET request to localhost:3000/users/login
+router.get('/expiredAdmin', function(req, res) {
+  //renders showall_recipes with all the available ingredients
+  db.query(
+    'SELECT * FROM ingredients WHERE ingredient_expiration_date IS NOT null AND ingredient_expiration_date < CURDATE() ',
+    function(err, results) {
+      for (key in results) {
+        results[key]['ingredient_expiration_date'] = moment(
+          results[key]['ingredient_expiration_date']
+        ).format('LL');
+      }
+      if (err) throw err;
+      res.render('expiredAdmin_ingredients', {
+        title: 'Your Expired Ingredients',
         results: results
       });
     }
