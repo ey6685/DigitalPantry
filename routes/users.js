@@ -355,7 +355,8 @@ router.post('/changePrivilege/:id', function(req, res) {
       user_type = 'P';
       break;
   }
-  // get user id
+
+// Get user id
   var user_id = req.params.id;
   // create database query
   var query = "UPDATE users SET user_type='" + user_type + "' WHERE user_id=" + user_id + ';';
@@ -389,17 +390,81 @@ router.post('/resetPassword/:id', async function(req, res) {
   res.redirect('/users/adminPanel');
 });
 
+router.get('/settings', function showSettings(req, res) {
+  const currentUserId = req.session.passport['user']
+  const query = `SELECT * FROM users WHERE user_id=${currentUserId};`
+  db.query(query, function getUser(err, results) {
+    if (err) throw err
+    res.render('user_profile', {
+      title: 'Your Settings',
+      data: results[0]
+    })
+  })
+})
+
+router.post('/changeUsername', function changeUsername(req, res) {
+  // get currently logged in user
+  const currentUserId = req.session.passport['user']
+  // get passed in username
+  const newUsername = req.body.newUsername
+  // create sql query
+  const query = `UPDATE users SET email='${newUsername}' WHERE user_id=${currentUserId}`
+  db.query(query, function updateUser(err) {
+    if (err) throw err
+    req.flash('success', 'Username Changed!')
+    res.redirect('/users/settings')
+  })
+})
+
+router.post('/changePassword', function changePassword(req, res) {
+  // get currently logged in user
+  const currentUserId = req.session.passport['user']
+  // get passed in current password
+  const currentPassword = req.body.currentPassword
+  // TODO check current password. Make sure that the user is the TRUE user
+  // get passed in new password
+  const newPassword = req.body.newPassword
+  // get passed in new password confirm
+  const confirmNewPassword = req.body.confirmNewPassword
+  req.checkBody('newPassword', "Passwords don't match").matches(confirmNewPassword)
+  // Get all errors is any based on above validators
+  const errors = req.validationErrors()
+
+  // if errors exist
+  if (errors) {
+    const query = `SELECT * FROM users WHERE user_id=${currentUserId};`;
+    db.query(query, function getUser(err, results) {
+      if (err) throw err
+      // render register page and pass in errors defined above, which will be rendered as well
+      res.render('user_profile', {
+        title: 'Your Settings',
+        data: results[0],
+        errors: errors
+      })
+    })
+  } else {
+    // generate salt
+    const salt = bcrypt.genSaltSync(10)
+    // generate hash using the passed in password
+    const hash = bcrypt.hashSync(newPassword, salt)
+    const query = `UPDATE users SET pass='${hash}' WHERE user_id=${currentUserId};`
+    db.query(query, function updatePassword(err) {
+      if (err) throw err
+      req.flash('success', 'Password Changed!')
+      res.redirect('/users/settings')
+    })
+  }
+})
+
 // Function to call from any route to check if user is authenticated
 // This needs to be used for verification of user privilleges
 function checkAuthentication(req, res, next) {
   if (req.isAuthenticated()) {
-    return next();
+    return next()
   } else {
     req.flash('error', 'You are not logged in');
     res.redirect('/users/login');
   }
 }
 
-//TODO
-// Remove user with DELETE
-module.exports = router;
+module.exports = router
