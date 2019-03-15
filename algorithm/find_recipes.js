@@ -117,15 +117,15 @@ async function find_recipes(exp_id,pantry_id)
             console.log((recommened_recipes));
             return recommened_recipes;
         }//end of if checking that we passed an id for ingfredients
+        else{
+            console.log("need ingredient id thank you");
+        }
     }
     catch(err)
     {
         console.log(err);
     }
-  } // end of check to see if the function was passed a name.
-  else {
-    console.log('need to pass an ingredient name, thank you');
-  }
+
 }
 
 module.exports.find_recipes = find_recipes;

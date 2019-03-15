@@ -79,32 +79,25 @@ router.get('/showall', async function(req, res){
                 ingredient_list[i] = ingredient_list[i]   + new_ingredient.ingredient_name + ", " + IiR_res[o].amount_of_ingredient_needed + " " + IiR_res[o].ingredient_unit_of_measurement; 
             }
         }
-      });
-      if (!ingredient_list[IiR_res[i].recipe_id - 1] == '')
-        ingredient_list[IiR_res[i].recipe_id - 1] += '#';
-      ingredient_list[IiR_res[i].recipe_id - 1] +=
-        ing_res[0].ingredient_name +
-        ',' +
-        IiR_res[i].recipe_ingredient_qty +
-        ' ' +
-        IiR_res[i].recipe_ingredient_measurement;
-    }
-
-        //now to take the ingredient_list array and make it 2d by spliting the columns
-        //into rows where the # tag is
-        console.log("ingredients for recipe: " + JSON.stringify(ingredient_list));
-        for(var i = 0; i<ingredient_list.length; i++)
+         for(var i =0; i<ingredient_list.length; i++)
         {
-        ingredient_list[i] = ingredient_list[i].split('#');
+            ingredient_list[i] = ingredient_list[i].split("#");
         }
-        console.log(recipe_steps_array);
-        res.render("showRecipes",{
-            title:"Your Recipes",
-            data: results,
-            recipe_steps:recipe_steps_array
-        })
-    })
+        console.log(ingredient_list);
+        res.render('showall_recipes', {
+            title: 'Your Recipes',
+            results: recipe_res,
+            ingredients: ingredient_list
+          });
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
 })
+
+
+
 
 router.get('/showRecipes', function(req, res){
     query = "SELECT * FROM recipes;";
@@ -151,7 +144,6 @@ router.get('/showCommunityRecipes', async function(req,res){
         });
     });
   });
-});
 
 /*
 TYPE: GET
@@ -255,8 +247,7 @@ router.post('/add', upload.single('image'), async function(req, res) {
                     var new_ingredient = await ingredient_t.create({
                         ingredient_name: ingredientName,
                         ingredient_weight : ingredient_weight,
-                        pantry_id: 1//need to get pantry id from session
-                    });
+                        });
                     final_ingredi_id = new_ingredient.ingredient_id;
                 }
                 var new_ingredient_slot = await IiR_t.create({
@@ -335,11 +326,10 @@ router.get('/getPantryRecipes', function(req, res){
     query = 'SELECT * FROM recipes WHERE pantry_id = ' +pantry_id + "';";
     db.query(query, function(err, results){
         if (err) throw err;
-        console.log('Recipe Shared to Community');
+        res.send('success');
       });
-    }
-  );
-  res.send('success');
+    
+    
 });
 
 
@@ -432,7 +422,7 @@ router.post('/edit', function(req, res){
         console.log(query);
       }
     }
-  }
+  
   db.query(query, function(err, results) {
     if (err) throw err;
     console.log('Values are updated');

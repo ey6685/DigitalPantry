@@ -25,6 +25,13 @@ router.get('/showall', function(req, res){
         });
     });
 });
+//Render page with a form for adding a new ingredient
+//GET request to localhost:3000/ingredients/add
+router.get('/add', function(req, res){
+  res.render('add_ingredient',{
+      title:'Add Ingredient'
+  });
+})
 
 //Render page with data from database
 //GET request to localhost:3000/users/login
@@ -50,51 +57,49 @@ router.get('/expiredAdmin', function(req, res) {
 //POST request to localhost:3000/ingredients/add
 //This will add a new ingredient to available ingredients and update database
 router.post('/add', async function(req,res){
-    //get parameters from request body
-    const ing_ingredient_name = req.body.ingredient_name;
-    const ing_ingredient_total = req.body.ingredient_total;
-    const ing_ingredient_measurement = req.body.ingredient_measurement;
-    const ing_ingredient_expiration_date = req.body.ingredient_expiration_date;
-    var   new_ing_id;
-    var  new_ingredient;
-    //Do crazy stuff here
+    for (var key in req.body)
+    {
+      if(key.includes("ingredientProperties"))
+      {
+        var block_oF_data = req.body[key];
+        console.log(block_oF_data);
+        //seperate the data
+        var ingredient_name = block_oF_data[0];
+        var ingredient_amount = block_oF_data[1];
+        var ingredient_unit = block_oF_data[2];
+        var ingredient_date = block_oF_data[3];
+        var final_id;
 
-        //first make sure the ingredient has not been stored in the ingredient table.
-        var does_ingred_exist = await ingredient_t.findAll({
-            where:{
-                ingredient_name: ing_ingredient_name
-            }
+        var does_ingredient_exist = await ingredient_t.findOne({
+          where: {
+            ingredient_name: ingredient_name
+          }
         });
-        //check the lenght of does ingred exist. if there is an ingredietn than we just need to get its 
-        //ingredient id
-        console.log("\n\noutput from checking if the ingredient exist" + JSON.stringify(does_ingred_exist));
-        if(does_ingred_exist.length >= 1)
+
+        if(does_ingredient_exist != null)
         {
-            new_ing_id = does_ingred_exist[0].ingredient_id;
+          final_id = does_ingredient_exist.ingredient_id;
         }
         else
         {
-            //add weight asigning function call here
-            var new_weight = await aw.auto_weight(ing_ingredient_name);
-            new_ingredient = await ingredient_t.create({
-                ingredient_name: ing_ingredient_name,
-                ingredient_weight: new_weight
-            });
-            new_ing_id = new_ingredient.ingredient_id;
+          var new_weight = await aw.auto_weight(ingredient_name);
+          var new_ingredient = await ingredient_t.create({
+            ingredient_name: ingredient_name,
+            ingredient_weight: new_weight,
+          });
+          final_id = new_ingredient.ingredient_id;
         }
-
-        ing_in_stock.create({
-            ingredient_id: new_ing_id,
-            pantry_id : 1,//change to get pantry id form the session
-            ingredient_amount: ing_ingredient_total,
-            ingredient_unit_of_measurement : ing_ingredient_measurement,
-            ingredient_expiration_date : ing_ingredient_expiration_date
-        })
-        .then(res =>{
-            console.log("result of creation of new ingredient: " + res);
-        })
-    // });
-
+        
+        var new_inv = ing_in_stock.create({
+          pantry_id:1,//change to get this from the sesson
+          ingredient_id: final_id,
+          ingredient_amount: ingredient_amount,
+          ingredient_unit_of_measurement: ingredient_unit,
+          ingredient_expiration_date: ingredient_date
+        });
+        console.log("ingredient add: \n" + JSON.stringify(new_inv));
+      }
+    }
     res.redirect('/ingredients/showall');
 })
 
@@ -139,29 +144,6 @@ router.delete('/remove/', async function(req,res){
 
 })
 
-      // Insert ingredient into Ingredients table
-      db.query(
-        'insert into ingredients (ingredient_name,ingredient_total,ingredient_measurement,ingredient_expiration_date,ingredient_image_path,ingredient_weight) values ' +
-          query,
-        function(err, results) {
-          if (err) throw err;
-        }
-      );
-    }
-  }
-  res.redirect('showall');
-});
-
-// remove ingredient by id
-router.delete('/remove/:id', function(req, res) {
-  const ingredient = req.params.id;
-  const delete_query = "DELETE FROM ingredients WHERE ingredient_name ='" + ingredient + "'";
-  db.query(delete_query, function(err, results) {
-    if (err) throw err;
-    // Since AJAX under /js/main.js made a request we have to respond back
-    res.send('Success');
-  });
-});
 
 // remove ingredient by name
 router.delete('/remove/recipe_ingredient/:name', function(req, res) {

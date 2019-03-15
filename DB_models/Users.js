@@ -16,6 +16,10 @@ const bcrypt = require('bcryptjs');
 //CREATED BY PATRICK
 //Defines User model
 const Users = db.define('users', {
+    user_id: {
+      type: Sequelize.INTEGER,
+      primaryKey:true,
+    },
     username:{
         type: Sequelize.STRING
     },

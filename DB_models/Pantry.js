@@ -28,10 +28,7 @@ const Pantry = db.define("pantry",
         },
     },
 
-    pantry_monthy_total_exipred: {
-      type: Sequelize.INTEGER
-    }
-  },
+
   {
     timestamps: false,
     freezeTableName: true

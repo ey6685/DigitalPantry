@@ -44,20 +44,19 @@ function converter_raw(num, unit, con_unit) {
 
     if (unit == con_unit) return num;
 
-        if(unit == null || con_unit == null) 
-        {
-            console.log("water, most likely\n");
-            return num;
-        }
-        ///done checking data
-        console.log("coverting " +num+" " + unit + " to " + con_unit);
-        //now to check if we can convert the units
-        //aka if a unit is for a liquid or not
-        if(unit == "tsp." || unit == "tbsp." || unit == "cup")
-        {
-            ///these can go both ways so just convert here
+    if(unit == null || con_unit == null) 
+    {
+      console.log("water, most likely\n");
+      return num;
+    }
+      
+    ///done checking data
+  console.log("coverting " +num+" " + unit + " to " + con_unit);
+  //now to check if we can convert the units
 
-    // now to check if we can convert the units
+  ///these can go both ways so just convert here
+
+// now to check if we can convert the units
     // aka if a unit is for a liquid or not
     if (unit == 'tsp.' || unit == 'tbsp.' || unit == 'cup') {
       // these can go both ways so just convert here
@@ -96,8 +95,6 @@ function converter_raw(num, unit, con_unit) {
 
           break;
 
-                    else return 0;
-                    break;
 
                 case "tbsp.":
                     if(con_unit == "tsp.")                           return (num * 3.0);
@@ -183,28 +180,8 @@ function converter_raw(num, unit, con_unit) {
 
         }
     }
-    catch(err)
-    {
-        console.log(err);
-        return 0;
-      }
-      // dry or solid food
-    } else if (unit == 'fl oz' || unit == 'ml' || unit == 'quart') {
-      // liquid food
-      switch (unit) {
-        case 'fl oz':
-          if (con_unit == 'ml') return num * 29.5735;
-          else if (con_unit == 'quart') return num * 0.03125;
-          else if (con_unit == 'tsp.') return num * 6;
-          else if (con_unit == 'tbsp.') return num * 2;
-          else if (con_unit == 'cup') return num * 8.115;
-          else return 0;
-      }
-    } else {
-      // return error
-      return 0;
-    }
-  } catch (err) {
+  
+   catch (err) {
     console.log(err);
     return 0;
   }

@@ -13,10 +13,6 @@ const Sequelize = require('sequelize');
 const ingredients_in_pantry = require('./ingredients_in_pantry');
 const db = require('../databaseMySQL.js');
 
-const Ingredients = db.define(
-  'ingredients',
-  {
-    ingredient_id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
 
 const Ingredients = db.define('ingredients', {
     ingredient_id             : {type: Sequelize.INTEGER,

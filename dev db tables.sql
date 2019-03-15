@@ -171,11 +171,12 @@ CREATE TABLE `users` (
   `username` varchar(32) NOT NULL,
   `user_password` text,
   `user_email` tinytext,
-  `pantry_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pantry_id` int(11) DEFAULT NULL,
   `user_type` enum('A','V') DEFAULT 'A',
-  PRIMARY KEY (`username`),
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`user_id`),
   KEY `pantry_id` (`pantry_id`),
-  CONSTRAINT `pantry_id` FOREIGN KEY (`pantry_id`) REFERENCES `pantry` (`pantry_id`)
+  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`pantry_id`) REFERENCES `pantry` (`pantry_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -197,4 +198,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-14 18:20:04
+-- Dump completed on 2019-03-15 13:52:13
