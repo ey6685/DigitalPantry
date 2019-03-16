@@ -16,12 +16,12 @@ block content
 			.row
 				.col-md-6
 					h4#name(style='border-bottom:1px solid black', onfocusout='cancelEdit()') Pantry Name
-				.btn#edit-btn.btn-primary(role='button', aria-disabled='false', onclick='edit()', id= 'edit-button') Edit
-				.btn#save-btn.btn-success.disabled(role='button', aria-disabled='true', id= 'save-button') Save
+				.btn.btn-primary(role='button', aria-disabled='false', onclick='edit()', id=edit-btn-admin) Edit
+				.btn.btn-success.disabled(role='button', aria-disabled='true', id=save-btn-admin) Save
 			br
 			.row
 				.col-md-6
-					input#imgupload(type='file', name='image', accept='image/*', onchange='loadFile(event)', style='display:none', id= 'image-upload')
+					input#imgupload(type='file', name='image', accept='image/*', onchange='loadFile(event)', style='display:none')
 					button#OpenImgUpload Image Upload
 	br
 	//-reset password overlay
@@ -42,8 +42,8 @@ block content
 									label Confirm password:
 									input#confirm-password.form-control(name='confirmPassword',type='password', placeholder="Password", class='form-group')
 					.modal-footer
-						button.btn.btn-primary(type='button', data-dismiss='modal', class='form-group') Cancel
-						input.btn.btn-primary(type='submit', value='Submit', class='form-group')
+						button.btn.btn-primary(type='button', data-dismiss='modal', id='cancle-admin') Cancel
+						input.btn.btn-primary(type='submit', value='Submit', id='submit-admin')
 	//-Change privilege overlay
 	#changePrivilege.modal.fade(tabindex='-1', role='dialog',aria-hidden='true', class= 'form-modal')
 		.modal-dialog.modal-dialog-centered.modal(role='document')
@@ -59,7 +59,7 @@ block content
 									option(value='administrator') Administrator
 									option(value='volunteer') Volunteer
 					.modal-footer
-						button.btn.btn-primary(type='button', data-dismiss='modal', class='form-group') Cancel
+						button.btn.btn-primary(type='button', data-dismiss='modal', id='cancle2-admin') Cancel
 						input.btn.btn-primary(type='submit', value='Change', class='form-group')
 	br
 	h4 Active users
@@ -89,11 +89,11 @@ block content
 					td.user-name= item.email
 					td= item.user_type
 					td
-						a.btn.btn-danger(data-toggle='modal', data-target='#changePrivilege', class= 'input-form') Change Privilege
+						a.btn.btn-danger(data-toggle='modal', data-target='#changePrivilege', id= 'change-admin') Change Privilege
 					td
-						a.btn.btn-danger(data-toggle='modal', data-target='#resetForm', class= 'input-form') Reset
+						a.btn.btn-danger(data-toggle='modal', data-target='#resetForm', id= 'reset-admin') Reset
 					td
-						a.btn.btn-danger(class="delete-user", data-id=item.user_id, class= 'input-form') DELETE
+						a.btn.btn-danger(class="delete-user", data-id=item.user_id, id= 'delete-admin') DELETE
 	h4 Add new users
 	hr
 	br
@@ -109,7 +109,7 @@ block content
 			.col-md-3
 				input.form-control(name='password', autocomplete="password", type='password', placeholder="Password", class= 'input-form')
 			.col-md-2
-				button.btn.btn-primary(type='submit', class= 'input-form') Add User
+				button.btn.btn-primary(type='submit', id='add-admin') Add User
 
 	script.
 		function edit(){

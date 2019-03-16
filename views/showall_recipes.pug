@@ -31,10 +31,10 @@ block content
                             .form-row
                                 .form-group.col-md-6
                                     label(for='recipe-name') Recipe name
-                                    input#recipe-name.form-control(name="recipeName", type='text', placeholder="Recipe name", class='form-group')
+                                    input.form-control(name="recipeName", type='text', placeholder="Recipe name", class='form-group', id='name-showall-rec')
                                 .form-group.col-md-6
                                     label(for='serving-size') Serving size
-                                    input#serving-size.form-control(name="recipeSize", type='text', placeholder="Serving Size", class='form-group')
+                                    input.form-control(name="recipeSize", type='text', placeholder="Serving Size", class='form-group', id='size-showall-rec')
                             br
                             h5 Ingredients
                             hr
@@ -53,9 +53,9 @@ block content
                             #dynamic-ingredient-row
                             hr
                             br
-                            button.btn.btn-primary(type='submit') Save changes
-                            button.btn.btn-secondary(class='btn-success', type='button', onclick='addIngredient()', class='form-group') Add Ingredient
-                            button.btn.btn-secondary(type='button', data-dismiss='modal', class='form-group') Close
+                            button.btn.btn-primary(type='submit', id='save-showall-rec') Save changes
+                            button.btn.btn-secondary(class='btn-success', type='button', onclick='addIngredient()', class='form-group', id='add-showall-rec') Add Ingredient
+                            button.btn.btn-secondary(type='button', data-dismiss='modal', class='form-group', id='close-showall-rec') Close
         //-Alert form end
         //- Page content start
         table.table.rounded.table-hover.table-dark
@@ -97,7 +97,7 @@ block content
                                 tr
                                     td(colspan='5') #{ingredient}
         form(method='GET', action='/recipes/add', class='form')
-            input.btn.btn-primary(type='submit', value='ADD RECIPES', class='form-group')
+            input.btn.btn-primary(type='submit', value='ADD RECIPES', class='form-group', id='submit-showall-rec')
         //- Page content end
     script.
         //i is used for numbering new dynamic rows

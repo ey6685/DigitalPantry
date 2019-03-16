@@ -43,7 +43,7 @@ block content
 									option(value='oz') Dry Ounce
 							.form-group.col-md-4
 								input.form-control(name='ingredient_expiration_date', type='date', class='form-group')
-							input.btn.btn-primary.col-md-2(type='submit', value='ADD', class='form-group')
+							input.btn.btn-primary.col-md-2(type='submit', value='ADD', class='form-group', id='submit-showall-ing')
 				for item in results
 					tr
 						th(scope='row') #
@@ -55,4 +55,4 @@ block content
 								//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
 								a.btn.btn-danger.delete-ingredient(href='#', data-id=item.ingredient_name) DELETE
 		form(method='GET', action='/ingredients/add', class= 'form')
-			input.btn.btn-primary(type='submit', value='ADD MULTIPLE INGREDIENTS', class='form-group')
+			input.btn.btn-primary(type='submit', value='ADD MULTIPLE INGREDIENTS', class='form-group', id='multiple-showall-ing')

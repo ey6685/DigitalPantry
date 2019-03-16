@@ -35,7 +35,7 @@ block content
                         option(value='2') Sort Z-A
         .form-group.col-md-2
             form(method='GET', action='/recipes/add')
-                input.btn.btn-primary(type='submit', value='Add Recipe', class='form-group')
+                input.btn.btn-primary(type='submit', value='Add Recipe', class='form-group', id='submit-showrec')
     br
     .form-row
         //-for each recipe in data
@@ -51,7 +51,7 @@ block content
                         for step in recipe_steps[i]
                             p(class='card-text')= step
                     div(class='card-foot', padding='.75rem')
-                        button.btn_card.btn.btn-primary(class='delete-recipe', data-id= recipe.recipe_id, type='button') Delete recipe
+                        button.btn_card.btn.btn-primary(class='delete-recipe', data-id= recipe.recipe_id, type='button', id='delete-showrec') Delete recipe
 
     script.
         //This will trigger once user stars to type text into a search bar

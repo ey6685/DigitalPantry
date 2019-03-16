@@ -27,7 +27,7 @@ block content
 					.container-fluid
 						#recipe-content
 				.modal-footer
-					button.btn.btn-primary(type='button', data-dismiss='modal', class='form-group') Close
+					button.btn.btn-primary(type='button', data-dismiss='modal', id='close-community') Close
 	.form-row
 		.form-group.col-md-2
 			input.form-control.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
@@ -38,7 +38,7 @@ block content
 					option(value='1') Sort A-Z
 					option(value='2') Sort Z-A
 		.form-group.col-md-2
-			input.btn.btn-primary(data-toggle='modal', type='button', value='Share Your Recipe', data-target='#shareForm', class='form-group')
+			input.btn.btn-primary(data-toggle='modal', type='button', value='Share Your Recipe', data-target='#shareForm', id='share-community')
 	br
 	.form-row
 		//-for each recipe in data

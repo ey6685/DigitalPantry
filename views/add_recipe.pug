@@ -36,7 +36,7 @@ block content
 						option(value='tablespoon') Tablespoon
 						option(value='teaspoon') Teaspoon
 			#recipe-container
-			button.btn.btn-secondary(type='button' onclick='addIngredient()', class='form-group') Add Ingredient
+			button.btn.btn-secondary(type='button' onclick='addIngredient()', id='add-ingredient-recipe') Add Ingredient
 			.form-row
 				.col-md-7
 					br
@@ -55,7 +55,7 @@ block content
 						img#output
 					.form-group
 						input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='form-group')
-			input.btn.btn-primary(type='submit', value='Submit', class='form-group', class='form-group')
+			input.btn.btn-primary(type='submit', value='Submit', class='form-group', id='submit-recipe')
 
 
 

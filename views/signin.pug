@@ -24,13 +24,13 @@ block content
 						form(method='POST', action='/users/login', class= 'form')
 							#form-group
 								label.text-white Email:
-								input.form-control(name='username', type='text', class='form-group')
+								input.form-control(name='username', type='text', class='form-group', id='username-signin')
 							br
 							#form-group
 								label.text-white Password:
-								input.form-control(name='password', type='password', class='form-group')
+								input.form-control(name='password', type='password', class='form-group', id='password-signin')
 								br
-								input.btn.btn-primary(type='submit', value='Submit', class='form-group')
+								input.btn.btn-primary(type='submit', value='Submit', class='form-group', id='submit-signin')
 								a(href='/users/register') Don't have an account?
 				h4.text-dark .
 			h4.text-secondary .
