@@ -201,8 +201,10 @@ router.get('/dashboard',async function(req, res){
     // }  
 // })
 
-router.get('/cook/:id', checkAuthentication, async function(req, res) {
+// router.get('/cook/:id', checkAuthentication, async function(req, res) {
+  router.get('/cook/:id', async function(req, res) {
   const recipe = req.params.id;
+  console.log("\n==================\ncook it router to with " + recipe + " id\n========================\n");
   ////////////////////////////////////
   // how do we get panty_id and scale?//
   // the function will work but wont //
@@ -211,7 +213,7 @@ router.get('/cook/:id', checkAuthentication, async function(req, res) {
   //////////////////////////////////
   /////////<<TO DO>>////////////////
   ///////////////////////////////////
-  var info = await cook_it.cook_it2(recipe);
+  var info = await cook_it.cook_it2(recipe,1,1);
   console.log('REFRESH!');
   res.redirect(req.get('referer'));
 });

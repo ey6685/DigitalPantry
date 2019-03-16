@@ -44,20 +44,21 @@ const db = mysql.createConnection ({
 async function cook_it2(recipe_id, pantry_id, people_to_fed)
 {
     try{
+        console.log("/n=====================\nstarted cook it.\n=======================\n");
         //check data
         var scale=0.0;
         if(recipe_id == null)
         {
             throw "no recipe id";
         }
-        else if(typeof recipe_id != 'number')
-        {
-            throw 'recipe_id not a number'
-        }
+        // else if(typeof recipe_id != 'number')
+        // {
+        //     throw 'recipe_id not a number'
+        // }
         
         if(pantry_id == null)
         {
-            throw "no pantry_id";
+            pantry_id = 1;
         }
         else if(typeof pantry_id != 'number')
         {
