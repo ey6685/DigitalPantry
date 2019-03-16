@@ -102,8 +102,8 @@ router.get('/expiredAdmin', function(req, res) {
 });
 
 //Render page with data from database
-//GET request to localhost:3000/ingredients/standard
-router.get('/standard', function(req, res) {
+//GET request to localhost:3000/ingredients/cards
+router.get('/cards', function(req, res) {
   db.query('SELECT * FROM ingredients WHERE ingredient_expiration_date IS NOT null', function(
     err,
     results
@@ -114,7 +114,7 @@ router.get('/standard', function(req, res) {
       ).format('LL');
     }
     if (err) throw err;
-    res.render('showall_ingredients_standard', {
+    res.render('showall_ingredients_cards', {
       title: 'Your Ingredients',
       results: results
     });

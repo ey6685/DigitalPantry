@@ -94,7 +94,7 @@ CREATE TABLE `ingredients` (
 
 LOCK TABLES `ingredients` WRITE;
 /*!40000 ALTER TABLE `ingredients` DISABLE KEYS */;
-INSERT INTO `ingredients` VALUES (1,'Chicken',1,'lb','2019-02-07',NULL,NULL),(2,'Black beans',1,'oz','2019-02-08',NULL,NULL),(3,'Salsa',16,'oz','2019-02-10',NULL,NULL),(4,'Corn',1,'oz','2019-02-10',NULL,NULL),(5,'Tortilla Chips',1,'oz','2019-02-10',NULL,NULL),(6,'Condensed Chicken Soup',1,'oz','2019-02-10',NULL,NULL),(7,'Mixed vegetables',1,'oz','2019-02-10',NULL,NULL),(8,'Water',99,'oz',NULL,NULL,NULL),(18,'test',1,'tsp.','3000-12-12',NULL,NULL);
+INSERT INTO `ingredients` VALUES (1,'Chicken',1,'lb','2019-02-07','/images/chicken.jpg',NULL),(2,'Black beans',1,'oz','2019-02-08','/images/black_beans.jpg',NULL),(3,'Salsa',16,'oz','2019-02-10','/images/salsa.jpg',NULL),(4,'Corn',1,'oz','2019-02-10','/images/corn.jpg',NULL),(5,'Tortilla Chips',1,'oz','2019-02-10','/images/tortilla_chips.jpg',NULL),(6,'Condensed Chicken Soup',1,'oz','2019-02-10','/images/condensed_chicken.jpg',NULL),(7,'Mixed vegetables',1,'oz','2019-02-10','/images/mixed_veggies.jpg',NULL),(8,'Water',99,'oz',NULL,'/images/water.jpg',NULL),(18,'test',1,'tsp.','3000-12-12','/images/default.jpg',NULL);
 /*!40000 ALTER TABLE `ingredients` ENABLE KEYS */;
 UNLOCK TABLES;
 
