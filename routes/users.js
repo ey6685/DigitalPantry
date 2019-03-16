@@ -115,6 +115,7 @@ router.get('/adminPanel', async function showAdminPanelPage(req, res) {
 // Get request to localhost:3000/users/login
 router.get('/dashboard',async function(req, res){
   console.log("PULLING UP DASHBOARD")
+  console.log(req.session);
   // router.get('/dashboard',async function(req, res){
     //Jon//pulls algorithm results from directAlgorithm into recipe_results
     //Jon//then parses recipe id into var recipe_id
@@ -259,6 +260,7 @@ router.post('/register', function(req, res) {
     console.log(newUser)
     console.log("USER OBJECT CREATED")
 
+    console.log("new users: \n" + JSON.stringify(newUser));
     // Call create function from DB_models/Users.js
     console.log("CALLING CREATE USER")
     User.createUser(newUser, function(result) {
@@ -294,7 +296,7 @@ router.post('/saveCommunityRecipe', async function(req,res){
   await db.query('SELECT * FROM users WHERE user_id=' + current_user_id, function(err, results) {
     if (err) throw err;
     // Asssign the pantry that the user belons to
-    users_pantry_id = results[0]['user_pantry_id'];
+    users_pantry_id = results[0]['pantry_id'];
     // Get single recipe information from community recipe database
     query =
       'SELECT c_recipe_name,c_recipe_serving_size,c_recipe_directions,c_recipe_image_path FROM community_recipes WHERE c_recipe_id=' +
@@ -352,7 +354,7 @@ router.post('/add', function(req, res) {
     pass: user_password,
     user_type: user_type,
     //TODO figure out how to assign pantry IDs
-    user_pantry_id: 1
+    pantry_id: 1
   });
 
   // Call create function from DB_models/Users.js
