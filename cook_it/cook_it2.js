@@ -47,6 +47,7 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
         console.log("/n=====================\nstarted cook it.\n=======================\n");
         //check data
         var scale=0.0;
+        console.log("data recived:\nrecipe id: " + recipe_id +"\npantry_id: " + pantry_id +"\npeople to fed: " + people_to_fed +'\n');
         if(recipe_id == null)
         {
             throw "no recipe id";
@@ -65,7 +66,7 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
             throw "pantry_id not a number";
         }
 
-        if(people_to_fed == null || typeof people_to_fed != 'number')
+        if(people_to_fed == null)
         {
             scale=1;
         }
@@ -74,17 +75,20 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
 
             //calc the scale to determin how much of the ingredients
             var recipe_scale = await recipe_t.findOne({
-                attributes: ['recipe_people_it_feeds'],
+                attributes: ['num_people_it_feeds'],
                 where:{
                     recipe_id : recipe_id
                 }
             });
-            console.log("recipe_scale: " + JSON.stringify(recipe_scale));
-            scale = people_to_fed / recipe_scale.recipe_people_it_feeds;
+            
+            scale = parseInt(people_to_fed / recipe_scale.recipe_people_it_feeds);
             if(people_to_fed < recipe_scale.recipe_people_it_feeds)
-                scale = 1;
+                {scale = 1;}
             else if(people_to_fed % recipe_scale.recipe_people_it_feeds >0)
-                scale++;
+                {scale++;}
+            if(scale == NaN)
+                scale = 1;
+            console.log("recipe_scale: " + JSON.stringify(recipe_scale));
         }
         console.log("scale: " + scale + '\n');
         //get the ingredients we need to cook
@@ -151,7 +155,7 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
                     else
                     {
                         amount_need -= current_ingredient[o].ingredient_amount;
-                        query_str = query_str+ "UPDATE ingredients_in_pantry SET ingredient_amount = 0 ingredient_expiration_date = null  WHERE ingredient_id = " + current_ingredient[o].ingredient_id + " AND ingredient_expiration_date = '" + current_ingredient[o].ingredient_expiration_date + "'; ";
+                        query_str = query_str+ "UPDATE ingredients_in_pantry SET ingredient_amount = 0, ingredient_expiration_date = null  WHERE ingredient_id = " + current_ingredient[o].ingredient_id + " AND ingredient_expiration_date = '" + current_ingredient[o].ingredient_expiration_date + "'; ";
                     }
 
                 }
