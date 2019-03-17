@@ -1,41 +1,41 @@
 // CREATED BY OSKARS DAUKSTS
 // THIS FILE HAS ALL THE JQUERY AND AJAX CALLS
 
-//DELETE ingredient request
-//On document ready start
-$(document).ready(function(){
-    //Once DELETE button is clicked on showall_ingredients.pug trigger
-    $('.delete-ingredient').on('click', function(e){
-        //get button object clicked
-        $target = $(e.target);
-        //get data-id from the button
-        const id = ($target.attr('data-id'));
-        const ex = ($target.attr('data-ex'));
-        const unit = ($target.attr('data-unit'));
-        const qty = ($target.attr('data-qty'));
+// DELETE ingredient request
+// On document ready start
+$(document).ready(function () {
+  // Once DELETE button is clicked on showall_ingredients.pug trigger
+  $('.delete-ingredient').on('click', function (e) {
+    // get button object clicked
+    $target = $(e.target)
+    // get data-id from the button
+    const id = ($target.attr('data-id'))
+    const ex = ($target.attr('data-ex'))
+    const unit = ($target.attr('data-unit'))
+    const qty = ($target.attr('data-qty'))
 
-        console.log(id + "|" + ex + '|' + unit +'|' +qty);
-        //Start AJAX
-        $.ajax({
-            type:'DELETE',
-            //This route is defined under ingredients.js
-            url:'/ingredients/remove/',
-            data:{
-                id  : id,
-                ex  : ex,
-                unit: unit,
-                qty : qty
-            },
-            success:function(response){
-                //route user back to results
-                window.location.href = '/ingredients/showall';
-            },
-            error:function(err){
-                console.log("Could not delete: "+id);
-            }
-        })
-    });
-});
+    console.log(id + '|' + ex + '|' + unit + '|' + qty)
+    // Start AJAX
+    $.ajax({
+      type: 'DELETE',
+      // This route is defined under ingredients.js
+      url: '/ingredients/remove/',
+      data: {
+        id: id,
+        ex: ex,
+        unit: unit,
+        qty: qty
+      },
+      success: function (response) {
+        // route user back to results
+        window.location.href = '/ingredients/showall'
+      },
+      error: function (err) {
+        console.log('Could not delete: ' + id)
+      }
+    })
+  })
+})
 
 // DELETE recipe request
 // On document ready start
@@ -358,6 +358,20 @@ $('#resetForm').on('show.bs.modal', function (event) {
 
 $('#OpenImgUpload').click(function () {
   $('#imgupload').trigger('click')
+})
+
+// Triggered when admin clicks save button on the admin panel for the new name of the pantry
+$('#save-pantryName-btn').click(function savePantryName () {
+  $newName = $('#name').text()
+
+  // Send request to update pantry name in the database
+  $.ajax({
+    type: 'POST',
+    url: '/pantry/changeName',
+    data: { pantryName: $newName },
+    success: function () {},
+    error: function (err) {console.log(err)}
+  })
 })
 
 // Once user clicks on edit link for his password run this function

@@ -31,6 +31,9 @@ const Users = db.define(
     user_email: {
       type: Sequelize.STRING
     },
+    user_type: {
+      type: Sequelize.STRING
+    },
     pantry_id: {
       type: Sequelize.INTEGER
     }
@@ -48,12 +51,9 @@ const User = (module.exports = Users)
 module.exports.createUser = function create(newUser, callback) {
   // Generate salt
   bcrypt.genSalt(10, function generateSalt(err, salt) {
-    console.log('GENERATING SALT')
     // Hash password with the generated salt
     bcrypt.hash(newUser.user_password, salt, async function makeHash(error, hash) {
-      console.log('GENERATING HASH')
       newUser.user_password = hash
-      newUser.username = 'admin'
       await newUser.save()
       callback(hash)
     })

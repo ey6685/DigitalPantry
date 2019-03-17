@@ -98,9 +98,10 @@ router.get('/register', function showRegistrationPage(req, res) {
 router.get('/adminPanel', async function showAdminPanelPage(req, res) {
   const currentUserId = req.session.passport['user']
   // Find which pantry user is from
-  const pantryId = `(SELECT (pantry_id) FROM users WHERE user_id=${currentUserId};)`
+  const pantryId = `(SELECT (pantry_id) FROM users WHERE user_id=${currentUserId})`
   // Find all users in that pantry and not the current user
   const query = `SELECT * FROM users WHERE pantry_id=${pantryId} AND user_id!=${currentUserId};`
+  console.log(query)
   db.query(query, function sendQuery(err, results) {
     if (err) throw err
     res.render('admin_panel', {
@@ -252,6 +253,7 @@ router.post('/register', function(req, res) {
     // Instantiate new user model defined in DB_models/Users.js
     console.log("CREATING USER OBJECT")
     var newUser = new User({
+      username: 'admin',
       user_email: email,
       user_password: password,
       pantry_id: 1
@@ -333,90 +335,89 @@ router.post('/saveCommunityRecipe', async function(req,res){
 });
 
 // Add new user from admin panel
-router.post('/add', function(req, res) {
-  var user_name = req.body.userName;
-  var user_type = req.body.userType;
-  switch (user_type) {
+router.post('/add', function addNewUser(req, res) {
+  const userName = req.body.userName
+  let userType = req.body.userType
+  switch (userType) {
     case 'volunteer':
-      user_type = 'V'
-      break;
+      userType = 'V'
+      break
     case 'administrator':
-      user_type = 'A'
-      break;
+      userType = 'A'
+      break
+    default:
+      userType = 'N/A'
   }
-  var user_password = req.body.password;
+  const userPassword = req.body.password
 
   // Instantiate new user model defined in DB_models/Users.js
-  var newUser = new User({
-    email: user_name,
-    pass: user_password,
-    user_type: user_type,
-    //TODO figure out how to assign pantry IDs
-    user_pantry_id: 1
-  });
+  const newUser = new User({
+    user_email: userName,
+    username: userName,
+    user_password: userPassword,
+    user_type: userType,
+    // TODO figure out how to assign pantry IDs
+    pantry_id: 1
+  })
 
   // Call create function from DB_models/Users.js
-  User.createUser(newUser, function() {
-    req.flash('success', 'User added!');
-    console.log('SHOWING PAGE');
-    res.redirect('/users/adminPanel');
-  });
-});
+  User.createUser(newUser, function create() {
+    req.flash('success', 'User added!')
+    res.redirect('/users/adminPanel')
+  })
+})
 
 // Delete user from admin panel
-router.delete('/delete/:id', async function(req, res) {
-  var query = 'DELETE FROM users WHERE user_id=' + req.params.id + ';';
-  await db.query(query);
-  req.flash('success', 'User deleted!');
-  res.send('success');
-});
+router.delete('/delete/:id', async function deleteUser(req, res) {
+  const userID = req.params.id
+  const query = `DELETE FROM users WHERE user_id=${userID};`
+  await db.query(query)
+  req.flash('success', 'User deleted!')
+  res.send('success')
+})
 
 // Change user privilege from admin panel
-router.post('/changePrivilege/:id', function(req, res) {
-  var user_type = req.body.userType;
+router.post('/changePrivilege/:id', function changePrivillege(req, res) {
+  let userType = req.body.userType
   // Change Volunteer or Administrator to N/NP for database insert
-  switch (user_type) {
+  switch (userType) {
     case 'volunteer':
-      user_type = 'NP';
+    userType = 'V';
       break;
     case 'administrator':
-      user_type = 'P';
+    userType = 'A';
       break;
   }
-
-// Get user id
-  var user_id = req.params.id;
+  // Get user id
+  const userId = req.params.id
   // create database query
-  var query = "UPDATE users SET user_type='" + user_type + "' WHERE user_id=" + user_id + ';';
-  console.log(query);
-  db.query(query, function(err, results) {
-    if (err) throw err;
-    else {
-      // Show message to user
-      req.flash('success', 'Privilege change successful!');
-      res.redirect('/users/adminPanel');
-    }
-  });
-});
+  const query = `UPDATE users SET user_type='${userType}' WHERE user_id=${userId};`
+  db.query(query, function showResults(err) {
+    if (err) throw err
+    // Show message to user
+    req.flash('success', 'Privilege change successful!')
+    res.redirect('/users/adminPanel')
+  })
+})
 
 // Reset users password and set a new password
-router.post('/resetPassword/:id', async function(req, res) {
-  var user_id = req.params.id;
-  var user_password = req.body.password;
+router.post('/resetPassword/:id', async function resetPassword(req, res) {
+  const userId = req.params.id
+  const userPassword = req.body.password
 
   // generate salt
-  salt = bcrypt.genSaltSync(10);
+  const salt = bcrypt.genSaltSync(10)
   // generate hash using the passed in password
-  var hash = bcrypt.hashSync(user_password, salt);
+  const hash = bcrypt.hashSync(userPassword, salt)
 
   // update password in database
-  query = "UPDATE users SET pass='" + hash + "' WHERE user_id=" + user_id + ';';
-  db.query(query);
+  const query = `UPDATE users SET user_password='${hash}' WHERE user_id=${userId};`
+  db.query(query)
 
   // Show message to user
-  req.flash('success', 'Password reset successful!');
-  res.redirect('/users/adminPanel');
-});
+  req.flash('success', 'Password reset successful!')
+  res.redirect('/users/adminPanel')
+})
 
 router.get('/settings', function showSettings(req, res) {
   const currentUserId = req.session.passport['user']

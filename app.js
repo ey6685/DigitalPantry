@@ -115,6 +115,9 @@ app.get('/test', function (req, res) {
 const users = require('./routes/users')
 app.use('/users', users)
 
+const pantry = require('./routes/pantry')
+app.use('/pantry', pantry)
+
 // anything that has to do with recipe data route it through /recipe
 const recipes = require('./routes/recipes')
 app.use('/recipes', recipes)
