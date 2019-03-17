@@ -54,7 +54,6 @@ router.get('/expiredAdmin', function(req, res) {
   );
 });
 
-<<<<<<< HEAD
 //POST request to localhost:3000/ingredients/add
 //This will add a new ingredient to available ingredients and update database
 router.post('/add', async function(req,res){
@@ -103,7 +102,6 @@ router.post('/add', async function(req,res){
     }
     res.redirect('/ingredients/showall');
 })
-=======
 //Render page with data from database
 //GET request to localhost:3000/ingredients/cards
 router.get('/cards', function(req, res) {
@@ -123,7 +121,6 @@ router.get('/cards', function(req, res) {
     });
   });
 });
->>>>>>> development
 
 //remove ingredient by id
 router.delete('/remove/', async function(req,res){
