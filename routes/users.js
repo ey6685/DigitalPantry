@@ -445,7 +445,7 @@ router.post('/changeUsername', function changeUsername(req, res) {
   // get passed in username
   const newUsername = req.body.newUsername
   // create sql query
-  const query = `UPDATE users SET email='${newUsername}' WHERE user_id=${currentUserId}`
+  const query = `UPDATE users SET user_email='${newUsername}' WHERE user_id=${currentUserId}`
   db.query(query, function updateUser(err) {
     if (err) throw err
     req.flash('success', 'Username Changed!')
@@ -484,7 +484,7 @@ router.post('/changePassword', function changePassword(req, res) {
     const salt = bcrypt.genSaltSync(10)
     // generate hash using the passed in password
     const hash = bcrypt.hashSync(newPassword, salt)
-    const query = `UPDATE users SET pass='${hash}' WHERE user_id=${currentUserId};`
+    const query = `UPDATE users SET user_password='${hash}' WHERE user_id=${currentUserId};`
     db.query(query, function updatePassword(err) {
       if (err) throw err
       req.flash('success', 'Password Changed!')

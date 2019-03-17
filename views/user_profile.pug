@@ -14,7 +14,7 @@ block content
     hr
     br
     != messages('message', locals)
-    p(id='userEmail') #{data.email} 
+    p(id='userEmail') #{data.user_email} 
       a(href='', id='editEmailButton') change
   br
   form(method= 'POST', action= '/users/changePassword', class= 'form')
