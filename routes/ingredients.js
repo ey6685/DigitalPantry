@@ -14,7 +14,7 @@ router.get('/showall', function(req, res){
     ////////////////////////////////
     //need to add pantry id feching//
     /////////////////////////////////
-    db.query('select ingredients.ingredient_id, ingredients.ingredient_name, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date from ingredients_in_pantry inner join ingredients on ingredients_in_pantry.ingredient_id = ingredients.ingredient_id;', function(err, results) {
+    db.query('select ingredients.ingredient_id, ingredients.ingredient_name, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date from ingredients_in_pantry inner join ingredients on ingredients_in_pantry.ingredient_id = ingredients.ingredient_id and ingredients_in_pantry.ingredient_expiration_date is not null;', function(err, results) {
         for (key in results){
             results[key]['ingredient_expiration_date'] = moment(results[key]['ingredient_expiration_date']).format('LL');
         }

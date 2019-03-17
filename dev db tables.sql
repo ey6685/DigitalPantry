@@ -29,7 +29,7 @@ CREATE TABLE `ingredients` (
   `ingredient_image_path` text,
   `ingredient_num_times_cooked` int(11) DEFAULT NULL,
   PRIMARY KEY (`ingredient_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `ingredients` (
 
 LOCK TABLES `ingredients` WRITE;
 /*!40000 ALTER TABLE `ingredients` DISABLE KEYS */;
-INSERT INTO `ingredients` VALUES (1,'Chicken',3,'/public/images/chicken.jpg',NULL),(2,'Canned Black Beans',1,'/public/images/black_beans.jpg',NULL),(3,'Carrot',3,'/public/images/placeholder.jpg',NULL),(4,'Potato chips',1,'/public/images/placeholder.jpg',NULL),(5,'Ground Pepper',0,'/public/images/placeholder.jpg',NULL),(6,'Chicken Broth',3,'/public/images/placeholder.jpg',NULL);
+INSERT INTO `ingredients` VALUES (1,'Chicken',3,'/public/images/chicken.jpg',NULL),(2,'Canned Black Beans',1,'/public/images/black_beans.jpg',NULL),(3,'Carrot',3,'/public/images/placeholder.jpg',NULL),(4,'Potato chips',1,'/public/images/placeholder.jpg',NULL),(5,'Ground Pepper',0,'/public/images/placeholder.jpg',NULL),(6,'Chicken Broth',3,'/public/images/placeholder.jpg',NULL),(7,'tuna',1,NULL,NULL),(8,'2nd add',1,NULL,NULL);
 /*!40000 ALTER TABLE `ingredients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,7 +100,7 @@ CREATE TABLE `ingredients_in_pantry` (
 
 LOCK TABLES `ingredients_in_pantry` WRITE;
 /*!40000 ALTER TABLE `ingredients_in_pantry` DISABLE KEYS */;
-INSERT INTO `ingredients_in_pantry` VALUES (1,1,10,'lb','2019-03-30'),(2,1,10,'oz','2019-03-30'),(3,1,5,'oz','2019-03-30'),(4,1,30,'oz','2019-03-30'),(5,1,4000,'lb','2019-03-30'),(6,1,360,'ml','2019-03-30');
+INSERT INTO `ingredients_in_pantry` VALUES (1,1,10,'lb','2019-03-30'),(3,1,5,'oz','2019-03-30'),(4,1,30,'oz','2019-03-30'),(5,1,4000,'lb','2019-03-30'),(6,1,360,'ml','2019-03-30'),(7,1,12,'lb','3000-10-10'),(8,1,2,'tbsp.','2222-02-02');
 /*!40000 ALTER TABLE `ingredients_in_pantry` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -147,7 +147,7 @@ CREATE TABLE `recipes` (
   PRIMARY KEY (`recipe_id`),
   KEY `pantry_id` (`pantry_id`),
   CONSTRAINT `recipes_ibfk_1` FOREIGN KEY (`pantry_id`) REFERENCES `pantry` (`pantry_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -156,7 +156,7 @@ CREATE TABLE `recipes` (
 
 LOCK TABLES `recipes` WRITE;
 /*!40000 ALTER TABLE `recipes` DISABLE KEYS */;
-INSERT INTO `recipes` VALUES (1,'Chicken Noodle Soup','/images/chicken_noodle_soup.jpg','put the stuff in a pot#boil for 12 days#serve cold',NULL,1,1,0),(2,'Chip n Beans','/images/bean_salsa.jpg','put the stuff in a pot#boil for 12 days#serve cold',NULL,1,1,0);
+INSERT INTO `recipes` VALUES (1,'Chicken Noodle Soup','/images/chicken_noodle_soup.jpg','put ingredients into pot#boil and stir till cooked#serve warm',NULL,1,1,0),(2,'Chip n Beans','/images/bean_salsa.jpg','boil beans in pot#serve warm with chips',NULL,1,1,1);
 /*!40000 ALTER TABLE `recipes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -168,7 +168,7 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `users` (
-  `username` varchar(32) NOT NULL,
+  `username` varchar(32) DEFAULT NULL,
   `user_password` text,
   `user_email` tinytext,
   `pantry_id` int(11) DEFAULT NULL,
@@ -177,7 +177,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`user_id`),
   KEY `pantry_id` (`pantry_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`pantry_id`) REFERENCES `pantry` (`pantry_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -186,6 +186,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (NULL,NULL,NULL,NULL,'A',1),(NULL,NULL,NULL,NULL,'A',2),(NULL,NULL,NULL,NULL,'A',3),('test','test','et8492@wayne.edu',1,'A',4),(NULL,NULL,NULL,NULL,'A',5),(NULL,NULL,NULL,NULL,'A',6),(NULL,NULL,NULL,NULL,'A',7),(NULL,NULL,NULL,NULL,'A',8),('admin','$2a$10$tuX182ufZmM8Wk7K9z5lNORnzle6IT7YviA4fCRkqDDVxneWqLg0i','et8492@wayne.edu',1,'A',9),('admin','$2a$10$3xFmRl/4Oj5/xDdc81fJ/OIjGtRehJ6fU6ag4dN.ka3CJ12KHgYky','test@wayne.edu',1,'A',10);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -198,4 +199,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-15 13:52:13
+-- Dump completed on 2019-03-15 20:14:41
