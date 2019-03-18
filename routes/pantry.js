@@ -20,4 +20,9 @@ router.post('/changeName', function changePantryName (req, res) {
   })
 })
 
+router.post('/setExpirationTimeFrame', function setExpirationTimeFrame (req, res) {
+  const expirationTimeFrameInDays = req.body.expirationTimeFrame
+// Do query stuff here
+})
+
 module.exports = router

@@ -3,9 +3,9 @@
 
 // DELETE ingredient request
 // On document ready start
-$(document).ready(function() {
+$(document).ready(function () {
   // Once DELETE button is clicked on showall_ingredients.pug trigger
-  $('.delete-ingredient').on('click', function(e) {
+  $('.delete-ingredient').on('click', function (e) {
     // get button object clicked
     $target = $(e.target)
     // get data-id from the button
@@ -26,11 +26,11 @@ $(document).ready(function() {
         unit: unit,
         qty: qty
       },
-      success: function(response) {
+      success: function (response) {
         // route user back to results
         location.reload()
       },
-      error: function(err) {
+      error: function (err) {
         console.log('Could not delete: ' + id)
       }
     })
@@ -39,9 +39,9 @@ $(document).ready(function() {
 
 // DELETE recipe request
 // On document ready start
-$(document).ready(function() {
+$(document).ready(function () {
   // Once DELETE button is clicked on showall_ingredients.pug trigger
-  $('.delete-recipe').on('click', function(e) {
+  $('.delete-recipe').on('click', function (e) {
     // get button object clicked
     $target = $(e.target)
     // get data-id from the button
@@ -52,12 +52,12 @@ $(document).ready(function() {
       type: 'DELETE',
       // This route is defined under ingredients.js
       url: '/recipes/remove/' + id,
-      success: function(response) {
+      success: function (response) {
         // route user back to results
         // window.location.href = '/recipes/showall'
         location.reload()
       },
-      error: function(err) {
+      error: function (err) {
         console.log('Could not delete: ' + id)
       }
     })
@@ -66,9 +66,9 @@ $(document).ready(function() {
 
 // DELETE user
 // Triggered by a delete button on admin panel
-$(document).ready(function() {
+$(document).ready(function () {
   // Once DELETE button is clicked on showall_ingredients.pug trigger
-  $('.delete-user').click(function(e) {
+  $('.delete-user').click(function (e) {
     // get button object clicked
     $target = $(e.target)
     // get data-id from the button
@@ -79,11 +79,11 @@ $(document).ready(function() {
       type: 'DELETE',
       // This route is defined under ingredients.js
       url: '/users/delete/' + id,
-      success: function(response) {
+      success: function (response) {
         // route user back to results
         window.location.href = '/users/adminPanel'
       },
-      error: function(err) {
+      error: function (err) {
         console.log('Could not delete: ' + id)
       }
     })
@@ -91,7 +91,7 @@ $(document).ready(function() {
 })
 
 // Delete extra rows if any from add_reipe
-$(document).on('click', '.delete-row', function() {
+$(document).on('click', '.delete-row', function () {
   // delete closest row
   $(this)
     .closest('.form-row')
@@ -99,7 +99,7 @@ $(document).on('click', '.delete-row', function() {
 })
 
 // Delete ingredient inside the edit recipe overlay
-$(document).on('click', '.delete-current-ingredient', function() {
+$(document).on('click', '.delete-current-ingredient', function () {
   // Get id of the recipe that is being edited
   recipe_id_being_edited = $(this).attr('data-id')
   // Get ingredient name that is being removed
@@ -111,11 +111,11 @@ $(document).on('click', '.delete-current-ingredient', function() {
     // This route is defined under ingredients.js
     url: '/ingredients/remove/recipe_ingredient/' + ingredient_name,
     // If ingredient has been removed remove the ingredient row
-    success: function() {
+    success: function () {
       row.remove()
-      // Remove whole row
+    // Remove whole row
     },
-    error: function(err) {
+    error: function (err) {
       console.log(err)
       console.log('Could not delete: ' + ingredient_name)
     }
@@ -123,7 +123,7 @@ $(document).on('click', '.delete-current-ingredient', function() {
 })
 
 // This will trigger when user tries to edit a recipe
-$('#editRecipe').on('show.bs.modal', function(event) {
+$('#editRecipe').on('show.bs.modal', function (event) {
   // Button that triggered the display card
   var button = $(event.relatedTarget)
   // Get the recipe row based on the button clicked and its closest tr element
@@ -236,8 +236,8 @@ $('#editRecipe').on('show.bs.modal', function(event) {
 // Cook it button logic
 // Uses ingredients based on the recipe chosen
 // Updates dashboard
-$(document).ready(function() {
-  $('#card-one').on('click', function(e) {
+$(document).ready(function () {
+  $('#card-one').on('click', function (e) {
     // get button object clicked
     $target = $(e.target)
     // get data-id value from the button, which is recipe ID
@@ -247,11 +247,11 @@ $(document).ready(function() {
     $.ajax({
       type: 'GET',
       url: '/users/cook/' + id,
-      success: function(response) {
+      success: function (response) {
         // Reload the page to update cards
         location.reload()
       },
-      error: function(err) {
+      error: function (err) {
         console.log('Could not delete: ' + id)
       }
     })
@@ -259,7 +259,7 @@ $(document).ready(function() {
 })
 
 // Save community recipe
-$(document).on('click', '.saveRecipe', function() {
+$(document).on('click', '.saveRecipe', function () {
   // Get id of the community recipe clicked
   $card_id = $(this)
     .closest('.card')
@@ -270,11 +270,11 @@ $(document).on('click', '.saveRecipe', function() {
     type: 'POST',
     url: '/users/saveCommunityRecipe',
     data: { community_recipe_id: $card_id },
-    success: function(response) {
+    success: function (response) {
       // Reload the page to update cards
       location.reload()
     },
-    error: function(err) {
+    error: function (err) {
       console.log('Could not copy recipe')
     }
   })
@@ -282,16 +282,16 @@ $(document).on('click', '.saveRecipe', function() {
 
 // When user clicks share recipes while on the community page
 // Populate the overlay form with the recipes they already have
-$('#shareForm').on('show.bs.modal', function(event) {
+$('#shareForm').on('show.bs.modal', function (event) {
   // set overlay form to empty
   $('#recipe-content').html('')
   $.ajax({
     type: 'GET',
     url: '/recipes/getPantryRecipes/',
-    success: function(response) {
+    success: function (response) {
       // For each recipe in list
       // Add logic not to show recipes that are already shared
-      $.each(response, function(index, value) {
+      $.each(response, function (index, value) {
         console.log(response)
         recipe_format =
           '<div class="individual-recipe"><div class="media"><img style="width: 30%" class="mr-3" src="$1" alt="Generic placeholder image"><div class="media-body"><h5 class="mt-0">$2</h5>$3</div></div></div><br>'
@@ -310,7 +310,7 @@ $('#shareForm').on('show.bs.modal', function(event) {
         $('#recipe-content').append(recipe_format)
       })
     },
-    error: function(err) {
+    error: function (err) {
       console.log('Could not get recipes')
     }
   })
@@ -318,7 +318,7 @@ $('#shareForm').on('show.bs.modal', function(event) {
 
 // Share recipe
 // Once user selects which recipe to share run this
-$(document).on('click', '.individual-recipe', function() {
+$(document).on('click', '.individual-recipe', function () {
   // get recipe name that was clicked
   $recipe_name = $(this).find('h5')[0].innerText
 
@@ -327,17 +327,17 @@ $(document).on('click', '.individual-recipe', function() {
     type: 'POST',
     url: '/recipes/share',
     data: { recipe_name: $recipe_name },
-    success: function(response) {
+    success: function (response) {
       console.log('Recipe: ' + $recipe_name + ' was shared')
     },
-    error: function(err) {
+    error: function (err) {
       console.log('Could not share recipe to the community')
     }
   })
 })
 
 // Once admin clicks change privillege on admin panel this gets called
-$('#changePrivilege').on('show.bs.modal', function(event) {
+$('#changePrivilege').on('show.bs.modal', function (event) {
   $button = $(event.relatedTarget)
   user_id = $button.closest('tr').attr('data-id')
 
@@ -347,7 +347,7 @@ $('#changePrivilege').on('show.bs.modal', function(event) {
 })
 
 // Once admin click reset password on admin panel this gets called
-$('#resetForm').on('show.bs.modal', function(event) {
+$('#resetForm').on('show.bs.modal', function (event) {
   $button = $(event.relatedTarget)
   user_id = $button.closest('tr').attr('data-id')
 
@@ -356,12 +356,12 @@ $('#resetForm').on('show.bs.modal', function(event) {
     .attr('action', '/users/resetPassword/' + user_id)
 })
 
-$('#OpenImgUpload').click(function() {
+$('#OpenImgUpload').click(function () {
   $('#imgupload').trigger('click')
 })
 
 // Triggered when admin clicks save button on the admin panel for the new name of the pantry
-$('#save-pantryName-btn').click(function savePantryName() {
+$('#save-pantryName-btn').click(function savePantryName () {
   $newName = $('#name').text()
 
   // Send request to update pantry name in the database
@@ -369,15 +369,15 @@ $('#save-pantryName-btn').click(function savePantryName() {
     type: 'POST',
     url: '/pantry/changeName',
     data: { pantryName: $newName },
-    success: function() {},
-    error: function(err) {
+    success: function () {},
+    error: function (err) {
       console.log(err)
     }
   })
 })
 
 // Once user clicks on edit link for his password run this function
-$('#editEmailButton').click(function showEditField(e) {
+$('#editEmailButton').click(function showEditField (e) {
   // Stop link from refreshing the page
   e.preventDefault()
   $(this).hide()
@@ -396,7 +396,7 @@ $('#editEmailButton').click(function showEditField(e) {
 })
 
 // Once user clicks cancel password change hide cancel button and show edit button
-$(document).on('click', '#cancelPassEdit', function cancelPasswordEdit() {
+$(document).on('click', '#cancelPassEdit', function cancelPasswordEdit () {
   console.log('CLICK')
   // hide cancel button after its clicked
   $(this).hide()
@@ -406,4 +406,8 @@ $(document).on('click', '#cancelPassEdit', function cancelPasswordEdit() {
   $('#newUsername').hide()
   // hide save email button
   $('#saveEmailButton').hide()
+})
+
+$(document).ready(function () {
+  $('.slider').slider()
 })
