@@ -16,6 +16,7 @@ const found_recipes = require('../algorithm/find_recipes')
 const recipe_t = require('../DB_models/Recipes')
 const ing_table  = require('../DB_models/Ingredients')
 const ing_in_pan_table = require('../DB_models/ingredients_in_pantry')
+const logger = require('../functions/logger')
 
 // Get request to localhost:3000/users/login
 router.get('/login', function renderLoginPage(req, res) {
