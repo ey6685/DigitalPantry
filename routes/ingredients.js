@@ -104,15 +104,14 @@ router.get('/expiredAdmin', function(req, res) {
 //Render page with data from database
 //GET request to localhost:3000/ingredients/cards
 router.get('/cards', function(req, res) {
-  db.query('SELECT * FROM ingredients WHERE ingredient_expiration_date IS NOT null', function(
-    err,
-    results
-  ) {
-    for (key in results) {
-      results[key]['ingredient_expiration_date'] = moment(
-        results[key]['ingredient_expiration_date']
-      ).format('LL');
-    }
+  db.query(
+    'SELECT * FROM ingredients WHERE ingredient_expiration_date IS NOT null AND ingredient_expiration_date >= CURDATE() ',
+    function(err, results) {
+      for (key in results) {
+        results[key]['ingredient_expiration_date'] = moment(
+          results[key]['ingredient_expiration_date']
+        ).format('LL');
+      }
     if (err) throw err;
     res.render('showall_ingredients_cards', {
       title: 'Your Ingredients',
