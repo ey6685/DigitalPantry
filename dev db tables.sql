@@ -38,7 +38,7 @@ CREATE TABLE `ingredients` (
 
 LOCK TABLES `ingredients` WRITE;
 /*!40000 ALTER TABLE `ingredients` DISABLE KEYS */;
-INSERT INTO `ingredients` VALUES (1,'Chicken',3,'/public/images/chicken.jpg',NULL),(2,'Canned Black Beans',1,'/public/images/black_beans.jpg',NULL),(3,'Carrot',3,'/public/images/placeholder.jpg',NULL),(4,'Potato chips',1,'/public/images/placeholder.jpg',NULL),(5,'Ground Pepper',0,'/public/images/placeholder.jpg',NULL),(6,'Chicken Broth',3,'/public/images/placeholder.jpg',NULL),(7,'tuna',1,NULL,NULL),(8,'2nd add',1,NULL,NULL);
+INSERT INTO `ingredients` VALUES (1,'Chicken',3,'/images/chicken.jpg',NULL),(2,'Canned Black Beans',1,'/images/black_beans.jpg',NULL),(3,'Carrot',3,'/images/placeholder.jpg',NULL),(4,'Potato chips',1,'/images/placeholder.jpg',NULL),(5,'Ground Pepper',0,'/images/placeholder.jpg',NULL),(6,'Chicken Broth',3,'/images/placeholder.jpg',NULL),(7,'tuna',1,NULL,NULL),(8,'2nd add',1,NULL,NULL);
 /*!40000 ALTER TABLE `ingredients` ENABLE KEYS */;
 UNLOCK TABLES;
 

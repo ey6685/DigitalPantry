@@ -45,7 +45,7 @@ block content
             //for ingredient,i in data
             for item in results
                 //-get recipe image
-                - ingredient_image= '/images/placeholder.jpg'
+                - ingredient_image= item.ingredient_image_path
                 .form-group.col-md-3
                     div(id=item.ingredient_id, class='card', class='h-100')
                         img.image(class='card-img-top', src=ingredient_image, alt='image', class="h-50")
