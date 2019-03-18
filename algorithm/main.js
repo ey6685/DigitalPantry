@@ -75,11 +75,7 @@ async function main(window) {
     });
 
     console.log(JSON.stringify(returning_recipes));
-    var new_recipe={
-      recipe_id : returning_recipes[0].recipe_id,
-      recipe_name : returning_recipes[0].recipe_name,
-      recipe_weight : await wieght_finder.weight_total(returning_recipes[0].recipe_id)
-    };
+
 
     // console.log("this line jon\n" , JSON.stringify(new_recipe));
     return returning_recipes;
