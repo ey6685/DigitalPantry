@@ -3,56 +3,56 @@ extends user_view_template
 //- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
 
 block content
-    br
-    br
-    br
-    br
-    div(class='container-fluid', class='rounded', style='width: 80%')
-        h1 #{title}
-        br
-        table.table.table-dark(class='rounded')
-            //-caption Available Ingredients
-            thead
-                tr
-                    th(scope='col') #
-                    th(scope='col') Name
-                    th(scope='col') Total
-                    th(scope='col') Ingredient Measurement
-                    th(scope='col') Expiration Date
-                    th(scope='col') Action
-            tbody
-                tr
-                    form(method= 'POST', action= '/ingredients/add', class= 'form')
-                        .form-row
-                            .form-group.col-md-2
-                                input.form-control(name='ingredient_name', type='text', placeholder='Name = Tuna')
-                            .form-group.col-md-1
-                                input.form-control(name='ingredient_total', type='text', placeholder='Total = 2')
-                            .form-group.col-md-3
-                                .dropdown-inline
-                                select.form-control(name='ingredient_measurement', required)
-                                    option(value='') Container Measurement
-                                    option(value='tsp.') Teaspoon
-                                    option(value='tbsp.') Tablespoon
-                                    option(value='fl oz') Fluid Ounce
-                                    option(value='cup') Cup
-                                    option(value='cup') Cup
-                                    option(value='quart') Quart
-                                    option(value='ml') Millilitter
-                                    option(value='lb') Pound
-                                    option(value='oz') Dry Ounce
-                            .form-group.col-md-4
-                                input.form-control(name='ingredient_expiration_date', type='date')
-                            input.btn.btn-primary.col-md-2(type='submit', value='ADD', class='form-group')
-                for item in results
-                    tr
-                        th(scope='row') #
-                            td= item.ingredient_name
-                            td= item.ingredient_amount
-                            td= item.ingredient_unit_of_measurement
-                            td= item.ingredient_expiration_date
-                            td 
-                                //- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
-                                a.btn.btn-danger.delete-ingredient(href='#',data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount)  DELETE
-        form(method='GET', action='/ingredients/add')
-            //-input.btn.btn-primary(type='submit', value='ADD MULTIPLE INGREDIENTS')
+	br
+	br
+	br
+	br
+	div(class='container-fluid', class='rounded', style='width: 80%')
+		h1 #{title}
+		br
+		table.table.table-dark(class='rounded')
+			//-caption Available Ingredients
+			thead
+				tr
+					th(scope='col') #
+					th(scope='col') Name
+					th(scope='col') Total
+					th(scope='col') Ingredient Measurement
+					th(scope='col') Expiration Date
+					th(scope='col') Action
+			tbody
+				tr
+					form(method= 'POST', action= '/ingredients/add', class= 'form')
+						.form-row
+							.form-group.col-md-2
+								input.form-control(name='ingredient_name', type='text', placeholder='Name = Tuna')
+							.form-group.col-md-1
+								input.form-control(name='ingredient_total', type='text', placeholder='Total = 2')
+							.form-group.col-md-3
+								.dropdown-inline
+								select.form-control(name='ingredient_measurement', required)
+									option(value='') Container Measurement
+									option(value='tsp.') Teaspoon
+									option(value='tbsp.') Tablespoon
+									option(value='fl oz') Fluid Ounce
+									option(value='cup') Cup
+									option(value='cup') Cup
+									option(value='quart') Quart
+									option(value='ml') Millilitter
+									option(value='lb') Pound
+									option(value='oz') Dry Ounce
+							.form-group.col-md-4
+								input.form-control(name='ingredient_expiration_date', type='date')
+							input.btn.btn-primary.col-md-2(type='submit', value='ADD', class='form-group')
+				for item in results
+					tr
+						th(scope='row') #
+							td= item.ingredient_name
+							td= item.ingredient_amount
+							td= item.ingredient_unit_of_measurement
+							td= item.ingredient_expiration_date
+							td 
+								//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
+								a.btn.btn-danger.delete-ingredient(href='#',data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount)  DELETE
+		form(method='GET', action='/ingredients/add')
+			//-input.btn.btn-primary(type='submit', value='ADD MULTIPLE INGREDIENTS')

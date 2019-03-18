@@ -40,10 +40,10 @@ router.get('/add', function(req, res) {
 
 // Render page with data from database
 // GET request to localhost:3000/users/login
-router.get('/expiredAdmin', function(req, res) {
+router.get('/expiredAdmin', function expiredTable(req, res) {
   //renders showall_recipes with all the available ingredients
   db.query(
-    'SELECT * FROM ingredients WHERE ingredient_expiration_date IS NOT null AND ingredient_expiration_date < CURDATE() ',
+    'select ingredients.ingredient_id, ingredients.ingredient_name, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date from ingredients_in_pantry inner join ingredients on ingredients_in_pantry.ingredient_id = ingredients.ingredient_id and ingredients_in_pantry.ingredient_expiration_date is not null AND ingredient_expiration_date < CURDATE();',
     function(err, results) {
       for (key in results) {
         results[key]['ingredient_expiration_date'] = moment(
@@ -105,7 +105,8 @@ router.post('/add', async function(req, res) {
 //Render page with data from database
 //GET request to localhost:3000/ingredients/cards
 router.get('/cards', function showCards(req, res) {
-  const query = `SELECT * FROM ingredients_in_pantry WHERE ingredient_expiration_date IS NOT null`
+  const query =
+    'select ingredients.ingredient_id, ingredients.ingredient_name, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date from ingredients_in_pantry inner join ingredients on ingredients_in_pantry.ingredient_id = ingredients.ingredient_id and ingredients_in_pantry.ingredient_expiration_date is not null;'
   db.query(query, function getResults(err, results) {
     for (key in results) {
       results[key]['ingredient_expiration_date'] = moment(
@@ -121,41 +122,49 @@ router.get('/cards', function showCards(req, res) {
 })
 
 //remove ingredient by id
-router.delete('/remove/', async function(req,res){
-    const ingredient = req.body.id;
-    var ex_date = req.body.ex;
-    const unit = req.body.unit;
-    const qty = req.body.qty;
-    ex_date =  await new Date(ex_date);
-    ex_date = await moment(ex_date).format("YYYY-MM-DD");
-    // ex_date = await moment(ex_date).format("L");
-    // ex_date = await ex_date.split('/');
-    // ex_date = ex_date[2] + '-' + ex_date[1] + '-' + ex_date[0];
-    const delete_query = "DELETE FROM ingredients_in_pantry WHERE ingredient_id ='"+ingredient+"' and ingredient_expiration_date= '" + ex_date +"' and ingredient_unit_of_measurement= '" + unit +"' and ingredient_amount = '" + qty +"';";
-    // db.query(delete_query, function(err, results) {
-    //     if (err) throw err
-    //     //Since AJAX under /js/main.js made a request we have to respond back
-    //     res.send("Success");
-    // });
-    
-    console.log("\ningredient id: " + ingredient + "\ndelete query: " + delete_query);
+router.delete('/remove/', async function(req, res) {
+  const ingredient = req.body.id
+  var ex_date = req.body.ex
+  const unit = req.body.unit
+  const qty = req.body.qty
+  ex_date = await new Date(ex_date)
+  ex_date = await moment(ex_date).format('YYYY-MM-DD')
+  // ex_date = await moment(ex_date).format("L");
+  // ex_date = await ex_date.split('/');
+  // ex_date = ex_date[2] + '-' + ex_date[1] + '-' + ex_date[0];
+  const delete_query =
+    "DELETE FROM ingredients_in_pantry WHERE ingredient_id ='" +
+    ingredient +
+    "' and ingredient_expiration_date= '" +
+    ex_date +
+    "' and ingredient_unit_of_measurement= '" +
+    unit +
+    "' and ingredient_amount = '" +
+    qty +
+    "';"
+  // db.query(delete_query, function(err, results) {
+  //     if (err) throw err
+  //     //Since AJAX under /js/main.js made a request we have to respond back
+  //     res.send("Success");
+  // });
 
-    // ing_in_stock.destroy({
-    //     where:{
-    //         ingredient_id: ingredient,
-    //         ingredient_expiration_date: ex_date,
-    //         ingredient_unit_of_measurement: unit,
-    //         ingredient_amount : qty
-    //     }
-    // })
-    // .then(results => {
-    //     console.log(JSON.stringify(results));
-    //     res.send("Success");
-    // })
-    db.query(delete_query,results=>{
-        console.log(results);
-        res.send("success");
-    })
+  console.log('\ningredient id: ' + ingredient + '\ndelete query: ' + delete_query)
+
+  // ing_in_stock.destroy({
+  //     where:{
+  //         ingredient_id: ingredient,
+  //         ingredient_expiration_date: ex_date,
+  //         ingredient_unit_of_measurement: unit,
+  //         ingredient_amount : qty
+  //     }
+  // })
+  // .then(results => {
+  //     console.log(JSON.stringify(results));
+  //     res.send("Success");
+  // })
+  db.query(delete_query, results => {
+    console.log(results)
+    res.send('success')
   })
 })
 
