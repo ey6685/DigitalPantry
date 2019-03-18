@@ -1,12 +1,12 @@
-/////////////////////////////////////////////
+// ///////////////////////////////////////////
 // this file is for setting up an object to //
 // interact with our pantry table in the db.//
-/////////////////////////////////////////////
+// ///////////////////////////////////////////
 
-//reqires
-const Sequelize =  require('sequelize');
-const recipes = require('./Recipes');
-const db = require('../databaseMySQL');
+// reqires
+const Sequelize = require('sequelize')
+const recipes = require('./Recipes')
+const db = require('../databaseMySQL')
 
 // db table
 /*
@@ -15,30 +15,27 @@ const db = require('../databaseMySQL');
 =================================================================================================================================================================
 */
 
-const Pantry = db.define("pantry", 
-    {
-        pantry_id:{
-        type: Sequelize.INTEGER,
-        
-        primarykey: true
-        },
-
-        pantry_name:{
-            type: Sequelize.STRING
-        },
+const Pantry = db.define(
+  'pantry',
+  {
+    pantry_id: {
+      type: Sequelize.INTEGER,
+      primarykey: true
     },
-
-
+    pantry_name: {
+      type: Sequelize.STRING
+    }
+  },
   {
     timestamps: false,
     freezeTableName: true
   }
-);
+)
+Pantry.removeAttribute('id')
+// relations
+// Pantry.hasMany(recipes, {foreignKey: "pantry_id", sourceKey: "pantry_id"})
 
-//relations
-// Pantry.hasMany(recipes, {foreignKey: "pantry_id", sourceKey: "pantry_id"});
-
-module.exports = Pantry;
+module.exports = Pantry
 
 // testing code////////////////////////////////////////
 
@@ -51,5 +48,5 @@ module.exports = Pantry;
 
 //     // recipes_cooked_month            : 10,
 //     // recipes_cooked_YTD              : 10
-// });
-/////////////////////////////////////////////////////
+// })
+// ///////////////////////////////////////////////////
