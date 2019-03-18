@@ -353,21 +353,26 @@ router.post('/add', function addNewUser(req, res) {
       userType = 'N/A'
   }
   const userPassword = req.body.password
-
-  // Instantiate new user model defined in DB_models/Users.js
-  const newUser = new User({
-    user_email: userName,
-    username: userName,
-    user_password: userPassword,
-    user_type: userType,
-    // TODO figure out how to assign pantry IDs
-    pantry_id: 1
-  })
-
-  // Call create function from DB_models/Users.js
-  User.createUser(newUser, function create() {
-    req.flash('success', 'User added!')
-    res.redirect('/users/adminPanel')
+  const currentUserId = req.session.passport['user']
+  // Find which pantry user is from
+  const query = `SELECT (pantry_id) FROM users WHERE user_id=${currentUserId};`
+  db.query(query, function getPantryID(err, results) {
+    if (err) throw err
+    const currentPantryID = results[0].pantry_id
+    // Instantiate new user model defined in DB_models/Users.js
+    const newUser = new User({
+      user_email: userName,
+      username: userName,
+      user_password: userPassword,
+      user_type: userType,
+      // TODO figure out how to assign pantry IDs
+      pantry_id: currentPantryID
+    })
+    // Call create function from DB_models/Users.js
+    User.createUser(newUser, function create() {
+      req.flash('success', 'User added!')
+      res.redirect('/users/adminPanel')
+    })
   })
 })
 
