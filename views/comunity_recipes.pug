@@ -44,7 +44,7 @@ block content
 		//-for each recipe in data
 		for recipe,i in data
 			//-get recipe image
-			- recipe_image= recipe.c_recipe_image_path
+			- recipe_image= '/images/placeholder.jpg'
 			.form-group.col-md-3
 				div(id=recipe.c_recipe_id, class='card', class='h-100')
 					img.image(class='card-img-top', src=recipe_image, alt='image')

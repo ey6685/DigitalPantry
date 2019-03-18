@@ -49,10 +49,22 @@ block content
 					let template = `
 					<div class="form-row">
 						<div class="form-group col-md-2">
-							<input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Name = Tuna" required="required">
+							<input
+								class="form-control"
+								name="ingredientProperties[${i}]"
+								type="text"
+								placeholder="Name = Tuna"
+								required="required"
+							/>
 						</div>
 						<div class="form-group col-md-1">
-							<input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Total = 2" required="required">
+							<input
+								class="form-control"
+								name="ingredientProperties[${i}]"
+								type="text"
+								placeholder="Total = 2"
+								required="required"
+							/>
 						</div>
 						<div class="dropdown-inline col-md-3">
 							<select class="form-control" name="ingredientProperties[${i}]" required="required">
@@ -68,9 +80,12 @@ block content
 							</select>
 						</div>
 						<div class="form-group col-md-3">
-							<input class="form-control" name="ingredientProperties[${i}]" type="date" required="required">
-						<div class="form-group col-md-1 text-center">
-							<button type="button" class="btn btn-danger delete-row" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<input class="form-control" name="ingredientProperties[${i}]" type="date" required="required" />
+						</div>
+						<div class="form-group col-md-1">
+							<button type="button" class="btn btn-danger delete-row" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
 						</div>
 					</div>`;
 					let container = document.getElementById('ingredient-container');

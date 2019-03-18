@@ -9,12 +9,14 @@ const LocalStrategy = require('passport-local')
 
 const steps = require('../recipe_direction_parser')
 const User = require('../DB_models/Users')
+const Pantry = require('../DB_models/Pantry')
 const cook_it = require('../cook_it/cook_it2')
 const next_ing = require('../algorithm/find_next_ing')
 const found_recipes = require('../algorithm/find_recipes')
 const recipe_t = require('../DB_models/Recipes')
 const ing_table  = require('../DB_models/Ingredients')
 const ing_in_pan_table = require('../DB_models/ingredients_in_pantry')
+const logger = require('../functions/logger')
 
 // Get request to localhost:3000/users/login
 router.get('/login', function renderLoginPage(req, res) {
@@ -224,8 +226,7 @@ router.get('/dashboard',async function(req, res){
 });
 
 // This will register a new user and add their credentials to the database
-router.post('/register', function(req, res) {
-  console.log(req.body)
+router.post('/register', async function registerUser(req, res) {
   // renders signin page with content 'Registration"
   // Checks that email field is not empty
   req.checkBody('email', 'Username field is required').notEmpty()
@@ -239,7 +240,7 @@ router.post('/register', function(req, res) {
   req.checkBody('confirm_password', 'Confirm password field required').notEmpty()
 
   // Get all errors is any based on above validators
-  let errors = req.validationErrors()
+  const errors = req.validationErrors()
 
   // if errors exist
   if (errors) {
@@ -247,7 +248,7 @@ router.post('/register', function(req, res) {
     res.render('register', {
       title: 'Registration',
       errors: errors
-    });
+    })
   }
 
   // ENCRYPTED AUTHENTICATION
@@ -257,36 +258,31 @@ router.post('/register', function(req, res) {
     const email = req.body.email
     // Get user's password
     const password = req.body.password
-    // Instantiate new user model defined in DB_models/Users.js
-    console.log("CREATING USER OBJECT")
-    var newUser = new User({
-      username: 'admin',
-      user_email: email,
-      user_password: password,
-      pantry_id: 1
-    })
-    console.log(newUser)
-    console.log("USER OBJECT CREATED")
-
-    console.log("new users: \n" + JSON.stringify(newUser));
-    // Call create function from DB_models/Users.js
-    console.log("CALLING CREATE USER")
-    User.createUser(newUser, function(result) {
-      console.log("INSIDE CREATE USER")
-      console.log("RESULT HASH:" + result)
-
-      // Upon sucessful creating take user to the dashboard
-      res.redirect('/users/dashboard')
+    // Create new pantry entry in the table, so the new pantry ID can be assigned to the new user
+    db.query('INSERT INTO pantry (pantry_name) VALUES ("");', function getResults(err, results) {
+      if (err) throw err
+      const recipe_id_inserted = results.insertId
+      const newUser = new User({
+        username: 'admin',
+        user_email: email,
+        user_password: password,
+        pantry_id: recipe_id_inserted
+      })
+      // Call create function from DB_models/Users.js
+      User.createUser(newUser, function createNewUser() {
+        // Upon sucessful creating take user to the dashboard
+        res.redirect('/users/dashboard')
+      })
     })
   }
 })
 
-router.get('/logout', function(req, res) {
-  req.logOut();
-  req.flash('success', 'You are logged out');
-  res.locals.user = null;
-  res.redirect('/users/login');
-});
+router.get('/logout', function logout(req, res) {
+  req.logOut()
+  req.flash('success', 'You are logged out')
+  res.locals.user = null
+  res.redirect('/users/login')
+})
 
 
 /*
@@ -357,21 +353,26 @@ router.post('/add', function addNewUser(req, res) {
       userType = 'N/A'
   }
   const userPassword = req.body.password
-
-  // Instantiate new user model defined in DB_models/Users.js
-  const newUser = new User({
-    user_email: userName,
-    username: userName,
-    user_password: userPassword,
-    user_type: userType,
-    // TODO figure out how to assign pantry IDs
-    pantry_id: 1
-  })
-
-  // Call create function from DB_models/Users.js
-  User.createUser(newUser, function create() {
-    req.flash('success', 'User added!')
-    res.redirect('/users/adminPanel')
+  const currentUserId = req.session.passport['user']
+  // Find which pantry user is from
+  const query = `SELECT (pantry_id) FROM users WHERE user_id=${currentUserId};`
+  db.query(query, function getPantryID(err, results) {
+    if (err) throw err
+    const currentPantryID = results[0].pantry_id
+    // Instantiate new user model defined in DB_models/Users.js
+    const newUser = new User({
+      user_email: userName,
+      username: userName,
+      user_password: userPassword,
+      user_type: userType,
+      // TODO figure out how to assign pantry IDs
+      pantry_id: currentPantryID
+    })
+    // Call create function from DB_models/Users.js
+    User.createUser(newUser, function create() {
+      req.flash('success', 'User added!')
+      res.redirect('/users/adminPanel')
+    })
   })
 })
 
