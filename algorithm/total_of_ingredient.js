@@ -25,6 +25,7 @@ async function total_ingredients(ing_id, pantry_id,unit)
 { 
     try 
     {    
+        console.log("\n\nstarting to total ingredient with id: " + ing_id + '\n\n');
         //get all the ingredients in the the pantry stock 
         var the_stock = await ingredient_t.findAll({ 
             attributes: ["ingredient_amount", "ingredient_unit_of_measurement"], 

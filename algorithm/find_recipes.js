@@ -32,7 +32,7 @@ async function find_recipes(exp_id,pantry_id)
                 }
             });
 
-            console.log('\n' +JSON.stringify("recipe ids: " + recipe_ids));
+            console.log('\nrecipe ids: ' +JSON.stringify(recipe_ids));
 
             var recipe_ids_array = new Array();
 
@@ -54,7 +54,7 @@ async function find_recipes(exp_id,pantry_id)
                 //set start data
                 total_amount_ingredient = 0;
                 flag_have_needed_anmount = true;
-                console.log("///////////////////////////////////////\nrecipe_id: " + recipe_ids[i] )
+                console.log("\nrecipe_id: " + JSON.stringify(recipe_ids[i] ));
                 //get a list of ingredients need for 
                 list_of_ingredients_in_recipe = await ingredients_in_a_recipe_t.findAll({
                     attributes: ['ingredient_id','amount_of_ingredient_needed', 'ingredient_unit_of_measurement'],
@@ -89,7 +89,7 @@ async function find_recipes(exp_id,pantry_id)
                             var new_amount;
                             console.log("have to convert units");
                             new_amount = await parseFloat(unit_convert.converter_raw(ingredents_from_pantry_data[p].ingredient_amount, ingredents_from_pantry_data[p].ingredient_unit_of_measurement,list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement));
-                            console.log(new_amount);
+                            console.log("converted amount: " +new_amount);
                             if(new_amount != 0)
                             {
                                 total_amount_ingredient += new_amount;
@@ -111,10 +111,10 @@ async function find_recipes(exp_id,pantry_id)
                     {
                         recommened_recipes.push(recipe_ids_array[i]);
                     }
-                console.log("///////////////////////////////////////\n");
+                console.log("\n");
             }//END OF FOR LOOP
             
-            console.log((recommened_recipes));
+            console.log("recommended recipe ids: \n" + (recommened_recipes));
             return recommened_recipes;
         }//end of if checking that we passed an id for ingfredients
         else{

@@ -18,16 +18,13 @@ const ingredient_finder = require('./find_ingredients');
 const recipe_id_finder = require('./find_recipes');
 const recipe_t = require('../DB_models/Recipes');
 const op = require('sequelize').Op;
+const wieght_finder= require('./recipe_weight_functions');
 async function main(window) {
   // first check the window date
   // if it is null just assume the window is today
+  console.log("starting the Algorithm\n\n");
   if (window == null) {
-    var new_date = new Date();
-    var year = new_date.getUTCFullYear();
-    var month = new_date.getUTCMonth() + 1;
-    var day = new_date.getUTCDate() - 1;
-
-    window = year + '-' + month + '-' + day;
+    window = 1;
     console.log('no window date provide, using: ' + window);
   }
   try {
@@ -46,34 +43,49 @@ async function main(window) {
     var recipes_ids = new Array();
     if (expiring_ingredients.length > 1) {
       for (var i = 0; i < expiring_ingredients.length; i += 1) {
-        recipes_ids[i].push();
-        recipes_ids[i] = await recipe_id_finder.find_recipes(
-          expiring_ingredients[i].ingredient_name
-        );
+        // recipes_ids[i].push();
+        recipes_ids.push(await recipe_id_finder.find_recipes(
+          expiring_ingredients[i].ingredient_id
+        ));
       }
     } else {
       console.log('passing: ' + expiring_ingredients[0].ingredient_name);
       recipes_ids = await recipe_id_finder.find_recipes(expiring_ingredients[0].ingredient_name);
     }
 
-    // console.log(recipes_ids);
+    console.log("ENDING RECIPE IDS: \n" +recipes_ids);
     // ended here with getting the ids of recipes that
 
+    //now we need only the ids sections that have values
+    var final_ids =new Array()
+    for(var i =0; i<recipes_ids.length;i++)
+    {
+      if(recipes_ids[i] != "")
+        final_ids.push(recipes_ids[i]);
+    }
     // return the recipes
     // as JSON objects
+    console.log("FINAL IDS: \n" + final_ids);
     var returning_recipes = await recipe_t.findAll({
       where: {
         recipe_id: {
-          [op.in]: recipes_ids
+          [op.in]: final_ids
         }
       }
     });
 
     console.log(JSON.stringify(returning_recipes));
+    var new_recipe={
+      recipe_id : returning_recipes[0].recipe_id,
+      recipe_name : returning_recipes[0].recipe_name,
+      recipe_weight : await wieght_finder.weight_total(returning_recipes[0].recipe_id)
+    };
+
+    // console.log("this line jon\n" , JSON.stringify(new_recipe));
     return returning_recipes;
   } catch (err) {
     console.log('error in main: \n' + err);
   }
 }
 // testing code
-main('2019-02-19', 1, 1);
+main(12);
