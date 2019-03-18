@@ -29,6 +29,7 @@ async function next_exp_ingredient()
         var day = date.getDate()-1;
         var year = date.getFullYear();
         var local_date = year + '-' + month + '-' + day;
+        console.log("todays date for checking: " + local_date);
     }
     catch(err)
     {
@@ -45,9 +46,9 @@ async function next_exp_ingredient()
                 ingredient_expiration_date: {
                     [op.gte]: local_date
                 },
-                ingredient_expiration_date: {
-                    [op.ne]: null
-                }
+                // ingredient_expiration_date: {
+                //     [op.ne]: null
+                // }
             },
             order: ["ingredient_expiration_date"],
             // include: [{model: ingredient_table}]

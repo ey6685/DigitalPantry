@@ -100,7 +100,7 @@ CREATE TABLE `ingredients_in_pantry` (
 
 LOCK TABLES `ingredients_in_pantry` WRITE;
 /*!40000 ALTER TABLE `ingredients_in_pantry` DISABLE KEYS */;
-INSERT INTO `ingredients_in_pantry` VALUES (1,1,10,'cup','2019-03-30'),(3,1,5,'oz','2019-03-30'),(4,1,30,'oz','2019-03-30'),(5,1,4000,'lb','2019-03-30'),(6,1,360,'ml','2019-03-30'),(7,1,12,'lb','3000-10-10'),(8,1,2,'tbsp.','2222-02-02');
+INSERT INTO `ingredients_in_pantry` VALUES (1,1,10,'cup','2019-03-30'),(3,1,5,'oz','2019-03-30'),(4,1,30,'oz','2019-03-30'),(5,1,4000,'lb','2019-03-30'),(6,1,360,'ml','2019-03-30'),(7,1,12,'lb','3000-10-10'),(8,1,2,'tbsp.','2222-02-02'),(1,1,12,'oz','2019-02-12'),(6,1,300,'ml','2019-02-14'),(1,1,2,'lb','2019-03-30'),(2,1,2,'cup','2019-03-30'),(3,1,24,'oz','2019-03-30'),(4,1,32,'oz','2019-03-30'),(5,1,4,'cup','2019-03-30'),(6,1,240,'ml','2019-05-24'),(7,1,32,'oz','2019-03-30'),(8,1,6,'cup','2019-04-04'),(9,1,3,'lb','2019-03-25'),(10,1,12,'oz','2019-06-15'),(11,1,9000,'oz','9999-03-30'),(12,1,5,'cup','2019-03-30'),(13,1,12,'oz','2019-03-30'),(14,1,4,'cup','2019-03-25'),(15,1,1,'cup','2019-07-30'),(16,1,12,'oz','2019-03-30'),(17,1,2,'cup','2019-03-30'),(18,1,24,'oz','2019-04-30'),(19,1,24,'oz','2019-03-30'),(20,1,7,'oz','2019-03-29'),(21,1,48,'oz','2019-03-29'),(22,1,3,'cup','2019-03-29'),(23,1,16,'tbsp.','2019-03-29'),(26,1,12,'oz','2019-03-29'),(28,1,12,'cup','2019-12-29'),(29,1,4,'oz','2019-03-29'),(30,1,16,'oz','2019-03-29'),(31,1,38,'oz','2019-03-29'),(32,1,200,'oz','2019-03-29');
 /*!40000 ALTER TABLE `ingredients_in_pantry` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -156,7 +156,7 @@ CREATE TABLE `recipes` (
 
 LOCK TABLES `recipes` WRITE;
 /*!40000 ALTER TABLE `recipes` DISABLE KEYS */;
-INSERT INTO `recipes` VALUES (1,'Chicken Noodle Soup','/images/chicken_noodle_soup.jpg','put ingredients into pot#boil and stir till cooked#serve warm',NULL,1,1,0),(2,'Chip n Beans','/images/bean_salsa.jpg','boil beans in pot#serve warm with chips',NULL,1,1,1),(4,'Ckicken Pot Pie','/images/chicken_pot_pie.jpg','Heat oil in wok or large skillet.#Add chicken. Cook until golden brown.#Add veggies. Cook for 2 minutes.#Add sauce. Cook for 2 minutes#Ready to serve!',NULL,1,5,0),(5,'Tuna Casserole','/images/placeholder.jpg',NULL,NULL,1,5,0),(6,'Tuna Melt','/images/placeholder.jpg',NULL,NULL,1,5,0),(7,'Black Bean Salsa','/images/bean_salsa.jpg',NULL,NULL,1,5,0),(8,'Black Bean Chili','/images/placeholder.jpg',NULL,NULL,1,10,0);
+INSERT INTO `recipes` VALUES (1,'Chicken Noodle Soup','/images/chicken_noodle_soup.jpg','put ingredients into pot#boil and stir till cooked#serve warm',NULL,1,1,0),(2,'Chip n Beans','/images/bean_salsa.jpg','boil beans in pot#serve warm with chips',NULL,1,1,1),(4,'Ckicken Pot Pie','/images/chicken_pot_pie.jpg','Heat oil in wok or large skillet.#Add chicken. Cook until golden brown.#Add veggies. Cook for 2 minutes.#Add sauce. Cook for 2 minutes#Ready to serve!',NULL,1,5,0),(5,'Tuna Casserole','/images/placeholder.jpg','need steps',NULL,1,5,0),(6,'Tuna Melt','/images/placeholder.jpg','need steps',NULL,1,5,0),(7,'Black Bean Salsa','/images/bean_salsa.jpg','need steps',NULL,1,5,0),(8,'Black Bean Chili','/images/placeholder.jpg','need steps',NULL,1,10,0);
 /*!40000 ALTER TABLE `recipes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -199,4 +199,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-18 14:21:23
+-- Dump completed on 2019-03-18 15:17:28

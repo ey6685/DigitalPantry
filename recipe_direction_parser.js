@@ -27,13 +27,14 @@ function recipe_direction_parser(recipe_id) {
       attributes: ['recipe_directions']
     })
     .then(recipe => {
+      console.log("starting string: \n" + recipe.recipe_directions);
       var counting_pound_sign = 1;
       var returning_string = '';
-      console.log('recipe directions: \n' + recipe.recipe_direction)
       for (var i = 0; i < recipe.recipe_directions.length; i += 1) {
         if (i == 0) {
           // starting the string with step one
-          returning_string =  '1.)' + recipe.recipe_directions[i];
+          returning_string =  '1.)';
+          returning_string += recipe.recipe_directions[0];
         } else if (recipe.recipe_directions[i] == '#') {
           // the start of a new step
           counting_pound_sign += 1;
@@ -43,7 +44,7 @@ function recipe_direction_parser(recipe_id) {
           returning_string += recipe.recipe_directions[i];
         }
       } // end of for loop
-      console.log(returning_string);
+      console.log("the parsed string :\n" +returning_string);
 
       return returning_string;
     });
