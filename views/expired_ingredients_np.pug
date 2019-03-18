@@ -12,6 +12,11 @@ block content
 		h1 Expired Ingredients
 		br
 
+		a.btn.btn-default(href='/ingredients/expired')
+			i(style='color:black').fa.fa-th-large.fa-2x
+		a.btn.btn-default(href='/ingredients/expiredAdmin')
+			i(style='color:black').fa.fa-list.fa-2x
+
 
 		.form-row
 			.form-group.col-md-2
@@ -22,8 +27,7 @@ block content
 						option(value='0') Sort By
 						option(value='1') Sort A-Z
 						option(value='2') Sort Z-A
-		form(method='GET', action='/ingredients/expiredAdmin')
-			input.btn.btn-primary(type='submit', value='ADMIN VIEW')
+		
 
 
 		.form-row

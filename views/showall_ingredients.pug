@@ -7,9 +7,15 @@ block content
 	br
 	br
 	br
+
 	div(class='container-fluid', class='rounded', style='width: 80%')
 		h1 #{title}
 		br
+		a.btn.btn-default(href='/ingredients/cards')
+			i(style='color:black').fa.fa-th-large.fa-2x
+		a.btn.btn-default(href='/ingredients/showall')
+			i(style='color:black').fa.fa-list.fa-2x
+			
 		table.table.table-dark(class='rounded')
 			//-caption Available Ingredients
 			thead

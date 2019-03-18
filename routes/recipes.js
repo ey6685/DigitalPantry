@@ -124,7 +124,7 @@ URL ENDPOINT: localhost:3000/recipes/showComunityRecipes
 DESCRIPTION: This will display all recipes withing the community
 */
 router.get('/showCommunityRecipes', async function(req,res){
-    query = 'SELECT * FROM recipes where sharable = 1;';
+    query = 'SELECT * FROM recipes WHERE sharable = 1;';
     console.log("Session");
     //Prints user id stored in the session. Can be used to determine which pantry user belongs to
     // console.log(req.session.passport['user']);

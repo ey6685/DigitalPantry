@@ -11,6 +11,10 @@ block content
     div(class='container-fluid', class='rounded', style='width: 80%')
         h1 #{title}
         br
+        a.btn.btn-default(href='/ingredients/cards')
+            i(style='color:black').fa.fa-th-large.fa-2x
+        a.btn.btn-default(href='/ingredients/showall')
+            i(style='color:black').fa.fa-list.fa-2x
        
         tbody
             tr
@@ -41,7 +45,7 @@ block content
             //for ingredient,i in data
             for item in results
                 //-get recipe image
-                - ingredient_image= item.ingredient_image_path
+                - ingredient_image= '/images/placeholder.jpg'
                 .form-group.col-md-3
                     div(id=item.ingredient_id, class='card', class='h-100')
                         img.image(class='card-img-top', src=ingredient_image, alt='image', class="h-50")
