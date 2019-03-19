@@ -19,21 +19,24 @@ const recipe_id_finder = require('./find_recipes');
 const recipe_t = require('../DB_models/Recipes');
 const op = require('sequelize').Op;
 const wieght_finder= require('./recipe_weight_functions');
+const logger = require('../functions/logger');
 async function main(window) {
   // first check the window date
   // if it is null just assume the window is today
-  console.log("starting the Algorithm\n\n");
+  logger.info("starting the Algorithm\n\n");
+
   if (window == null) {
     window = 1;
-    console.log('no window date provide, using: ' + window);
+    logger.info('no window date provide, using: ' + window);
   }
   try {
     // finding all the ingredients the expire between today and the window
     // just like in this function, for somereason is the window is null
     // it just using todays date
+    logger.info("\nCALLING find_ingredients\n")
     var expiring_ingredients = await ingredient_finder.find_ingredients(window);
-    // console.log("returned from find_ingredients: " + JSON.stringify(expiring_ingredients));
-    // console.log(expiring_ingredients[0].ingredient_name);
+    // logger.info("returned from find_ingredients: " + JSON.stringify(expiring_ingredients));
+    // logger.info(expiring_ingredients[0].ingredient_name);
     if (expiring_ingredients.length == 0) {
       return 0;
     }
@@ -49,11 +52,11 @@ async function main(window) {
         ));
       }
     } else {
-      console.log('passing: ' + expiring_ingredients[0].ingredient_name);
+      logger.info('passing: ' + expiring_ingredients[0].ingredient_name+ '\n');
       recipes_ids = await recipe_id_finder.find_recipes(expiring_ingredients[0].ingredient_name);
     }
 
-    console.log("ENDING RECIPE IDS: \n" +recipes_ids);
+    logger.info("ENDING RECIPE IDS: \n" +recipes_ids);
     // ended here with getting the ids of recipes that
 
     //now we need only the ids sections that have values
@@ -61,11 +64,15 @@ async function main(window) {
     for(var i =0; i<recipes_ids.length;i++)
     {
       if(recipes_ids[i] != "")
-        final_ids.push(recipes_ids[i]);
+      {
+          final_ids.push(recipes_ids[i]);
+        }
+      
+      
     }
     // return the recipes
     // as JSON objects
-    console.log("FINAL IDS: \n" + final_ids);
+    logger.info("FINAL IDS: \n" + final_ids + '\n');
     var returning_recipes = await recipe_t.findAll({
       where: {
         recipe_id: {
@@ -74,13 +81,13 @@ async function main(window) {
       }
     });
 
-    console.log(JSON.stringify(returning_recipes));
+    logger.info(JSON.stringify(returning_recipes));
 
 
-    // console.log("this line jon\n" , JSON.stringify(new_recipe));
+    // logger.info("this line jon\n" , JSON.stringify(new_recipe));
     return returning_recipes;
   } catch (err) {
-    console.log('error in main: \n' + err);
+    logger.info('error in main: \n' + err);
   }
 }
 // testing code

@@ -20,6 +20,7 @@ outputs
 requires*/ 
 const ingredient_t = require('../DB_models/ingredients_in_pantry'); 
 const unit_convert = require('./Convert_unts'); 
+const logger = require('../functions/logger');
  
 async function total_ingredients(ing_id, pantry_id,unit) 
 { 
