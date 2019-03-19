@@ -6,3 +6,5 @@ node_modules/
 views/test\.pug
 
 \.eslintrc\.json
+
+log/
