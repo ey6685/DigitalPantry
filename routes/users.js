@@ -2,7 +2,8 @@ const express = require('express')
 
 const router = express.Router()
 const moment = require('moment')
-const op = require('sequelize').Op
+const sequelized = require('sequelize')
+const op = sequelized.Op
 const bcrypt = require('bcryptjs')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
@@ -112,8 +113,10 @@ router.get('/adminPanel', async function showAdminPanelPage(req, res) {
   // Find all users in that pantry and not the current user
   const users = await User.findAll({
     where: {
-      pantry_id: pantryId
-      // [op.ne]: currentUserId
+      pantry_id: pantryId,
+      user_id: {
+        [op.ne]: currentUserId
+      }
     }
   }).then(function returnResults(results) {
     return results
