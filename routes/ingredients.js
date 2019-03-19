@@ -184,6 +184,7 @@ router.get('/cards', function showCards(req, res) {
       ).format('LL')
     }
     if (err) throw err
+    // console.log("the query results: \n" + JSON.stringify(results));
     res.render('showall_ingredients_cards', {
       title: 'Your Ingredients',
       results: results
