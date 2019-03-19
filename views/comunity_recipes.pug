@@ -17,7 +17,8 @@ block content
 	br
 	h1 #{title}
 	br
-	//- Overlay form start. In other words edit recipe form
+	//- Overlay form start. In other words share recipe to the community
+	//- Lists all available recipes in pantry
 	#shareForm.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true')
 		.modal-dialog.modal-dialog-centered.modal-lg(role='document')
 			.modal-content
@@ -49,7 +50,7 @@ block content
 				div(id=recipe.c_recipe_id, class='card', class='h-100')
 					img.image(class='card-img-top', src=recipe_image, alt='image')
 					div(class='card-body')
-						h4(class='card-title') #{recipe.c_recipe_name}
+						h4(class='card-title') #{recipe.recipe_name}
 						//- For each steps inside of the array of steps
 						for step in recipe_steps[i]
 							p(class='card-text')= step
