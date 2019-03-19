@@ -100,8 +100,26 @@ router.get('/register', function showRegistrationPage(req, res) {
 router.get('/adminPanel', async function showAdminPanelPage(req, res) {
   const currentUserId = req.session.passport['user']
   // Find which pantry user is from
-  const pantryId = `(SELECT (pantry_id) FROM users WHERE user_id=${currentUserId})`
+  const pantryId = await User.findOne({
+    attributes: ['pantry_id'],
+    where: {
+      user_id: currentUserId
+    }
+  }).then(function getPantryID(result) {
+    return result.pantry_id
+  })
+  console.log("SECOND QUERY")
   // Find all users in that pantry and not the current user
+  const users = await User.findAll({
+    where: {
+      pantry_id: pantryId
+      // [op.ne]: currentUserId
+    }
+  }).then(function returnResults(results) {
+    return results
+  })
+  console.log("USERS")
+  console.log(users)
   const query = `SELECT * FROM users WHERE pantry_id=${pantryId} AND user_id!=${currentUserId};`
   console.log(query)
   db.query(query, function sendQuery(err, results) {
