@@ -58,15 +58,14 @@ function parse_recipe_directions_by_string (recipe_direction) {
   var counting_pound_sign = 1
   var returning_string = ''
 
-  for (var i = -1; i < recipe_direction.length; i = i + 1) {
-    if (i == -1) {
+  for (var i = 0; i < recipe_direction.length; i += 1) {
+    if (i == 0) {
       // starting the string with step one
-      returning_string += '1)'
-      returning_string = returning_string + '1.)' + recipe_direction[i];
+      returning_string = returning_string + '1.)' + recipe_direction[i]
     } else if (recipe_direction[i] == '#') {
       // the start of a new step
       counting_pound_sign += 1
-      returning_string += '${<br>}' + counting_pound_sign + ')'
+      returning_string += '${<br>}' + counting_pound_sign + '.)'
     } else {
       // just adding the next character
       returning_string += recipe_direction[i]
