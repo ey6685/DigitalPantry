@@ -14,6 +14,7 @@ const recipe_t               = require('../DB_models/Recipes');
 const ingredient_in_recipe_t = require('../DB_models/ingredients_in_a_recipe');
 const ingrediet_in_pan       = require('../DB_models/ingredients_in_pantry');
 const op                     = require('sequelize').Op;
+const logger = require('../functions/logger');
 
 
 

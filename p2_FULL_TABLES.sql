@@ -114,6 +114,7 @@ DROP TABLE IF EXISTS `pantry`;
 CREATE TABLE `pantry` (
   `pantry_id` int(11) NOT NULL AUTO_INCREMENT,
   `pantry_name` varchar(255) DEFAULT NULL,
+  `expire_window` int(11) DEFAULT '5',
   PRIMARY KEY (`pantry_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -124,7 +125,7 @@ CREATE TABLE `pantry` (
 
 LOCK TABLES `pantry` WRITE;
 /*!40000 ALTER TABLE `pantry` DISABLE KEYS */;
-INSERT INTO `pantry` VALUES (1,'Jons digial checkin pantry'),(2,'Jons digial checkin pantry');
+INSERT INTO `pantry` VALUES (1,'Jons digial checkin pantry',5),(2,'Jons digial checkin pantry',5);
 /*!40000 ALTER TABLE `pantry` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -199,4 +200,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-18 15:17:28
+-- Dump completed on 2019-03-18 20:35:47
