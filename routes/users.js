@@ -163,7 +163,10 @@ router.get('/dashboard', async function(req, res) {
     console.log(JSON.stringify(ingredient_results))
     var additional_ingredient_results = await ing_in_pan_table.findAll({
       where: {
-        ingredient_id: results
+        ingredient_id: results,
+        ingredient_expiration_date:{
+          [op.gte] : "2019-03-19"
+        }
       },
       order: ['ingredient_expiration_date']
     })
