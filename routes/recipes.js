@@ -298,12 +298,11 @@ router.post('/add', upload.single('image'), async function(req, res) {
 // Get all available recipes that a single pantry has
 // Returns a JSON result
 router.get('/getPantryRecipes', function(req, res) {
-  console.log(req.session.passport['user']);
   // get id of the currently logged in user
   var user_id = req.session.passport['user'];
   // query all recipes which are availabel to this user
   query =
-    'SELECT * FROM recipes WHERE recipe_pantry_id = (SELECT user_pantry_id FROM users WHERE user_id=' +
+    'SELECT * FROM recipes WHERE pantry_id = (SELECT pantry_id FROM users WHERE user_id=' +
     user_id +
     ');';
   db.query(query, function(err, results) {
@@ -335,7 +334,7 @@ router.get('/getPantryRecipes', function(req, res){
 
 //Share a recipe into community
 router.post('/share', async function(req, res){
-    share_query="UPDATE recipes SET sharable=1 WHERE recipe_name='"+req.body.recipe_name+"';";
+    share_query=`UPDATE recipes SET sharable=1 WHERE recipe_name='${req.body.recipe_name}';`
     await db.query(share_query, function(err, results){
         if (err) throw err;
         console.log(results);
