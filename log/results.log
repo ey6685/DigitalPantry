@@ -71,3 +71,295 @@ total: 4
 
 2019-03-18 22:40:52 info: recommended recipe ids: 
 1,4
+2019-03-18 22:49:27 info: todays date for checking: 2019-3-17
+
+2019-03-18 22:49:27 info: [{"ingredient_id":1,"pantry_id":1,"ingredient_amount":6,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-03-21"},{"ingredient_id":10,"pantry_id":1,"ingredient_amount":24,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-22"},{"ingredient_id":18,"pantry_id":1,"ingredient_amount":24,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-22"},{"ingredient_id":19,"pantry_id":1,"ingredient_amount":24,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-22"},{"ingredient_id":9,"pantry_id":1,"ingredient_amount":3,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-03-25"},{"ingredient_id":32,"pantry_id":1,"ingredient_amount":200,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-29"},{"ingredient_id":5,"pantry_id":1,"ingredient_amount":4,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-03-30"},{"ingredient_id":2,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-01"},{"ingredient_id":21,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-04-01"},{"ingredient_id":12,"pantry_id":1,"ingredient_amount":6,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-02"},{"ingredient_id":13,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-03"},{"ingredient_id":14,"pantry_id":1,"ingredient_amount":3,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-04"},{"ingredient_id":15,"pantry_id":1,"ingredient_amount":4,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-05"},{"ingredient_id":16,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-06"},{"ingredient_id":17,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-07"},{"ingredient_id":20,"pantry_id":1,"ingredient_amount":10,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-09"},{"ingredient_id":23,"pantry_id":1,"ingredient_amount":10,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-11"},{"ingredient_id":26,"pantry_id":1,"ingredient_amount":16,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-14"},{"ingredient_id":28,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"tbsp.","ingredient_expiration_date":"2019-04-15"},{"ingredient_id":29,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-16"},{"ingredient_id":30,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-04-17"},{"ingredient_id":31,"pantry_id":1,"ingredient_amount":15,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-18"},{"ingredient_id":22,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"tbsp.","ingredient_expiration_date":"2019-04-19"}]
+
+2019-03-18 22:49:27 info: {"ingredient_name":"Chicken","ingredient_id":1,"ingredient_weight":3}
+
+2019-03-18 22:49:27 info: starting find recipe with ingredient id: 1
+
+2019-03-18 22:49:27 info: 
+recipe ids: [{"recipe_id":1},{"recipe_id":4}]
+2019-03-18 22:49:27 info: array of recipes : 
+1,4
+2019-03-18 22:49:27 info: 
+recipe_id: {"recipe_id":1}
+2019-03-18 22:49:27 info: [{"ingredient_id":1,"amount_of_ingredient_needed":2,"ingredient_unit_of_measurement":"cup"},{"ingredient_id":10,"amount_of_ingredient_needed":12,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":11,"amount_of_ingredient_needed":12,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":12,"amount_of_ingredient_needed":1,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:49:27 info: [{"ingredient_amount":6,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:49:27 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 22:49:27 info: 
+total: 6
+
+2019-03-18 22:49:27 info: [{"ingredient_amount":24,"ingredient_unit_of_measurement":"oz"}]
+2019-03-18 22:49:27 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: oz == oz
+2019-03-18 22:49:27 info: 
+total: 24
+
+2019-03-18 22:49:27 info: [{"ingredient_amount":12,"ingredient_unit_of_measurement":"oz"}]
+2019-03-18 22:49:27 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: oz == oz
+2019-03-18 22:49:27 info: 
+total: 12
+
+2019-03-18 22:49:27 info: [{"ingredient_amount":6,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:49:27 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 22:49:27 info: 
+total: 6
+
+2019-03-18 22:49:27 info: 
+
+2019-03-18 22:49:27 info: 
+recipe_id: {"recipe_id":4}
+2019-03-18 22:49:27 info: [{"ingredient_id":13,"amount_of_ingredient_needed":12,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":14,"amount_of_ingredient_needed":1,"ingredient_unit_of_measurement":"cup"},{"ingredient_id":12,"amount_of_ingredient_needed":3,"ingredient_unit_of_measurement":"cup"},{"ingredient_id":1,"amount_of_ingredient_needed":1,"ingredient_unit_of_measurement":"lb"},{"ingredient_id":15,"amount_of_ingredient_needed":1,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:49:27 info: [{"ingredient_amount":12,"ingredient_unit_of_measurement":"oz"}]
+2019-03-18 22:49:27 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: oz == oz
+2019-03-18 22:49:27 info: 
+total: 12
+
+2019-03-18 22:49:27 info: [{"ingredient_amount":3,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:49:27 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 22:49:27 info: 
+total: 3
+
+2019-03-18 22:49:27 info: [{"ingredient_amount":6,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:49:27 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 22:49:27 info: 
+total: 6
+
+2019-03-18 22:49:27 info: [{"ingredient_amount":6,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:49:27 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: lb == cup
+2019-03-18 22:49:28 info: have to convert units
+2019-03-18 22:49:28 info: coverting 6 cup to lb
+
+2019-03-18 22:49:28 info: converted amount: 3
+2019-03-18 22:49:28 info: 
+total: 3
+
+2019-03-18 22:49:28 info: [{"ingredient_amount":4,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:49:28 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 22:49:28 info: 
+total: 4
+
+2019-03-18 22:49:28 info: 
+
+2019-03-18 22:49:28 info: recommended recipe ids: 
+1,4
+2019-03-18 22:50:13 info: todays date for checking: 2019-3-17
+
+2019-03-18 22:50:13 info: [{"ingredient_id":1,"pantry_id":1,"ingredient_amount":6,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-03-21"},{"ingredient_id":10,"pantry_id":1,"ingredient_amount":24,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-22"},{"ingredient_id":18,"pantry_id":1,"ingredient_amount":24,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-22"},{"ingredient_id":19,"pantry_id":1,"ingredient_amount":24,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-22"},{"ingredient_id":9,"pantry_id":1,"ingredient_amount":3,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-03-25"},{"ingredient_id":32,"pantry_id":1,"ingredient_amount":200,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-29"},{"ingredient_id":5,"pantry_id":1,"ingredient_amount":4,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-03-30"},{"ingredient_id":2,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-01"},{"ingredient_id":21,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-04-01"},{"ingredient_id":12,"pantry_id":1,"ingredient_amount":6,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-02"},{"ingredient_id":13,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-03"},{"ingredient_id":14,"pantry_id":1,"ingredient_amount":3,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-04"},{"ingredient_id":15,"pantry_id":1,"ingredient_amount":4,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-05"},{"ingredient_id":16,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-06"},{"ingredient_id":17,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-07"},{"ingredient_id":20,"pantry_id":1,"ingredient_amount":10,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-09"},{"ingredient_id":23,"pantry_id":1,"ingredient_amount":10,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-11"},{"ingredient_id":26,"pantry_id":1,"ingredient_amount":16,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-14"},{"ingredient_id":28,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"tbsp.","ingredient_expiration_date":"2019-04-15"},{"ingredient_id":29,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-16"},{"ingredient_id":30,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-04-17"},{"ingredient_id":31,"pantry_id":1,"ingredient_amount":15,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-18"},{"ingredient_id":22,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"tbsp.","ingredient_expiration_date":"2019-04-19"}]
+
+2019-03-18 22:50:13 info: {"ingredient_name":"Chicken","ingredient_id":1,"ingredient_weight":3}
+
+2019-03-18 22:50:13 info: starting find recipe with ingredient id: 1
+
+2019-03-18 22:50:13 info: 
+recipe ids: [{"recipe_id":1},{"recipe_id":4}]
+2019-03-18 22:50:13 info: array of recipes : 
+1,4
+2019-03-18 22:50:13 info: 
+recipe_id: {"recipe_id":1}
+2019-03-18 22:50:13 info: [{"ingredient_id":1,"amount_of_ingredient_needed":2,"ingredient_unit_of_measurement":"cup"},{"ingredient_id":10,"amount_of_ingredient_needed":12,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":11,"amount_of_ingredient_needed":12,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":12,"amount_of_ingredient_needed":1,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:50:13 info: [{"ingredient_amount":6,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:50:13 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 22:50:13 info: 
+total: 6
+
+2019-03-18 22:50:13 info: [{"ingredient_amount":24,"ingredient_unit_of_measurement":"oz"}]
+2019-03-18 22:50:13 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: oz == oz
+2019-03-18 22:50:13 info: 
+total: 24
+
+2019-03-18 22:50:13 info: [{"ingredient_amount":12,"ingredient_unit_of_measurement":"oz"}]
+2019-03-18 22:50:13 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: oz == oz
+2019-03-18 22:50:13 info: 
+total: 12
+
+2019-03-18 22:50:13 info: [{"ingredient_amount":6,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:50:13 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 22:50:13 info: 
+total: 6
+
+2019-03-18 22:50:13 info: 
+
+2019-03-18 22:50:13 info: 
+recipe_id: {"recipe_id":4}
+2019-03-18 22:50:13 info: [{"ingredient_id":13,"amount_of_ingredient_needed":12,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":14,"amount_of_ingredient_needed":1,"ingredient_unit_of_measurement":"cup"},{"ingredient_id":12,"amount_of_ingredient_needed":3,"ingredient_unit_of_measurement":"cup"},{"ingredient_id":1,"amount_of_ingredient_needed":1,"ingredient_unit_of_measurement":"lb"},{"ingredient_id":15,"amount_of_ingredient_needed":1,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:50:13 info: [{"ingredient_amount":12,"ingredient_unit_of_measurement":"oz"}]
+2019-03-18 22:50:13 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: oz == oz
+2019-03-18 22:50:13 info: 
+total: 12
+
+2019-03-18 22:50:13 info: [{"ingredient_amount":3,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:50:13 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 22:50:13 info: 
+total: 3
+
+2019-03-18 22:50:13 info: [{"ingredient_amount":6,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:50:13 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 22:50:13 info: 
+total: 6
+
+2019-03-18 22:50:13 info: [{"ingredient_amount":6,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:50:13 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: lb == cup
+2019-03-18 22:50:13 info: have to convert units
+2019-03-18 22:50:13 info: coverting 6 cup to lb
+
+2019-03-18 22:50:13 info: converted amount: 3
+2019-03-18 22:50:13 info: 
+total: 3
+
+2019-03-18 22:50:13 info: [{"ingredient_amount":4,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:50:13 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 22:50:13 info: 
+total: 4
+
+2019-03-18 22:50:13 info: 
+
+2019-03-18 22:50:13 info: recommended recipe ids: 
+1,4
+2019-03-18 22:59:21 info: todays date for checking: 2019-3-17
+
+2019-03-18 22:59:21 info: [{"ingredient_id":1,"pantry_id":1,"ingredient_amount":6,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-03-21"},{"ingredient_id":10,"pantry_id":1,"ingredient_amount":24,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-22"},{"ingredient_id":18,"pantry_id":1,"ingredient_amount":24,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-22"},{"ingredient_id":19,"pantry_id":1,"ingredient_amount":24,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-22"},{"ingredient_id":9,"pantry_id":1,"ingredient_amount":3,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-03-25"},{"ingredient_id":32,"pantry_id":1,"ingredient_amount":200,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-29"},{"ingredient_id":5,"pantry_id":1,"ingredient_amount":4,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-03-30"},{"ingredient_id":2,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-01"},{"ingredient_id":21,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-04-01"},{"ingredient_id":12,"pantry_id":1,"ingredient_amount":6,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-02"},{"ingredient_id":13,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-03"},{"ingredient_id":14,"pantry_id":1,"ingredient_amount":3,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-04"},{"ingredient_id":15,"pantry_id":1,"ingredient_amount":4,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-05"},{"ingredient_id":16,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-06"},{"ingredient_id":17,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-07"},{"ingredient_id":20,"pantry_id":1,"ingredient_amount":10,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-09"},{"ingredient_id":23,"pantry_id":1,"ingredient_amount":10,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-11"},{"ingredient_id":26,"pantry_id":1,"ingredient_amount":16,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-14"},{"ingredient_id":28,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"tbsp.","ingredient_expiration_date":"2019-04-15"},{"ingredient_id":29,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-16"},{"ingredient_id":30,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-04-17"},{"ingredient_id":31,"pantry_id":1,"ingredient_amount":15,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-18"},{"ingredient_id":22,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"tbsp.","ingredient_expiration_date":"2019-04-19"}]
+
+2019-03-18 22:59:21 info: {"ingredient_name":"Chicken","ingredient_id":1,"ingredient_weight":3}
+
+2019-03-18 22:59:21 info: starting find recipe with ingredient id: 1
+
+2019-03-18 22:59:21 info: 
+recipe ids: [{"recipe_id":1},{"recipe_id":4}]
+2019-03-18 22:59:21 info: array of recipes : 
+1,4
+2019-03-18 22:59:21 info: 
+recipe_id: {"recipe_id":1}
+2019-03-18 22:59:21 info: [{"ingredient_id":1,"amount_of_ingredient_needed":2,"ingredient_unit_of_measurement":"cup"},{"ingredient_id":10,"amount_of_ingredient_needed":12,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":11,"amount_of_ingredient_needed":12,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":12,"amount_of_ingredient_needed":1,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:59:21 info: [{"ingredient_amount":6,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:59:21 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 22:59:21 info: 
+total: 6
+
+2019-03-18 22:59:21 info: [{"ingredient_amount":24,"ingredient_unit_of_measurement":"oz"}]
+2019-03-18 22:59:21 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: oz == oz
+2019-03-18 22:59:21 info: 
+total: 24
+
+2019-03-18 22:59:21 info: [{"ingredient_amount":12,"ingredient_unit_of_measurement":"oz"}]
+2019-03-18 22:59:21 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: oz == oz
+2019-03-18 22:59:21 info: 
+total: 12
+
+2019-03-18 22:59:21 info: [{"ingredient_amount":6,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:59:21 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 22:59:21 info: 
+total: 6
+
+2019-03-18 22:59:21 info: 
+
+2019-03-18 22:59:21 info: 
+recipe_id: {"recipe_id":4}
+2019-03-18 22:59:21 info: [{"ingredient_id":13,"amount_of_ingredient_needed":12,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":14,"amount_of_ingredient_needed":1,"ingredient_unit_of_measurement":"cup"},{"ingredient_id":12,"amount_of_ingredient_needed":3,"ingredient_unit_of_measurement":"cup"},{"ingredient_id":1,"amount_of_ingredient_needed":1,"ingredient_unit_of_measurement":"lb"},{"ingredient_id":15,"amount_of_ingredient_needed":1,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:59:21 info: [{"ingredient_amount":12,"ingredient_unit_of_measurement":"oz"}]
+2019-03-18 22:59:21 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: oz == oz
+2019-03-18 22:59:21 info: 
+total: 12
+
+2019-03-18 22:59:21 info: [{"ingredient_amount":3,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:59:21 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 22:59:21 info: 
+total: 3
+
+2019-03-18 22:59:21 info: [{"ingredient_amount":6,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:59:21 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 22:59:21 info: 
+total: 6
+
+2019-03-18 22:59:21 info: [{"ingredient_amount":6,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:59:21 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: lb == cup
+2019-03-18 22:59:21 info: have to convert units
+2019-03-18 22:59:21 info: coverting 6 cup to lb
+
+2019-03-18 22:59:21 info: converted amount: 3
+2019-03-18 22:59:21 info: 
+total: 3
+
+2019-03-18 22:59:21 info: [{"ingredient_amount":4,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 22:59:21 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 22:59:21 info: 
+total: 4
+
+2019-03-18 22:59:21 info: 
+
+2019-03-18 22:59:21 info: recommended recipe ids: 
+1,4
+2019-03-18 23:02:20 info: todays date for checking: 2019-3-17
+
+2019-03-18 23:02:20 info: [{"ingredient_id":1,"pantry_id":1,"ingredient_amount":6,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-03-21"},{"ingredient_id":10,"pantry_id":1,"ingredient_amount":24,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-22"},{"ingredient_id":18,"pantry_id":1,"ingredient_amount":24,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-22"},{"ingredient_id":19,"pantry_id":1,"ingredient_amount":24,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-22"},{"ingredient_id":9,"pantry_id":1,"ingredient_amount":3,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-03-25"},{"ingredient_id":32,"pantry_id":1,"ingredient_amount":200,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-29"},{"ingredient_id":5,"pantry_id":1,"ingredient_amount":4,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-03-30"},{"ingredient_id":2,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-01"},{"ingredient_id":21,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-04-01"},{"ingredient_id":12,"pantry_id":1,"ingredient_amount":6,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-02"},{"ingredient_id":13,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-03"},{"ingredient_id":14,"pantry_id":1,"ingredient_amount":3,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-04"},{"ingredient_id":15,"pantry_id":1,"ingredient_amount":4,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-05"},{"ingredient_id":16,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-06"},{"ingredient_id":17,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-07"},{"ingredient_id":20,"pantry_id":1,"ingredient_amount":10,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-09"},{"ingredient_id":23,"pantry_id":1,"ingredient_amount":10,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-11"},{"ingredient_id":26,"pantry_id":1,"ingredient_amount":16,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-14"},{"ingredient_id":28,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"tbsp.","ingredient_expiration_date":"2019-04-15"},{"ingredient_id":29,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-16"},{"ingredient_id":30,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-04-17"},{"ingredient_id":31,"pantry_id":1,"ingredient_amount":15,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-18"},{"ingredient_id":22,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"tbsp.","ingredient_expiration_date":"2019-04-19"}]
+
+2019-03-18 23:02:20 info: {"ingredient_name":"Chicken","ingredient_id":1,"ingredient_weight":3}
+
+2019-03-18 23:02:20 info: starting find recipe with ingredient id: 1
+
+2019-03-18 23:02:20 info: 
+recipe ids: [{"recipe_id":1},{"recipe_id":4}]
+2019-03-18 23:02:20 info: array of recipes : 
+1,4
+2019-03-18 23:02:20 info: 
+recipe_id: {"recipe_id":1}
+2019-03-18 23:02:20 info: [{"ingredient_id":1,"amount_of_ingredient_needed":2,"ingredient_unit_of_measurement":"cup"},{"ingredient_id":10,"amount_of_ingredient_needed":12,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":11,"amount_of_ingredient_needed":12,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":12,"amount_of_ingredient_needed":1,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 23:02:20 info: [{"ingredient_amount":6,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 23:02:20 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 23:02:20 info: 
+total: 6
+
+2019-03-18 23:02:20 info: [{"ingredient_amount":24,"ingredient_unit_of_measurement":"oz"}]
+2019-03-18 23:02:20 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: oz == oz
+2019-03-18 23:02:20 info: 
+total: 24
+
+2019-03-18 23:02:20 info: [{"ingredient_amount":12,"ingredient_unit_of_measurement":"oz"}]
+2019-03-18 23:02:20 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: oz == oz
+2019-03-18 23:02:20 info: 
+total: 12
+
+2019-03-18 23:02:20 info: [{"ingredient_amount":6,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 23:02:20 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 23:02:20 info: 
+total: 6
+
+2019-03-18 23:02:20 info: 
+
+2019-03-18 23:02:20 info: 
+recipe_id: {"recipe_id":4}
+2019-03-18 23:02:20 info: [{"ingredient_id":13,"amount_of_ingredient_needed":12,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":14,"amount_of_ingredient_needed":1,"ingredient_unit_of_measurement":"cup"},{"ingredient_id":12,"amount_of_ingredient_needed":3,"ingredient_unit_of_measurement":"cup"},{"ingredient_id":1,"amount_of_ingredient_needed":1,"ingredient_unit_of_measurement":"lb"},{"ingredient_id":15,"amount_of_ingredient_needed":1,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 23:02:20 info: [{"ingredient_amount":12,"ingredient_unit_of_measurement":"oz"}]
+2019-03-18 23:02:20 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: oz == oz
+2019-03-18 23:02:20 info: 
+total: 12
+
+2019-03-18 23:02:20 info: [{"ingredient_amount":3,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 23:02:20 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 23:02:20 info: 
+total: 3
+
+2019-03-18 23:02:20 info: [{"ingredient_amount":6,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 23:02:20 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 23:02:20 info: 
+total: 6
+
+2019-03-18 23:02:20 info: [{"ingredient_amount":6,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 23:02:20 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: lb == cup
+2019-03-18 23:02:20 info: have to convert units
+2019-03-18 23:02:20 info: coverting 6 cup to lb
+
+2019-03-18 23:02:20 info: converted amount: 3
+2019-03-18 23:02:20 info: 
+total: 3
+
+2019-03-18 23:02:20 info: [{"ingredient_amount":4,"ingredient_unit_of_measurement":"cup"}]
+2019-03-18 23:02:20 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-18 23:02:20 info: 
+total: 4
+
+2019-03-18 23:02:20 info: 
+
+2019-03-18 23:02:20 info: recommended recipe ids: 
+1,4

@@ -61,7 +61,7 @@ function parse_recipe_directions_by_string(recipe_direction) {
   for (var i = 0; i < recipe_direction.length; i += 1) {
     if (i == 0) {
       // starting the string with step one
-      returning_string += '1.)';
+      returning_string = returning_string + '1.)' + recipe_direction[i];
     } else if (recipe_direction[i] == '#') {
       // the start of a new step
       counting_pound_sign += 1;

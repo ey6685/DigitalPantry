@@ -133,10 +133,11 @@ router.get('/showCommunityRecipes', async function(req,res){
     db.query(query, async function(err, results) {
         if (err) throw err;
         for (every_recipe_directions in results){
+            console.log("directions to be parse: " + JSON.stringify(every_recipe_directions[every_recipe_directions]));
             var recipe_steps = await steps.parse_recipe_directions_by_string(results[every_recipe_directions].recipe_directions);
             recipe_steps_array.push(recipe_steps.split('${<br>}'));
         }
-        console.log(results);
+        console.log("directions that have been parsed:\n" + results);
         res.render('comunity_recipes',{
             title:"Community Recipes",
             recipe_steps:recipe_steps_array,
