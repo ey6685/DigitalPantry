@@ -109,7 +109,6 @@ router.get('/adminPanel', async function showAdminPanelPage(req, res) {
   }).then(function getPantryID(result) {
     return result.pantry_id
   })
-  console.log("SECOND QUERY")
   // Find all users in that pantry and not the current user
   const users = await User.findAll({
     where: {
@@ -121,16 +120,10 @@ router.get('/adminPanel', async function showAdminPanelPage(req, res) {
   }).then(function returnResults(results) {
     return results
   })
-  console.log("USERS")
-  console.log(users)
-  const query = `SELECT * FROM users WHERE pantry_id=${pantryId} AND user_id!=${currentUserId};`
-  console.log(query)
-  db.query(query, function sendQuery(err, results) {
-    if (err) throw err
-    res.render('admin_panel', {
-      title: 'Admin Panel',
-      userData: results
-    })
+  // render page with all found users that are related to the pantry
+  res.render('admin_panel', {
+    title: 'Admin Panel',
+    userData: users
   })
 })
 
