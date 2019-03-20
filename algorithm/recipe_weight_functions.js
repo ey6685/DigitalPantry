@@ -100,15 +100,15 @@ async function weight_total(recipe_id)
 module.exports.weight_total = weight_total;
 
 //test wieght code
-for(var i=2; i<=8;i++)
-{
-//test wieght code
-    console.log("recipe id: " + i);
-    if(i !=3)
-    {
-        weight_total(i);
-    }
-}
+// for(var i=2; i<=8;i++)
+// {
+// //test wieght code
+//     console.log("recipe id: " + i);
+//     if(i !=3)
+//     {
+//         weight_total(i);
+//     }
+// }
 
 /*
 ing_is_greatest

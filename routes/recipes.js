@@ -8,6 +8,7 @@ const multer = require('multer');
 const steps = require('../recipe_direction_parser');
 const users_route = require('./users');
 const aw = require("../algorithm/auto_weight");
+const base_recipe_w = require('../algorithm/recipe_weight_functions');
 //defines where to store image
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -288,6 +289,11 @@ router.post('/add', upload.single('image'), async function(req, res) {
             }
     //     //Repeat until all recipes have been parsed
         }
+        var recipe_weight = await base_recipe_w(recipe_id_inserted);
+        db.query("update table recipes set recipe_weight = '" + recipe_weight + "' where recipe_id = '" + recipe_id_inserted +"';",(err,results) =>{
+            if(err) console.log(err);
+            else console.log(results);
+        })
     // });
 
     // res.send(req.body.ingredientName[1]);
