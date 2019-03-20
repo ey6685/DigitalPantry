@@ -150,6 +150,25 @@ function converter_raw(num, unit, con_unit) {
             }
             else
             {
+              switch(unit){
+                case "oz":
+                  if(con_unit == "tsp.") return(num * 6);
+                  else if(con_unit == "tbsp.") return (num *2);
+                  else if(con_unit == "fl oz") return (num);
+                  else if(con_unit == "cup") return (num *0.125);
+                  else if(con_unit == "ml") return (num *29.5735);
+                  break;
+                case "lb":
+                  if (con_unit== "tsp.") return(num *96);
+                  else if(con_unit == "tbsp.") return (num *32);
+                  else if(con_unit == "fl oz") return (num *16 );
+                  else if(con_unit == "cup") return (num *2);
+                  else if(con_unit == "ml") return (num *29.5735);
+                  else return 0;
+                  break;
+
+              }
+
                 return 0;
             }
             //dry or solid food
@@ -170,6 +189,23 @@ function converter_raw(num, unit, con_unit) {
                     else if(con_unit == "cup") return (num * 8.115);
 
                     else return 0;
+                    break;
+                case "ml":
+                    if(con_unit == "tsp.") return (num * 0.202884);
+                    else if(con_unit == "tbsp.") return(num *0.067628);
+                    else if (con_unit == "fl oz" || con_unit == "oz") return (num * 0.033814);
+                    else if(con_unit == "cup") return (num * 0.00416667);
+                    else if(con_unit == "lb") return (num *0.00416667 * 0.5); //to cup then cup to lb
+                    else return 0;
+                    break;
+                case "quart":
+                  if(con_unit == "tsp.") return (num *192);
+                  else if(con_unit == "tbsp.") return(num *64);
+                  else if(con_unit.includes("oz")) return (num * 32);
+                  else if(con_unit == "cup") return (num * 3.94314);
+                  else if(con_unit == "ml") return(num *946.353);
+                  else if(con_unit == "lb") return(num *3.94314 *0.5 ); //to cup then to lb
+                  else return 0;
 
             }
         }

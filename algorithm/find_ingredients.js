@@ -14,7 +14,7 @@ const logger = require('../functions/logger');
 
 const op = require('sequelize').Op; /// handles
 
-async function find_ingredients(window) {
+async function find_ingredients(window,pantry_id) {
   var new_date = new Date();
   // if no window passed, assume today
   if (window == null) {
@@ -35,10 +35,12 @@ async function find_ingredients(window) {
 
     var expiring_ings = await ingredients_in_pan.findAll({
       attributes: ['ingredient_id'],
-      where: {
+      where: 
+      {
         ingredient_expiration_date: {
           [op.between]: [today, window]
-        }
+        },
+        pantry_id: pantry_id  
       }
     });
     logger.info("\nfound ingredient ids: \n" + JSON.stringify(expiring_ings));

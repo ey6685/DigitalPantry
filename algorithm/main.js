@@ -20,7 +20,7 @@ const recipe_t = require('../DB_models/Recipes');
 const op = require('sequelize').Op;
 const wieght_finder= require('./recipe_weight_functions');
 const logger = require('../functions/logger');
-async function main(window) {
+async function main(window,pantry_id) {
   // first check the window date
   // if it is null just assume the window is today
   logger.info("starting the Algorithm\n\n");
@@ -34,7 +34,7 @@ async function main(window) {
     // just like in this function, for somereason is the window is null
     // it just using todays date
     logger.info("\nCALLING find_ingredients\n")
-    var expiring_ingredients = await ingredient_finder.find_ingredients(window);
+    var expiring_ingredients = await ingredient_finder.find_ingredients(window,pantry_id);
     // logger.info("returned from find_ingredients: " + JSON.stringify(expiring_ingredients));
     // logger.info(expiring_ingredients[0].ingredient_name);
     if (expiring_ingredients.length == 0) {
@@ -48,15 +48,15 @@ async function main(window) {
       for (var i = 0; i < expiring_ingredients.length; i += 1) {
         // recipes_ids[i].push();
         recipes_ids.push(await recipe_id_finder.find_recipes(
-          expiring_ingredients[i].ingredient_id
+          expiring_ingredients[i].ingredient_id, pantry_id
         ));
       }
     } else {
       logger.info('passing: ' + expiring_ingredients[0].ingredient_name+ '\n');
-      recipes_ids = await recipe_id_finder.find_recipes(expiring_ingredients[0].ingredient_name);
+      recipes_ids = await recipe_id_finder.find_recipes(expiring_ingredients[0].ingredient_name,pantry_id);
     }
 
-    logger.info("ENDING RECIPE IDS: \n" +recipes_ids);
+    logger.info("ENDING RECIPE IDS: \n" +JSON.stringify(recipes_ids));
     // ended here with getting the ids of recipes that
 
     //now we need only the ids sections that have values
@@ -65,8 +65,15 @@ async function main(window) {
     {
       if(recipes_ids[i] != "")
       {
-          final_ids.push(recipes_ids[i]);
-        }
+        console.log(recipes_ids[i]);
+          for(var o=0;o<recipes_ids[i].length;o++)
+          {
+            if(final_ids.indexOf(recipes_ids[i][o]) == -1)
+            {
+              final_ids.push(recipes_ids[i][o]);
+            }
+          }
+      }
       
       
     }
@@ -77,7 +84,8 @@ async function main(window) {
       where: {
         recipe_id: {
           [op.in]: final_ids
-        }
+        },
+        pantry_id: pantry_id
       }
     });
 
