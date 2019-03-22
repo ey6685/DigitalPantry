@@ -408,3 +408,16 @@ $(document).on('click', '#cancelPassEdit', function cancelPasswordEdit () {
   // hide save email button
   $('#saveEmailButton').hide()
 })
+
+$('#sortByTimeFrameBtn').click(function sortByTimeFrame () {
+  $timeFrameValue = $('input[data-slider-value]').val()
+  $.ajax({
+    type: 'POST',
+    url: '/pantry/setExpirationTimeFrame',
+    data: { expirationTimeFrameValue: $timeFrameValue },
+    success: function () {},
+    error: function (err) {
+      console.log(err)
+    }
+  })
+})
