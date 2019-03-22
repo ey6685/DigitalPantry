@@ -16,7 +16,6 @@ block content
 			background: #BABABA;
 		}
 	link(rel='stylesheet' href='/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css')
-	//- != messages('message', locals)
 	//- Stores a variable passed in, which defines an image path
 	- card1_image= recipe_image_path
 	- card2_image= stir_fry_image
@@ -27,17 +26,18 @@ block content
 		div.bg-dark.card-container(class='container-fluid', class='rounded')
 			.row
 				.col-sm
-					input#expirationWindowSlider(data-slider-id='expirationWindowSlider', type='text', data-slider-min='0', data-slider-max='50', data-slider-step='1', data-slider-value='10')
+					input#expirationWindowSlider(data-slider-id='expirationWindowSlider', type='text', data-slider-min='0', data-slider-max='30', data-slider-step='1', data-slider-value='10')
 			.row
 				.col-sm-5
-					h3.text-white#currentSliderValue Expiration time frame: 10 days
+					h3.text-white#currentSliderValue Expiration time frame: #{expirationTimeFrame} days
 				.col-sm-2
-					input.btn.btn-primary(type='button', value='Sort')
+					input.btn.btn-primary(id='sortByTimeFrameBtn', type='submit', value='Sort')
 			.row
 				.col-sm
 					h3.text-white Next Expiring Ingredient:
 						|  #{i_total} #{i_measurement} of #{i_name} on #{(i_expire)}
 		br
+		!= messages('message', locals)
 		div.bg-dark.card-container(class='container-fluid', class='rounded')
 			h3.mb-3.text-white Recommended Recipes
 			div(class='row')

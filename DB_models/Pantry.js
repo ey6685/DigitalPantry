@@ -5,8 +5,7 @@
 
 // reqires
 const Sequelize = require('sequelize')
-const recipes = require('./Recipes')
-const db = require('../databaseMySQL')
+const db = require('../databaseMySQL.js')
 
 // db table
 /*
@@ -24,6 +23,9 @@ const Pantry = db.define(
     },
     pantry_name: {
       type: Sequelize.STRING
+    },
+    expire_window: {
+      type: Sequelize.INTEGER
     }
   },
   {
