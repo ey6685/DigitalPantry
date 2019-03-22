@@ -46,7 +46,7 @@ block content
                 div(id=recipe.recipe_id, class='card', class='h-100')
                     img.image(class='card-img-top', src=recipe_image, alt='image')
                     div(class='card-body')
-                        h4(class='card-title') #{recipe.recipe_name}
+                        h5(class='card-title') #{recipe.recipe_name}
                         //- For each steps inside of the array of steps
                         for step in recipe_steps[i]
                             p(class='card-text')= step
