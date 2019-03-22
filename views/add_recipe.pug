@@ -3,61 +3,59 @@ extends user_view_template
 //- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
 
 block content
-    style.
-        img{
-            display:none;
-        }
-    br
-    br
-    div(class='container-fluid', class='rounded', style='width: 80%')
-        h1 #{title}
-        hr
-        br
-        form(method= 'POST', action= '/recipes/add', class= 'form', enctype="multipart/form-data")
-            .form-row
-                .form-group.col-md-4
-                    input.form-control(name='recipeName', type='text', placeholder='Recipe = Chicken Soup')
-                .form-group.col-md-4
-                    input.form-control(name='recipeServingSize', type='text', placeholder='Number of People This Feeds = 2')
-            .form-row
-                .form-group.col-md-4
-                    input.form-control(name='ingredientProperties[1]', type='text', placeholder='Ingredient = Chicken')
-                .form-group.col-md-4
-                    input.form-control(name='ingredientProperties[1]', type='text', placeholder='Quantity = 2')
-                .form-group.col-md-3
-                    .dropdown-inline
-                    select.form-control(name='ingredientProperties[1]', required)
-                        option(value='') Measurement
-                        option(value='tsp.') Teaspoon
-                        option(value='tbsp.') Tablespoon
-                        option(value='fl oz') Fluid Ounce
-                        option(value='cup') Cup
-                        option(value='quart') Quart
-                        option(value='ml') Milliliter
-                        option(value='lb') Pound
-                        option(value='oz') Dry Ounce
-            #recipe-container
-            button.btn.btn-secondary(type='button' onclick='addIngredient()', class='form-group') Add Ingredient
-            .form-row
-                .col-md-7
-                    br
-                    h3 Add Instructions
-                    hr
-                    br
-                    .form-group
-                        textarea.form-control(name='recipeDirections', placeholder= 'Describe first step\nDescribe second step \nContinue with each step on new line', rows='8')
-                .col-md-1
-                .col-md-4
-                    br
-                    h3 Add An Image
-                    hr
-                    br
-                    .form-group
-                        img#output
-                    .form-group
-                        input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)')
-            input.btn.btn-primary(type='submit', value='Submit', class='form-group')
-                
+	style.
+		img{
+			display:none;
+		}
+	br
+	br
+	div(class='container-fluid', class='rounded', style='width: 80%')
+		h1 #{title}
+		hr
+		br
+		form(method= 'POST', action= '/recipes/add', class= 'form', enctype="multipart/form-data")
+			.form-row
+				.form-group.col-md-4
+					input.form-control(name='recipeName', type='text', placeholder='Recipe = Chicken Soup', class= 'input-form')
+				.form-group.col-md-4
+					input.form-control(name='recipeServingSize', type='text', placeholder='Serving Size = 2', class= 'input-form')
+			.form-row
+				.form-group.col-md-4
+					input.form-control(name='ingredientProperties[1]', type='text', placeholder='Ingredient = Chicken', class= 'input-form')
+				.form-group.col-md-4
+					input.form-control(name='ingredientProperties[1]', type='text', placeholder='Quantity = 2', class= 'input-form')
+				.form-group.col-md-3
+					.dropdown-inline
+					select.form-control(name='ingredientProperties[1]', required, class= 'selection-drop')
+						option(value='') Measurement
+						option(value='bag') Bag
+						option(value='can') Can
+						option(value='pound') Pound
+						option(value='ounce') Ounce
+						option(value='cup') Cup
+						option(value='tablespoon') Tablespoon
+						option(value='teaspoon') Teaspoon
+			#recipe-container
+			button.btn.btn-secondary(type='button' onclick='addIngredient()', id='add-ingredient-recipe') Add Ingredient
+			.form-row
+				.col-md-7
+					br
+					h3 Add Instructions
+					hr
+					br
+					.form-group
+						textarea.form-control(name='recipeDirections', placeholder= 'Describe first step\nDescribe second step \nContinue with each step on new line', rows='8', class='form-group')
+				.col-md-1
+				.col-md-4
+					br
+					h3 Add An Image
+					hr
+					br
+					.form-group
+						img#output
+					.form-group
+						input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='form-group')
+			input.btn.btn-primary(type='submit', value='Submit', class='form-group', id='submit-recipe')
 
 
         script.

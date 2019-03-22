@@ -8,7 +8,7 @@ block content
 			div(class='alert alert-danger') #{error.msg}
 	.row
 		.col-md-3
-			img.img-thumbnail.img-fluid.rounded-circle(id='pantry-image', src='/images/placeholder.jpg', alt='Pantry Image')
+			img.img-thumbnail.img-fluid.rounded-circle(id='pantry-image', src='/images/placeholder.jpg', alt='Pantry Image', class='image-card')
 		.col-md-9
 			h1 #{title}
 			hr
@@ -25,32 +25,32 @@ block content
 					button#OpenImgUpload Image Upload
 	br
 	//-reset password overlay
-	#resetForm.modal.fade(tabindex='-1', role='dialog', aria-hidden='true')
+	#resetForm.modal.fade(tabindex='-1', role='dialog', aria-hidden='true', class= 'form-modal')
 		.modal-dialog.modal-dialog-centered.modal(role='document')
 			.modal-content
 				.modal-header.modal-title 
 					h5 Reset password
-				form(method='POST', action='/user/resetPassword')
+				form(method='POST', action='/user/resetPassword', class='form')
 					.modal-body
 						.container
 							.row.justify-content-md-center
 								.form-group
 									label Enter new password:
-									input#new-password.form-control(name='password', type='password', placeholder="Password")
+									input#new-password.form-control(name='password', type='password', placeholder="Password", class='form-group')
 							.row.justify-content-md-center
 								.form-group
 									label Confirm password:
-									input#confirm-password.form-control(name='confirmPassword',type='password', placeholder="Password")
+									input#confirm-password.form-control(name='confirmPassword',type='password', placeholder="Password", class='form-group')
 					.modal-footer
-						button.btn.btn-primary(type='button', data-dismiss='modal') Cancel
-						input.btn.btn-primary(type='submit', value='Submit')
+						button.btn.btn-primary(type='button', data-dismiss='modal', id='cancle-admin') Cancel
+						input.btn.btn-primary(type='submit', value='Submit', id='submit-admin')
 	//-Change privilege overlay
-	#changePrivilege.modal.fade(tabindex='-1', role='dialog',aria-hidden='true')
+	#changePrivilege.modal.fade(tabindex='-1', role='dialog',aria-hidden='true', class= 'form-modal')
 		.modal-dialog.modal-dialog-centered.modal(role='document')
 			.modal-content
 				.modal-header.modal-title 
 					h5 Change privilege
-				form(method='POST', action='/users/changePrivilege')
+				form(method='POST', action='/users/changePrivilege', class='form')
 					.modal-body
 						label Set new privilege
 						.container
@@ -59,18 +59,18 @@ block content
 									option(value='administrator') Administrator
 									option(value='volunteer') Volunteer
 					.modal-footer
-						button.btn.btn-primary(type='button', data-dismiss='modal') Cancel
-						input.btn.btn-primary(type='submit', value='Change')
+						button.btn.btn-primary(type='button', data-dismiss='modal', id='cancle2-admin') Cancel
+						input.btn.btn-primary(type='submit', value='Change', class='form-group')
 	br
 	h4 Active users
 	hr
 	br
 	.form-row
 		.form-group.col-md-2
-			input.form-control.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search')
+			input.form-control.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
 		.form-group.col-md-2
 			.dropdown
-				select.form-control(id='sortBar', name='SortBar', onchange='sortList()')
+				select.form-control(id='sortBar', name='SortBar', onchange='sortList()', class='selection-drop')
 					option(value='0') Sort By
 					option(value='1') Sort A-Z
 					option(value='2') Sort Z-A
@@ -89,27 +89,27 @@ block content
 					td.user-name= item.username
 					td= item.user_type
 					td
-						a.btn.btn-danger(data-toggle='modal', data-target='#changePrivilege') Change Privilege
+						a.btn.btn-danger(data-toggle='modal', data-target='#changePrivilege', id= 'change-admin') Change Privilege
 					td
-						a.btn.btn-danger(data-toggle='modal', data-target='#resetForm') Reset
+						a.btn.btn-danger(data-toggle='modal', data-target='#resetForm', id= 'reset-admin') Reset
 					td
-						a.btn.btn-danger(class="delete-user", data-id=item.user_id) DELETE
+						a.btn.btn-danger(class="delete-user", data-id=item.user_id, id= 'delete-admin') DELETE
 	h4 Add new users
 	hr
 	br
 	form(method= 'POST', action= '/users/add', class= 'form')
 		.form-row
 			.col-md-3
-				input.form-control(name='userName', type='text', placeholder='Username')
+				input.form-control(name='userName', type='text', placeholder='Username', class= 'input-form')
 			.col-md-3
 				.dropdown-inline
 				select.form-control(name='userType', required)
 					option(value='administrator') Administrator
 					option(value='volunteer') Volunteer
 			.col-md-3
-				input.form-control(name='password', autocomplete="password", type='password', placeholder="Password")
+				input.form-control(name='password', autocomplete="password", type='password', placeholder="Password", class= 'input-form')
 			.col-md-2
-				button.btn.btn-primary(type='submit') Add User
+				button.btn.btn-primary(type='submit', id='add-admin') Add User
 
 	script.
 		function edit(){
