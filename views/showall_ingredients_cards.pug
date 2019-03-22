@@ -48,7 +48,7 @@ block content
                 - ingredient_image= item.ingredient_image_path
                 .form-group.col-md-3
                     div(id=item.ingredient_id, class='card', class='h-100')
-                        img.image(class='card-img-top', src=ingredient_image, alt='image', class="h-50")
+                        img.image(class='card-img-top', src=ingredient_image, alt='image')
                         div(class='card-body')
                             h5(class='card-title') #{item.ingredient_name}
                             p(class='card-text') Amount: #{item.ingredient_amount} #{item.ingredient_unit_of_measurement}

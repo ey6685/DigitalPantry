@@ -44,7 +44,7 @@ block content
             - recipe_image= recipe.recipe_image_path
             .form-group.col-md-3
                 div(id=recipe.recipe_id, class='card', class='h-100')
-                    img.image(class='card-img-top', src=recipe_image, alt='image', class="h-50")
+                    img.image(class='card-img-top', src=recipe_image, alt='image')
                     div(class='card-body')
                         h5(class='card-title') #{recipe.recipe_name}
                         //- For each steps inside of the array of steps
