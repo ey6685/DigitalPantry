@@ -21,12 +21,12 @@ block content
 				form(method= 'POST', action= '/ingredients/add', class= 'form')
 					.form-row
 						.form-group.col-md-2
-							input.form-control(name='ingredientProperties[1]', type='text', placeholder='Name = Tuna')
+							input.form-control(name='ingredientProperties[1]', type='text', placeholder='Name = Tuna', class= 'input-form')
 						.form-group.col-md-1
-							input.form-control(name='ingredientProperties[1]', type='text', placeholder='Total = 2')
+							input.form-control(name='ingredientProperties[1]', type='text', placeholder='Total = 2' class= 'input-form')
 						.form-group.col-md-3
 							.dropdown-inline
-							select.form-control(name='ingredientProperties[1]', required)
+							select.form-control(name='ingredientProperties[1]', required, class= 'selection-drop')
 								option(value='') Measurement
 								option(value='tsp.') Teaspoon
 								option(value='tbsp.') Tablespoon
@@ -37,9 +37,9 @@ block content
 								option(value='lb') Pound
 								option(value='oz') Dry Ounce
 						.form-group.col-md-3
-							input.form-control(name='ingredientProperties[1]', type='date')
+							input.form-control(name='ingredientProperties[1]', type='date', class= 'input-form')
 					#ingredient-container
-					button.btn.btn-secondary(type='button' onclick='addIngredient()', class='form-group') Add Ingredient
+					button.btn.btn-secondary(type='button' onclick='addIngredient()', id='add-ingredient', class='form-group') Add Ingredient
 					input.btn.btn-primary.col-md-2(type='submit', value='Submit', class='form-group')
 
 		script.
