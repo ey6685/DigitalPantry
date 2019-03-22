@@ -8,6 +8,7 @@ const multer = require('multer');
 const steps = require('../recipe_direction_parser');
 const users_route = require('./users');
 const aw = require("../algorithm/auto_weight");
+const gm = require('gm');
 //defines where to store image
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -177,6 +178,13 @@ router.post('/add', upload.single('image'), async function(req, res) {
   if (req.file) {
     console.log('Uploading file...');
     console.log('File Uploaded Successfully');
+    gm(req.file.path) //uses graphicsmagic and takes in image path
+        .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
+        .write(req.file.path, (err) => {
+            if (err) {
+                console.log(err);
+            }
+        })
   } else {
     console.log('No File Uploaded');
     console.log('File Upload Failed');
