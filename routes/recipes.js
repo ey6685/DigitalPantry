@@ -8,6 +8,7 @@ const multer = require('multer');
 const steps = require('../recipe_direction_parser');
 const users_route = require('./users');
 const aw = require("../algorithm/auto_weight");
+const gm = require('gm');
 //defines where to store image
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -133,10 +134,11 @@ router.get('/showCommunityRecipes', async function(req,res){
     db.query(query, async function(err, results) {
         if (err) throw err;
         for (every_recipe_directions in results){
+            console.log("directions to be parse: " + JSON.stringify(every_recipe_directions[every_recipe_directions]));
             var recipe_steps = await steps.parse_recipe_directions_by_string(results[every_recipe_directions].recipe_directions);
             recipe_steps_array.push(recipe_steps.split('${<br>}'));
         }
-        console.log(results);
+        console.log("directions that have been parsed:\n" + results);
         res.render('comunity_recipes',{
             title:"Community Recipes",
             recipe_steps:recipe_steps_array,
@@ -176,6 +178,13 @@ router.post('/add', upload.single('image'), async function(req, res) {
   if (req.file) {
     console.log('Uploading file...');
     console.log('File Uploaded Successfully');
+    gm(req.file.path) //uses graphicsmagic and takes in image path
+        .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
+        .write(req.file.path, (err) => {
+            if (err) {
+                console.log(err);
+            }
+        })
   } else {
     console.log('No File Uploaded');
     console.log('File Upload Failed');
@@ -298,12 +307,11 @@ router.post('/add', upload.single('image'), async function(req, res) {
 // Get all available recipes that a single pantry has
 // Returns a JSON result
 router.get('/getPantryRecipes', function(req, res) {
-  console.log(req.session.passport['user']);
   // get id of the currently logged in user
   var user_id = req.session.passport['user'];
   // query all recipes which are availabel to this user
   query =
-    'SELECT * FROM recipes WHERE recipe_pantry_id = (SELECT user_pantry_id FROM users WHERE user_id=' +
+    'SELECT * FROM recipes WHERE pantry_id = (SELECT pantry_id FROM users WHERE user_id=' +
     user_id +
     ');';
   db.query(query, function(err, results) {
@@ -335,7 +343,7 @@ router.get('/getPantryRecipes', function(req, res){
 
 //Share a recipe into community
 router.post('/share', async function(req, res){
-    share_query="UPDATE recipes SET sharable=1 WHERE recipe_name='"+req.body.recipe_name+"';";
+    share_query=`UPDATE recipes SET sharable=1 WHERE recipe_name='${req.body.recipe_name}';`
     await db.query(share_query, function(err, results){
         if (err) throw err;
         console.log(results);

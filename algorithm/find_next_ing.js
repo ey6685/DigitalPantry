@@ -15,6 +15,7 @@ requires
 const ingredient_table           = require('../DB_models/Ingredients');
 const ingredient_in_pantry_table = require('../DB_models/ingredients_in_pantry');
 const op = require('sequelize').Op;
+const logger = require('../functions/logger');
 
 
 //start of function
@@ -29,11 +30,11 @@ async function next_exp_ingredient()
         var day = date.getDate()-1;
         var year = date.getFullYear();
         var local_date = year + '-' + month + '-' + day;
-        console.log("todays date for checking: " + local_date);
+        logger.info("todays date for checking: " + local_date + '\n');
     }
     catch(err)
     {
-        console.log("date err: " + err);
+        logger.info("date err: " + err);
     }
 
     try 
@@ -54,7 +55,7 @@ async function next_exp_ingredient()
             // include: [{model: ingredient_table}]
         });
         
-        console.log(JSON.stringify(list_of_exp_ing));
+        logger.info(JSON.stringify(list_of_exp_ing) + '\n');
         //now to find the one with the greatest weight
         var ex_date = list_of_exp_ing[0].ingredient_expiration_date;
         var i = 0;
@@ -85,14 +86,14 @@ async function next_exp_ingredient()
                 best_weight = weights[i];
         }
         
-        console.log(JSON.stringify(best_weight));
+        logger.info(JSON.stringify(best_weight)+ '\n');
 
         //return the ingredient id
         return best_weight.ingredient_id;
 
     } 
     catch (err) {
-        console.log(err);
+        logger.info(err);
     }
 }
 

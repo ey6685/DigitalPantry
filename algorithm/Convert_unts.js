@@ -30,7 +30,7 @@ The second funtion in this file is for the front end
 
 /////requires////
 const ing_t = require('../DB_models/Ingredients');
-
+const logger = require('../functions/logger');
 function converter_raw(num, unit, con_unit) {
   try {
     // checking data
@@ -46,12 +46,12 @@ function converter_raw(num, unit, con_unit) {
 
     if(unit == null || con_unit == null) 
     {
-      console.log("water, most likely\n");
+      logger.info("water, most likely\n");
       return num;
     }
       
     ///done checking data
-  console.log("coverting " +num+" " + unit + " to " + con_unit);
+  logger.info("coverting " +num+" " + unit + " to " + con_unit +'\n');
   //now to check if we can convert the units
 
   ///these can go both ways so just convert here
@@ -141,7 +141,7 @@ function converter_raw(num, unit, con_unit) {
             //put in the universals from above
             if(unit == "lb" && con_unit == "oz")
             {
-                console.log((num * 16));
+                logger.info((num * 16) + '\n');
                 return (num * 16);
             }
             else if(unit == "oz" && con_unit == "lb")
@@ -182,7 +182,7 @@ function converter_raw(num, unit, con_unit) {
     }
   
    catch (err) {
-    console.log(err);
+    logger.info(err);
     return 0;
   }
 }
@@ -236,7 +236,7 @@ async function converter_whole(num, unit, con_unit) {
     if (converted_num == 0) throw 'converter_raw fail';
     else if (converted_num < 1) return parseFloat(converted_num).toFixed(2); // keep it to two descible points
 
-    console.log('raw: ' + converted_num + con_unit);
+    logger.info('raw: ' + converted_num + con_unit + '\n');
 
     // take the raw convert into two parts
     // the whole and the decibel
@@ -245,20 +245,20 @@ async function converter_whole(num, unit, con_unit) {
 
     // if no need to convert decibel part.
     if (decibel_part == 0) return whole_part;
-    // console.log('whole: ' + whole_part + "\ndeci: " + decibel_part);
+    // logger.info('whole: ' + whole_part + "\ndeci: " + decibel_part);
 
     decibel_part = await parseFloat(
       parseFloat(converter_raw(decibel_part, con_unit, unit)).toFixed(1)
     );
 
-    // console.log(decibel_part.toFixed(2) +" "+ unit);
+    // logger.info(decibel_part.toFixed(2) +" "+ unit);
 
     // build the return array
     return_array = [[whole_part, con_unit], [decibel_part, unit]];
 
-    console.log(return_array);
+    logger.info(return_array + '\n');
   } catch (err) {
-    console.log(err);
+    logger.info(err);
     return 0;
   }
 }

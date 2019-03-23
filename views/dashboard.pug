@@ -11,63 +11,78 @@ block content
 		.btn_card{
 			/*Defines CSS for butons on the dashboard*/
 			margin: 0px 10px 10px 10px;
-			}
-	//- != messages('message', locals)
+		}
+		#ex1Slider .slider-selection {
+			background: #BABABA;
+		}
+	link(rel='stylesheet' href='/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css')
 	//- Stores a variable passed in, which defines an image path
 	- card1_image= recipe_image_path
 	- card2_image= stir_fry_image
 	- card3_image= pot_pie_image
 	- rid_variable= rid
 	br
-	br
-	br
 	div(class='container-fluid', class='rounded', style='width: 80%')
-		div.bg-secondary(class='rounded', class='col-12')
-			h4.text-secondary .
-			h2.text-white.ml-2 Next Expiring Ingredient:
-				|  #{i_total} #{i_measurement} of #{i_name} on #{(i_expire)}
-			br
-			div.bg-dark.card-container(class='container-fluid', class='rounded')
-				h4.text-dark .
-				h2.mb-3.text-white Recommended Recipes
-				div(class='row')
-					div(class='col-4')
-						div(class='card', style='width: 100%', class='card h-100')
-							img.image(class='card-img-top', src=card1_image, alt='Recipe 1 Image')
-							div(class='card-body')
-								h4(class='card-title') #{recipe_name}
-								//- For each steps inside of the array of steps
-								for step in recipe_steps
-									p(class='card-text')= step
-							div(class='card-foot', padding='.75rem')
-								//- btn_card is a custom class used for CSS for buttons
-								button.btn_card.btn.btn-primary(recipe-id=rid, id='card-one', type='button', style='width: 93%') Cook It!
-					div(class='col-4')
-						div(class='card', style='width: 100%', class='card h-100')
-							img.image(class='card-img-top', src='/images/chicken_stir_fry.jpg', alt='Recipe 2 Image')
-							div(class='card-body')
-								h4(class='card-title') Chicken Stir-Fry
-								p(class='card-text') 1.)Heat oil in wok or large skillet. 
-									p 2.)Add chicken. Cook until golden brown.
-									p 3.)Add veggies. Cook for 2 minutes.
-									p 4.)Add sauce. Cook for 2 minutes.
-									p 5.)Ready to serve!
-							div(class='card-foot', padding='.75rem')
-								//- btn_card is a custom class used for CSS for buttons
-								button.btn_card.btn.btn-primary(type='submit' onclick='view_recipe()', style='width: 93%') Cook It!
-					div(class='col-4')
-						div(class='card', style='width: 100%', class='card h-100')
-							img.image(class='card-img-top', src=card3_image, alt='Recipe 3 Image')
-							div(class='card-body')
-								h4(class='card-title') Chicken Pot Pie
-								p(class='card-text') 1.)Heat oven to 425 degrees F.
-									p 2.) Set pie crust in pan.
-									p 3.) Add chicken and mixed vegetables.
-									p 4.) Cover top with top pie crust.
-									p 5.) Bake 30-40 minutes. Let stand for 5 minutes.
-							div(class='card-foot', padding='.75rem')
-								//- btn_card is a custom class used for CSS for buttons
-								button.btn_card.btn.btn-primary(type='submit' onclick='view_recipe()', style='width: 93%') Cook It!
-			h4.text-secondary .
-
-
+		div.bg-dark.card-container(class='container-fluid', class='rounded')
+			.row
+				.col-sm
+					input#expirationWindowSlider(data-slider-id='expirationWindowSlider', type='text', data-slider-min='0', data-slider-max='30', data-slider-step='1', data-slider-value='10')
+			.row
+				.col-sm-5
+					h3.text-white#currentSliderValue Expiration time frame: #{expirationTimeFrame} days
+				.col-sm-2
+					input.btn.btn-primary(id='sortByTimeFrameBtn', type='submit', value='Sort')
+			.row
+				.col-sm
+					h3.text-white Next Expiring Ingredient:
+						|  #{i_total} #{i_measurement} of #{i_name} on #{(i_expire)}
+		br
+		!= messages('message', locals)
+		div.bg-dark.card-container(class='container-fluid', class='rounded')
+			h3.mb-3.text-white Recommended Recipes
+			div(class='row')
+				div(class='col-4')
+					div(class='card', style='width: 100%', class='card h-100')
+						img.image(class='card-img-top', src=card1_image, alt='Recipe 1 Image')
+						div(class='card-body')
+							h4(class='card-title') #{recipe_name}
+							//- For each steps inside of the array of steps
+							for step in recipe_steps
+								p(class='card-text')= step
+						div(class='card-foot', padding='.75rem')
+							//- btn_card is a custom class used for CSS for buttons
+							button.btn_card.btn.btn-primary(recipe-id=rid, id='card-one', type='button', style='width: 93%') Cook It!
+				div(class='col-4')
+					div(class='card', style='width: 100%', class='card h-100')
+						img.image(class='card-img-top', src=card2_image, alt='Recipe 2 Image')
+						div(class='card-body')
+							h4(class='card-title') Chicken Stir-Fry
+							p(class='card-text') 1.)Heat oil in wok or large skillet. 
+								p 2.)Add chicken. Cook until golden brown.
+								p 3.)Add veggies. Cook for 2 minutes.
+								p 4.)Add sauce. Cook for 2 minutes.
+								p 5.)Ready to serve!
+						div(class='card-foot', padding='.75rem')
+							//- btn_card is a custom class used for CSS for buttons
+							button.btn_card.btn.btn-primary(type='submit' onclick='view_recipe()', style='width: 93%') Cook It!
+				div(class='col-4')
+					div(class='card', style='width: 100%', class='card h-100')
+						img.image(class='card-img-top', src=card3_image, alt='Recipe 3 Image')
+						div(class='card-body')
+							h4(class='card-title') Chicken Pot Pie
+							p(class='card-text') 1.)Heat oven to 425 degrees F.
+								p 2.) Set pie crust in pan.
+								p 3.) Add chicken and mixed vegetables.
+								p 4.) Cover top with top pie crust.
+								p 5.) Bake 30-40 minutes. Let stand for 5 minutes.
+						div(class='card-foot', padding='.75rem')
+							//- btn_card is a custom class used for CSS for buttons
+							button.btn_card.btn.btn-primary(type='submit' onclick='view_recipe()', style='width: 93%') Cook It!
+	script(src='/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js')
+	script(type='text/javascript').
+		$(window).on('load', function() {
+			var slider = new Slider("#expirationWindowSlider")
+			slider.on("slide", function(sliderValue) {
+				document.getElementById("currentSliderValue").textContent = 'Expiration time frame: ' + sliderValue + ' days';
+			});
+		});

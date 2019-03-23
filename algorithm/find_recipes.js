@@ -13,13 +13,14 @@ const ingredients_in_a_recipe_t = require('../DB_models/ingredients_in_a_recipe'
 const ingredients_in_pantry_t = require('../DB_models/ingredients_in_pantry');
 const unit_convert = require('./Convert_unts');
 const op = require('sequelize').Op;
+const logger = require('../functions/logger');
 
 
 async function find_recipes(exp_id,pantry_id)
 {
     try{
         var recommened_recipes= new Array();
-        console.log("starting find recipe with ingredient id: " + exp_id+"\n");
+        logger.info("starting find recipe with ingredient id: " + exp_id+"\n");
         if(pantry_id == null) pantry_id = 1;
         if(exp_id != null)
         {
@@ -32,7 +33,7 @@ async function find_recipes(exp_id,pantry_id)
                 }
             });
 
-            console.log('\nrecipe ids: ' +JSON.stringify(recipe_ids));
+            logger.info('\nrecipe ids: ' +JSON.stringify(recipe_ids));
 
             var recipe_ids_array = new Array();
 
@@ -40,7 +41,7 @@ async function find_recipes(exp_id,pantry_id)
 
                 recipe_ids_array.push(ids.recipe_id);
             });
-            console.log("array of recipes : \n" + recipe_ids_array);
+            logger.info("array of recipes : \n" + recipe_ids_array);
 
             //new vars for for loops
             var flag_have_needed_anmount = false//starts false will flip if we have the ingredents
@@ -54,7 +55,7 @@ async function find_recipes(exp_id,pantry_id)
                 //set start data
                 total_amount_ingredient = 0;
                 flag_have_needed_anmount = true;
-                console.log("\nrecipe_id: " + JSON.stringify(recipe_ids[i] ));
+                logger.info("\nrecipe_id: " + JSON.stringify(recipe_ids[i] ));
                 //get a list of ingredients need for 
                 list_of_ingredients_in_recipe = await ingredients_in_a_recipe_t.findAll({
                     attributes: ['ingredient_id','amount_of_ingredient_needed', 'ingredient_unit_of_measurement'],
@@ -63,7 +64,7 @@ async function find_recipes(exp_id,pantry_id)
                         pantry_id: pantry_id
                     }
                 });
-                console.log(JSON.stringify(list_of_ingredients_in_recipe));
+                logger.info(JSON.stringify(list_of_ingredients_in_recipe));
                 //check each needed amount of the recipe and change the flag if we doent
                 for(var o=0; o< list_of_ingredients_in_recipe.length; o++)
                 {
@@ -76,10 +77,10 @@ async function find_recipes(exp_id,pantry_id)
                     })
 
                     total_amount_ingredient = 0;
-                    console.log(JSON.stringify(ingredents_from_pantry_data));
+                    logger.info(JSON.stringify(ingredents_from_pantry_data));
                     for(var p=0; p<ingredents_from_pantry_data.length; p++)
                     {
-                        console.log("list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: " + list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement + ' == ' + ingredents_from_pantry_data[p].ingredient_unit_of_measurement);
+                        logger.info("list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: " + list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement + ' == ' + ingredents_from_pantry_data[p].ingredient_unit_of_measurement);
                         if(list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement == ingredents_from_pantry_data[p].ingredient_unit_of_measurement)
                         {
                             total_amount_ingredient += ingredents_from_pantry_data[p].ingredient_amount;
@@ -87,20 +88,20 @@ async function find_recipes(exp_id,pantry_id)
                         else
                         {
                             var new_amount;
-                            console.log("have to convert units");
+                            logger.info("have to convert units");
                             new_amount = await parseFloat(unit_convert.converter_raw(ingredents_from_pantry_data[p].ingredient_amount, ingredents_from_pantry_data[p].ingredient_unit_of_measurement,list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement));
-                            console.log("converted amount: " +new_amount);
+                            logger.info("converted amount: " +new_amount);
                             if(new_amount != 0)
                             {
                                 total_amount_ingredient += new_amount;
                             }   
                         }
-                        console.log("\ntotal: " + total_amount_ingredient + "\n");
+                        logger.info("\ntotal: " + total_amount_ingredient + "\n");
                     }//end of double nesst for loop
-                    // console.log("total_amount_ingredient: " + total_amount_ingredient + " < " +list_of_ingredients_in_recipe[o].amount_of_ingredient_needed);
+                    // logger.info("total_amount_ingredient: " + total_amount_ingredient + " < " +list_of_ingredients_in_recipe[o].amount_of_ingredient_needed);
                     if(total_amount_ingredient < list_of_ingredients_in_recipe[o].amount_of_ingredient_needed)
                     {
-                        console.log("cant cook, next\n");
+                        logger.info("cant cook, next\n");
                         flag_have_needed_anmount =false;
                         break;
                     }
@@ -111,19 +112,19 @@ async function find_recipes(exp_id,pantry_id)
                     {
                         recommened_recipes.push(recipe_ids_array[i]);
                     }
-                console.log("\n");
+                logger.info("\n");
             }//END OF FOR LOOP
             
-            console.log("recommended recipe ids: \n" + (recommened_recipes));
+            logger.info("recommended recipe ids: \n" + (recommened_recipes));
             return recommened_recipes;
         }//end of if checking that we passed an id for ingfredients
         else{
-            console.log("need ingredient id thank you");
+            logger.info("need ingredient id thank you");
         }
     }
     catch(err)
     {
-        console.log(err);
+        logger.info(err);
     }
 
 }
