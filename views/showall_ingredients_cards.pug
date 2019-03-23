@@ -38,11 +38,10 @@ block content
                                 option(value='oz') Dry Ounce
                         .form-group.col-md-3
                             input.form-control(name='ingredientProperties[1]', type='date')
+                        .col-md-4
+                            h4 Add An Image
                             input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='form-group')
-                        
-                            
-                            
-                        input.btn.btn-primary.col-md-2(type='submit', value='Submit', class='form-group')
+                            input.btn.btn-primary.col-md-2(type='submit', value='Submit', class='form-group')
 
         .form-row
             //-for each ingredient in data
