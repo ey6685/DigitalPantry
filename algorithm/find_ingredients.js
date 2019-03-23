@@ -15,21 +15,18 @@ const logger = require('../functions/logger');
 const op = require('sequelize').Op; /// handles
 
 async function find_ingredients(window,pantry_id) {
-  var new_date = new Date();
+  var window = new Date();
   // if no window passed, assume today
-  if (window == null) {
-    window =1;
-    logger.info('no window date provide, using: ' + window);
-  }
-  else{
-    window = new Date(new_date.getUTCFullYear(),new_date.getUTCMonth(),new_date.getUTCDate() + window);
+  
+  if(window =! null){
+    window = window.setDate(window.getDate() + window);
   } 
   try {
     // SELECT ingredient_name
     // FROM   ingredients
     // WHERE ingrdient_exiration_date BETWEEN today and window
     logger.info("")
-    var today = new Date(new_date.getUTCFullYear(),new_date.getUTCMonth(),new_date.getUTCDate());
+    var today = new Date();
     logger.info("today: " + today + "\nwindow: " + window);
     
 

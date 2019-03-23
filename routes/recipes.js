@@ -175,6 +175,8 @@ BODY_PARAMS:
 */
 // calls upload function for images
 router.post('/add', upload.single('image'), async function(req, res) {
+    console.log("STARTING ADDING THE RECIPE");
+    console.log("==========================");
   console.log(req.file);
   if (req.file) {
     console.log('Uploading file...');
@@ -220,85 +222,95 @@ router.post('/add', upload.single('image'), async function(req, res) {
         recipe_id_inserted = results.insertId;
 
         //Iterate over every key_name inside JSON request
+        console.log("req.body");
+        console.log("========")
+        console.log(JSON.stringify(req.body));
         for(var key in req.body) {
+            console.log("LOOP KEY IN REQ.BODY");
+            console.log("====================");
             //When Ingredient key_name is found
             //For every ingredient in recipe defined by user in the form do the following
             if(key.includes("ingredientProperties")){
                 //Retrieve all values from request body
-                var ingredient_data_from_page =  req.body[key][1];
-                console.log("//////////////////////////////////////////\n" +JSON.stringify(ingredient_data_from_page) +"\n////////////////////////////////////\n");
-                // const ingredientName = req.body[key][0];
-                // const ingredientQuantity = req.body[key][1];
-                // const ingredientMeasurement = req.body[key][2];
+                console.log("ingredient properties lenght:" + JSON.stringify(req.body.ingredientProperties))
+                for(var i=1 ; i<req.body.ingredientProperties.length;i++)
+                {
+                    console.log("=============================================================================");
+                    var ingredient_data_from_page =  req.body.ingredientProperties[i];
+                    console.log("//////////////////////////////////////////\n" +JSON.stringify(ingredient_data_from_page) +"\n////////////////////////////////////\n");
+                    // const ingredientName = req.body[key][0];
+                    // const ingredientQuantity = req.body[key][1];
+                    // const ingredientMeasurement = req.body[key][2];
 
-                const ingredientName = ingredient_data_from_page[0];
-                const ingredientQuantity = ingredient_data_from_page[1];
-                const ingredientMeasurement = ingredient_data_from_page[2];
-                console.log("adding ingredient to recipe: \n")// + ingredientQuantity+ " " +ingredientMeasurement+" of " + ingredientName);
-                console.log("ingredientName: " + ingredientName);
-                console.log("ingredientQTY: " + ingredientQuantity);
-                console.log("ingredientMeasurement: " + ingredientMeasurement);
+                    const ingredientName = ingredient_data_from_page[0];
+                    const ingredientQuantity = ingredient_data_from_page[1];
+                    const ingredientMeasurement = ingredient_data_from_page[2];
+                    console.log("adding ingredient to recipe: \n")// + ingredientQuantity+ " " +ingredientMeasurement+" of " + ingredientName);
+                    console.log("ingredientName: " + ingredientName);
+                    console.log("ingredientQTY: " + ingredientQuantity);
+                    console.log("ingredientMeasurement: " + ingredientMeasurement);
 
-                //find if the ingredient is in db
-                var final_ingredi_id;
-                var checking_ingr_t = await ingredient_t.findAll({
-                    where:{
-                        ingredient_name : ingredientName
-                        
+                    //find if the ingredient is in db
+                    var final_ingredi_id;
+                    var checking_ingr_t = await ingredient_t.findAll({
+                        where:{
+                            ingredient_name : ingredientName
+                            
+                        }
+                    });
+                    if(checking_ingr_t.length>0)
+                    {
+                        final_ingredi_id = checking_ingr_t[0].ingredient_id;
                     }
-                });
-                if(checking_ingr_t.length>0)
-                {
-                    final_ingredi_id = checking_ingr_t[0].ingredient_id;
-                }
-                else
-                {
-                    var ingredient_weight = await aw.auto_weight(ingredientName);
-                    var new_ingredient = await ingredient_t.create({
-                        ingredient_name: ingredientName,
-                        ingredient_weight : ingredient_weight,
-                        });
-                    final_ingredi_id = new_ingredient.ingredient_id;
-                }
-                var new_ingredient_slot = await IiR_t.create({
-                    ingredient_id : final_ingredi_id,
-                    recipe_id : recipe_id_inserted,
-                    ingredient_unit_of_measurement: ingredientMeasurement,
-                    pantry_id: 1,//change this to be from the session
-                    amount_of_ingredient_needed: ingredientQuantity
-                });
-                console.log("created ingredient slot: \n" + JSON.stringify(new_ingredient_slot));
+                    else
+                    {
+                        var ingredient_weight = await aw.auto_weight(ingredientName);
+                        var new_ingredient = await ingredient_t.create({
+                            ingredient_name: ingredientName,
+                            ingredient_weight : ingredient_weight,
+                            });
+                        final_ingredi_id = new_ingredient.ingredient_id;
+                    }
+                    var new_ingredient_slot = await IiR_t.create({
+                        ingredient_id : final_ingredi_id,
+                        recipe_id : recipe_id_inserted,
+                        ingredient_unit_of_measurement: ingredientMeasurement,
+                        pantry_id: 1,//change this to be from the session
+                        amount_of_ingredient_needed: ingredientQuantity
+                    });
+                    console.log("created ingredient slot: \n" + JSON.stringify(new_ingredient_slot));
 
-                // query = "('"+ingredientName+"',"+ingredietQuantity+",'"+ingredientMeasurement+"','" + ingredientExpirationDate + "')";
-                // console.log("Ingredient Name: " + ingredientName);
-                // console.log("Ingredient Qty: " + ingredietQuantity);
-                // console.log("Ingredient Measurement: " + ingredientMeasurement);
-                // console.log("Insert into ingredients query: " + query);
-                // //Insert ingredient into a Ingredients table
-                // await db.query('insert into ingredients (ingredient_name,ingredient_total,ingredient_measurement,ingredient_expiration_date) values '+query, async function(err, results) {
-                //     if (err) throw err
-                //     //Get inserted ingredient's row id, this works because auto-increment is set in the table
-                //     ingredients_ids_inserted = results.insertId;
-                //     //Create values that will be inserted into recipe_ingredient table
-                //     //recipe_ingredients is what links ingredients to the recipe
-                //     values = recipe_id_inserted + ',' + ingredients_ids_inserted
-                //     // query = "("+ingredients_ids_inserted + "," + ingredietQuantity + "," + recipe_id_inserted + ",'" + ingredientMeasurement + "')";
-                //     query = "("+ingredients_ids_inserted + "," + recipe_id_inserted + "," + ingredietQuantity + ",'" + ingredientMeasurement + "')";
-
-                //     //***************************
-                //     //TODO add pantry ID here
-                //     //***************************
-
-                    // await db.query('insert into recipe_ingredient (ingredient_id,recipe_id,amount_of_ingredient_needed,ingredient_unit_of_measurement) values ' + query, async function(err, results) {
+                    // query = "('"+ingredientName+"',"+ingredietQuantity+",'"+ingredientMeasurement+"','" + ingredientExpirationDate + "')";
+                    // console.log("Ingredient Name: " + ingredientName);
+                    // console.log("Ingredient Qty: " + ingredietQuantity);
+                    // console.log("Ingredient Measurement: " + ingredientMeasurement);
+                    // console.log("Insert into ingredients query: " + query);
+                    // //Insert ingredient into a Ingredients table
+                    // await db.query('insert into ingredients (ingredient_name,ingredient_total,ingredient_measurement,ingredient_expiration_date) values '+query, async function(err, results) {
                     //     if (err) throw err
-                    // });
+                    //     //Get inserted ingredient's row id, this works because auto-increment is set in the table
+                    //     ingredients_ids_inserted = results.insertId;
+                    //     //Create values that will be inserted into recipe_ingredient table
+                    //     //recipe_ingredients is what links ingredients to the recipe
+                    //     values = recipe_id_inserted + ',' + ingredients_ids_inserted
+                    //     // query = "("+ingredients_ids_inserted + "," + ingredietQuantity + "," + recipe_id_inserted + ",'" + ingredientMeasurement + "')";
+                    //     query = "("+ingredients_ids_inserted + "," + recipe_id_inserted + "," + ingredietQuantity + ",'" + ingredientMeasurement + "')";
 
-    //             });
+                    //     //***************************
+                    //     //TODO add pantry ID here
+                    //     //***************************
+
+                        // await db.query('insert into recipe_ingredient (ingredient_id,recipe_id,amount_of_ingredient_needed,ingredient_unit_of_measurement) values ' + query, async function(err, results) {
+                        //     if (err) throw err
+                        // });
+
+        //             });
+                }
+        //     //Repeat until all recipes have been parsed
             }
-    //     //Repeat until all recipes have been parsed
         }
-        var recipe_weight = await base_recipe_w(recipe_id_inserted);
-        db.query("update table recipes set recipe_weight = '" + recipe_weight + "' where recipe_id = '" + recipe_id_inserted +"';",(err,results) =>{
+        var recipe_weight = await base_recipe_w.weight_total(recipe_id_inserted);
+        db.query("update recipes set recipe_weight = " + recipe_weight + " where recipe_id = '" + recipe_id_inserted +"';",(err,results) =>{
             if(err) console.log(err);
             else console.log(results);
         })
@@ -307,6 +319,9 @@ router.post('/add', upload.single('image'), async function(req, res) {
     // res.send(req.body.ingredientName[1]);
     // This will respond with the parameters that you sent in your request
     // TODO redirect to another page
+    console.log("========================")
+    console.log("|DONE ADDING THE RECIPE|")
+    console.log("========================")
     res.redirect("showall");
 })});
 
