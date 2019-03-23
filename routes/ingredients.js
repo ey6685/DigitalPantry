@@ -4,6 +4,19 @@ const moment = require('moment')
 const ingredient_t = require('../DB_models/Ingredients')
 const ing_in_stock = require('../DB_models/ingredients_in_pantry')
 const aw = require('../algorithm/auto_weight')
+const gm = require('gm')
+const multer = require('multer')
+//defines where to store image
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, __dirname + '/../public/images/');
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+// create an upload function using configuration above
+const upload = multer({ storage: storage });
 
 // Render page with data from database
 // GET request to localhost:3000/users/login
@@ -188,9 +201,13 @@ router.get('/cards', function showCards(req, res) {
     res.render('showall_ingredients_cards', {
       title: 'Your Ingredients',
       results: results
+
+    
     })
   })
 })
+
+
 
 // remove ingredient by id
 router.delete('/remove/', async function(req, res) {
