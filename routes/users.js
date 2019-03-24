@@ -2,7 +2,8 @@ const express = require('express')
 
 const router = express.Router()
 const moment = require('moment')
-const op = require('sequelize').Op
+const sequelized = require('sequelize')
+const op = sequelized.Op
 const bcrypt = require('bcryptjs')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
@@ -100,16 +101,29 @@ router.get('/register', function showRegistrationPage(req, res) {
 router.get('/adminPanel', async function showAdminPanelPage(req, res) {
   const currentUserId = req.session.passport['user']
   // Find which pantry user is from
-  const pantryId = `(SELECT (pantry_id) FROM users WHERE user_id=${currentUserId})`
+  const pantryId = await User.findOne({
+    attributes: ['pantry_id'],
+    where: {
+      user_id: currentUserId
+    }
+  }).then(function getPantryID(result) {
+    return result.pantry_id
+  })
   // Find all users in that pantry and not the current user
-  const query = `SELECT * FROM users WHERE pantry_id=${pantryId} AND user_id!=${currentUserId};`
-  console.log(query)
-  db.query(query, function sendQuery(err, results) {
-    if (err) throw err
-    res.render('admin_panel', {
-      title: 'Admin Panel',
-      userData: results
-    })
+  const users = await User.findAll({
+    where: {
+      pantry_id: pantryId,
+      user_id: {
+        [op.ne]: currentUserId
+      }
+    }
+  }).then(function returnResults(results) {
+    return results
+  })
+  // render page with all found users that are related to the pantry
+  res.render('admin_panel', {
+    title: 'Admin Panel',
+    userData: users
   })
 })
 
