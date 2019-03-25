@@ -8,3 +8,5 @@ views/test\.pug
 \.eslintrc\.json
 
 log/
+
+*.log

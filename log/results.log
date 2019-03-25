@@ -4021,3 +4021,111 @@ total: 12
 1,4
 
 2019-03-20 18:04:44 info: [{"recipe_id":1,"recipe_name":"Chicken Noodle Soup","recipe_image_path":"/images/chicken_noodle_soup.jpg","recipe_directions":"Combine ingredients into pot#Boil and stir till cooked#Serve warm","pantry_id":1,"recipe_num_times_cooked":null,"num_people_it_feeds":1},{"recipe_id":4,"recipe_name":"Ckicken Pot Pie","recipe_image_path":"/images/chicken_pot_pie.jpg","recipe_directions":"Heat the oven to 400°F.  Stir the soup, 1/2 cup milk, vegetables and chicken in a 9-inch pie plate.#Stir the remaining 1/2 cup milk, egg and baking mix in a small bowl.  Spread the batter over the chicken mixture (the batter is thin but will bake up into a perfect crust).#Bake for 20 minutes or until the topping is golden brown.","pantry_id":1,"recipe_num_times_cooked":null,"num_people_it_feeds":5}]
+2019-03-22 21:55:23 info: todays date for checking: 2019-3-21
+
+2019-03-22 21:55:23 info: [{"ingredient_id":18,"pantry_id":1,"ingredient_amount":24,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-22"},{"ingredient_id":19,"pantry_id":1,"ingredient_amount":24,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-22"},{"ingredient_id":9,"pantry_id":1,"ingredient_amount":3,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-03-25"},{"ingredient_id":32,"pantry_id":1,"ingredient_amount":200,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-29"},{"ingredient_id":5,"pantry_id":1,"ingredient_amount":4,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-03-30"},{"ingredient_id":2,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-01"},{"ingredient_id":21,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-04-01"},{"ingredient_id":12,"pantry_id":1,"ingredient_amount":6,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-02"},{"ingredient_id":13,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-03"},{"ingredient_id":14,"pantry_id":1,"ingredient_amount":3,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-04"},{"ingredient_id":15,"pantry_id":1,"ingredient_amount":4,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-05"},{"ingredient_id":16,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-06"},{"ingredient_id":17,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-07"},{"ingredient_id":20,"pantry_id":1,"ingredient_amount":10,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-09"},{"ingredient_id":23,"pantry_id":1,"ingredient_amount":10,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-11"},{"ingredient_id":26,"pantry_id":1,"ingredient_amount":16,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-14"},{"ingredient_id":28,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"tbsp.","ingredient_expiration_date":"2019-04-15"},{"ingredient_id":29,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-16"},{"ingredient_id":30,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-04-17"},{"ingredient_id":31,"pantry_id":1,"ingredient_amount":15,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-18"},{"ingredient_id":22,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"tbsp.","ingredient_expiration_date":"2019-04-19"}]
+
+2019-03-22 21:55:23 info: {"ingredient_name":"Cream of Mushroom Soup","ingredient_id":18,"ingredient_weight":1}
+
+2019-03-22 21:55:23 info: starting find recipe with ingredient id: 18
+
+2019-03-22 21:55:23 info: 
+recipe ids: [{"recipe_id":5}]
+2019-03-22 21:55:23 info: array of recipes : 
+5
+2019-03-22 21:55:23 info: 
+recipe_id: {"recipe_id":5}
+2019-03-22 21:55:23 info: [{"ingredient_id":16,"amount_of_ingredient_needed":12,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":17,"amount_of_ingredient_needed":12,"ingredient_unit_of_measurement":"cup"},{"ingredient_id":18,"amount_of_ingredient_needed":24,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":19,"amount_of_ingredient_needed":10,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":20,"amount_of_ingredient_needed":2,"ingredient_unit_of_measurement":"oz"}]
+2019-03-22 21:55:23 info: [{"ingredient_amount":12,"ingredient_unit_of_measurement":"oz"}]
+2019-03-22 21:55:23 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: oz == oz
+2019-03-22 21:55:23 info: 
+total: 12
+
+2019-03-22 21:55:23 info: [{"ingredient_amount":2,"ingredient_unit_of_measurement":"cup"}]
+2019-03-22 21:55:23 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-22 21:55:23 info: 
+total: 2
+
+2019-03-22 21:55:23 info: cant cook, next
+
+2019-03-22 21:55:23 info: 
+
+2019-03-22 21:55:23 info: recommended recipe ids: 
+
+2019-03-22 21:57:23 info: todays date for checking: 2019-3-21
+
+2019-03-22 21:57:23 info: [{"ingredient_id":18,"pantry_id":1,"ingredient_amount":24,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-22"},{"ingredient_id":19,"pantry_id":1,"ingredient_amount":24,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-22"},{"ingredient_id":9,"pantry_id":1,"ingredient_amount":3,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-03-25"},{"ingredient_id":32,"pantry_id":1,"ingredient_amount":200,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-03-29"},{"ingredient_id":5,"pantry_id":1,"ingredient_amount":4,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-03-30"},{"ingredient_id":2,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-01"},{"ingredient_id":21,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-04-01"},{"ingredient_id":12,"pantry_id":1,"ingredient_amount":6,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-02"},{"ingredient_id":13,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-03"},{"ingredient_id":14,"pantry_id":1,"ingredient_amount":3,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-04"},{"ingredient_id":15,"pantry_id":1,"ingredient_amount":4,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-05"},{"ingredient_id":16,"pantry_id":1,"ingredient_amount":12,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-06"},{"ingredient_id":17,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-07"},{"ingredient_id":20,"pantry_id":1,"ingredient_amount":10,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-09"},{"ingredient_id":23,"pantry_id":1,"ingredient_amount":10,"ingredient_unit_of_measurement":"cup","ingredient_expiration_date":"2019-04-11"},{"ingredient_id":26,"pantry_id":1,"ingredient_amount":16,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-14"},{"ingredient_id":28,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"tbsp.","ingredient_expiration_date":"2019-04-15"},{"ingredient_id":29,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-16"},{"ingredient_id":30,"pantry_id":1,"ingredient_amount":1,"ingredient_unit_of_measurement":"lb","ingredient_expiration_date":"2019-04-17"},{"ingredient_id":31,"pantry_id":1,"ingredient_amount":15,"ingredient_unit_of_measurement":"oz","ingredient_expiration_date":"2019-04-18"},{"ingredient_id":22,"pantry_id":1,"ingredient_amount":2,"ingredient_unit_of_measurement":"tbsp.","ingredient_expiration_date":"2019-04-19"}]
+
+2019-03-22 21:57:23 info: {"ingredient_name":"Cream of Mushroom Soup","ingredient_id":18,"ingredient_weight":1}
+
+2019-03-22 21:57:23 info: starting find recipe with ingredient id: 18
+
+2019-03-22 21:57:23 info: 
+recipe ids: [{"recipe_id":5}]
+2019-03-22 21:57:23 info: array of recipes : 
+5
+2019-03-22 21:57:23 info: 
+recipe_id: {"recipe_id":5}
+2019-03-22 21:57:23 info: [{"ingredient_id":16,"amount_of_ingredient_needed":12,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":17,"amount_of_ingredient_needed":12,"ingredient_unit_of_measurement":"cup"},{"ingredient_id":18,"amount_of_ingredient_needed":24,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":19,"amount_of_ingredient_needed":10,"ingredient_unit_of_measurement":"oz"},{"ingredient_id":20,"amount_of_ingredient_needed":2,"ingredient_unit_of_measurement":"oz"}]
+2019-03-22 21:57:23 info: [{"ingredient_amount":12,"ingredient_unit_of_measurement":"oz"}]
+2019-03-22 21:57:23 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: oz == oz
+2019-03-22 21:57:23 info: 
+total: 12
+
+2019-03-22 21:57:23 info: [{"ingredient_amount":2,"ingredient_unit_of_measurement":"cup"}]
+2019-03-22 21:57:23 info: list_of_ingredients_in_recipe[o].ingredient_unit_of_measurement: cup == cup
+2019-03-22 21:57:23 info: 
+total: 2
+
+2019-03-22 21:57:23 info: cant cook, next
+
+2019-03-22 21:57:23 info: 
+
+2019-03-22 21:57:23 info: recommended recipe ids: 
+
+2019-03-23 22:00:17 info: coverting 5 lb to cup
+
+2019-03-23 22:00:44 info: coverting 5 lb to cup
+
+2019-03-23 22:02:06 info: coverting 5 lb to cup
+
+2019-03-23 22:02:06 info: coverting 5 lb to cup
+
+2019-03-23 22:02:39 info: coverting 5 lb to cup
+
+2019-03-23 22:02:39 info: coverting 5 lb to cup
+
+2019-03-23 22:02:39 info: coverting 5 lb to cup
+
+2019-03-23 22:02:39 info: coverting 5 lb to cup
+
+2019-03-23 22:05:19 info: coverting 5 lb to cup
+
+2019-03-23 22:06:42 info: coverting 5 lb to cup
+
+2019-03-23 22:06:42 info: coverting 5 lb to cup
+
+2019-03-23 22:06:42 info: coverting 5 lb to cup
+
+2019-03-23 22:06:42 info: coverting 5 lb to cup
+
+2019-03-23 22:07:11 info: coverting 5 lb to cup
+
+2019-03-23 22:07:11 info: coverting 5 lb to cup
+
+2019-03-23 22:07:11 info: coverting 5 lb to cup
+
+2019-03-23 22:07:11 info: coverting 5 lb to cup
+
+2019-03-23 22:08:28 info: coverting 5 lb to cup
+
+2019-03-23 22:08:59 info: coverting 5 lb to cup
+
+2019-03-23 22:08:59 info: coverting 5 lb to cup
+
+2019-03-23 22:08:59 info: coverting 5 lb to cup
+
+2019-03-23 22:08:59 info: coverting 5 lb to cup
+
+2019-03-23 22:09:42 info: coverting 5 lb to cup
+
