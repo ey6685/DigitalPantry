@@ -35,7 +35,7 @@ const ingredients_in_pantry = db.define("ingredients_in_pantry", {
         },
 
         ingredient_expiration_date:{
-            type: sequelize.DATE
+            type: sequelize.DATEONLY
         }
     },
     {

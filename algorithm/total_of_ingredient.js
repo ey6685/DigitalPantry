@@ -21,18 +21,23 @@ requires*/
 const ingredient_t = require('../DB_models/ingredients_in_pantry'); 
 const unit_convert = require('./Convert_unts'); 
 const logger = require('../functions/logger');
+const op = require('sequelize').Op;
  
 async function total_ingredients(ing_id, pantry_id,unit) 
 { 
     try 
     {    
+        var today = new Date();
         console.log("\n\nstarting to total ingredient with id: " + ing_id + '\n\n');
         //get all the ingredients in the the pantry stock 
         var the_stock = await ingredient_t.findAll({ 
             attributes: ["ingredient_amount", "ingredient_unit_of_measurement"], 
             where:{ 
                 ingredient_id: ing_id, 
-                pantry_id: pantry_id 
+                pantry_id: pantry_id ,
+                ingredient_expiration_date:{
+                    [op.gte] : today
+                }
             } 
         }); 
  

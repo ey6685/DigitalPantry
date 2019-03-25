@@ -16,6 +16,7 @@ const unit_convert = require('./Convert_unts');
 const op = require('sequelize').Op;
 const logger = require('../functions/logger');
 const ing_totaler = require('./total_of_ingredient');
+const ingredient_t = require('../DB_models/Ingredients');
 
 async function find_recipes(exp_id,pantry_id)
 {
@@ -154,6 +155,7 @@ async function find_recipes_no_inv(ingredient_id, pantry_id){
     
 
     try{
+        var today = new Date();
         var returning_JSON = new Array();
         var recieps_ing_in = await ingredients_in_a_recipe_t.findAll({
             where : {
@@ -175,13 +177,13 @@ async function find_recipes_no_inv(ingredient_id, pantry_id){
 
         //get the rest of the date per id
         var ingredients_we_have = new Array();
-        ingredients_we_have[0] = new Array()
-        var ingredients_we_dont = new Array();
-        ingredients_we_dont[0] = new Array();
+        
+        // var ingredients_we_dont = new Array();
+        
         for(var i = 0;i<recipe_ids_arr.length;i++)
         {
-            ingredients_we_have[i]= ""
-            ingredients_we_dont[i] = ""
+            var ingredients_we_have = new Array();
+            // var ingredients_we_dont = new Array();
             var ingredients_recipe = await ingredients_in_a_recipe_t.findAll({
                 attributes:['ingredient_id','amount_of_ingredient_needed','ingredient_unit_of_measurement'],
                 where :{
@@ -189,76 +191,85 @@ async function find_recipes_no_inv(ingredient_id, pantry_id){
                     pantry_id: pantry_id
                 }
             });
+            var num_ing_we_have=0;
             //now to seperate the ingredients into have and dont have enought arrays
             for(var o=0;o<ingredients_recipe.length; o++)
             {
                 var sum = await ing_totaler.total_ingredients(ingredients_recipe[i].ingredient_id, pantry_id, ingredients_recipe[i].ingredient_unit_of_measurement);
-                if(sum >= ingredients_recipe[o].amount_of_ingredient_needed)
-                {
-                    ingredients_we_have[i].push( {
+                var name = await ingredient_t.findOne({
+                    attributes : ["ingredient_name"],
+                    where:{
+                        ingredient_id: ingredients_recipe[i].ingredient_id
+                    }
+                })
+                if(sum >= ingredients_recipe[o].amount_of_ingredient_needed){
+                    num_ing_we_have++;
+                }
+                
+                    ingredients_we_have.push( {
                         "ingredient_id" : ingredients_recipe[o].ingredient_id,
+                        "ingredient_name" : name.ingredient_name,
                         "ingredient_sum" : sum,
                         "ingredient_unit_of_measurement" : ingredients_recipe[o].ingredient_unit_of_measurement
                     })
-                }
-                else{
-                    ingredients_we_dont[i].push({
-                        "ingredient_id" : ingredients_recipe[o].ingredient_id,
-                        "ingredient_sum" : sum,
-                        "ingredient_unit_of_measurement" : ingredients_recipe[o].ingredient_unit_of_measurement
-                    })
-                }
+                
             }
-        }
+            console.log("INGREDENTS WE HAVE")
+            console.log("==================")
+            console.log(JSON.stringify(ingredients_we_have))
 
-        console.log("INGREDENTS WE HAVE")
-        console.log("==================")
-        console.log(JSON.stringify(ingredients_we_have))
-        console.log("ingredients_we_dont")
-        console.log("===================")
-        console.log(JSON.stringify(ingredients_we_dont))
-
-        
-
-        console.log("FOUND REST OF INGREDIENTS");
-        console.log("=========================");
-        for(var i=0;i<all_ingredients_in_recipe.length;i++)
-        {
-            console.log(JSON.stringify(all_ingredients_in_recipe[i]));
-        }
         //now need some data from the recipes table
+        var recipe_table_data;
+        recipe_table_data = await recipe_t.findOne({
+            attributes: ['recipe_name','recipe_image_path','recipe_directions','num_people_it_feeds'],
+            where:{
+                recipe_id: recipe_ids_arr[i],
+                pantry_id: pantry_id
+            }})
 
-        var recipe_table_data = new Array()
-        for(var i= 0;i<recipe_ids_arr.length;i++)
-        {
-            recipe_table_data.push(await recipe_t.findAll({
-                attributes: ['recipe_name','recipe_image_path','recipe_directions','num_people_it_feeds'],
-                where:{
-                    recipe_id: recipe_ids_arr[i],
-                    pantry_id: pantry_id
-                }
-            }))
-        }
+            //making the JSON return object
+            returning_JSON.push({
+                "recipe_id" : recipe_ids_arr[i],
+                "recipe_name" : recipe_table_data.recipe_name,
+                "recipe_image_path": recipe_table_data.recipe_image_path,
+                "recipe_directions" : recipe_table_data.recipe_directions,
+                "num_of_ingredients" : ingredients_recipe.length,
+                "num_of_ingredients_on_hand": num_ing_we_have,
+                "ingredients_required":  ingredients_recipe,
+                "ingredients_on_hand" : ingredients_we_have,
+
+            })
+
+        }//end of main for loop
+
+
+                
+            
+        
  
         //now that we have the ingredients for each recipe
         //time to make the JSON object that we are reutnring
-        for(var i=0;i<recipe_ids_arr.length;i++){
-            returning_JSON.push({
-                "recipe_name": recipe_table_data[i].recipe_name,
-                "recipe_id" : recipe_ids_arr[i],//might not need
-                "recipe_image_path": recipe_table_data[i].recipe_image_path,
-                "recipe_directions" : recipe_table_data[i].recipe_directions,
-                "num_of_people_it_feeds" : recipe_table_data[i].num_of_people_it_feeds,
-                "ingredients_needed": all_ingredients_in_recipe[i]
-            })
-        }
+        // for(var i=0;i<recipe_ids_arr.length;i++){
+        //     returning_JSON.push({
+        //         "recipe_name": recipe_table_data[i].recipe_name,
+        //         "recipe_id" : recipe_ids_arr[i],//might not need
+        //         "recipe_image_path": recipe_table_data[i].recipe_image_path,
+        //         "recipe_directions" : recipe_table_data[i].recipe_directions,
+        //         "num_of_people_it_feeds" : recipe_table_data[i].num_of_people_it_feeds,
+        //         "ingredients_needed": all_ingredients_in_recipe[i]
+        //     })
+        // }
 
         console.log("Returning json data")
         console.log("===================")
-        console.log(JSON.stringify(returning_JSON));
+        for(var i = 0;i<returning_JSON.length;i++)
+            {console.log(JSON.stringify(returning_JSON[i]));}
+
+        return returning_JSON;
     }catch(err){
         console.log(err)
         return -1;
     }
 }
-find_recipes_no_inv(1,1);
+// find_recipes_no_inv(1,1);
+module.exports.find_recipes_no_inv = find_recipes_no_inv;
