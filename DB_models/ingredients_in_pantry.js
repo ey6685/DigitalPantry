@@ -45,16 +45,7 @@ const ingredients_in_pantry = db.define('ingredients_in_pantry', {
 
 // relationsshipes
 
-        ingredient_expiration_date:{
-            type: sequelize.DATEONLY
-        }
-    },
-    {
-        timestamps: false,
-        freezeTableName: true,
-        underscored:true
-    }
-);
+
 ingredients_in_pantry.removeAttribute('id')
 
 module.exports = ingredients_in_pantry
