@@ -4,6 +4,19 @@ const moment = require('moment')
 const ingredient_t = require('../DB_models/Ingredients')
 const ing_in_stock = require('../DB_models/ingredients_in_pantry')
 const aw = require('../algorithm/auto_weight')
+const gm = require('gm')
+const multer = require('multer')
+//defines where to store image
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, __dirname + '/../public/images/');
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+// create an upload function using configuration above
+const upload = multer({ storage: storage });
 
 // Render page with data from database
 // GET request to localhost:3000/users/login
@@ -188,109 +201,35 @@ router.get('/cards', function showCards(req, res) {
     res.render('showall_ingredients_cards', {
       title: 'Your Ingredients',
       results: results
+
+    
     })
   })
 })
 
-// remove ingredient by id
-router.delete('/remove/', async function(req, res) {
-  const ingredient = req.body.id
-  var ex_date = req.body.ex
-  const unit = req.body.unit
-  const qty = req.body.qty
-  ex_date = await new Date(ex_date)
-  ex_date = await moment(ex_date).format('YYYY-MM-DD')
-  // ex_date = await moment(ex_date).format("L");
-  // ex_date = await ex_date.split('/');
-  // ex_date = ex_date[2] + '-' + ex_date[1] + '-' + ex_date[0];
-  const delete_query =
-    "DELETE FROM ingredients_in_pantry WHERE ingredient_id ='" +
-    ingredient +
-    "' and ingredient_expiration_date= '" +
-    ex_date +
-    "' and ingredient_unit_of_measurement= '" +
-    unit +
-    "' and ingredient_amount = '" +
-    qty +
-    "';"
-  // db.query(delete_query, function(err, results) {
-  //     if (err) throw err
-  //     //Since AJAX under /js/main.js made a request we have to respond back
-  //     res.send("Success");
-  // });
-
-  console.log('\ningredient id: ' + ingredient + '\ndelete query: ' + delete_query)
-
-  // ing_in_stock.destroy({
-  //     where:{
-  //         ingredient_id: ingredient,
-  //         ingredient_expiration_date: ex_date,
-  //         ingredient_unit_of_measurement: unit,
-  //         ingredient_amount : qty
-  //     }
-  // })
-  // .then(results => {
-  //     console.log(JSON.stringify(results));
-  //     res.send("Success");
-  // })
-  db.query(delete_query, results => {
-    console.log(results)
-    res.send('success')
-  })
-})
 
 // remove ingredient by id
-router.delete('/remove/', async function(req, res) {
+router.delete('/remove/', async function remove(req, res) {
   const ingredient = req.body.id
-  var ex_date = req.body.ex
+  let expirationDate = req.body.ex
   const unit = req.body.unit
   const qty = req.body.qty
-  ex_date = await new Date(ex_date)
-  ex_date = await moment(ex_date).format('YYYY-MM-DD')
-  // ex_date = await moment(ex_date).format("L");
-  // ex_date = await ex_date.split('/');
-  // ex_date = ex_date[2] + '-' + ex_date[1] + '-' + ex_date[0];
-  const delete_query =
-    "DELETE FROM ingredients_in_pantry WHERE ingredient_id ='" +
-    ingredient +
-    "' and ingredient_expiration_date= '" +
-    ex_date +
-    "' and ingredient_unit_of_measurement= '" +
-    unit +
-    "' and ingredient_amount = '" +
-    qty +
-    "';"
-  // db.query(delete_query, function(err, results) {
-  //     if (err) throw err
-  //     //Since AJAX under /js/main.js made a request we have to respond back
-  //     res.send("Success");
-  // });
-
-  console.log('\ningredient id: ' + ingredient + '\ndelete query: ' + delete_query)
-
-  // ing_in_stock.destroy({
-  //     where:{
-  //         ingredient_id: ingredient,
-  //         ingredient_expiration_date: ex_date,
-  //         ingredient_unit_of_measurement: unit,
-  //         ingredient_amount : qty
-  //     }
-  // })
-  // .then(results => {
-  //     console.log(JSON.stringify(results));
-  //     res.send("Success");
-  // })
-  db.query(delete_query, results => {
-    console.log(results)
-    res.send('success')
+  expirationDate = await new Date(expirationDate)
+  expirationDate = await moment(expirationDate).format('YYYY-MM-DD')
+  await ing_in_stock.destroy({
+    where: {
+      ingredient_id: ingredient,
+      ingredient_expiration_date: expirationDate,
+      ingredient_unit_of_measurement: unit,
+      ingredient_amount: qty
+    }
   })
+  res.send('success')
 })
 
 // remove ingredient by name
-router.delete('/remove/recipe_ingredient/:name', function(req, res) {
+router.delete('/remove/recipe_ingredient/:name', function deleteIngredientByName(req, res) {
   const ingredient = req.params.name
-  console.log('REMOVING')
-  console.log(ingredient)
   // Since no cascading is set up have to do it manually
   // delete ingredient from recipe_ingredient table
   const delete_query =
