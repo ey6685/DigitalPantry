@@ -113,10 +113,10 @@ input:
 
 outputs:
 json data of a list of ingredients, with all the recipe data to go with it
-      "ingredient_name" : 
-      "ingredient_amount" : 
-      "ingredient_unit_of_measurement": 
-      "recipe_data": 
+      "ingredient_name" : string
+      "ingredient_amount" : float
+      "ingredient_unit_of_measurement": enum
+      "recipe_data": JSON
 
 **NOTE THE RECIPE DATA CAN BE FOUND IN find_recipes.js FUNCTION find_recipes_no_inv
       

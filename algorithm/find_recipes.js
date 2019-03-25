@@ -143,7 +143,17 @@ inputs
 2)pantry id
 
 outputs
-TBD
+                {
+                    "recipe_id" : int
+                    "recipe_name" : string
+                    "recipe_image_path":  string
+                    "recipe_directions" : string
+                    "num_of_ingredients" : int
+                    "num_of_ingredients_on_hand": int 
+                    "ingredients_required":  JSON 
+                    "ingredients_on_hand" : JSON
+
+                })
 
 returns
 
