@@ -49,6 +49,10 @@ function converter_raw(num, unit, con_unit) {
       logger.info("water, most likely\n");
       return num;
     }
+    if(unit == con_unit)
+    {
+      return num;
+    }
       
     ///done checking data
   logger.info("coverting " +num+" " + unit + " to " + con_unit +'\n');

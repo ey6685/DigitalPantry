@@ -113,6 +113,13 @@ input:
 
 outputs:
 json data of a list of ingredients, with all the recipe data to go with it
+      "ingredient_name" : 
+      "ingredient_amount" : 
+      "ingredient_unit_of_measurement": 
+      "recipe_data": 
+
+**NOTE THE RECIPE DATA CAN BE FOUND IN find_recipes.js FUNCTION find_recipes_no_inv
+      
 
 discription:
 first querys the ingredients in a pantry id with the window date. take the ingredient
@@ -141,7 +148,9 @@ async function main2(window, pantry_id)
       console.log(d_str);
       window_date = new Date(d_str);
   }
-  if(pantry_id == null || typeof pantry_id !="number" )
+  if(pantry_id == null || typeof pantry_id !="number" ){
+    pantry_id = 1;
+  }
   
   console.log("Dates for pulling info");
   console.log("======================");
@@ -184,10 +193,10 @@ async function main2(window, pantry_id)
     })
 
     returing_JSON.push({
-      "ingredient_id": ex_ids_array[i],
       "ingredient_name" : ingredient_data.ingredient_name,
       "ingredient_amount" : ing_in_pan_data[0].ingredient_amount,
       "ingredient_unit_of_measurement": ing_in_pan_data[0].ingredient_unit_of_measurement,
+      "ingredient_expiration_date": ing_in_pan_data[0].ingredient_expiration_date,
       "recipe_data": await recipe_id_finder.find_recipes_no_inv(ex_ids_array[i],pantry_id)
       })
   }
@@ -205,4 +214,4 @@ async function main2(window, pantry_id)
   return returing_JSON
 }
 
-main2(12,1);
+module.exports.main2 = main2

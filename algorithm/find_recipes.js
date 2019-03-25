@@ -17,7 +17,7 @@ const op = require('sequelize').Op;
 const logger = require('../functions/logger');
 const ing_totaler = require('./total_of_ingredient');
 const ingredient_t = require('../DB_models/Ingredients');
-
+const direction_parser = require('../recipe_direction_parser');
 async function find_recipes(exp_id,pantry_id)
 {
     try{
@@ -179,7 +179,7 @@ async function find_recipes_no_inv(ingredient_id, pantry_id){
         var ingredients_we_have = new Array();
         
         // var ingredients_we_dont = new Array();
-        
+
         for(var i = 0;i<recipe_ids_arr.length;i++)
         {
             var ingredients_we_have = new Array();
@@ -191,18 +191,25 @@ async function find_recipes_no_inv(ingredient_id, pantry_id){
                     pantry_id: pantry_id
                 }
             });
+            console.log("list of ingredients we need")
+            console.log("===========================")
+            console.log(JSON.stringify(ingredients_recipe));
             var num_ing_we_have=0;
             //now to seperate the ingredients into have and dont have enought arrays
             for(var o=0;o<ingredients_recipe.length; o++)
             {
-                var sum = await ing_totaler.total_ingredients(ingredients_recipe[i].ingredient_id, pantry_id, ingredients_recipe[i].ingredient_unit_of_measurement);
+                var sum = await ing_totaler.total_ingredients(ingredients_recipe[o].ingredient_id, pantry_id, ingredients_recipe[o].ingredient_unit_of_measurement);
                 var name = await ingredient_t.findOne({
-                    attributes : ["ingredient_name"],
+                    attributes : ["ingredient_name","ingredient_weight"],
                     where:{
-                        ingredient_id: ingredients_recipe[i].ingredient_id
+                        ingredient_id: ingredients_recipe[o].ingredient_id
                     }
                 })
-                if(sum >= ingredients_recipe[o].amount_of_ingredient_needed){
+                console.log("sum >= needed")
+                console.log("=============")
+                console.log(sum + ">=" + ingredients_recipe[o].amount_of_ingredient_needed)
+                if(sum >= ingredients_recipe[o].amount_of_ingredient_needed|| name.ingredient_weight == 0){
+                    console.log("mun ing we have icremented!");
                     num_ing_we_have++;
                 }
                 
@@ -226,19 +233,39 @@ async function find_recipes_no_inv(ingredient_id, pantry_id){
                 recipe_id: recipe_ids_arr[i],
                 pantry_id: pantry_id
             }})
+            console.log("=====================")
+            console.log("REMAINING RECIPE DATE")
+            console.log("=====================")
+            console.log(JSON.stringify(recipe_table_data))
 
             //making the JSON return object
-            returning_JSON.push({
-                "recipe_id" : recipe_ids_arr[i],
-                "recipe_name" : recipe_table_data.recipe_name,
-                "recipe_image_path": recipe_table_data.recipe_image_path,
-                "recipe_directions" : recipe_table_data.recipe_directions,
-                "num_of_ingredients" : ingredients_recipe.length,
-                "num_of_ingredients_on_hand": num_ing_we_have,
-                "ingredients_required":  ingredients_recipe,
-                "ingredients_on_hand" : ingredients_we_have,
+            if(recipe_ids_arr.length>0)
+            {
+                var direction_array = await direction_parser.parse_by_str_for_dashboard(recipe_table_data.recipe_directions)
+                returning_JSON.push({
+                    "recipe_id" : recipe_ids_arr[i],
+                    "recipe_name" : recipe_table_data.recipe_name,
+                    "recipe_image_path": recipe_table_data.recipe_image_path,
+                    "recipe_directions" : direction_array,
+                    "num_of_ingredients" : ingredients_recipe.length,
+                    "num_of_ingredients_on_hand": num_ing_we_have,
+                    "ingredients_required":  ingredients_recipe,
+                    "ingredients_on_hand" : ingredients_we_have
 
-            })
+                })
+            }
+            else{
+                returning_JSON.push({
+                    "recipe_id" : recipe_ids_arr[i],
+                    "recipe_name" : "NO RECIPES. why not add some to your pantry",
+                    "recipe_image_path": '/images/placeholder.jpg',
+                    "recipe_directions" : " ",
+                    "num_of_ingredients" : 0,
+                    "num_of_ingredients_on_hand": 0,
+                    "ingredients_required":  " ",
+                    "ingredients_on_hand" : " "                    
+                })
+            }
 
         }//end of main for loop
 

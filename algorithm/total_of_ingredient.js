@@ -36,7 +36,7 @@ async function total_ingredients(ing_id, pantry_id,unit)
                 ingredient_id: ing_id, 
                 pantry_id: pantry_id ,
                 ingredient_expiration_date:{
-                    [op.gte] : today
+                    [op.or] : [null,{[op.gte] : today}]
                 }
             } 
         }); 
@@ -67,3 +67,4 @@ async function total_ingredients(ing_id, pantry_id,unit)
 } 
  
 module.exports.total_ingredients= total_ingredients;
+

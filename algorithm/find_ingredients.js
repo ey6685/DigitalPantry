@@ -53,7 +53,8 @@ async function find_ingredients(window,pantry_id) {
           [op.between]: [today, window_date]
         },
         pantry_id: pantry_id  
-      }
+      },
+      order : ["ingredient_expiration_date"]
     });
     logger.info("\nfound ingredient ids: \n" + JSON.stringify(expiring_ings));
     return expiring_ings;
