@@ -6,6 +6,7 @@ const ing_in_stock = require('../DB_models/ingredients_in_pantry')
 const aw = require('../algorithm/auto_weight')
 const gm = require('gm')
 const multer = require('multer')
+const User = require('../DB_models/Users')
 //defines where to store image
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -143,7 +144,10 @@ router.get('/expiredAdmin', function expiredTable(req, res) {
 
 // POST request to localhost:3000/ingredients/add
 // This will add a new ingredient to available ingredients and update database
-router.post('/add', async function(req, res) {
+router.post('/add', upload.single('image'), async function addIngredient(req, res) {
+
+
+
   for (var key in req.body) {
     if (key.includes('ingredientProperties')) {
       var block_oF_data = req.body[key]
@@ -182,6 +186,9 @@ router.post('/add', async function(req, res) {
       console.log('ingredient add: \n' + JSON.stringify(new_inv))
     }
   }
+
+
+
   res.redirect('/ingredients/showall')
 })
 
@@ -206,6 +213,7 @@ router.get('/cards', function showCards(req, res) {
     })
   })
 })
+
 
 
 // remove ingredient by id

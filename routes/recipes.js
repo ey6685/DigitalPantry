@@ -167,7 +167,7 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
   const imagePath = req.file.path
   // If file exists
   if (req.file) {
-    console.log(req.file)
+    
     console.log('File Uploaded Successfully')
     gm(req.file.path) // uses graphicsmagic and takes in image path
       .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
