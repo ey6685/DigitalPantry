@@ -16,6 +16,7 @@ block content
 			background: #BABABA;
 		}
 	link(rel='stylesheet' href='/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css')
+	link(rel='stylesheet' type='text/css' href='/css/digital_pantry.css')
 	//- Stores a variable passed in, which defines an image path
 	- card1_image= recipe_image_path
 	- card2_image= stir_fry_image
@@ -38,7 +39,7 @@ block content
 						|  #{i_total} #{i_measurement} of #{i_name} on #{(i_expire)}
 		br
 		!= messages('message', locals)
-		div.bg-dark.card-container(class='container-fluid', class='rounded')
+		div.card-container.container-green(class='container-fluid', class='rounded')
 			h3.mb-3.text-white Recommended Recipes
 			div(class='row')
 				div(class='col-4')

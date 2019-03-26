@@ -9,7 +9,11 @@ block content
 		}
 
 	div(class='container-fluid', class='rounded', style='width: 80%')
-		h1 Expired Ingredients
+		br
+		br
+		br
+		br
+		h1.text-green Expired Ingredients
 		br
 
 		a.btn.btn-default(href='/ingredients/expired')
@@ -20,14 +24,14 @@ block content
 
 		.form-row
 			.form-group.col-md-2
-				input.form-control.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search')
+				input.form-control.table-green.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search')
 			.form-group.col-md-2
 				.dropdown
-					select.form-control(id='sortBar', name='SortBar', onchange='sortList()')
+					select.form-control.table-green(id='sortBar', name='SortBar', onchange='sortList()')
 						option(value='0') Sort By
 						option(value='1') Sort A-Z
 						option(value='2') Sort Z-A
-		
+
 
 
 		.form-row

@@ -1,0 +1,29 @@
+/*Navbar background color*/
+.navbar-green {
+  background-color: #058d3f;
+}
+
+/*Container background color*/
+.container-green {
+  background-color: #66c08d;
+}
+
+/*Table colors*/
+.table-green {
+  background-color: #134309;
+  /* background-color: #195a0c; */
+  color: white;
+}
+
+.footer-green {
+  /* background-image: linear-gradient(rgb(25, 90, 12), rgba(236, 252, 233)); */
+  background-color: #195a0c;
+}
+
+.text-green {
+  color: #134309;
+}
+
+.body-green {
+  background-color: #b7e1c9;
+}
