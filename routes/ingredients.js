@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const moment = require('moment')
+const ingredients_t = require('../DB_models/Ingredients')
 const ingredient_t = require('../DB_models/Ingredients')
 const ing_in_stock = require('../DB_models/ingredients_in_pantry')
 const aw = require('../algorithm/auto_weight')
