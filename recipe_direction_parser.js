@@ -76,7 +76,21 @@ function parse_recipe_directions_by_string (recipe_direction) {
   return returning_string
 }
 
+async function parse_by_str_for_dashboard(recipe_directions)
+{
+  if(recipe_directions == null || typeof recipe_directions!= "string")
+  {return -1}
+
+  var str_array = await recipe_directions.split('#');
+  for(var i=0; i<str_array.length; i++)
+  {
+    str_array[i] = (i+1) + ")" + str_array[i];
+  }
+  return str_array;
+}
+
 module.exports.parse_recipe_directions_by_string = parse_recipe_directions_by_string
 module.exports.recipe_direction_parser = recipe_direction_parser
+module.exports.parse_by_str_for_dashboard = parse_by_str_for_dashboard;
 // test function call
 // recipe_direction_parser(1)

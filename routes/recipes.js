@@ -9,6 +9,7 @@ const multer = require('multer');
 const steps = require('../recipe_direction_parser');
 const users_route = require('./users');
 const aw = require("../algorithm/auto_weight");
+const base_recipe_w = require('../algorithm/recipe_weight_functions');
 const gm = require('gm');
 //defines where to store image
 const storage = multer.diskStorage({
