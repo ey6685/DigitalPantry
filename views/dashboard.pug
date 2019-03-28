@@ -50,6 +50,8 @@ block content
 								div(class='card-body')
 									h4(class='card-title') #{recipe.recipe_name}
 									br
+									p(class="card-text") Cooked #{recipe.num_of_times_cooked} times.
+									br
 									p(class='card-text') Ingredients: #{(recipe.num_of_ingredients_on_hand)} out of #{recipe.num_of_ingredients}
 										
 									//- For each steps inside of the array of steps
