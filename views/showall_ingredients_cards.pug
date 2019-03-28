@@ -18,15 +18,15 @@ block content
        
         tbody
             tr
-                form(method= 'POST', action= '/ingredients/add', class= 'form')
+                form(method= 'POST', action= '/ingredients/add', class= 'form', enctype="multipart/form-data")
                     .form-row
                         .form-group.col-md-2
-                            input.form-control(name='ingredientProperties[1]', type='text', placeholder='Name = Tuna')
+                            input.form-control(name='ingredientProperties[0]', type='text', placeholder='Name = Tuna')
                         .form-group.col-md-2
                             input.form-control(name='ingredientProperties[1]', type='text', placeholder='Total = 2')
                         .form-group.col-md-3
                             .dropdown-inline
-                            select.form-control(name='ingredientProperties[1]', required)
+                            select.form-control(name='ingredientProperties[2]', required)
                                 option(value='') Measurement
                                 option(value='tsp.') Teaspoon
                                 option(value='tbsp.') Tablespoon
@@ -37,11 +37,14 @@ block content
                                 option(value='lb') Pound
                                 option(value='oz') Dry Ounce
                         .form-group.col-md-3
-                            input.form-control(name='ingredientProperties[1]', type='date')
+                            input.form-control(name='ingredientProperties[3]', type='date')
                         .col-md-4
                             h4 Add An Image
-                            input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='form-group')
-                            input.btn.btn-primary.col-md-2(type='submit', value='Submit', class='form-group')
+                            .form-group
+                                img#output
+                            .form-group
+                                input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='form-group')
+                                input.btn.btn-primary.col-md-2(type='submit', value='Submit', class='form-group')
 
         .form-row
             //-for each ingredient in data
