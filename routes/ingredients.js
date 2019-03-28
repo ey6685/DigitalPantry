@@ -147,12 +147,31 @@ router.get('/expiredAdmin', function expiredTable(req, res) {
 // This will add a new ingredient to available ingredients and update database
 router.post('/add', upload.single('image'), async function addIngredient(req, res) {
 
+  if (req.file) {
+    var imagePath = req.file.filename
+    console.log('File Uploaded Successfully')
+    gm(req.file.path) // uses graphicsmagic and takes in image path
+      .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
+      .write(req.file.path, err => {
+        if (err) {
+          console.log(err)
+        }
+      })
+  } else {
+    var imagePath = 'placeholder.jpg'
+    console.log('File Upload Failed')
+  }
+
 
 
   for (var key in req.body) {
     if (key.includes('ingredientProperties')) {
       var block_oF_data = req.body[key]
       console.log(block_oF_data)
+      console.log('0 is '+block_oF_data[0])
+      console.log('1 is '+block_oF_data[1])
+      console.log('2 is '+block_oF_data[2])
+      console.log('3 is '+block_oF_data[3])
       //seperate the data
       var ingredient_name = block_oF_data[0]
       var ingredient_amount = block_oF_data[1]
@@ -172,7 +191,8 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
         var new_weight = await aw.auto_weight(ingredient_name)
         var new_ingredient = await ingredient_t.create({
           ingredient_name: ingredient_name,
-          ingredient_weight: new_weight
+          ingredient_weight: new_weight,
+          ingredient_image_path: '/images/' + imagePath
         })
         final_id = new_ingredient.ingredient_id
       }
@@ -187,9 +207,6 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
       console.log('ingredient add: \n' + JSON.stringify(new_inv))
     }
   }
-
-
-
   res.redirect('/ingredients/showall')
 })
 
