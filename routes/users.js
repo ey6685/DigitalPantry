@@ -155,7 +155,8 @@ router.get('/dashboard', async function showDashboard(req, res) {
     console.log(JSON.stringify(data))
     res.render('dashboard',{
       title: "Dashboard",
-      data: data
+      data: data,
+      storedData: JSON.stringify(data)
     })
       //Send individual recipe steps inside the array
           // res.render('dashboard',{

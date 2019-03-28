@@ -3,6 +3,10 @@ extends user_view_template
 //- NOTE: CSS FOR BUTTONS IS LOCATED UNDER THE layout_template
 
 block content
+	script.
+		$('#showRecipeDetails').on('click', function (e) {
+				console.log('TEST')
+			})
 	style.
 		.card-container{
 			padding-top:10px;
@@ -24,44 +28,27 @@ block content
 	br
 	div(class='container-fluid', class='rounded', style='width: 80%')
 		//- Overlay form start. In other words view recipe form
-		#editRecipe.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
+		#viewRecipeDetails.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
 			.modal-dialog.modal-dialog-centered.modal-lg(role='document')
 				.modal-content
+					.modal-header
+						h4.modal-title Recipe details
 					.modal-body
-						form(method= 'POST', action='/recipes/edit', class='form')
-							h4
-							hr
-							br
-							//- Edit recipe information fields
-							.form-row
-								.form-group.col-md-6
-									label(for='recipe-name') Recipe name
-									input.form-control(name="recipeName", type='text', placeholder="Recipe name", class='form-group')
-								.form-group.col-md-6
-									label(for='serving-size') Serving size
-									input.form-control(name="recipeSize", type='text', placeholder="Serving Size", class='form-group')
-							br
-							h5 Ingredients
-							hr
-							br
-							//- Edit ingredient information fields
-							.form-row
-								.form-group.col-md-4
-									| Name
-								.form-group.col-md-3
-									| Qty
-								.form-group.col-md-3
-									| Measurement
-							//- Although it might seem like ingredient row does nothing
-							//- #ingredient-rows is used for Jquery 
-							#ingredient-rows
-							#dynamic-ingredient-row
-							hr
-							br
-							button.btn.btn-primary(type='submit', id='save-showall-rec') Save changes
-							button.btn.btn-secondary(class='btn-success', type='button', onclick='addIngredient()', class='form-group') Add Ingredient
-							button.btn.btn-secondary(type='button', data-dismiss='modal', class='form-group') Close
-		//-Alert form end
+						h5 RECIPE NAME HERE
+						table.table.rounded.table-hover.table-dark
+							thead
+								tr
+									th(scope='col') 
+									th(scope='col') Requires
+									th(scope='col') On-hand
+							tbody
+								#ingredientRow
+						h4.modal-title Recipe steps
+						hr
+						br
+						#recipeStepsOverlay
+					.modal-footer
+		//-Overlay form end
 		div.bg-dark.card-container(class='container-fluid', class='rounded')
 			.row
 				.col-sm
@@ -83,32 +70,37 @@ block content
 				div(class='row')
 					for recipe in i.recipe_data
 						div(class='col-4')
-
 							div(class='card', style='width: 100%', class='card h-100')
 								img.image(class='card-img-top', src=recipe.recipe_image_path, alt="#{(recipe.recipe_name)}")
-								div(class='card-body')
-									h4(class='card-title') #{recipe.recipe_name}
+								.card-body
+									h4(id='recipeName', lass='card-title') #{recipe.recipe_name}
 									br
 									p(class='card-text') Ingredients: #{(recipe.num_of_ingredients_on_hand)} out of #{recipe.num_of_ingredients}
 
 									//- For each steps inside of the array of steps
 									for step in recipe.recipe_directions
-										p(class='card-text')= step
-
-
-
-								div(class='card-foot', padding='.75rem')
+										p.card-text.recipeStep= step
 									//- btn_card is a custom class used for CSS for buttons
-									a.btn.btn-primary.edit-recipe(type='button', data-toggle='modal', data-target='#editRecipe') View Ingredient
-									button.btn_card.btn.btn-primary(recipe-id=rid, id='card-one', type='button', style='width: 93%') Cook It!
+								.card-footer
+									.container
+										.row
+											.col
+												.text-center
+													button.btn.btn-primary(class='test', id='showRecipeDetails', type='button', data-toggle='modal', data-target='#viewRecipeDetails') Details
+													button.btn.btn-primary(recipe-id=rid, id='card-one', type='button') Cook It!
 			br
 
 
 	script(src='/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js')
 	script(type='text/javascript').
+		var allData = '!{storedData}'
+		//- console.log(allData)
 		$(window).on('load', function() {
 			var slider = new Slider("#expirationWindowSlider")
 			slider.on("slide", function(sliderValue) {
 				document.getElementById("currentSliderValue").textContent = 'Expiration time frame: ' + sliderValue + ' days';
 			});
 		});
+		$('#showRecipeDetails').on('click', function (e) {
+			console.log('TEST')
+		})
