@@ -248,6 +248,7 @@ router.post('/register', async function registerUser(req, res) {
         user_password: password,
         pantry_id: recipe_id_inserted
       })
+      mail.signup(email)
       // Call create function from DB_models/Users.js
       User.createUser(newUser, function createNewUser() {
         // Upon sucessful creating take user to the dashboard
@@ -347,8 +348,10 @@ router.post('/add', function addNewUser(req, res) {
       // TODO figure out how to assign pantry IDs
       pantry_id: currentPantryID
     })
+
     // Call create function from DB_models/Users.js
     User.createUser(newUser, function create() {
+      
       req.flash('success', 'User added!')
       res.redirect('/users/adminPanel')
     })

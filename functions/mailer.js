@@ -105,6 +105,33 @@ function password_reset(email,pass){
         console.log(e)
     }
 }
+function signup(email){
+    try{
+        if(email == null)
+        {
+            throw "can't send mail"
+        }
+
+        var options = {
+            from: 'wsu.digital.pantry@gmail.com',
+            to: email,
+            subject: "Digital Pantry: Welcome to Digital Pantry",
+            html: "<h2>Welcome " + email + ",</h2><br>Thank you for registering your pantry with Digital Pantry<hr>" 
+        }
+        transporter.sendMail(options,function(error,info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
+    }
+    catch(e)
+    {
+        console.log(e)
+    }
+}
 module.exports.send_mail = send_mail;
 module.exports.password_change= password_change;
 module.exports.password_reset = password_reset;
+module.exports.signup = signup;
