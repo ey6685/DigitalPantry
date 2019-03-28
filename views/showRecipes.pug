@@ -36,7 +36,7 @@ block content
         .form-group.col-md-2
             form(method='GET', action='/recipes/add')
                 input.btn.btn-primary(type='submit', value='Add Recipe', class='form-group', id='submit-showrec')
-    br
+    
     .form-row
         //-for each recipe in data
         for recipe,i in data
@@ -63,7 +63,7 @@ block content
             //Set all letters to upper case
             filter = input.value.toUpperCase();
             //get all card names
-            card_names = document.getElementsByTagName('h4');
+            card_names = document.getElementsByTagName('h5');
             //get all cards
             div = document.getElementsByClassName('col-md-3');
 
@@ -93,7 +93,7 @@ block content
             while (switching && optionValue != 0) {
                 // Start by saying: no switching is done:
                 switching = false;
-                b = document.getElementsByTagName('h4');
+                b = document.getElementsByTagName('h5');
                 // Loop through all list items:
                 for (i = 0; i < (b.length - 1); i++) {
                     //Initial condition (no switches)
