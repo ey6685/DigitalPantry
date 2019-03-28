@@ -238,7 +238,7 @@ async function find_recipes_no_inv(ingredient_id, pantry_id){
         //now need some data from the recipes table
         var recipe_table_data;
         recipe_table_data = await recipe_t.findOne({
-            attributes: ['recipe_name','recipe_image_path','recipe_directions','num_people_it_feeds'],
+            attributes: ['recipe_name','recipe_image_path','recipe_directions','num_people_it_feeds',"recipe_num_times_cooked"],
             where:{
                 recipe_id: recipe_ids_arr[i],
                 pantry_id: pantry_id
@@ -260,7 +260,8 @@ async function find_recipes_no_inv(ingredient_id, pantry_id){
                     "num_of_ingredients" : ingredients_recipe.length,
                     "num_of_ingredients_on_hand": num_ing_we_have,
                     "ingredients_required":  ingredients_recipe,
-                    "ingredients_on_hand" : ingredients_we_have
+                    "ingredients_on_hand" : ingredients_we_have,
+                    "num_of_times_cooked": recipe_table_data.recipe_num_times_cooked
 
                 })
             }
