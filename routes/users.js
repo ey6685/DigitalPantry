@@ -2,7 +2,8 @@ const express = require('express')
 
 const router = express.Router()
 const moment = require('moment')
-const op = require('sequelize').Op
+const sequelized = require('sequelize')
+const op = sequelized.Op
 const bcrypt = require('bcryptjs')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
@@ -17,6 +18,7 @@ const recipe_t = require('../DB_models/Recipes')
 const ing_table = require('../DB_models/Ingredients')
 const ing_in_pan_table = require('../DB_models/ingredients_in_pantry')
 const logger = require('../functions/logger')
+const algorithm = require('../algorithm/main')
 
 // Get request to localhost:3000/users/login
 router.get('/login', function renderLoginPage(req, res) {
@@ -100,16 +102,29 @@ router.get('/register', function showRegistrationPage(req, res) {
 router.get('/adminPanel', async function showAdminPanelPage(req, res) {
   const currentUserId = req.session.passport['user']
   // Find which pantry user is from
-  const pantryId = `(SELECT (pantry_id) FROM users WHERE user_id=${currentUserId})`
+  const pantryId = await User.findOne({
+    attributes: ['pantry_id'],
+    where: {
+      user_id: currentUserId
+    }
+  }).then(function getPantryID(result) {
+    return result.pantry_id
+  })
   // Find all users in that pantry and not the current user
-  const query = `SELECT * FROM users WHERE pantry_id=${pantryId} AND user_id!=${currentUserId};`
-  console.log(query)
-  db.query(query, function sendQuery(err, results) {
-    if (err) throw err
-    res.render('admin_panel', {
-      title: 'Admin Panel',
-      userData: results
-    })
+  const users = await User.findAll({
+    where: {
+      pantry_id: pantryId,
+      user_id: {
+        [op.ne]: currentUserId
+      }
+    }
+  }).then(function returnResults(results) {
+    return results
+  })
+  // render page with all found users that are related to the pantry
+  res.render('admin_panel', {
+    title: 'Admin Panel',
+    userData: users
   })
 })
 
@@ -118,94 +133,52 @@ router.get('/adminPanel', async function showAdminPanelPage(req, res) {
 // Get request to localhost:3000/users/login
 router.get('/dashboard', async function showDashboard(req, res) {
   const currentUserId = req.session.passport['user']
+  //need pantry id
   const currentPantryID = await User.findOne({
     attributes: ['pantry_id'],
     where: {
       user_id: currentUserId
     }
   })
-  // Jon//pulls algorithm results from directAlgorithm into recipe_results
-  // Jon//then parses recipe id into var recipe_id
-  const results = await next_ing.next_exp_ingredient()                                   //returns an int for the ingredient id of the next expiring ingredient
-  console.log(JSON.stringify("\nresults of finding next ingredient: " + results))       //send the info to the console for debuging
-  const results2 = await found_recipes.find_recipes(results)
-  const recipe_id = results2[0]
-  console.log("\nrecipe: ids: \n" + results2);
-  // var recipe_results = await recipe_t.findOne({where:{recipe_id: recipe_id}});
-  // console.log(JSON.stringify(recipe_results));
-  //Jon//pulls recipes steps from recipe_direction_parser by the recipe_id
-  //Oskars//then splits string by the delimeter so we can get all the individual steps
-  if(results2.length >0)
-  {
-    var recipe_steps = await steps.recipe_direction_parser(recipe_id);
-    var recipe_steps_array = await recipe_steps.split('${<br>}');
-    var recipe_info = await recipe_t.findAll({
-      where: {recipe_id: {[op.in]: results2}}
-    });
-    console.log("\n\nrecipe_info: \n=========================================================================================\n\n" + JSON.stringify(recipe_info) + "\n");
-    //var cookit = cookit.cook_it(id);
-
-    //Grab relative image path for 2nd and 3rd recipe cards
-    var chicken_stir_fry_image = '/images/chicken.jpg';
-    var chicken_pot_pie_image = '/images/chicken_pot_pie.jpg';
-    //Jon//renders dashboard page with next expiring ingredient
-    // results = await.
-    // db.query('SELECT * FROM ingredients WHERE ingredient_expiration_date IS NOT null ORDER BY ingredient_expiration_date LIMIT 1', function(err, results)
-    // {
-    //   if (err) throw err
-      // results= results,
-      var ingredient_results = await ing_table.findOne({
-        where:{
-          ingredient_id: results
-        }
-      });
-      console.log(JSON.stringify(ingredient_results));
-      var additional_ingredient_results = await ing_in_pan_table.findAll({
-        where:{
-          ingredient_id: results
-        },
-        order: ['ingredient_expiration_date']
-
-      });
-      const pantryExpirationTimeFrame = await Pantry.findOne({
-        attributes: ['expire_window'],
-        where:{
-          pantry_id: currentPantryID.pantry_id
-        }
-      })
-      i_total= additional_ingredient_results[0]['ingredient_amount'],
-      i_measurement= additional_ingredient_results[0]['ingredient_unit_of_measurement'],
-      i_name= ingredient_results['ingredient_name'],
-      i_expire= moment(additional_ingredient_results[0]['ingredient_expiration_date']).format('LL'),
-      
-      //pulls recipe_name into recipe_name for referencing in dashboard
-      
-      recipe_name= recipe_info[0]['recipe_name'],
-      recipe_steps= recipe_steps_array,
-      rid= recipe_id,
-    
-      //Send individual recipe steps inside the array
-          res.render('dashboard',{
-              title:"Dashboard",
-              results: results,
-              i_total: i_total,
-              i_measurement: i_measurement,
-              i_name: i_name,
-              i_expire: i_expire,
-              //pulls recipe_name into recipe_name for referencing in dashboard
-              recipe_name: recipe_name,
-              recipe_steps: recipe_steps,
-              rid: rid,
-              recipe_image_path: recipe_info[0]['recipe_image_path'],
-              //Send individual recipe steps inside the array
-              chicken_stir_fry_image: chicken_stir_fry_image,
-              pot_pie_image: chicken_pot_pie_image,
-              expirationTimeFrame: pantryExpirationTimeFrame.expire_window
-              //cook_it: cookit
-          });
+  //need window
+  const window= await Pantry.findOne({
+    attributes: ['expire_window'],
+    where: {
+      pantry_id: currentPantryID.pantry_id
     }
-  }
-)
+  })
+
+    //grabing data for the page
+    var data = await algorithm.main2(window.expire_window, currentPantryID.pantry_id)
+    console.log("DATA ON DASHBOARD ROUTE")
+    console.log("=======================")
+    console.log(JSON.stringify(data))
+    res.render('dashboard',{
+      title: "Dashboard",
+      data: data
+    })
+      //Send individual recipe steps inside the array
+          // res.render('dashboard',{
+          //     title:"Dashboard",
+          //     results: results,
+          //     i_total: i_total,
+          //     i_measurement: i_measurement,
+          //     i_name: i_name,
+          //     i_expire: i_expire,
+          //     //pulls recipe_name into recipe_name for referencing in dashboard
+          //     recipe_name: recipe_name,
+          //     recipe_steps: recipe_steps,
+          //     rid: rid,
+          //     recipe_image_path: recipe_info[0]['recipe_image_path'],
+          //     //Send individual recipe steps inside the array
+          //     chicken_stir_fry_image: chicken_stir_fry_image,
+          //     pot_pie_image: chicken_pot_pie_image,
+          //     expirationTimeFrame: pantryExpirationTimeFrame.expire_window
+          //     //cook_it: cookit
+          // });
+    
+  
+})
 
 // catch(err){
 //   console.log("routes/users/dashboard err: " + err);

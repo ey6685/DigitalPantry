@@ -21,16 +21,16 @@ block content
 				div(class='row')
 				h6.text-dark .
 					div.mx-auto(class='col-8')
-						form(method='POST', action='/users/login')
+						form(method='POST', action='/users/login', class= 'form')
 							#form-group
 								label.text-white Email:
-								input.form-control(name='username', type='text')
+								input.form-control(name='username', type='text', class='form-group', id='username-signin')
 							br
 							#form-group
 								label.text-white Password:
-								input.form-control(name='password', type='password')
+								input.form-control(name='password', type='password', class='form-group', id='password-signin')
 								br
-								input.btn.btn-primary(type='submit', value='Submit')
+								input.btn.btn-primary(type='submit', value='Submit', class='form-group', id='submit-signin')
 								a(href='/users/register') Don't have an account?
 				h4.text-dark .
 			h4.text-secondary .

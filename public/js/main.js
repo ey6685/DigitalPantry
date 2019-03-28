@@ -55,7 +55,7 @@ $(document).ready(function () {
       success: function (response) {
         // route user back to results
         // window.location.href = '/recipes/showall'
-        location.reload()
+        location.reload(true)
       },
       error: function (err) {
         console.log('Could not delete: ' + id)

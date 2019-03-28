@@ -42,7 +42,7 @@ block content
 				- ingredient_image= '/images/placeholder.jpg'
 				.form-group.col-md-3
 					div(id=item.ingredient_id, class='card', class='h-100')
-						img.image(class='card-img-top', src=ingredient_image, alt='image', class="h-50")
+						img.image(class='card-img-top', src=ingredient_image, alt='image')
 						div(class='card-body')
 							h4(class='card-title') #{item.ingredient_name}
 							h5(class='card-text') Amount: #{item.ingredient_total} #{item.ingredient_measurement}

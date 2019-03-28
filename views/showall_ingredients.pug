@@ -27,28 +27,33 @@ block content
 					th(scope='col') Action
 			tbody
 				tr
-					form(method= 'POST', action= '/ingredients/showall', class= 'form')
+					form(method= 'POST', action= '/ingredients/add', class= 'form', enctype="multipart/form-data")
 						.form-row
 							.form-group.col-md-2
-								input.form-control.table-green(name='ingredient_name', type='text', placeholder='Name = Tuna')
-							.form-group.col-md-1
-								input.form-control.table-green(name='ingredient_total', type='text', placeholder='Total = 2')
+								input.form-control(name='ingredientProperties[0]', type='text', placeholder='Name = Tuna')
+							.form-group.col-md-2
+								input.form-control(name='ingredientProperties[1]', type='text', placeholder='Total = 2')
 							.form-group.col-md-3
 								.dropdown-inline
-								select.form-control.table-green(name='ingredient_measurement', required)
-									option(value='') Container Measurement
+								select.form-control(name='ingredientProperties[2]', required)
+									option(value='') Measurement
 									option(value='tsp.') Teaspoon
 									option(value='tbsp.') Tablespoon
 									option(value='fl oz') Fluid Ounce
 									option(value='cup') Cup
-									option(value='cup') Cup
 									option(value='quart') Quart
-									option(value='ml') Millilitter
+									option(value='ml') Millilitre
 									option(value='lb') Pound
 									option(value='oz') Dry Ounce
-							.form-group.col-md-4
-								input.form-control.table-green(name='ingredient_expiration_date', type='date')
-							input.btn.btn-primary.col-md-2(type='submit', value='ADD', class='form-group')
+							.form-group.col-md-3
+								input.form-control(name='ingredientProperties[3]', type='date')
+							.col-md-4
+								h4 Add An Image
+								.form-group
+									img#output
+								.form-group
+									input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='form-group')
+									input.btn.btn-primary.col-md-2(type='submit', value='Submit', class='form-group')
 				for item in results
 					tr
 						th(scope='row') #
@@ -58,6 +63,6 @@ block content
 							td= item.ingredient_expiration_date
 							td 
 								//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
-								a.btn.btn-danger.delete-ingredient(href='#',data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount)  DELETE
-		form(method='GET', action='/ingredients/add')
-		input.btn.btn-primary(type='submit', value='ADD MULTIPLE INGREDIENTS')
+								a.btn.btn-danger.delete-ingredient(data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount) DELETE
+		form(method='GET', action='/ingredients/add', class= 'form')
+			input.btn.btn-primary(type='submit', value='ADD MULTIPLE INGREDIENTS', class='form-group', id='multiple-showall-ing')
