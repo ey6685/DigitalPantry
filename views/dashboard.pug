@@ -3,6 +3,10 @@ extends user_view_template
 //- NOTE: CSS FOR BUTTONS IS LOCATED UNDER THE layout_template
 
 block content
+	script.
+		$('#showRecipeDetails').on('click', function (e) {
+				console.log('TEST')
+			})
 	style.
 		.card-container{
 			padding-top:10px;
@@ -23,6 +27,30 @@ block content
 	- rid_variable= rid
 	br
 	div(class='container-fluid', class='rounded', style='width: 80%')
+		//- Overlay form start. In other words view recipe form
+		#viewRecipeDetails.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
+			.modal-dialog.modal-dialog-centered.modal-lg(role='document')
+				.modal-content
+					.modal-header
+						h4.modal-title Recipe details
+					.modal-body
+						h5 RECIPE NAME HERE
+						br
+						table.table.rounded.table-hover.table-dark
+							thead
+								tr
+									th(scope='col', style="background-color:white;border:none;") 
+									th(scope='col') Requires
+									th(scope='col') On-hand
+									th(scope='col', style="background-color:white; border:none;")
+							tbody
+								#ingredientRow
+						h4.modal-title Recipe steps
+						hr
+						br
+						#recipeStepsOverlay
+					.modal-footer
+		//-Overlay form end
 		div.bg-dark.card-container(class='container-fluid', class='rounded')
 			.row
 				.col-sm
@@ -34,43 +62,53 @@ block content
 					input.btn.btn-primary(id='sortByTimeFrameBtn', type='submit', value='Sort')
 			.row
 				.col-sm
-					
+
 		br
 		!= messages('message', locals)
 		for i in data
 			div.bg-dark.card-container(class='container-fluid', class='rounded')
 				h3.text-white Expiring Ingredient:
-							|  #{i.ingredient_amount} #{i.ingredient_unit_of_measurement} of #{i.ingredient_name} on #{(i.ingredient_expiration_date)}
+					|  #{i.ingredient_amount} #{i.ingredient_unit_of_measurement} of #{i.ingredient_name} on #{(i.ingredient_expiration_date)}
 				div(class='row')
 					for recipe in i.recipe_data
 						div(class='col-4')
-						
-							div(class='card', style='width: 100%', class='card h-100')
+							div.card.h-100(recipe-id=recipe.recipe_id , style='width: 100%')
 								img.image(class='card-img-top', src=recipe.recipe_image_path, alt="#{(recipe.recipe_name)}")
-								div(class='card-body')
-									h4(class='card-title') #{recipe.recipe_name}
+								.card-body
+									h4(id='recipeName', lass='card-title') #{recipe.recipe_name}
 									br
 									p(class="card-text") Cooked #{recipe.num_of_times_cooked} times.
 									br
 									p(class='card-text') Ingredients: #{(recipe.num_of_ingredients_on_hand)} out of #{recipe.num_of_ingredients}
-										
+
 									//- For each steps inside of the array of steps
 									for step in recipe.recipe_directions
-										p(class='card-text')= step
-										
-										
-									
-								div(class='card-foot', padding='.75rem')
+										p.card-text.recipeStep= step
 									//- btn_card is a custom class used for CSS for buttons
-									button.btn_card.btn.btn-primary(recipe-id=rid, id='card-one', type='button', style='width: 93%') Cook It!
+								.card-footer
+									.container
+										.row
+											.col
+												.text-center
+													button.btn.btn-primary(class='test', id='showRecipeDetails', type='button', data-toggle='modal', data-target='#viewRecipeDetails') Details
+													button.btn.btn-primary(recipe-id=rid, id='card-one', type='button') Cook It!
 			br
-			
-				
+
+
 	script(src='/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js')
 	script(type='text/javascript').
+		var allData = '!{storedData}'
+		allData = JSON.parse(allData)
+		// Creates the slider for expiration time frame
 		$(window).on('load', function() {
 			var slider = new Slider("#expirationWindowSlider")
 			slider.on("slide", function(sliderValue) {
 				document.getElementById("currentSliderValue").textContent = 'Expiration time frame: ' + sliderValue + ' days';
 			});
 		});
+		function edit(){
+			document.getElementById('name').setAttribute("contenteditable", "true");
+			document.getElementById('name').focus()
+			document.getElementById('edit-btn').classList.add("disabled");
+			document.getElementById('save-pantryName-btn').classList.remove("disabled");
+		}

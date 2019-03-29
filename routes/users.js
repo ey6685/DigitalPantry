@@ -173,6 +173,7 @@ router.get('/dashboard', async function showDashboard(req, res) {
       title: "Dashboard",
       data: data,
       expirationTimeFrame : window.expire_window
+      storedData: JSON.stringify(data)
     })
       //Send individual recipe steps inside the array
           // res.render('dashboard',{
