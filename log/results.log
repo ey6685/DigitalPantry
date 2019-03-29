@@ -4305,3 +4305,33 @@ found ingredient ids:
 
 2019-03-28 22:04:04 info: coverting 2 tbsp. to cup
 
+2019-03-28 22:27:29 info: 
+2019-03-28 22:27:29 info: today: Thu Mar 28 2019 22:27:29 GMT-0400 (Eastern Daylight Time)
+window: Tue Apr 02 2019 00:00:00 GMT-0400 (Eastern Daylight Time)
+2019-03-28 22:27:29 info: 
+found ingredient ids: 
+[{"ingredient_id":5},{"ingredient_id":2},{"ingredient_id":21},{"ingredient_id":12}]
+2019-03-28 22:27:29 info: coverting 200 oz to tbsp.
+
+2019-03-28 22:27:29 info: coverting 2 tbsp. to cup
+
+2019-03-28 22:39:25 info: 
+2019-03-28 22:39:25 info: today: Thu Mar 28 2019 22:39:25 GMT-0400 (Eastern Daylight Time)
+window: Tue Apr 02 2019 00:00:00 GMT-0400 (Eastern Daylight Time)
+2019-03-28 22:39:25 info: 
+found ingredient ids: 
+[{"ingredient_id":5},{"ingredient_id":33},{"ingredient_id":2},{"ingredient_id":21},{"ingredient_id":12}]
+2019-03-28 22:39:25 info: coverting 200 oz to tbsp.
+
+2019-03-28 22:39:25 info: coverting 2 tbsp. to cup
+
+2019-03-28 22:48:16 info: 
+2019-03-28 22:48:16 info: today: Thu Mar 28 2019 22:48:16 GMT-0400 (Eastern Daylight Time)
+window: Tue Apr 02 2019 00:00:00 GMT-0400 (Eastern Daylight Time)
+2019-03-28 22:48:16 info: 
+found ingredient ids: 
+[{"ingredient_id":5},{"ingredient_id":34},{"ingredient_id":2},{"ingredient_id":21},{"ingredient_id":12}]
+2019-03-28 22:48:16 info: coverting 200 oz to tbsp.
+
+2019-03-28 22:48:16 info: coverting 2 tbsp. to cup
+
