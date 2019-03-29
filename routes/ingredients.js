@@ -4,6 +4,8 @@ const moment = require('moment')
 const ingredient_t = require('../DB_models/Ingredients')
 const ing_in_stock = require('../DB_models/ingredients_in_pantry')
 const aw = require('../algorithm/auto_weight')
+const User = require('../DB_models/Users')
+const op = require('sequelize').Op;
 const gm = require('gm')
 const multer = require('multer')
 //defines where to store image
@@ -207,6 +209,26 @@ router.get('/cards', function showCards(req, res) {
   })
 })
 
+// This route gets called from dashboard when users change ingredient amount on-hand
+router.post('/editIngredientAmount', async function editIngredientAmount(req, res) {
+  const currentUserId = req.session.passport['user']
+  console.log("CURRENT PANTRY")
+  currentPantryId = await User.findOne({
+    where:{user_id:currentUserId}
+  })
+  console.log(currentPantryId)
+  const ingredientId = req.body.ingredient_id
+  const newAmount = req.body.ingredient_amount
+  console.log("BEFORE UPDATE")
+  ing_in_stock.update({
+      ingredient_amount:newAmount
+    },
+    {where:{ingredient_id:ingredientId, pantry_id:currentPantryId.pantry_id}
+  })
+  console.log("AFTER UPDATE")
+  console.log(req.body)
+  console.log(newAmount)
+})
 
 // remove ingredient by id
 router.delete('/remove/', async function remove(req, res) {
