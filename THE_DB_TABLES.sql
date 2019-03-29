@@ -176,12 +176,12 @@ CREATE TABLE `users` (
   `user_password` text,
   `user_email` tinytext,
   `pantry_id` int(11) DEFAULT NULL,
-  `user_type` enum('A','V') DEFAULT 'A',
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_type` enum('Volunteer','Administrator') DEFAULT 'Volunteer',
   PRIMARY KEY (`user_id`),
   KEY `pantry_id` (`pantry_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`pantry_id`) REFERENCES `pantry` (`pantry_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -190,7 +190,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('test','test','test@test.com',1,'V',4),('admin','$2a$10$lZ1kSUDEAMriZLdfVNjuTO9BEud5RMk6LJYfz2xKystQnD7YQNl8G','et8492@wayne.edu',1,'A',9),('admin','$2a$10$S5tTpwlmQEQY03U.G1mpbOWjU9wPGtApKX9RyiDMdc.gvQeWjJrsO','et8492@wayne.edu',1,'A',10),('quastan@live.com','$2a$10$R0/SpFJOHHUyKiz5Yzy4xeUv33cgbdQ.bboHuY1Vl.4v8FiFpnh8W','quastan@live.com',1,'A',11),('admin','$2a$10$wRudyksT/2MCVOcj4TctVu5QrJg4gUlLQWKsTyJ8HDc5PYMBvHBsC','jenna291991@gmail.com',3,'A',12),('admin','$2a$10$Zg3f7FieL/J6Ch9hHefSYuJ.e6PDZIJmiLk3oLRl0Xqm35ctsiZS6','pat9592@yahoo.com',8,'A',15);
+INSERT INTO `users` VALUES ('test','test','test@test.com',1,4,'Volunteer'),('admin','$2a$10$lZ1kSUDEAMriZLdfVNjuTO9BEud5RMk6LJYfz2xKystQnD7YQNl8G','et8492@wayne.edu',1,9,'Volunteer'),('admin','$2a$10$S5tTpwlmQEQY03U.G1mpbOWjU9wPGtApKX9RyiDMdc.gvQeWjJrsO','et8492@wayne.edu',1,10,'Volunteer'),('quastan@live.com','$2a$10$R0/SpFJOHHUyKiz5Yzy4xeUv33cgbdQ.bboHuY1Vl.4v8FiFpnh8W','quastan@live.com',1,11,'Administrator'),('admin','$2a$10$wRudyksT/2MCVOcj4TctVu5QrJg4gUlLQWKsTyJ8HDc5PYMBvHBsC','jenna291991@gmail.com',3,12,'Volunteer'),('admin','$2a$10$Zg3f7FieL/J6Ch9hHefSYuJ.e6PDZIJmiLk3oLRl0Xqm35ctsiZS6','pat9592@yahoo.com',8,15,'Volunteer'),('quastan@live.com','$2a$10$DOl83/1nofHtU/auUA4J6esckvkCOZt9qfgNJQxHE4E/rhgZHn0B6','quastan@live.com',1,16,'Volunteer');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -203,4 +203,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-28 18:16:29
+-- Dump completed on 2019-03-29  0:01:04

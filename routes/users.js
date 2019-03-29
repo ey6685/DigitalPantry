@@ -20,6 +20,7 @@ const ing_in_pan_table = require('../DB_models/ingredients_in_pantry')
 const logger = require('../functions/logger')
 const algorithm = require('../algorithm/main')
 const mail = require("../functions/mailer");
+const str_generater = require('randomstring');
 
 // Get request to localhost:3000/users/login
 router.get('/login', function renderLoginPage(req, res) {
@@ -491,6 +492,40 @@ router.post('/changePassword', async function changePassword(req, res) {
       res.redirect('/users/settings')
     })
   }
+})
+router.get('/forgotpass', function (req,res){
+  res.render("password_reset",{
+    title: "Reset Password"
+  })
+})
+router.post('/forgotpass', async function(req,res){
+  //pull email from the page
+  const email = req.body.email
+
+  //check to see if email in db
+  var db = User.findOne({
+    where:{
+      user_email: email
+    }
+  })
+  if(db != null)
+  {
+    //help by okasers you are my only hope
+    //randomly generate a new password
+    var new_pass = str_generater.generate({
+      length: 8,
+      charset: "alphanumeric"
+    })
+    //send out the email
+    mail.password_reset(email,new_pass);
+    //salt the password please
+  }
+  else{
+    req.flash("error","Email Unknown")
+    res.redirect('user/forgotpass')
+  }
+  
+  
 })
 
 // Function to call from any route to check if user is authenticated
