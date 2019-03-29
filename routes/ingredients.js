@@ -8,6 +8,7 @@ const aw = require('../algorithm/auto_weight')
 const gm = require('gm')
 const multer = require('multer')
 const User = require('../DB_models/Users')
+const fs = require('fs')
 //defines where to store image
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -148,7 +149,7 @@ router.get('/expiredAdmin', function expiredTable(req, res) {
 router.post('/add', upload.single('image'), async function addIngredient(req, res) {
 
   if (req.file) {
-    var imagePath = req.file.filename
+    
     console.log('File Uploaded Successfully')
     gm(req.file.path) // uses graphicsmagic and takes in image path
       .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
@@ -157,6 +158,13 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
           console.log(err)
         }
       })
+      var currentDate= Date.now()
+      var imagePath = currentDate + '.jpg'
+      fs.rename(req.file.path, './public/images/' + currentDate + '.jpg', function (err) {
+        if (err) throw err;
+        console.log('File Renamed.');
+      }); 
+
   } else {
     var imagePath = 'placeholder.jpg'
     console.log('File Upload Failed')
