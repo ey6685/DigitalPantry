@@ -7,7 +7,8 @@ const op = sequelized.Op
 const bcrypt = require('bcryptjs')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
-
+const gm = require('gm')
+const multer = require('multer')
 const steps = require('../recipe_direction_parser')
 const User = require('../DB_models/Users')
 const Pantry = require('../DB_models/Pantry')
@@ -20,6 +21,20 @@ const ing_in_pan_table = require('../DB_models/ingredients_in_pantry')
 const logger = require('../functions/logger')
 const algorithm = require('../algorithm/main')
 const mail = require("../functions/mailer");
+const fs = require('fs');
+
+//defines where to store image
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, __dirname + '/../public/images/');
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+// create an upload function using configuration above
+const upload = multer({ storage: storage });
+
 
 // Get request to localhost:3000/users/login
 router.get('/login', function renderLoginPage(req, res) {
@@ -491,6 +506,30 @@ router.post('/changePassword', async function changePassword(req, res) {
       res.redirect('/users/settings')
     })
   }
+})
+
+router.post('/addImg', upload.single('image'), async function addImg(req, res) {
+
+  if (req.file) {
+    var imagePath = req.file.filename
+    console.log('File Uploaded Successfully')
+    gm(req.file.path) // uses graphicsmagic and takes in image path
+      .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
+      .write(req.file.path, err => {
+        if (err) {
+          console.log(err)
+        }
+      })
+    fs.rename(req.file.path, './public/images/PantryImage9001.jpg', function (err) {
+      if (err) throw err;
+      console.log('File Renamed.');
+    }); 
+  } else {
+    var imagePath = 'placeholder.jpg'
+    console.log('File Upload Failed')
+  }
+
+  res.redirect('/users/adminPanel')
 })
 
 // Function to call from any route to check if user is authenticated
