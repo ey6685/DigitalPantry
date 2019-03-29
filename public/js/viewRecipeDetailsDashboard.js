@@ -22,7 +22,6 @@ $(document).on('click', '#showRecipeDetails', async function () {
 
   // Build table body
   $.each(ingredientsRequired, function (index, item) {
-    console.log(item)
     // by default all ingredient rows are green
     var ingredientStatus = '<tr style="background-color:#d5f5ee";>'
     // if available amount of ingredient is less than required amount of ingredient
@@ -54,7 +53,6 @@ function findRecipeIngredients (recipeId) {
   $.each(allData, function (index, item) {
     // In each ingredient parse through all recipes that can be cooked with it
     $.each(item.recipe_data, function getIngredients(index, thing) {
-      console.log(thing.recipe_id)
       if (recipeId == thing.recipe_id) {
         var ingredientOnHand = thing.ingredients_required
         ingredientsRequired = thing.ingredients_on_hand
