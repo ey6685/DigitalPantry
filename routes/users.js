@@ -20,21 +20,20 @@ const ing_table = require('../DB_models/Ingredients')
 const ing_in_pan_table = require('../DB_models/ingredients_in_pantry')
 const logger = require('../functions/logger')
 const algorithm = require('../algorithm/main')
-const mail = require("../functions/mailer");
-const fs = require('fs');
+const mail = require('../functions/mailer')
+const fs = require('fs')
 
 //defines where to store image
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, __dirname + '/../public/images/');
+    cb(null, __dirname + '/../public/images/')
   },
   filename: function(req, file, cb) {
-    cb(null, file.originalname);
+    cb(null, file.originalname)
   }
-});
+})
 // create an upload function using configuration above
-const upload = multer({ storage: storage });
-
+const upload = multer({ storage: storage })
 
 // Get request to localhost:3000/users/login
 router.get('/login', function renderLoginPage(req, res) {
@@ -157,45 +156,43 @@ router.get('/dashboard', async function showDashboard(req, res) {
     }
   })
   //need window
-  const window= await Pantry.findOne({
+  const window = await Pantry.findOne({
     attributes: ['expire_window'],
     where: {
       pantry_id: currentPantryID.pantry_id
     }
   })
 
-    //grabing data for the page
-    var data = await algorithm.main2(window.expire_window, currentPantryID.pantry_id)
-    console.log("DATA ON DASHBOARD ROUTE")
-    console.log("=======================")
-    console.log(JSON.stringify(data))
-    res.render('dashboard',{
-      title: "Dashboard",
-      data: data,
-      expirationTimeFrame : window.expire_window,
-      storedData: JSON.stringify(data)
-    })
-      //Send individual recipe steps inside the array
-          // res.render('dashboard',{
-          //     title:"Dashboard",
-          //     results: results,
-          //     i_total: i_total,
-          //     i_measurement: i_measurement,
-          //     i_name: i_name,
-          //     i_expire: i_expire,
-          //     //pulls recipe_name into recipe_name for referencing in dashboard
-          //     recipe_name: recipe_name,
-          //     recipe_steps: recipe_steps,
-          //     rid: rid,
-          //     recipe_image_path: recipe_info[0]['recipe_image_path'],
-          //     //Send individual recipe steps inside the array
-          //     chicken_stir_fry_image: chicken_stir_fry_image,
-          //     pot_pie_image: chicken_pot_pie_image,
-          //     expirationTimeFrame: pantryExpirationTimeFrame.expire_window
-          //     //cook_it: cookit
-          // });
-    
-  
+  //grabing data for the page
+  var data = await algorithm.main2(window.expire_window, currentPantryID.pantry_id)
+  console.log('DATA ON DASHBOARD ROUTE')
+  console.log('=======================')
+  console.log(JSON.stringify(data))
+  res.render('dashboard', {
+    title: 'Dashboard',
+    data: data,
+    expirationTimeFrame: window.expire_window,
+    storedData: JSON.stringify(data)
+  })
+  //Send individual recipe steps inside the array
+  // res.render('dashboard',{
+  //     title:"Dashboard",
+  //     results: results,
+  //     i_total: i_total,
+  //     i_measurement: i_measurement,
+  //     i_name: i_name,
+  //     i_expire: i_expire,
+  //     //pulls recipe_name into recipe_name for referencing in dashboard
+  //     recipe_name: recipe_name,
+  //     recipe_steps: recipe_steps,
+  //     rid: rid,
+  //     recipe_image_path: recipe_info[0]['recipe_image_path'],
+  //     //Send individual recipe steps inside the array
+  //     chicken_stir_fry_image: chicken_stir_fry_image,
+  //     pot_pie_image: chicken_pot_pie_image,
+  //     expirationTimeFrame: pantryExpirationTimeFrame.expire_window
+  //     //cook_it: cookit
+  // });
 })
 
 // catch(err){
@@ -368,7 +365,6 @@ router.post('/add', function addNewUser(req, res) {
 
     // Call create function from DB_models/Users.js
     User.createUser(newUser, function create() {
-      
       req.flash('success', 'User added!')
       res.redirect('/users/adminPanel')
     })
@@ -412,11 +408,10 @@ router.post('/changePrivilege/:id', function changePrivillege(req, res) {
 router.post('/resetPassword/:id', async function resetPassword(req, res) {
   const userId = req.params.id
   const userPassword = req.body.password
-  
 
   var email_address = await User.findOne({
-    attributes: ["user_email"],
-    where:{
+    attributes: ['user_email'],
+    where: {
       user_id: userId
     }
   })
@@ -490,8 +485,8 @@ router.post('/changePassword', async function changePassword(req, res) {
   } else {
     //get the email
     var email = await User.findOne({
-      attributes:["user_email"],
-      where:{
+      attributes: ['user_email'],
+      where: {
         user_id: currentUserId
       }
     })
@@ -502,7 +497,7 @@ router.post('/changePassword', async function changePassword(req, res) {
     const query = `UPDATE users SET user_password='${hash}' WHERE user_id=${currentUserId};`
     db.query(query, function updatePassword(err) {
       if (err) throw err
-      mail.password_change(email.user_email);
+      mail.password_change(email.user_email)
       req.flash('success', 'Password Changed!')
       res.redirect('/users/settings')
     })
@@ -510,7 +505,6 @@ router.post('/changePassword', async function changePassword(req, res) {
 })
 
 router.post('/addImg', upload.single('image'), async function addImg(req, res) {
-
   if (req.file) {
     var imagePath = req.file.filename
     console.log('File Uploaded Successfully')
@@ -521,10 +515,10 @@ router.post('/addImg', upload.single('image'), async function addImg(req, res) {
           console.log(err)
         }
       })
-    fs.rename(req.file.path, './public/images/PantryImage9001.jpg', function (err) {
-      if (err) throw err;
-      console.log('File Renamed.');
-    }); 
+    fs.rename(req.file.path, './public/images/PantryImage9001.jpg', function(err) {
+      if (err) throw err
+      console.log('File Renamed.')
+    })
   } else {
     var imagePath = 'placeholder.jpg'
     console.log('File Upload Failed')

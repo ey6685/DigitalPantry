@@ -1,4 +1,4 @@
-extends user_view_template
+extends admin_template
 
 block content
 	br
@@ -63,7 +63,7 @@ block content
 						button.btn.btn-primary(type='button', data-dismiss='modal', id='cancle2-admin') Cancel
 						input.btn.btn-primary(type='submit', value='Change', class='form-group')
 	br
-	h4 Active users
+	h4 Active Users
 	hr
 	br
 	.form-row
@@ -79,8 +79,8 @@ block content
 		//-caption Available Ingredients
 		thead
 			tr
-				th(scope='col') User name
-				th(scope='col') User type
+				th(scope='col') User Name
+				th(scope='col') User Type
 				th(scope='col') Change Privilege
 				th(scope='col') Reset Password
 				th(scope='col') Remove User
@@ -95,7 +95,7 @@ block content
 						a.btn.btn-danger(data-toggle='modal', data-target='#resetForm', id= 'reset-admin') Reset
 					td
 						a.btn.btn-danger(class="delete-user", data-id=item.user_id, id= 'delete-admin') DELETE
-	h4 Add new users
+	h4 Add New User
 	hr
 	br
 	form(method= 'POST', action= '/users/add', class= 'form')
