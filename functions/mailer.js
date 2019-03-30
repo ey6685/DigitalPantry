@@ -131,7 +131,36 @@ function signup(email){
         console.log(e)
     }
 }
+function add_user(email,pass)
+{
+    try{
+        if(email == null)
+        {
+            throw "can't send mail"
+        }
+
+        var options = {
+            from: 'wsu.digital.pantry@gmail.com',
+            to: email,
+            subject: "Digital Pantry: Added to pantry",
+            html: "<h2>Welcome " + email + ",</h2><br>You have been added to your pantry here is your password<br><hr>Password: " + pass +"<br><hr>"
+        }
+        transporter.sendMail(options,function(error,info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
+    }
+    catch(e)
+    {
+        console.log(e)
+    }
+}
+
 module.exports.send_mail = send_mail;
 module.exports.password_change= password_change;
 module.exports.password_reset = password_reset;
 module.exports.signup = signup;
+module.exports.add_user = add_user;

@@ -334,7 +334,7 @@ router.post('/saveCommunityRecipe', async function(req, res) {
 })
 
 // Add new user from admin panel
-router.post('/add', function addNewUser(req, res) {
+router.post('/add', async function addNewUser(req, res) {
   const userName = req.body.userName
   let userType = req.body.userType
   switch (userType) {
@@ -347,13 +347,25 @@ router.post('/add', function addNewUser(req, res) {
     default:
       userType = 'N/A'
   }
-  const userPassword = req.body.password
+  var userPassword = await str_generater.generate({
+    length: 8,
+    charset: "alphanumeric"
+  })
+  console.log("new pass")
+  console.log("========")
+  console.log(userPassword)
+  //send out the email
+  
+  //salt the password please
+  const salt = bcrypt.genSaltSync(10)
+  const hash = bcrypt.hashSync(userPassword, salt)
   const currentUserId = req.session.passport['user']
   // Find which pantry user is from
   const query = `SELECT (pantry_id) FROM users WHERE user_id=${currentUserId};`
   db.query(query, function getPantryID(err, results) {
     if (err) throw err
     const currentPantryID = results[0].pantry_id
+    mail.add_user(userName,userPassword)
     // Instantiate new user model defined in DB_models/Users.js
     const newUser = new User({
       user_email: userName,
