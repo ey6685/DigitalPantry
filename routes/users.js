@@ -173,7 +173,7 @@ router.get('/dashboard', async function showDashboard(req, res) {
     res.render('dashboard',{
       title: "Dashboard",
       data: data,
-      expirationTimeFrame : window.expire_window
+      expirationTimeFrame : window.expire_window,
       storedData: JSON.stringify(data)
     })
       //Send individual recipe steps inside the array
@@ -342,10 +342,10 @@ router.post('/add', function addNewUser(req, res) {
   let userType = req.body.userType
   switch (userType) {
     case 'volunteer':
-      userType = 'V'
+      userType = 'Volunteer'
       break
     case 'administrator':
-      userType = 'A'
+      userType = 'Administrator'
       break
     default:
       userType = 'N/A'
@@ -391,10 +391,10 @@ router.post('/changePrivilege/:id', function changePrivillege(req, res) {
   // Change Volunteer or Administrator to N/NP for database insert
   switch (userType) {
     case 'volunteer':
-      userType = 'V'
+      userType = 'Volunteer'
       break
     case 'administrator':
-      userType = 'A'
+      userType = 'Administrator'
       break
   }
   // Get user id
@@ -509,14 +509,8 @@ router.post('/changePassword', async function changePassword(req, res) {
     })
   }
 })
-router.get('/forgotpass', function (req,res){
-  res.render("password_reset",{
-    title: "Reset Password"
-  })
-})
-router.post('/forgotpass', async function(req,res){
-  //pull email from the page
-  const email = req.body.email
+
+
 
 router.post('/addImg', upload.single('image'), async function addImg(req, res) {
 
@@ -542,23 +536,54 @@ router.post('/addImg', upload.single('image'), async function addImg(req, res) {
   res.redirect('/users/adminPanel')
 })
 
+router.get('/forgotpass', function (req,res){
+  res.render("password_reset",{
+    title: "Reset Password"
+  })
+})
+router.post('/forgotpass', async function(req,res){
+  //pull email from the page
+  const email = req.body.email
   //check to see if email in db
-  var db = User.findOne({
+  console.log("email:")
+  console.log("======")
+  console.log(email);
+  var db_data = await User.findOne({
     where:{
       user_email: email
     }
   })
+  console.log("user data")
+  console.log("=========")
+  console.log(JSON.stringify(db_data))
   if(db != null)
   {
     //help by okasers you are my only hope
     //randomly generate a new password
-    var new_pass = str_generater.generate({
+    var new_pass = await str_generater.generate({
       length: 8,
       charset: "alphanumeric"
     })
+    console.log("new pass")
+    console.log("========")
+    console.log(new_pass)
     //send out the email
-    mail.password_reset(email,new_pass);
+    
     //salt the password please
+    const salt = bcrypt.genSaltSync(10)
+    const hash = bcrypt.hashSync(new_pass, salt)
+    const query = `Update users set user_password='${hash}' where user_id=${db_data.user_id};`
+    console.log("the query")
+    console.log("=========")
+    console.log(query)
+    db.query(query, function(err) {
+      if (err) throw err
+      mail.password_reset(email,new_pass);
+      req.flash('success', 'Password Reset!')
+      res.redirect('/users/login')
+    })
+
+    
   }
   else{
     req.flash("error","Email Unknown")

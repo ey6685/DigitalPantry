@@ -9,7 +9,6 @@ const User = require('../DB_models/Users')
 const op = require('sequelize').Op;
 const gm = require('gm')
 const multer = require('multer')
-const User = require('../DB_models/Users')
 const fs = require('fs')
 //defines where to store image
 const storage = multer.diskStorage({

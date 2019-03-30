@@ -88,8 +88,8 @@ function password_reset(email,pass){
             from: 'wsu.digital.pantry@gmail.com',
             to: email,
             subject: "Digital Pantry: Password reset",
-            html: "Hello " + email + ",<br>Your pasword has been resest.<hr>" +
-            "<b>New Passord: </b>" + pass +"<hr><br><br><b><u>this is TEMPORTARY. Please change the next time you log in!"
+            html: "Hello " + email + ",<br>Your pasword has been reset.<br><hr>" +
+            "<b>New Passord: </b>" + pass +"<hr><br><br><b>This is <u>TEMPORTARY.</u> Please change the next time you log in!"
         }
 
         transporter.sendMail(options,function(error,info){
