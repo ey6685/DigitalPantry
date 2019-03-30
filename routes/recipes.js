@@ -11,6 +11,7 @@ const users_route = require('./users');
 const aw = require("../algorithm/auto_weight");
 const base_recipe_w = require('../algorithm/recipe_weight_functions');
 const gm = require('gm');
+const fs = require('fs')
 //defines where to store image
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -165,7 +166,7 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
       user_id: userId
     }
   })
-  const imagePath = req.file.path
+  
   // If file exists
   if (req.file) {
     
@@ -177,8 +178,15 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
           console.log(err)
         }
       })
+      var currentDate= Date.now()
+      var imagePath = currentDate + '.jpg'
+      fs.rename(req.file.path, './public/images/' + currentDate + '.jpg', function (err) {
+        if (err) throw err;
+        console.log('File Renamed.');
+      });
   } else {
-    console.log('File Upload Failed')
+      var imagePath = 'placeholder.jpg'
+      console.log('File Upload Failed')
   }
   // recipe_name and recipe_size are unique form fields, so they do not require any recursion to grab all of them
   const recipeName = req.body.recipeName
@@ -194,7 +202,7 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
   const result = await recipe_t
     .create({
       recipe_name: recipeName,
-      recipe_image_path: '/images/' + req.file.filename,  //saves image path in the db in a way that can be pulled from to display later
+      recipe_image_path: '/images/' + imagePath,  //saves image path in the db in a way that can be pulled from to display later
       num_people_it_feeds: recipeServingSize,
       recipe_directions: replaceNewLine,
       pantry_id: pantryId.pantry_id

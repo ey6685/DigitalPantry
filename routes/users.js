@@ -7,7 +7,8 @@ const op = sequelized.Op
 const bcrypt = require('bcryptjs')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
-
+const gm = require('gm')
+const multer = require('multer')
 const steps = require('../recipe_direction_parser')
 const User = require('../DB_models/Users')
 const Pantry = require('../DB_models/Pantry')
@@ -19,6 +20,21 @@ const ing_table = require('../DB_models/Ingredients')
 const ing_in_pan_table = require('../DB_models/ingredients_in_pantry')
 const logger = require('../functions/logger')
 const algorithm = require('../algorithm/main')
+const mail = require("../functions/mailer");
+const fs = require('fs');
+
+//defines where to store image
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, __dirname + '/../public/images/');
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+// create an upload function using configuration above
+const upload = multer({ storage: storage });
+
 
 // Get request to localhost:3000/users/login
 router.get('/login', function renderLoginPage(req, res) {
@@ -155,7 +171,9 @@ router.get('/dashboard', async function showDashboard(req, res) {
     console.log(JSON.stringify(data))
     res.render('dashboard',{
       title: "Dashboard",
-      data: data
+      data: data,
+      expirationTimeFrame : window.expire_window
+      storedData: JSON.stringify(data)
     })
       //Send individual recipe steps inside the array
           // res.render('dashboard',{
@@ -247,6 +265,7 @@ router.post('/register', async function registerUser(req, res) {
         user_password: password,
         pantry_id: recipe_id_inserted
       })
+      mail.signup(email)
       // Call create function from DB_models/Users.js
       User.createUser(newUser, function createNewUser() {
         // Upon sucessful creating take user to the dashboard
@@ -346,8 +365,10 @@ router.post('/add', function addNewUser(req, res) {
       // TODO figure out how to assign pantry IDs
       pantry_id: currentPantryID
     })
+
     // Call create function from DB_models/Users.js
     User.createUser(newUser, function create() {
+      
       req.flash('success', 'User added!')
       res.redirect('/users/adminPanel')
     })
@@ -391,7 +412,14 @@ router.post('/changePrivilege/:id', function changePrivillege(req, res) {
 router.post('/resetPassword/:id', async function resetPassword(req, res) {
   const userId = req.params.id
   const userPassword = req.body.password
+  
 
+  var email_address = await User.findOne({
+    attributes: ["user_email"],
+    where:{
+      user_id: userId
+    }
+  })
   // generate salt
   const salt = bcrypt.genSaltSync(10)
   // generate hash using the passed in password
@@ -400,7 +428,8 @@ router.post('/resetPassword/:id', async function resetPassword(req, res) {
   // update password in database
   const query = `UPDATE users SET user_password='${hash}' WHERE user_id=${userId};`
   db.query(query)
-
+  // console.log("emailing " + email_address.user_email + " new password " + userPassword);
+  mail.password_reset(email_address.user_email, userPassword)
   // Show message to user
   req.flash('success', 'Password reset successful!')
   res.redirect('/users/adminPanel')
@@ -432,7 +461,7 @@ router.post('/changeUsername', function changeUsername(req, res) {
   })
 })
 
-router.post('/changePassword', function changePassword(req, res) {
+router.post('/changePassword', async function changePassword(req, res) {
   // get currently logged in user
   const currentUserId = req.session.passport['user']
   // get passed in current password
@@ -459,6 +488,13 @@ router.post('/changePassword', function changePassword(req, res) {
       })
     })
   } else {
+    //get the email
+    var email = await User.findOne({
+      attributes:["user_email"],
+      where:{
+        user_id: currentUserId
+      }
+    })
     // generate salt
     const salt = bcrypt.genSaltSync(10)
     // generate hash using the passed in password
@@ -466,10 +502,35 @@ router.post('/changePassword', function changePassword(req, res) {
     const query = `UPDATE users SET user_password='${hash}' WHERE user_id=${currentUserId};`
     db.query(query, function updatePassword(err) {
       if (err) throw err
+      mail.password_change(email.user_email);
       req.flash('success', 'Password Changed!')
       res.redirect('/users/settings')
     })
   }
+})
+
+router.post('/addImg', upload.single('image'), async function addImg(req, res) {
+
+  if (req.file) {
+    var imagePath = req.file.filename
+    console.log('File Uploaded Successfully')
+    gm(req.file.path) // uses graphicsmagic and takes in image path
+      .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
+      .write(req.file.path, err => {
+        if (err) {
+          console.log(err)
+        }
+      })
+    fs.rename(req.file.path, './public/images/PantryImage9001.jpg', function (err) {
+      if (err) throw err;
+      console.log('File Renamed.');
+    }); 
+  } else {
+    var imagePath = 'placeholder.jpg'
+    console.log('File Upload Failed')
+  }
+
+  res.redirect('/users/adminPanel')
 })
 
 // Function to call from any route to check if user is authenticated

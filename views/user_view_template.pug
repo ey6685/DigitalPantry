@@ -1,0 +1,134 @@
+//- Template for navigation side-bar css
+//- Created by: Oskars
+//- Date: 03/12/19
+//- Last modified by: Jon
+//- Date: 03/12/19
+//- Updated nav-bar routes
+
+doctype html
+html
+    head
+        style.
+            .footer {
+                position: fixed;
+                left: 0;
+                height:60px;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+                box-shadow: 0 50vh 0 50vh #343a40;
+            }
+            .nav{
+                top:0;
+                bottom:0;
+                width:200px;
+            }
+            .sidebar-sticky {
+                padding-top:50px;
+                position:fixed;
+                float:left;
+                /*height is 100% - the footer height*/
+                height: 100%;
+                padding-top: 5px;
+                box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+            }
+            main{
+                margin-bottom:100px;
+            }
+            .nav-link{
+                color:white;
+            }
+            hr{
+                background-color:white;
+                margin-bottom:0px !important;
+                border-bottom:0px !important;
+                padding-bottom:0px !important;
+            }
+            .nav-item{
+                padding-right:10px;
+                padding-left:10px;
+                border-bottom:1px solid black;
+            }
+            .header{
+                text-align:center;
+                font-size:25px;
+            }
+            .fa-spoon{
+                margin-left:5px;
+                padding-right:10px;
+                width:30px;
+            }
+            i{
+                padding-right:15px;
+                width:35px;
+                color:white;
+            }
+            .symbol{
+                position:absolute;
+                bottom:60px;
+                color:white;
+            }
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+        script(src='/bower_components/jquery/dist/jquery.js')
+        script(src="/js/viewRecipeDetailsDashboard.js")
+        //- script(type='text/javascript', src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js')
+    body
+        .nav
+            .sidebar-sticky.bg-secondary.text-white
+                ul.nav.flex-column
+                li.header Digital Pantry
+                    hr
+                    li.nav-item
+                        a.nav-link(href='/users/dashboard')
+                            i.fa.fa-tachometer
+                            | Dashboard
+                    li.nav-item
+                        a.nav-link(href='/ingredients/showall')
+                            i.fa.fa-spoon
+                            | View Ingredients
+                    li.nav-item
+                        a.nav-link(href='/ingredients/expired')
+                            i.fa.fa-spoon
+                            | View Expired Ingredients
+                    li.nav-item
+                        a.nav-link(href='/ingredients/add')
+                            i.fa.fa-spoon
+                            | Add Multiple Ingredients
+                    li.nav-item
+                        a.nav-link(href='/recipes/showall')
+                            i.fa.fa-spoon
+                            | View Recipes
+                    li.nav-item
+                        a.nav-link(href='/recipes/add')
+                            i.fa.fa-spoon
+                            | Add Recipe
+                    li.nav-item
+                        a.nav-link(href='/recipes/showCommunityRecipes')
+                            i.fa.fa-cutlery
+                            | Community Recipes
+                    li.nav-item
+                        a.nav-link(href='/users/adminPanel')
+                            i.fa.fa-user-o
+                            | Admin Panel
+                    li.nav-item
+                        a.nav-link(href='/users/logout')
+                            i.fa.fa-sign-out
+                            | Logout
+                a.btn.symbol(href='/users/settings')
+                    i.fa.fa-cogs.fa-2x
+        .containter
+            main.ml-sm-auto.col-lg-10.px-4(role='main')
+                block content
+            footer.footer.bg-dark.text-light
+                p.mb-1 © 2019 Digital Pantry
+                ul.list-inline
+                    //- TODO link these to proper files
+                    li.list-inline-item
+                        a(href='#') Privacy
+                    li.list-inline-item
+                        a(href='#') Terms
+                    li.list-inline-item
+                        a(href='#') Support
+        script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
+        script(src="/js/main.js")

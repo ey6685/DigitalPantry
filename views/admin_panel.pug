@@ -8,7 +8,7 @@ block content
 			div(class='alert alert-danger') #{error.msg}
 	.row
 		.col-md-3
-			img.img-thumbnail.img-fluid.rounded-circle(id='pantry-image', src='/images/placeholder.jpg', alt='Pantry Image', class='image-card')
+			img.img-thumbnail.img-fluid.rounded-circle(id='pantry-image', src='/images/PantryImage9001.jpg', alt='Pantry Image', class='image-card')
 		.col-md-9
 			h1 #{title}
 			hr
@@ -21,8 +21,9 @@ block content
 			br
 			.row
 				.col-md-6
-					input#imgupload(type='file', name='image', accept='image/*', onchange='loadFile(event)', style='display:none')
-					button#OpenImgUpload Image Upload
+					form(method= 'POST', action= '/users/addImg', class= 'form', enctype="multipart/form-data")
+						input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='form-group')
+						input.btn.btn-primary(type='submit', value='Upload-Image', class='form-group', id='Upload-Image')
 	br
 	//-reset password overlay
 	#resetForm.modal.fade(tabindex='-1', role='dialog', aria-hidden='true', class= 'form-modal')
