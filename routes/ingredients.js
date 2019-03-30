@@ -6,10 +6,9 @@ const ingredient_t = require('../DB_models/Ingredients')
 const ing_in_stock = require('../DB_models/ingredients_in_pantry')
 const aw = require('../algorithm/auto_weight')
 const User = require('../DB_models/Users')
-const op = require('sequelize').Op;
+const op = require('sequelize').Op
 const gm = require('gm')
 const multer = require('multer')
-const User = require('../DB_models/Users')
 const fs = require('fs')
 //defines where to store image
 const storage = multer.diskStorage({
@@ -150,7 +149,6 @@ router.get('/expiredAdmin', function expiredTable(req, res) {
 // This will add a new ingredient to available ingredients and update database
 router.post('/add', upload.single('image'), async function addIngredient(req, res) {
   if (req.file) {
-    
     console.log('File Uploaded Successfully')
     gm(req.file.path) // uses graphicsmagic and takes in image path
       .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
@@ -159,13 +157,12 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
           console.log(err)
         }
       })
-      var currentDate= Date.now()
-      var imagePath = currentDate + '.jpg'
-      fs.rename(req.file.path, './public/images/' + currentDate + '.jpg', function (err) {
-        if (err) throw err;
-        console.log('File Renamed.');
-      }); 
-
+    var currentDate = Date.now()
+    var imagePath = currentDate + '.jpg'
+    fs.rename(req.file.path, './public/images/' + currentDate + '.jpg', function(err) {
+      if (err) throw err
+      console.log('File Renamed.')
+    })
   } else {
     var imagePath = 'placeholder.jpg'
     console.log('File Upload Failed')
@@ -241,17 +238,17 @@ router.get('/cards', function showCards(req, res) {
 router.post('/editIngredientAmount', async function editIngredientAmount(req, res) {
   const currentUserId = req.session.passport['user']
   currentPantryId = await User.findOne({
-    where:{user_id:currentUserId}
+    where: { user_id: currentUserId }
   })
   const ingredientId = req.body.ingredient_id
   const newAmount = req.body.ingredient_amount
-  ing_in_stock.update({
-      ingredient_amount:newAmount
+  ing_in_stock.update(
+    {
+      ingredient_amount: newAmount
     },
-    {where:{ingredient_id:ingredientId, pantry_id:currentPantryId.pantry_id}
-  })
+    { where: { ingredient_id: ingredientId, pantry_id: currentPantryId.pantry_id } }
+  )
 })
-
 
 // remove ingredient by id
 router.delete('/remove/', async function remove(req, res) {
