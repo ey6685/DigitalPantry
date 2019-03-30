@@ -215,57 +215,61 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
   const recipe_id_inserted = result['null']
 
   // Iterate over every key_name inside JSON request
-  for(var key in req.body) {
+  // var key = req.body
     // When Ingredient key_name is found
     // For every ingredient in recipe defined by user in the form do the following
-    if(key.includes("ingredientProperties")){
-      //Retrieve all values from request body
-      var ingredient_data_from_page =  req.body[key][1];
-      console.log("//////////////////////////////////////////\n" +JSON.stringify(ingredient_data_from_page) +"\n////////////////////////////////////\n");
-      // const ingredientName = req.body[key][0];
-      // const ingredientQuantity = req.body[key][1];
-      // const ingredientMeasurement = req.body[key][2];
-
-      const ingredientName = ingredient_data_from_page[0];
-      const ingredientQuantity = ingredient_data_from_page[1];
-      const ingredientMeasurement = ingredient_data_from_page[2];
-      console.log("adding ingredient to recipe: \n")// + ingredientQuantity+ " " +ingredientMeasurement+" of " + ingredientName);
-      console.log("ingredientName: " + ingredientName);
-      console.log("ingredientQTY: " + ingredientQuantity);
-      console.log("ingredientMeasurement: " + ingredientMeasurement);
-
-      //find if the ingredient is in db
-      var final_ingredi_id;
-      var checking_ingr_t = await ingredient_t.findAll({
-          where:{
-              ingredient_name : ingredientName
-              
-          }
-      });
-      if(checking_ingr_t.length>0)
+    console.log(req.body)
+   
+      for(var i =1; i < req.body.ingredientProperties.length; i++)
       {
-          final_ingredi_id = checking_ingr_t[0].ingredient_id;
-      }
-      else
-      {
-          var ingredient_weight = await aw.auto_weight(ingredientName);
-          var new_ingredient = await ingredient_t.create({
-              ingredient_name: ingredientName,
-              ingredient_weight : ingredient_weight,
-              });
-          final_ingredi_id = new_ingredient.ingredient_id;
-      }
-      var new_ingredient_slot = await IiR_t.create({
-          ingredient_id : final_ingredi_id,
-          recipe_id : recipe_id_inserted,
-          ingredient_unit_of_measurement: ingredientMeasurement,
-          pantry_id: 1,//change this to be from the session
-          amount_of_ingredient_needed: ingredientQuantity
-      });
-      console.log("created ingredient slot: \n" + JSON.stringify(new_ingredient_slot));
-      }
-    //Repeat until all recipes have been parsed
-  }
+        //Retrieve all values from request body
+        var ingredient_data_from_page =  req.body.ingredientProperties[i];
+        console.log("//////////////////////////////////////////\n" +JSON.stringify(ingredient_data_from_page) +"\n////////////////////////////////////\n");
+        // const ingredientName = req.body[key][0];
+        // const ingredientQuantity = req.body[key][1];
+        // const ingredientMeasurement = req.body[key][2];
+
+        const ingredientName = ingredient_data_from_page[0];
+        const ingredientQuantity = ingredient_data_from_page[1];
+        const ingredientMeasurement = ingredient_data_from_page[2];
+        console.log("adding ingredient to recipe: \n")// + ingredientQuantity+ " " +ingredientMeasurement+" of " + ingredientName);
+        console.log("ingredientName: " + ingredientName);
+        console.log("ingredientQTY: " + ingredientQuantity);
+        console.log("ingredientMeasurement: " + ingredientMeasurement);
+
+        //find if the ingredient is in db
+        var final_ingredi_id;
+        var checking_ingr_t = await ingredient_t.findAll({
+            where:{
+                ingredient_name : ingredientName
+                
+            }
+        });
+        if(checking_ingr_t.length>0)
+        {
+            final_ingredi_id = checking_ingr_t[0].ingredient_id;
+        }
+        else
+        {
+            var ingredient_weight = await aw.auto_weight(ingredientName);
+            var new_ingredient = await ingredient_t.create({
+                ingredient_name: ingredientName,
+                ingredient_weight : ingredient_weight,
+                });
+            final_ingredi_id = new_ingredient.ingredient_id;
+        }
+        var new_ingredient_slot = await IiR_t.create({
+            ingredient_id : final_ingredi_id,
+            recipe_id : recipe_id_inserted,
+            ingredient_unit_of_measurement: ingredientMeasurement,
+            pantry_id: 1,//change this to be from the session
+            amount_of_ingredient_needed: ingredientQuantity
+        });
+        console.log("created ingredient slot: \n" + JSON.stringify(new_ingredient_slot));
+        }
+      //Repeat until all recipes have been parsed
+    
+  
   res.redirect("showall");
 })
 
