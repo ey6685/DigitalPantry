@@ -1,4 +1,4 @@
-extends user_view_template
+extends admin_template
 
 //- NOTE: CSS FOR BUTTONS IS LOCATED UNDER THE layout_template
 
@@ -20,6 +20,7 @@ block content
 			background: #BABABA;
 		}
 	link(rel='stylesheet' href='/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css')
+	link(rel='stylesheet' type='text/css' href='/css/digital_pantry.css')
 	//- Stores a variable passed in, which defines an image path
 	- card1_image= recipe_image_path
 	- card2_image= stir_fry_image
@@ -96,6 +97,7 @@ block content
 
 
 	script(src='/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js')
+	script(src="/js/viewRecipeDetailsDashboard.js")
 	script(type='text/javascript').
 		var allData = '!{storedData}'
 		allData = JSON.parse(allData)
