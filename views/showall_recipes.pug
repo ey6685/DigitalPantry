@@ -1,138 +1,140 @@
-extends user_view_template
+extends admin_template
 
 
 block content
-    //- Style used for removing different border color within a table
-    style.
-        .table-dark th, .table-dark td, .table-dark thead th{
-            border-color: inherit;
-        }
-    br
-    br
-    br
-    br
-    div(class='container-fluid', class='rounded', style='width: 80%')
-        h1 #{title}
-        br
-        a.btn.btn-default(href='/recipes/showRecipes', class='link')
-            i(style='color:black').fa.fa-th-large.fa-2x
-        a.btn.btn-default(href='/recipes/showall', class='link')
-            i(style='color:black').fa.fa-list.fa-2x
-        //- Overlay form start. In other words edit recipe form
-        #editRecipe.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
-            .modal-dialog.modal-dialog-centered.modal-lg(role='document')
-                .modal-content
-                    .modal-body
-                        form(method= 'POST', action='/recipes/edit', class='form')
-                            h4
-                            hr
-                            br
-                            //- Edit recipe information fields
-                            .form-row
-                                .form-group.col-md-6
-                                    label(for='recipe-name') Recipe name
-                                    input.form-control(name="recipeName", type='text', placeholder="Recipe name", class='form-group', id='name-showall-rec')
-                                .form-group.col-md-6
-                                    label(for='serving-size') Serving size
-                                    input.form-control(name="recipeSize", type='text', placeholder="Serving Size", class='form-group', id='size-showall-rec')
-                            br
-                            h5 Ingredients
-                            hr
-                            br
-                            //- Edit ingredient information fields
-                            .form-row
-                                .form-group.col-md-4
-                                    | Name
-                                .form-group.col-md-3
-                                    | Qty
-                                .form-group.col-md-3
-                                    | Measurement
-                            //- Although it might seem like ingredient row does nothing
-                            //- #ingredient-rows is used for Jquery 
-                            #ingredient-rows
-                            #dynamic-ingredient-row
-                            hr
-                            br
-                            button.btn.btn-primary(type='submit', id='save-showall-rec') Save changes
-                            button.btn.btn-secondary(class='btn-success', type='button', onclick='addIngredient()', class='form-group', id='add-showall-rec') Add Ingredient
-                            button.btn.btn-secondary(type='button', data-dismiss='modal', class='form-group', id='close-showall-rec') Close
-        //-Alert form end
-        //- Page content start
-        table.table.rounded.table-hover.table-dark
-                thead
-                    tr
-                        th(scope='col') 
-                        th(scope='col') Recipe ID
-                        th(scope='col') Pantry ID
-                        th(scope='col') Recipe name
-                        th(scope='col') Serving size
-                        th(scope='col') Action
-                tbody
-                    for item,i in results
-                        //- variable below is used to define clickable table row
-                        //- Used for figuring out which recipe dropdown to show
-                        - row= '#group-of-rows-' + i
-                        //- variable below is used for linking the clickable table row with the drop-down row
-                        //- Used for figuring out which recipe dropdown to show
-                        - row2= 'group-of-rows-' + i
-                        tr.clickable(data-toggle='collapse', data-target=row)
-                            td
-                                i.fa.fa-plus
-                            td= item.recipe_id
-                            td= item.pantry_id
-                            td= item.recipe_name
-                            td= item.recipe_serving_size
-                            td
-                                //- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
-                                a.btn.btn-danger.delete-recipe(href='#', data-id=item.recipe_id, id= 'delete-button') DELETE
-                                a.btn.btn-primary.edit-recipe(type='button', data-toggle='modal', data-target='#editRecipe', id= 'edit-button') EDIT
-                        //- Body of a drop-down row with ID linked to the parent row
-                        tbody(id=row2).collapse.bg-secondary.text-white
-                            tr
-                                td(rowspan='15').align-middle.border-right.text-center
-                                    b
-                                        | Ingredients
-                            //-ingrediets are recieved from the middleware API
-                            for ingredient in ingredients[i]
-                                tr
-                                    td(colspan='5') #{ingredient}
-        form(method='GET', action='/recipes/add', class='form')
-            input.btn.btn-primary(type='submit', value='ADD RECIPES', class='form-group', id='submit-showall-rec')
-        //- Page content end
-    script.
-        //i is used for numbering new dynamic rows
-        let i = 0;
-        //When editing a recipe addIngredient function
-        //adds an extra row for an additional ingredient
-        function addIngredient(){
-                    let template = `
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Ingredient = Chicken">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Quantity = 2">
-                        </div>
-                        <div class="dropdown-inline col-md-4">
-                            <select class="form-control" name="ingredientProperties[${i}]">
-                                <option value="">Select Measurement</option>
-                                <option value="bag">Bag</option>
-                                <option value="can">Can</option>
-                                <option value="can">Oz</option>
-                                <option value="pound">Pound</option>
-                                <option value="ounce">Ounce</option>
-                                <option value="cup">Cup</option>
-                                <option value="tablespoon">Tablespoon</option>
-                                <option value="teaspoon">Teaspoon</option>
-                            </select>
-                            </div>
-                        <div class="form-group col-1">
-                            <button type="button" class="btn btn-danger delete-row">X</button>
-                        </div>
-                    </div>`;
-                    let container = document.getElementById('dynamic-ingredient-row');
-                    let element = document.createElement('div');
-                    element.innerHTML = template;
-                    container.appendChild(element);
-                    i++
-                }
+	//- Style used for removing different border color within a table
+	style.
+		.table-dark th, .table-dark td, .table-dark thead th{
+			border-color: inherit;
+		}
+	br
+	br
+	br
+	br
+	div(class='container-fluid', class='rounded', style='width: 80%')
+		h1 #{title}
+		br
+		a.btn.btn-default(href='/recipes/showRecipes', class='link')
+			i(style='color:black').fa.fa-th-large.fa-2x
+		a.btn.btn-default(href='/recipes/showall', class='link')
+			i(style='color:black').fa.fa-list.fa-2x
+		a.btn.btn-primary(href='/recipes/add', class='h-75')
+			| Add Recipe
+		p
+		//- Overlay form start. In other words edit recipe form
+		#editRecipe.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
+			.modal-dialog.modal-dialog-centered.modal-lg(role='document')
+				.modal-content
+					.modal-body
+						form(method= 'POST', action='/recipes/edit', class='form')
+							h4
+							hr
+							br
+							//- Edit recipe information fields
+							.form-row
+								.form-group.col-md-6
+									label(for='recipe-name') Recipe name
+									input.form-control(name="recipeName", type='text', placeholder="Recipe name", class='form-group', id='name-showall-rec')
+								.form-group.col-md-6
+									label(for='serving-size') Serving size
+									input.form-control(name="recipeSize", type='text', placeholder="Serving Size", class='form-group', id='size-showall-rec')
+							br
+							h5 Ingredients
+							hr
+							br
+							//- Edit ingredient information fields
+							.form-row
+								.form-group.col-md-4
+									| Name
+								.form-group.col-md-3
+									| Qty
+								.form-group.col-md-3
+									| Measurement
+							//- Although it might seem like ingredient row does nothing
+							//- #ingredient-rows is used for Jquery 
+							#ingredient-rows
+							#dynamic-ingredient-row
+							hr
+							br
+							button.btn.btn-primary(type='submit', id='save-showall-rec') Save changes
+							button.btn.btn-secondary(class='btn-success', type='button', onclick='addIngredient()', class='form-group', id='add-showall-rec') Add Ingredient
+							button.btn.btn-secondary(type='button', data-dismiss='modal', class='form-group', id='close-showall-rec') Close
+		//-Alert form end
+		//- Page content start
+		table.table.rounded.table-hover.table-dark
+			thead
+				tr
+					th(scope='col') 
+					th(scope='col') Recipe ID
+					th(scope='col') Pantry ID
+					th(scope='col') Recipe name
+					th(scope='col') Serves
+					th(scope='col') Action
+			tbody
+				for item,i in results
+					//- variable below is used to define clickable table row
+					//- Used for figuring out which recipe dropdown to show
+					- row= '#group-of-rows-' + i
+					//- variable below is used for linking the clickable table row with the drop-down row
+					//- Used for figuring out which recipe dropdown to show
+					- row2= 'group-of-rows-' + i
+					tr.clickable(data-toggle='collapse', data-target=row)
+						td
+							//- i.fa.fa-plus
+							img.ml-3(src=item.recipe_image_path, alt='image', width='50', height='50')
+						td(class='align-middle')= item.recipe_id
+						td(class='align-middle')= item.pantry_id
+						td(class='align-middle')= item.recipe_name
+						td(class='align-middle')= item.num_people_it_feeds
+						td(class='align-middle')
+							//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
+							a.btn.btn-danger.delete-recipe(href='#', data-id=item.recipe_id, id= 'delete-button') DELETE
+							a.btn.btn-primary.edit-recipe(type='button', data-toggle='modal', data-target='#editRecipe', id= 'edit-button') EDIT
+					//- Body of a drop-down row with ID linked to the parent row
+					tbody(id=row2).collapse.bg-secondary.text-white
+						tr
+							td(rowspan='15').align-middle.border-right.text-center
+								b
+									| Ingredients
+						//-ingrediets are recieved from the middleware API
+						for ingredient in ingredients[i]
+							tr
+								td(colspan='5') #{ingredient}
+		//- Page content end
+	script.
+		//i is used for numbering new dynamic rows
+		let i = 0;
+		//When editing a recipe addIngredient function
+		//adds an extra row for an additional ingredient
+		function addIngredient(){
+			let template = `
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Ingredient = Chicken">
+				</div>
+				<div class="form-group col-md-3">
+					<input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Quantity = 2">
+				</div>
+				<div class="dropdown-inline col-md-4">
+					<select class="form-control" name="ingredientProperties[${i}]">
+						<option value="">Select Measurement</option>
+						<option value="bag">Bag</option>
+						<option value="can">Can</option>
+						<option value="can">Oz</option>
+						<option value="pound">Pound</option>
+						<option value="ounce">Ounce</option>
+						<option value="cup">Cup</option>
+						<option value="tablespoon">Tablespoon</option>
+						<option value="teaspoon">Teaspoon</option>
+					</select>
+					</div>
+				<div class="form-group col-1">
+					<button type="button" class="btn btn-danger delete-row">X</button>
+				</div>
+			</div>`;
+			let container = document.getElementById('dynamic-ingredient-row');
+			let element = document.createElement('div');
+			element.innerHTML = template;
+			container.appendChild(element);
+			i++
+			}
