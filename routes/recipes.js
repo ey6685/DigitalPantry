@@ -78,7 +78,6 @@ router.get('/showall', async function(req, res){
         {
             ingredient_list[i] = ingredient_list[i].split("#");
         }
-        console.log(ingredient_list);
         res.render('showall_recipes', {
             title: 'Your Recipes',
             results: recipe_res,
@@ -320,74 +319,62 @@ router.post('/share', async function(req, res){
 })
 
 
+router.post('/edit', async function editRecipe(req, res) {
+  const data = req.body
+  const recipeName = req.body.recipeName
+  const recipeSize = req.body.recipeSize
+  const recipeId = req.body.recipeId
 
-
-
-router.post('/edit', function(req, res){
-    //get all data from the body
-    data = req.body;
-    //$1 - recipe_name
-    //$2 - recipe_serving_size
-    //$3 - recipe_id
-    query = "UPDATE recipes SET $1, $2 WHERE $3;";
-    //In this loop we will build above query
-    for (key in data){
-        //Recipe Name handling
-        if(key.includes('currentName')){
-            //Split currentRecipe parameter. results in array
-            recipeId = key.split(':');
-            //Get recipeID from the array
-            recipeId = "recipe_id="+recipeId[1]
-            //Replace $3 with recipe ID for the query
-            query = query.replace('$3', recipeId);
-            if(data[key] == ""){
-                //If recipe name was not changed remove extra parameters from the query
-                query = query.replace('$1', '');
-                query = query.replace(',', '');
-                console.log("NAME NOT CHANGED");
-            }
-            else{
-                recipe_name_query_parameter = 'recipe_name="' + data[key] + '"';
-                //Replace $1 with new recipe name
-                query = query.replace('$1', recipe_name_query_parameter);
-            }
-        }
-        //Recipe serving size handling
-        if(key.includes('currentServSize')){
-            if(data[key] == ""){
-                //If recipe serving size was not changed remove extra parameters from the query
-                query = query.replace('$2', '');
-                query = query.replace(',', '');
-            }
-            else{
-                recipe_name_query_parameter = "recipe_people_it_feeds=" + data[key];
-                //Replace $2 with new recipe name
-                query = query.replace('$2', recipe_name_query_parameter);
-                console.log(query);
-            }
-        }
-        
+  // Deal with updated ingredients
+  for (key in data){
+    // Check if JSON key is an array
+    if (Object.prototype.toString.call(data[key]) === '[object Array]'){
+      // Get ingredient ID which is beaing udpated
+        const ingredientId = await ingredient_t.findOne({
+          attributes:['ingredient_id'],
+          where:{
+            ingredient_name:key
+          }
+        })
+        // New ingredient Name
+        const ingredientNewName = data[key][0]
+        // Update ingredient name
+        await ingredient_t.update(
+          {
+            ingredient_name:ingredientNewName
+          },
+          { where: { ingredient_id: ingredientId.ingredient_id }}
+        )
+        // New ingredient QTY
+        const ingredientNewQty = data[key][1]
+        // New ingredient Measurement
+        const ingredientNewMeasurement = data[key][2]
+        // Update amount of ingredient needed and ingredient unit
+        await IiR_t.update(
+          {
+            amount_of_ingredient_needed:ingredientNewQty,
+            ingredient_unit_of_measurement:ingredientNewMeasurement
+          },
+          {where:{ingredient_id:ingredientId.ingredient_id}}
+        )
     }
-    // Recipe serving size handling
-    if (key.includes('currentServSize')) {
-      if (data[key] == '') {
-        // If recipe serving size was not changed remove extra parameters from the query
-        query = query.replace('$2', '');
-        query = query.replace(',', '');
-      } else {
-        recipe_name_query_parameter = 'recipe_serving_size=' + data[key];
-        // Replace $2 with new recipe name
-        query = query.replace('$2', recipe_name_query_parameter);
-        console.log(query);
+  }
+  if(recipeName != "" && recipeSize != ""){
+    // Update recipe name and number of people it feeds
+    recipe_t.update(
+      {
+        recipe_name: recipeName,
+        num_people_it_feeds: recipeSize
+      },
+      {
+        where: { recipe_id: recipeId }
       }
-    }
-  
-  db.query(query, function(err, results) {
-    if (err) throw err;
-    console.log('Values are updated');
-  });
-  res.send(req.body);
-});
+    )
+  }
+
+  req.flash('success', "Recipe updated successfully")
+  res.redirect('/recipes/showall')
+})
 
 /*
 TYPE: DELETE

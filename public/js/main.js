@@ -124,6 +124,7 @@ $(document).on('click', '.delete-current-ingredient', function () {
 
 // This will trigger when user tries to edit a recipe
 $('#editRecipe').on('show.bs.modal', function (event) {
+
   // Button that triggered the display card
   var button = $(event.relatedTarget)
   // Get the recipe row based on the button clicked and its closest tr element
@@ -155,20 +156,18 @@ $('#editRecipe').on('show.bs.modal', function (event) {
   // At this point we have
   // Recipe name and serving size
   // Recipe ingredients
-
-  // Now lets populate the form with recipe and ingredient data
-  // Get the form card object so we can modify values inside the form per each recipe
-  var modal = $(this)
   // Populate recipe general information
   // Set header of the overlay form
   $('h4').text('Editing Recipe - ' + values[1])
   $('h4').addClass('data-id')
+  $('#recipe-name').val('')
+  $('#recipe-size').val('')
   // Set placeholders inside input box with a value of recipe name that it currently has
-  modal.find('#recipe-name').attr('placeholder', values[1])
-  modal.find('#recipe-name').attr('name', 'currentName:' + values[0])
+  $('#recipe-name').attr('placeholder', values[1])
+  // $('#recipe-name').attr('name', 'currentName:' + values[0])
   // Set placeholders inside input box with a value of recipe serving size that it currently has
-  modal.find('#serving-size').attr('placeholder', values[2])
-  modal.find('#serving-size').attr('name', 'currentServSize:' + values[2])
+  $('#recipe-size').attr('placeholder', values[2])
+  // $('#recipe-size').attr('name', 'currentServSize:' + values[2])
   // Set form html to nothing so it can be updated with new recipe selected
   // This is in case user closes the form overlay and opens it back up
   // Otherwise the form will keep adding rows non stop
@@ -176,6 +175,7 @@ $('#editRecipe').on('show.bs.modal', function (event) {
   $('#dynamic-ingredient-row').html('')
   // Populate ingredient rows
   for (ingredient in ingredientList) {
+    let ingredientCounter = 'ingredient' + ingredient
     // split Ingredient name and QtyMeasurement
     var ingredientsSplit = ingredientList[ingredient].split(',')
     // get ingredientName
@@ -183,54 +183,41 @@ $('#editRecipe').on('show.bs.modal', function (event) {
     // split measurement and qty into 2 separate fields
     var ingredientQtyAndMeasurement = ingredientsSplit[1].split(' ')
     // get Qty
-    let ingredientQty = ingredientQtyAndMeasurement[0]
+    let ingredientQty = ingredientQtyAndMeasurement[1]
     // get measurement
-    let ingredientMeasurement = ingredientQtyAndMeasurement[1].toLowerCase()
-    console.log(ingredientMeasurement)
+    let ingredientMeasurement = ingredientQtyAndMeasurement[2].toLowerCase()
     // Create a row for an ingredient
     $ingredientRow = `
         <div class="form-row">
             <div class="form-group col-4">
-                <input class="form-control" name="$1" id="ingredient-name" type="text" placeholder="$1" />
+                <input class="form-control" name="${ingredientName}" id="ingredient-name" type="text" placeholder="${ingredientName}" />
             </div>
             <div class="form-group col-3">
-                <input class="form-control" name="$2" id="ingredient-qty" type="text" placeholder="$2" />
+                <input class="form-control" name="${ingredientName}" id="ingredient-qty" type="text" placeholder="${ingredientQty}" />
             </div>
             <div class="form-group col-4">
-                <select name="$3" class="form-control id="measurement">
+                <select name="${ingredientName}" class="form-control id="measurement">
                     <option value="">Measurement</option>
-                    <option value="bag">Bag</option>
-                    <option value="can">Can</option>
-                    <option value="oz">Oz</option>
-                    <option value="pound">Pound</option>
-                    <option value="ounce">Ounce</option>
+                    <option value="fl oz">fluid ounce</option>
+                    <option value="ml">Mililliter</option>
+                    <option value="quart">Quart</option>
+                    <option value="lb">Pound</option>
+                    <option value="oz">Ounce</option>
                     <option value="cup">Cup</option>
-                    <option value="tablespoon">Tablespoon</option>
-                    <option value="teaspoon">Teaspoon</option>
+                    <option value="tbsp.">Tablespoon</option>
+                    <option value="tsp.">Teaspoon</option>
                 </select>
             </div>
             <div class="form-group col-1">
-                <button type="button" data-id="{3}" class="btn btn-danger delete-current-ingredient">X</button>
+                <button type="button" data-id="${values[0]}" class="btn btn-danger delete-current-ingredient">X</button>
             </div>
         </div>`
-    // Replace name with correct value
-    $ingredientRow = $ingredientRow.replace('$1', ingredientName)
-    // Replace placeholders with correct values
-    $ingredientRow = $ingredientRow.replace('$1', ingredientName)
-    // Replace name with correct value
-    $ingredientRow = $ingredientRow.replace('$2', ingredientName)
-    // Replace placeholders with correct values
-    $ingredientRow = $ingredientRow.replace('$2', ingredientQty)
-    $ingredientRow = $ingredientRow.replace('$3', ingredientName)
-    // Replace data-id with an id of a recipe. This will to remove ingredients from database
-    $ingredientRow = $ingredientRow.replace('{3}', values[0])
     // shows what measurement has already been selected for that specific ingredient
-    $ingredientRow = $ingredientRow.replace(
-      'value="' + ingredientMeasurement + '"',
-      (value = "'+ingredientMeasurement+' selected")
-    )
+    $ingredientRow = $ingredientRow.replace('value="' + ingredientMeasurement + '"', `value ="${ingredientMeasurement}" selected`)
     $('#ingredient-rows').append($ingredientRow)
   }
+  var $input = $('<input>').attr('type', 'hidden').attr('name', 'recipeId').val(values[0])
+  $('#ingredient-rows').append($input)
 })
 
 // Cook it button logic
