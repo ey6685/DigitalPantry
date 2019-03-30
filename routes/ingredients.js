@@ -136,7 +136,7 @@ router.get('/expiredAdmin', function expiredTable(req, res) {
       }
       if (err) throw err
       res.render('expiredAdmin_ingredients', {
-        title: 'Your Expired Ingredients',
+        title: 'Expired Ingredients',
         results: results
       })
     }

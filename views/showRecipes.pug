@@ -1,127 +1,129 @@
 //- CREATED BY OSKARS DAUKSTS
 //- This page is used for displaying all recipes to the volunteers
-extends user_view_template
+extends admin_template
 
 block content
-    style.
-        .btn_card{
-            /*Defines CSS for butons on the dashboard*/
-            width: 93%;
-            margin: 0px 10px 10px 10px;
-        }
-        .individual-recipe{
-            padding:3px;
-        }
-        .individual-recipe:hover{
-            background-color: #a2f02d;
-            color:black;
-        }
-    br
-    br
-    h1 #{title}
-    br
-    a.btn.btn-default(href='/recipes/showRecipes', class='link')
-            i(style='color:black').fa.fa-th-large.fa-2x
-    a.btn.btn-default(href='/recipes/showall', class='link')
-            i(style='color:black').fa.fa-list.fa-2x
-    .form-row
-        .form-group.col-md-2
-            input.form-control.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
-        .form-group.col-md-2
-            .dropdown
-                select.form-control(id='sortBar', name='SortBar', onchange='sortList()', class='selection-drop')
-                        option(value='0') Sort By
-                        option(value='1') Sort A-Z
-                        option(value='2') Sort Z-A
-        .form-group.col-md-2
-            form(method='GET', action='/recipes/add')
-                input.btn.btn-primary(type='submit', value='Add Recipe', class='form-group', id='submit-showrec')
-    br
-    .form-row
-        //-for each recipe in data
-        for recipe,i in data
-            //-get recipe image
-            - recipe_image= recipe.recipe_image_path
-            .form-group.col-md-3
-                div(id=recipe.recipe_id, class='card', class='h-100')
-                    img.image(class='card-img-top', src=recipe_image, alt='image')
-                    div(class='card-body')
-                        h5(class='card-title') #{recipe.recipe_name}
-                        //- For each steps inside of the array of steps
-                        for step in recipe_steps[i]
-                            p(class='card-text')= step
-                    div(class='card-foot', padding='.75rem')
-                        button.btn_card.btn.btn-primary(class='delete-recipe', data-id= recipe.recipe_id, type='button', id='delete-showrec') Delete recipe
+	style.
+		.btn_card{
+			/*Defines CSS for butons on the dashboard*/
+			width: 93%;
+			margin: 0px 10px 10px 10px;
+		}
+		.individual-recipe{
+			padding:3px;
+		}
+		.individual-recipe:hover{
+			background-color: #a2f02d;
+			color:black;
+		}
+	div(class='container-fluid', class='rounded', style='width: 80%')
+		br
+		br
+		br
+		br
+		h1 #{title}
+		br
+		.form-row
+			a.btn.btn-default(href='/recipes/showRecipes', class='link')
+				i(style='color:black').fa.fa-th-large.fa-2x
+			a.btn.btn-default(href='/recipes/showall', class='link')
+				i(style='color:black').fa.fa-list.fa-2x
+			.form-group.col-md-2
+				input.form-control.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
+			.form-group.col-md-2
+				.dropdown
+					select.form-control(id='sortBar', name='SortBar', onchange='sortList()', class='selection-drop')
+						option(value='0') Sort By
+						option(value='1') Sort A-Z
+						option(value='2') Sort Z-A
+			.form-group.col-md-2
+				form(method='GET', action='/recipes/add')
+					input.btn.btn-primary(type='submit', value='Add Recipe', class='form-group', id='submit-showrec', class='h-75')
+		.form-row
+			//-for each recipe in data
+			for recipe,i in data
+				//-get recipe image
+				- recipe_image= recipe.recipe_image_path
+				.form-group.col-md-3
+					div(id=recipe.recipe_id, class='card', class='h-100')
+						img.image(class='card-img-top', src=recipe_image, alt='image')
+						div(class='card-body')
+							h5(class='card-title') #{recipe.recipe_name}
+							//- For each steps inside of the array of steps
+							for step in recipe_steps[i]
+								p(class='card-text')= step
+						div(class='card-foot', padding='.75rem')
+							button.btn_card.btn.btn-primary(class='delete-recipe', data-id= recipe.recipe_id, type='button', id='delete-showrec') Delete recipe
 
-    script.
-        //This will trigger once user stars to type text into a search bar
-        function search() {
-            // Declare variables
-            var input, filter, div, i, txtValue;
-            //get the search bar input
-            input = document.getElementById('filterInput');
-            //Set all letters to upper case
-            filter = input.value.toUpperCase();
-            //get all card names
-            card_names = document.getElementsByTagName('h4');
-            //get all cards
-            div = document.getElementsByClassName('col-md-3');
+	script.
+		//This will trigger once user stars to type text into a search bar
+		function search() {
+			// Declare variables
+			var input, filter, div, i, txtValue;
+			//get the search bar input
+			input = document.getElementById('filterInput');
+			//Set all letters to upper case
+			filter = input.value.toUpperCase();
+			//get all card names
+			card_names = document.getElementsByTagName('h4');
+			//get all cards
+			div = document.getElementsByClassName('col-md-3');
 
-            // Loop through all list items, and hide those who don't match the search query
-            for (i = 0; i < div.length; i++) {
-                txtValue = card_names[i].textContent || card_names[i].innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    //show
-                    div[i].style.display = "";
-                } 
-                else {
-                    //hide
-                    div[i].style.display = "none";
-                }
-            }
-        }
-        //Function based on sort select dropdown box
-        function sortList() {
-            var list, i, switching, b, shouldSwitch;
-            //get all cards
-            list = document.getElementsByClassName("col-md-3");
-            switching = true;
-            var e = document.getElementById("sortBar");
-            var optionValue = e.options[e.selectedIndex].value;
-            /* Make a loop that will continue until
-            no switching has been done: */
-            while (switching && optionValue != 0) {
-                // Start by saying: no switching is done:
-                switching = false;
-                b = document.getElementsByTagName('h4');
-                // Loop through all list items:
-                for (i = 0; i < (b.length - 1); i++) {
-                    //Initial condition (no switches)
-                    shouldSwitch = false;
-                    /* Check if the next item should
-                    switch place with the current item: */
-                    //If sort by A-Z is selected
-                    if(optionValue == 1){
-                        if (b[i].innerHTML.toLowerCase() > b[i + 1].innerHTML.toLowerCase()) {
-                            /* If next item is alphabetically lower than current item,
-                            mark as a switch and break the loop: */
-                            shouldSwitch = true;
-                            break;
-                        }
-                    }
-                    //If sort by Z-A is selected
-                    else if(optionValue == 2){
-                        if (b[i].innerHTML.toLowerCase() < b[i + 1].innerHTML.toLowerCase()) {
-                            /* If next item is alphabetically higher than current item,
-                            mark as a switch and break the loop: */
-                            shouldSwitch = true;
-                            break;
-                        }
-                    }
-                }
-                    if (shouldSwitch) {
-                            list[i].parentNode.insertBefore(list[i + 1], list[i]);
-                            switching = true;
-                    }
-            }
-        }
+			// Loop through all list items, and hide those who don't match the search query
+			for (i = 0; i < div.length; i++) {
+				txtValue = card_names[i].textContent || card_names[i].innerText;
+				if (txtValue.toUpperCase().indexOf(filter) > -1) {
+					//show
+					div[i].style.display = "";
+				} 
+				else {
+					//hide
+					div[i].style.display = "none";
+				}
+			}
+		}
+		//Function based on sort select dropdown box
+		function sortList() {
+			var list, i, switching, b, shouldSwitch;
+			//get all cards
+			list = document.getElementsByClassName("col-md-3");
+			switching = true;
+			var e = document.getElementById("sortBar");
+			var optionValue = e.options[e.selectedIndex].value;
+			/* Make a loop that will continue until
+			no switching has been done: */
+			while (switching && optionValue != 0) {
+				// Start by saying: no switching is done:
+				switching = false;
+				b = document.getElementsByTagName('h4');
+				// Loop through all list items:
+				for (i = 0; i < (b.length - 1); i++) {
+					//Initial condition (no switches)
+					shouldSwitch = false;
+					/* Check if the next item should
+					switch place with the current item: */
+					//If sort by A-Z is selected
+					if(optionValue == 1){
+						if (b[i].innerHTML.toLowerCase() > b[i + 1].innerHTML.toLowerCase()) {
+							/* If next item is alphabetically lower than current item,
+							mark as a switch and break the loop: */
+							shouldSwitch = true;
+							break;
+						}
+					}
+					//If sort by Z-A is selected
+					else if(optionValue == 2){
+						if (b[i].innerHTML.toLowerCase() < b[i + 1].innerHTML.toLowerCase()) {
+							/* If next item is alphabetically higher than current item,
+							mark as a switch and break the loop: */
+							shouldSwitch = true;
+							break;
+						}
+					}
+				}
+					if (shouldSwitch) {
+						list[i].parentNode.insertBefore(list[i + 1], list[i]);
+						switching = true;
+					}
+			}
+		}
