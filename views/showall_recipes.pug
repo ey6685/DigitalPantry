@@ -99,7 +99,9 @@ block content
 							tr
 								td(colspan='5') #{ingredient}
 		//- Page content end
-	script.
+	script(type='text/javascript').
+		var allData = '!{data}'
+		allData = JSON.parse(allData)
 		//i is used for numbering new dynamic rows
 		let i = 0;
 		//When editing a recipe addIngredient function

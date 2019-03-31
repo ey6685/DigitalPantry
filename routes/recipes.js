@@ -51,7 +51,6 @@ router.get('/showall', async function(req, res){
     //and stores them in to ingredients list in a formated str where
     //each ingredient is seperated by a #
     
-        var ing_res;
         console.log('starting for loop');
         for(var i=0; i<recipe_res.length;i++)
         {
@@ -68,7 +67,7 @@ router.get('/showall', async function(req, res){
                     where:{
                         ingredient_id: IiR_res[o].ingredient_id
                     }
-                });
+                })
                 if(ingredient_list[i] != '')
                     ingredient_list[i] = ingredient_list[i] + "#";
                 ingredient_list[i] = ingredient_list[i]   + new_ingredient.ingredient_name + ", " + IiR_res[o].amount_of_ingredient_needed + " " + IiR_res[o].ingredient_unit_of_measurement; 
@@ -78,10 +77,12 @@ router.get('/showall', async function(req, res){
         {
             ingredient_list[i] = ingredient_list[i].split("#");
         }
+        var data = await ingredient_t.findAll()
         res.render('showall_recipes', {
             title: 'Your Recipes',
             results: recipe_res,
-            ingredients: ingredient_list
+            ingredients: ingredient_list,
+            data: JSON.stringify(data)
           });
     }
     catch(err)
@@ -324,12 +325,13 @@ router.post('/edit', async function editRecipe(req, res) {
   const recipeName = req.body.recipeName
   const recipeSize = req.body.recipeSize
   const recipeId = req.body.recipeId
-
+  let updatedIngredientsCount = 0
   // Deal with updated ingredients
   for (key in data){
     // Check if JSON key is an array
     if (Object.prototype.toString.call(data[key]) === '[object Array]'){
-      // Get ingredient ID which is beaing udpated
+      if (data[key][0] != "" && data[key][1] != "" && data[key][2] != ""){
+        // Get ingredient ID which is beaing udpated
         const ingredientId = await ingredient_t.findOne({
           attributes:['ingredient_id'],
           where:{
@@ -357,11 +359,22 @@ router.post('/edit', async function editRecipe(req, res) {
           },
           {where:{ingredient_id:ingredientId.ingredient_id}}
         )
+        // Increment updated ingredients
+        updatedIngredientsCount = updatedIngredientsCount + 1
+      }
+      else{
+        req.flash('error', key + " was not updated because not all fields were filled out")
+      }
+      // Show how many ingredients have been updated
+      if (updatedIngredientsCount > 0){
+        req.flash('success', updatedIngredientsCount + " ingredient(s) updated successfully")
+      }
     }
   }
+  // Check if values are present
   if(recipeName != "" && recipeSize != ""){
     // Update recipe name and number of people it feeds
-    recipe_t.update(
+    await recipe_t.update(
       {
         recipe_name: recipeName,
         num_people_it_feeds: recipeSize
@@ -369,10 +382,13 @@ router.post('/edit', async function editRecipe(req, res) {
       {
         where: { recipe_id: recipeId }
       }
-    )
+    ).catch( function handleErrors(err){
+      if(err){
+        req.flash('error', "Could not update Recipe Name or Recipe Size")
+        res.redirect('/recipes/showall')
+      }
+    })
   }
-
-  req.flash('success', "Recipe updated successfully")
   res.redirect('/recipes/showall')
 })
 

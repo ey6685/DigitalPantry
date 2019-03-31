@@ -110,6 +110,7 @@ $(document).on('click', '.delete-current-ingredient', function () {
     type: 'DELETE',
     // This route is defined under ingredients.js
     url: '/ingredients/remove/recipe_ingredient/' + ingredient_name,
+    data: { recipe_id: recipe_id_being_edited },
     // If ingredient has been removed remove the ingredient row
     success: function () {
       row.remove()
