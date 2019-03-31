@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const moment = require('moment')
-const ingredients_t = require('../DB_models/Ingredients')
+const ingredientInRecipe = require('../DB_models/ingredients_in_a_recipe')
 const ingredient_t = require('../DB_models/Ingredients')
 const ing_in_stock = require('../DB_models/ingredients_in_pantry')
 const aw = require('../algorithm/auto_weight')
@@ -270,17 +270,23 @@ router.delete('/remove/', async function remove(req, res) {
 })
 
 // remove ingredient by name
-router.delete('/remove/recipe_ingredient/:name', function deleteIngredientByName(req, res) {
-  const ingredient = req.params.name
-  // Since no cascading is set up have to do it manually
-  // delete ingredient from recipe_ingredient table
-  const delete_query =
-    "DELETE FROM recipe_ingredient WHERE recipe_ingredient_used ='" + ingredient + "'"
-  db.query(delete_query, function(err) {
-    if (err) throw err
-    // Since AJAX under /js/main.js made a request we have to respond back
+router.delete('/remove/recipe_ingredient/:name', async function deleteIngredientByName(req, res) {
+  const ingredientName = req.params.name
+  const recipeId = req.body.recipe_id
+  // Get ingredient ID which is beaing udpated
+  const ingredientId = await ingredient_t.findOne({
+    attributes: ['ingredient_id'],
+    where: {
+      ingredient_name: ingredientName
+    }
   })
-  console.log('DONE')
+  ingredientInRecipe.destroy({
+    where: {
+      ingredient_id: ingredientId.ingredient_id,
+      recipe_id: recipeId
+    }
+  })
+  
   res.send('Success')
 })
 

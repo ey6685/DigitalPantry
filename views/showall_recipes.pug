@@ -8,9 +8,7 @@ block content
 			border-color: inherit;
 		}
 	br
-	br
-	br
-	br
+	!= messages('message', locals)
 	div(class='container-fluid', class='rounded', style='width: 80%')
 		h1 #{title}
 		br
@@ -34,10 +32,10 @@ block content
 							.form-row
 								.form-group.col-md-6
 									label(for='recipe-name') Recipe name
-									input.form-control(name="recipeName", type='text', placeholder="Recipe name", class='form-group', id='name-showall-rec')
+									input.form-control(name="recipeName", type='text', placeholder="Recipe name", class='form-group', id='recipe-name')
 								.form-group.col-md-6
 									label(for='serving-size') Serving size
-									input.form-control(name="recipeSize", type='text', placeholder="Serving Size", class='form-group', id='size-showall-rec')
+									input.form-control(name="recipeSize", type='text', placeholder="Serving Size", class='form-group', id='recipe-size')
 							br
 							h5 Ingredients
 							hr
@@ -57,8 +55,8 @@ block content
 							hr
 							br
 							button.btn.btn-primary(type='submit', id='save-showall-rec') Save changes
-							button.btn.btn-secondary(class='btn-success', type='button', onclick='addIngredient()', class='form-group', id='add-showall-rec') Add Ingredient
-							button.btn.btn-secondary(type='button', data-dismiss='modal', class='form-group', id='close-showall-rec') Close
+							button.btn.btn-secondary.btn-success(type='button', onclick='addIngredient()', id='add-showall-rec') Add Ingredient
+							button.btn.btn-secondary(type='button', data-dismiss='modal', id='close-showall-rec') Close
 		//-Alert form end
 		//- Page content start
 		table.table.rounded.table-hover.table-dark
@@ -101,7 +99,9 @@ block content
 							tr
 								td(colspan='5') #{ingredient}
 		//- Page content end
-	script.
+	script(type='text/javascript').
+		var allData = '!{data}'
+		allData = JSON.parse(allData)
 		//i is used for numbering new dynamic rows
 		let i = 0;
 		//When editing a recipe addIngredient function
@@ -110,22 +110,22 @@ block content
 			let template = `
 			<div class="form-row">
 				<div class="form-group col-md-4">
-					<input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Ingredient = Chicken">
+					<input class="form-control" name="ingredientName" type="text" placeholder="Ingredient = Chicken">
 				</div>
 				<div class="form-group col-md-3">
-					<input class="form-control" name="ingredientProperties[${i}]" type="text" placeholder="Quantity = 2">
+					<input class="form-control" name="ingredientQty" type="text" placeholder="Quantity = 2">
 				</div>
 				<div class="dropdown-inline col-md-4">
-					<select class="form-control" name="ingredientProperties[${i}]">
-						<option value="">Select Measurement</option>
-						<option value="bag">Bag</option>
-						<option value="can">Can</option>
-						<option value="can">Oz</option>
-						<option value="pound">Pound</option>
-						<option value="ounce">Ounce</option>
+					<select class="form-control" name="ingredientMeasurement">
+						<option value="">Measurement</option>
+						<option value="fl oz">fluid ounce</option>
+						<option value="ml">Mililliter</option>
+						<option value="quart">Quart</option>
+						<option value="lb">Pound</option>
+						<option value="oz">Ounce</option>
 						<option value="cup">Cup</option>
-						<option value="tablespoon">Tablespoon</option>
-						<option value="teaspoon">Teaspoon</option>
+						<option value="tbsp.">Tablespoon</option>
+						<option value="tsp.">Teaspoon</option>
 					</select>
 					</div>
 				<div class="form-group col-1">

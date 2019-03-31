@@ -51,7 +51,6 @@ router.get('/showall', async function(req, res){
     //and stores them in to ingredients list in a formated str where
     //each ingredient is seperated by a #
     
-        var ing_res;
         console.log('starting for loop');
         for(var i=0; i<recipe_res.length;i++)
         {
@@ -68,7 +67,7 @@ router.get('/showall', async function(req, res){
                     where:{
                         ingredient_id: IiR_res[o].ingredient_id
                     }
-                });
+                })
                 if(ingredient_list[i] != '')
                     ingredient_list[i] = ingredient_list[i] + "#";
                 ingredient_list[i] = ingredient_list[i]   + new_ingredient.ingredient_name + ", " + IiR_res[o].amount_of_ingredient_needed + " " + IiR_res[o].ingredient_unit_of_measurement; 
@@ -78,11 +77,12 @@ router.get('/showall', async function(req, res){
         {
             ingredient_list[i] = ingredient_list[i].split("#");
         }
-        console.log(ingredient_list);
+        var data = await ingredient_t.findAll()
         res.render('showall_recipes', {
             title: 'Your Recipes',
             results: recipe_res,
-            ingredients: ingredient_list
+            ingredients: ingredient_list,
+            data: JSON.stringify(data)
           });
     }
     catch(err)
@@ -324,74 +324,138 @@ router.post('/share', async function(req, res){
 })
 
 
+router.post('/edit', async function editRecipe(req, res) {
+  const data = req.body
+  const recipeName = req.body.recipeName
+  const recipeSize = req.body.recipeSize
+  const recipeId = req.body.recipeId
+  const newIngredientNames = req.body.ingredientName
+  const newIngredientQtys = req.body.ingredientQty
+  const newIngredientMeasurements = req.body.ingredientMeasurement
 
-
-
-router.post('/edit', function(req, res){
-    //get all data from the body
-    data = req.body;
-    //$1 - recipe_name
-    //$2 - recipe_serving_size
-    //$3 - recipe_id
-    query = "UPDATE recipes SET $1, $2 WHERE $3;";
-    //In this loop we will build above query
-    for (key in data){
-        //Recipe Name handling
-        if(key.includes('currentName')){
-            //Split currentRecipe parameter. results in array
-            recipeId = key.split(':');
-            //Get recipeID from the array
-            recipeId = "recipe_id="+recipeId[1]
-            //Replace $3 with recipe ID for the query
-            query = query.replace('$3', recipeId);
-            if(data[key] == ""){
-                //If recipe name was not changed remove extra parameters from the query
-                query = query.replace('$1', '');
-                query = query.replace(',', '');
-                console.log("NAME NOT CHANGED");
-            }
-            else{
-                recipe_name_query_parameter = 'recipe_name="' + data[key] + '"';
-                //Replace $1 with new recipe name
-                query = query.replace('$1', recipe_name_query_parameter);
-            }
-        }
-        //Recipe serving size handling
-        if(key.includes('currentServSize')){
-            if(data[key] == ""){
-                //If recipe serving size was not changed remove extra parameters from the query
-                query = query.replace('$2', '');
-                query = query.replace(',', '');
-            }
-            else{
-                recipe_name_query_parameter = "recipe_people_it_feeds=" + data[key];
-                //Replace $2 with new recipe name
-                query = query.replace('$2', recipe_name_query_parameter);
-                console.log(query);
-            }
-        }
-        
+  // Get current user from session auth
+  const userId = req.session.passport['user']
+  // Get pantry ID which user belongs to
+  const pantryId = await User.findOne({
+    attributes: ['pantry_id'],
+    where: {
+      user_id: userId
     }
-    // Recipe serving size handling
-    if (key.includes('currentServSize')) {
-      if (data[key] == '') {
-        // If recipe serving size was not changed remove extra parameters from the query
-        query = query.replace('$2', '');
-        query = query.replace(',', '');
-      } else {
-        recipe_name_query_parameter = 'recipe_serving_size=' + data[key];
-        // Replace $2 with new recipe name
-        query = query.replace('$2', recipe_name_query_parameter);
-        console.log(query);
+  })
+
+  // Check if user has added new ingredients
+  if(newIngredientNames != undefined && newIngredientNames != ""){
+    // Loop through all parameters of a single ingredient (name, qty, measurement)
+    for (i = 0; i < newIngredientNames.length; i++){
+      // TODO Check if ingredient exists
+      // Create new ingredient
+      await ingredient_t.create({
+        ingredient_name:newIngredientNames[i],
+        ingredient_weight:1,
+        ingredient_image_path:'../images/placeholder.jpg',
+      }).then(async function (results) {
+        // Get id of newly created ingredient
+        createdIngredientsId = results.ingredient_id
+        // Link new ingredient to recipe that is being edited
+        await IiR_t.create({
+          recipe_id:recipeId,
+          ingredient_id:createdIngredientsId,
+          pantry_id:pantryId.pantry_id,
+          amount_of_ingredient_needed:newIngredientQtys[i],
+          ingredient_unit_of_measurement:newIngredientMeasurements[i]
+        })
+      }).catch(function (error){
+        console.log(error)
+      })
+    }
+}
+
+  let updatedIngredientsCount = 0
+  // Deal with updated ingredients info here
+  for (key in data){
+    // Check if JSON key is an array
+    if (Object.prototype.toString.call(data[key]) === '[object Array]'){
+      // Check if all ingredient fields were filled out
+      console.log(data[key][0])
+      console.log(data[key][1])
+      console.log(data[key][2])
+      //TODO THIS IS GARBAGE AND NEEDS TO GET ADDRESSED, but for now it will do
+      // Check if all 3 inputs for name,qty,measurement of a single row have been updated
+      if (data[key][0] != "" && data[key][1] != "" && data[key][2] != ""){
+        // Get ingredient ID which is beaing udpated
+        const ingredientId = await ingredient_t.findOne({
+          attributes:['ingredient_id'],
+          where:{
+            ingredient_name:key
+          }
+        }).catch(function (err){
+          console.log(err)
+        })
+        // New ingredient Name
+        const ingredientNewName = data[key][0]
+        // Update ingredient name
+        await ingredient_t.update(
+          {
+            ingredient_name:ingredientNewName
+          },
+          { where: { ingredient_id: ingredientId.ingredient_id }}
+        ).catch(function (err){
+          console.log(err)
+        })
+        // New ingredient QTY
+        const ingredientNewQty = data[key][1]
+        // New ingredient Measurement
+        const ingredientNewMeasurement = data[key][2]
+        // Update amount of ingredient needed and ingredient unit
+        await IiR_t.update(
+          {
+            amount_of_ingredient_needed:ingredientNewQty,
+            ingredient_unit_of_measurement:ingredientNewMeasurement
+          },
+          {where:{ingredient_id:ingredientId.ingredient_id}}
+        ).catch(function (err){
+          console.log(err)
+        })
+        // Increment updated ingredients
+        updatedIngredientsCount = updatedIngredientsCount + 1
       }
+      // If all inputs do not have a value
+      else{
+        let message = ""
+        if (data[key][0] == ""){
+          message = message + "Missing value for name"
+        }
+        else if (data[key][1] == ""){
+          message = message + "Missing value for quantity"
+        }
+        req.flash('error', "INGREDIENT NAME: " + key + "  ERROR: " + message)
+      }
+      // Show how many ingredients have been updated
     }
-  
-  db.query(query, function(err, results) {
-    if (err) throw err;
-    console.log('Values are updated');
-  });
-  res.send(req.body);
-});
+  }
+  if (updatedIngredientsCount > 0){
+    req.flash('success', updatedIngredientsCount + " ingredient(s) updated successfully")
+  }
+  // Check if recipeName and recipeSize values are present
+  if(recipeName != "" && recipeSize != ""){
+    // Update recipe name and number of people it feeds
+    await recipe_t.update(
+      {
+        recipe_name: recipeName,
+        num_people_it_feeds: recipeSize
+      },
+      {
+        where: { recipe_id: recipeId }
+      }
+    ).catch( function handleErrors(err){
+      if(err){
+        req.flash('error', "Could not update Recipe Name or Recipe Size")
+        res.redirect('/recipes/showall')
+      }
+    })
+  }
+  res.redirect('/recipes/showall')
+})
 
 /*
 TYPE: DELETE
