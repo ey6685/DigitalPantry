@@ -325,11 +325,58 @@ router.post('/edit', async function editRecipe(req, res) {
   const recipeName = req.body.recipeName
   const recipeSize = req.body.recipeSize
   const recipeId = req.body.recipeId
+  const newIngredientNames = req.body.ingredientName
+  const newIngredientQtys = req.body.ingredientQty
+  const newIngredientMeasurements = req.body.ingredientMeasurement
+
+  // Get current user from session auth
+  const userId = req.session.passport['user']
+  // Get pantry ID which user belongs to
+  const pantryId = await User.findOne({
+    attributes: ['pantry_id'],
+    where: {
+      user_id: userId
+    }
+  })
+
+  // Check if user has added new ingredients
+  if(newIngredientNames != undefined && newIngredientNames != ""){
+    // Loop through all parameters of a single ingredient (name, qty, measurement)
+    for (i = 0; i < newIngredientNames.length; i++){
+      // TODO Check if ingredient exists
+      // Create new ingredient
+      await ingredient_t.create({
+        ingredient_name:newIngredientNames[i],
+        ingredient_weight:1,
+        ingredient_image_path:'../images/placeholder.jpg',
+      }).then(async function (results) {
+        // Get id of newly created ingredient
+        createdIngredientsId = results.ingredient_id
+        // Link new ingredient to recipe that is being edited
+        await IiR_t.create({
+          recipe_id:recipeId,
+          ingredient_id:createdIngredientsId,
+          pantry_id:pantryId.pantry_id,
+          amount_of_ingredient_needed:newIngredientQtys[i],
+          ingredient_unit_of_measurement:newIngredientMeasurements[i]
+        })
+      }).catch(function (error){
+        console.log(error)
+      })
+    }
+}
+
   let updatedIngredientsCount = 0
-  // Deal with updated ingredients
+  // Deal with updated ingredients info here
   for (key in data){
     // Check if JSON key is an array
     if (Object.prototype.toString.call(data[key]) === '[object Array]'){
+      // Check if all ingredient fields were filled out
+      console.log(data[key][0])
+      console.log(data[key][1])
+      console.log(data[key][2])
+      //TODO THIS IS GARBAGE AND NEEDS TO GET ADDRESSED, but for now it will do
+      // Check if all 3 inputs for name,qty,measurement of a single row have been updated
       if (data[key][0] != "" && data[key][1] != "" && data[key][2] != ""){
         // Get ingredient ID which is beaing udpated
         const ingredientId = await ingredient_t.findOne({
@@ -337,6 +384,8 @@ router.post('/edit', async function editRecipe(req, res) {
           where:{
             ingredient_name:key
           }
+        }).catch(function (err){
+          console.log(err)
         })
         // New ingredient Name
         const ingredientNewName = data[key][0]
@@ -346,7 +395,9 @@ router.post('/edit', async function editRecipe(req, res) {
             ingredient_name:ingredientNewName
           },
           { where: { ingredient_id: ingredientId.ingredient_id }}
-        )
+        ).catch(function (err){
+          console.log(err)
+        })
         // New ingredient QTY
         const ingredientNewQty = data[key][1]
         // New ingredient Measurement
@@ -358,20 +409,30 @@ router.post('/edit', async function editRecipe(req, res) {
             ingredient_unit_of_measurement:ingredientNewMeasurement
           },
           {where:{ingredient_id:ingredientId.ingredient_id}}
-        )
+        ).catch(function (err){
+          console.log(err)
+        })
         // Increment updated ingredients
         updatedIngredientsCount = updatedIngredientsCount + 1
       }
+      // If all inputs do not have a value
       else{
-        req.flash('error', key + " was not updated because not all fields were filled out")
+        let message = ""
+        if (data[key][0] == ""){
+          message = message + "Missing value for name"
+        }
+        else if (data[key][1] == ""){
+          message = message + "Missing value for quantity"
+        }
+        req.flash('error', "INGREDIENT NAME: " + key + "  ERROR: " + message)
       }
       // Show how many ingredients have been updated
-      if (updatedIngredientsCount > 0){
-        req.flash('success', updatedIngredientsCount + " ingredient(s) updated successfully")
-      }
     }
   }
-  // Check if values are present
+  if (updatedIngredientsCount > 0){
+    req.flash('success', updatedIngredientsCount + " ingredient(s) updated successfully")
+  }
+  // Check if recipeName and recipeSize values are present
   if(recipeName != "" && recipeSize != ""){
     // Update recipe name and number of people it feeds
     await recipe_t.update(

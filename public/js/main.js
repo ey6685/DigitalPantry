@@ -103,7 +103,7 @@ $(document).on('click', '.delete-current-ingredient', function () {
   // Get id of the recipe that is being edited
   recipe_id_being_edited = $(this).attr('data-id')
   // Get ingredient name that is being removed
-  ingredient_name = $('#ingredient-name').attr('placeholder')
+  ingredient_name = $(this).closest('.form-row').find('#ingredient-name').attr('placeholder')
   row = $(this).closest('.form-row')
 
   $.ajax({
