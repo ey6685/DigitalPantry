@@ -68,8 +68,8 @@ block content
 		!= messages('message', locals)
 		for i in data
 			div.bg-dark.card-container(class='container-fluid', class='rounded')
-				h3.text-white Expiring Ingredient:
-					|  #{i.ingredient_amount} #{i.ingredient_unit_of_measurement} of #{i.ingredient_name} on #{(i.ingredient_expiration_date)}
+				h3.text-white 
+					|  #{i.ingredient_amount} #{i.ingredient_unit_of_measurement} of #{i.ingredient_name} is expiring in #{(i.ingredient_expiration_date)} 
 				div(class='row')
 					for recipe in i.recipe_data
 						div(class='col-4')
