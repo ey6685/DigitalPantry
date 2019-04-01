@@ -40,11 +40,10 @@ block content
 						img.image(class='card-img-top', src=ingredient_image, alt='image')
 						div(class='card-body')
 							h4(class='card-title') #{item.ingredient_name}
-							h5(class='card-text') Amount: #{item.ingredient_total} #{item.ingredient_measurement}
-							h6(class='card-text') Expires: #{item.ingredient_expiration_date}
+							p(class='card-text') #{item.ingredient_amount} #{item.ingredient_unit_of_measurement} exipred on #{item.ingredient_expiration_date} 
 
 						div(class='card-foot')
-							button.btn_card.btn.btn-primary.btn-danger.delete-ingredient(href='#', data-id=item.ingredient_name) DELETE
+							button.btn_card.btn.btn-primary.btn-danger.delete-ingredient(href='#', data-id=item.ingredient_name) Remove From Pantry
 
 
 		script.

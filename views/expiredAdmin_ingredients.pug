@@ -37,5 +37,5 @@ block content
 						td(class='align-middle')= item.ingredient_expiration_date
 						td(class='align-middle')
 							//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
-							a.btn.btn-danger.delete-ingredient(href='#',data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount)  DELETE
+							a.btn.btn-danger.delete-ingredient(href='#',data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount)  Remove From Pantry
 		form(method='GET', action='/ingredients/add')

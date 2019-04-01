@@ -53,7 +53,7 @@ block content
 								option(value='') Priority Item?
 								option(value='Yes') Yes
 								option(value='No') No
-						input.btn.btn-primary.col-md-1.mt-3(type='submit', value='Submit', class='form-group')
+						input.btn.btn-primary.col-md-1.mt-3(type='submit', value='Add', class='form-group')
 		br
 		.form-row
 			//-for each ingredient in data
@@ -66,8 +66,7 @@ block content
 						img.image(class='card-img-top', src=ingredient_image, alt='image')
 						div(class='card-body')
 							h5(class='card-title') #{item.ingredient_name}
-							p(class='card-text') Amount: #{item.ingredient_amount} #{item.ingredient_unit_of_measurement}
-							p(class='card-text') Expires: #{item.ingredient_expiration_date}
+							p(class='card-text') #{item.ingredient_amount} #{item.ingredient_unit_of_measurement} that expires on #{item.ingredient_expiration_date}
 
 						div(class='card-foot')
 							button.btn_card.btn.btn-danger.delete-ingredient(href='#',data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount)  DELETE
