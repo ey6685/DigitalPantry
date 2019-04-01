@@ -38,10 +38,23 @@ router.post('/setExpirationTimeFrame', async function setExpirationTimeFrame (re
     { where: { pantry_id: pantryId.pantry_id } }
   )
 
-  req.flash('success', 'WORK PLS')
-  console.log('REQ.FLASH')
-  console.log(req.flash)
   res.redirect('/users/dashboard')
+})
+
+router.post('/setNumberOfPeopleToCookFor', async function setNumberOfPeopleToCookFor(req, res){
+  const numberOfPeople = req.body.numberOfPeople
+  const currentUserId = req.session.passport['user']
+  const pantryId = await User.findOne({
+    attributes: ['pantry_id'],
+    where: { user_id: currentUserId }
+  })
+
+  await Pantry.update({
+    people_cooking_for:numberOfPeople
+  },
+  {where:{pantry_id:pantryId.pantry_id}}
+  )
+  res.send('success')
 })
 
 module.exports = router
