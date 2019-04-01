@@ -161,7 +161,7 @@ description
 checks for the best recipes for the ingredient id provided and returns them
 */
 
-async function find_recipes_no_inv(ingredient_id, pantry_id){
+async function find_recipes_no_inv(ingredient_id, pantry_id,scale){
     
 
     try{
@@ -173,6 +173,8 @@ async function find_recipes_no_inv(ingredient_id, pantry_id){
                 pantry_id: pantry_id
             }
         });
+        if(scale == null || typeof scale != 'number')
+
         console.log("THE RECIPE IDS FOUND");
         console.log("====================");
         console.log(JSON.stringify(recieps_ing_in))
@@ -192,6 +194,27 @@ async function find_recipes_no_inv(ingredient_id, pantry_id){
 
         for(var i = 0;i<recipe_ids_arr.length;i++)
         {
+            var recipe_table_data;
+            recipe_table_data = await recipe_t.findOne({
+            attributes: ['recipe_name','recipe_image_path','recipe_directions','num_people_it_feeds',"recipe_num_times_cooked"],
+            where:{
+                recipe_id: recipe_ids_arr[i],
+                pantry_id: pantry_id
+            }})
+            console.log("=====================")
+            console.log("REMAINING RECIPE DATE")
+            console.log("=====================")
+            console.log(JSON.stringify(recipe_table_data))
+            var recipe_scale;
+            if(scale == -1)
+            {
+                scale = recipe_table_data.num_people_it_feeds;
+            }
+            //use this for the scalling factor
+            recipe_scale = scale/recipe_table_data.num_people_it_feeds;
+            console.log("scaling recipe by: " + recipe_scale)
+            console.log("=====================================")
+            
             var ingredients_we_have = new Array();
             // var ingredients_we_dont = new Array();
             var ingredients_recipe = await ingredients_in_a_recipe_t.findAll({
@@ -217,7 +240,7 @@ async function find_recipes_no_inv(ingredient_id, pantry_id){
                 })
                 console.log("sum >= needed")
                 console.log("=============")
-                console.log(sum + ">=" + ingredients_recipe[o].amount_of_ingredient_needed)
+                console.log(sum + ">=" + ingredients_recipe[o].amount_of_ingredient_needed * recipe_scale)
                 if(sum >= ingredients_recipe[o].amount_of_ingredient_needed|| name.ingredient_weight == 0){
                     console.log("mun ing we have icremented!");
                     num_ing_we_have++;
@@ -236,19 +259,24 @@ async function find_recipes_no_inv(ingredient_id, pantry_id){
             console.log(JSON.stringify(ingredients_we_have))
 
         //now need some data from the recipes table
-        var recipe_table_data;
-        recipe_table_data = await recipe_t.findOne({
-            attributes: ['recipe_name','recipe_image_path','recipe_directions','num_people_it_feeds',"recipe_num_times_cooked"],
-            where:{
-                recipe_id: recipe_ids_arr[i],
-                pantry_id: pantry_id
-            }})
-            console.log("=====================")
-            console.log("REMAINING RECIPE DATE")
-            console.log("=====================")
-            console.log(JSON.stringify(recipe_table_data))
+        // var recipe_table_data;
+        // recipe_table_data = await recipe_t.findOne({
+        //     attributes: ['recipe_name','recipe_image_path','recipe_directions','num_people_it_feeds',"recipe_num_times_cooked"],
+        //     where:{
+        //         recipe_id: recipe_ids_arr[i],
+        //         pantry_id: pantry_id
+        //     }})
+        //     console.log("=====================")
+        //     console.log("REMAINING RECIPE DATE")
+        //     console.log("=====================")
+        //     console.log(JSON.stringify(recipe_table_data))
 
             //making the JSON return object
+            //scale the required ingredients
+            for(var i = 0; i<ingredients_recipe.length;i++)
+            {
+                ingredients_recipe[i].amount_of_ingredient_needed *= recipe_scale
+            }
             if(recipe_ids_arr.length>0)
             {
                 var direction_array = await direction_parser.parse_by_str_for_dashboard(recipe_table_data.recipe_directions)
@@ -309,5 +337,5 @@ async function find_recipes_no_inv(ingredient_id, pantry_id){
         return -1;
     }
 }
-// find_recipes_no_inv(1,1);
+find_recipes_no_inv(19,1,10);
 module.exports.find_recipes_no_inv = find_recipes_no_inv;

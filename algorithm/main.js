@@ -125,7 +125,7 @@ discription:
 first querys the ingredients in a pantry id with the window date. take the ingredient
 ids and then gets the recipe data and reutrns all the data under the ingredient name
 */
-async function main2(window, pantry_id)
+async function main2(window, pantry_id,scale)
 {
   //data vaidation
   console.log("starting Algorithm with no inv reject");
@@ -150,6 +150,10 @@ async function main2(window, pantry_id)
   }
   if(pantry_id == null || typeof pantry_id !="number" ){
     pantry_id = 1;
+  }
+  if(scale == null || typeof scale !='number')
+  {
+    scale = -1;
   }
   
   console.log("Dates for pulling info");
@@ -210,7 +214,7 @@ async function main2(window, pantry_id)
       "ingredient_amount" : ing_in_pan_data[0].ingredient_amount,
       "ingredient_unit_of_measurement": ing_in_pan_data[0].ingredient_unit_of_measurement,
       "ingredient_expiration_date": string_days,
-      "recipe_data": await recipe_id_finder.find_recipes_no_inv(ex_ids_array[i],pantry_id)
+      "recipe_data": await recipe_id_finder.find_recipes_no_inv(ex_ids_array[i],pantry_id,scale)
       })
   }
 
