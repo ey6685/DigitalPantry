@@ -411,5 +411,14 @@ $('#sortByTimeFrameBtn').click(function sortByTimeFrame () {
 })
 
 $('#cookForNumberOfPeople').focusout(function updateCookForNumberOfPeople () {
-  console.log('')
+  numberOfPeopleToCookFor = $(this).val()
+  $.ajax({
+    type: 'POST',
+    url: '/pantry/setNumberOfPeopleToCookFor',
+    data: { numberOfPeople: numberOfPeopleToCookFor },
+    success: function () {location.reload()},
+    error: function (err) {
+      console.log(err)
+    }
+  })
 })
