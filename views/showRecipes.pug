@@ -16,6 +16,12 @@ block content
 			background-color: #a2f02d;
 			color:black;
 		}
+		.morecontent span {
+			display: none;
+		}
+		.morelink {
+			display: block;
+		}
 	div(class='container-fluid', class='rounded', style='width: 80%')
 		br
 		br
@@ -50,12 +56,61 @@ block content
 						div(class='card-body')
 							h5(class='card-title') #{recipe.recipe_name}
 							//- For each steps inside of the array of steps
-							for step in recipe_steps[i]
-								p(class='card-text')= step
+							for step,x in recipe_steps[i]
+								p(id='recipeStep'+x class='recipeStep' class='card-text')= step
+								p#step
 						div(class='card-foot', padding='.75rem')
 							button.btn_card.btn.btn-danger(class='delete-recipe', data-id= recipe.recipe_id, type='button', id='delete-showrec') Delete Recipe
 
 	script.
+		$(window).on('load', function() {
+			var showChar = 50
+			var previousCharacterLength = 0
+			var recipeStep = -1
+
+			$('.card-body').each(function(index) {
+				var fullContent = ""
+				var $steps = $(this).find('.recipeStep')
+				var ellipsestext = "..."
+				var moretext = "Show more"
+				var lesstext = "Show less"
+				var newStepLength = 0
+				var html = ""
+
+				$.each($steps, function (index, value) {
+					newStepLength = newStepLength + value.innerText.length
+					console.log("new step length")
+					console.log(newStepLength)
+					if (showChar < newStepLength)
+					{
+						console.log("VIOLATION")
+						//- difference = newStepLength - previousCharacterLength
+						//- var c = fullContent.substr(0, showChar);
+						var h = fullContent.substr(showChar, fullContent.length - showChar);
+						//- recipeStep = index
+						html = html + '<span class="moreellipses">' + ellipsestext+ '</span><span class="morecontent"><span>' + h + '</span><a href="" class="morelink">' + moretext + '</a></span>';
+						return false
+					}
+					else{
+						console.log("NOT VIOLATING")
+						//- previousCharacterLength = previousCharacterLength + newStepLength
+						html = html + `<p>${value.innerText}</p>`
+					}
+					//- fullContent = fullContent + value.innerText
+					console.log("html")
+					console.log(html)
+				});
+				//- if(fullContent.length > showChar) {
+		
+				//- 	var c = fullContent.substr(0, showChar);
+				//- 	var h = fullContent.substr(showChar, fullContent.length - showChar);
+		
+					//- var html = c + '<span class="moreellipses">' + ellipsestext+ '</span><span class="morecontent"><span>' + h + '</span><a href="" class="morelink">' + moretext + '</a></span>';
+					console.log(html)
+					$(this).html(html);
+				//- }
+			});
+		})
 		//This will trigger once user stars to type text into a search bar
 		function search() {
 			// Declare variables
