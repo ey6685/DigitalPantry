@@ -336,6 +336,13 @@ router.post('/saveCommunityRecipe', async function(req, res) {
 // Add new user from admin panel
 router.post('/add', async function addNewUser(req, res) {
   const userName = req.body.userName
+  const confirmUserName = req.body.confirmUserName
+  if(confirmUserName != userName)
+  {
+    req.flash("error","Emails do not match!")
+    res.redirect('/users/adminPanel')
+  }
+  else{
   let userType = req.body.userType
   switch (userType) {
     case 'volunteer':
@@ -382,6 +389,7 @@ router.post('/add', async function addNewUser(req, res) {
       res.redirect('/users/adminPanel')
     })
   })
+}
 })
 
 // Delete user from admin panel

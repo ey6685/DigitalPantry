@@ -101,7 +101,9 @@ block content
 	form(method= 'POST', action= '/users/add', class= 'form')
 		.form-row
 			.col-md-3
-				input.form-control(name='userName', type='text', placeholder='Username', class= 'input-form')
+				input.form-control(name='userName', type='emial', placeholder='Email', class= 'input-form')
+			.col-md-3
+				input.form-control(name="confirmUserName", type='email', placeholder="Confirm Email", class='input-form')
 			.col-md-3
 				.dropdown-inline
 				select.form-control(name='userType', required)
