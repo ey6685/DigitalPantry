@@ -3,10 +3,6 @@ extends admin_template
 //- NOTE: CSS FOR BUTTONS IS LOCATED UNDER THE layout_template
 
 block content
-	script.
-		$('#showRecipeDetails').on('click', function (e) {
-				console.log('TEST')
-			})
 	style.
 		.card-container{
 			padding-top:10px;
@@ -52,24 +48,34 @@ block content
 						#recipeStepsOverlay
 					.modal-footer
 		//-Overlay form end
-		div.bg-dark.card-container(class='container-fluid', class='rounded')
-			.row
-				.col-sm
-					input#expirationWindowSlider(data-slider-id='expirationWindowSlider', type='text', data-slider-min='0', data-slider-max='30', data-slider-step='1', data-slider-value='10')
-			.row
-				.col-sm-5
-					h3.text-white#currentSliderValue Expiration time frame: #{expirationTimeFrame} days
-				.col-sm-2
-					input.btn.btn-primary(id='sortByTimeFrameBtn', type='submit', value='Sort')
-			.row
-				.col-sm
+		.row
+			.col-sm-8 Show me recipes for ingredients expiring in 
+				btn-toolbar(role='toolbar', aria-label='Toolbar with button groups')
+					.btn-group.mr-2(role='group', aria-label='First group')
+						button.btn.btn-secondary(class='combo-box' type='button') 1
+						button.btn.btn-secondary(class='combo-box' type='button') 5
+						button.btn.btn-secondary(class='combo-box' type='button') 10
+						button.btn.btn-secondary(class='combo-box' type='button') 15
+				| days
+		hr
+
+			//- .row
+			//- 	.col-sm
+			//- 		input#expirationWindowSlider(data-slider-id='expirationWindowSlider', type='text', data-slider-min='0', data-slider-max='30', data-slider-step='1', data-slider-value='10')
+			//- .row
+			//- 	.col-sm-5
+			//- 		h3.text-white#currentSliderValue Expiration time frame: #{expirationTimeFrame} days
+			//- 	.col-sm-2
+			//- 		input.btn.btn-primary(id='sortByTimeFrameBtn', type='submit', value='Sort')
+			//- .row
+			//- 	.col-sm
 
 		br
 		!= messages('message', locals)
 		for i in data
 			div.bg-dark.card-container(class='container-fluid', class='rounded')
-				h3.text-white Expiring Ingredient:
-					|  #{i.ingredient_amount} #{i.ingredient_unit_of_measurement} of #{i.ingredient_name} on #{(i.ingredient_expiration_date)}
+				h3.text-white 
+					|  #{i.ingredient_amount} #{i.ingredient_unit_of_measurement} of #{i.ingredient_name} is expiring in #{(i.ingredient_expiration_date)} 
 				div(class='row')
 					for recipe in i.recipe_data
 						div(class='col-4')
@@ -102,12 +108,43 @@ block content
 		var allData = '!{storedData}'
 		allData = JSON.parse(allData)
 		// Creates the slider for expiration time frame
+		//- $(window).on('load', function() {
+		//- 	var slider = new Slider("#expirationWindowSlider")
+		//- 	slider.on("slide", function(sliderValue) {
+		//- 		document.getElementById("currentSliderValue").textContent = 'Expiration time frame: ' + sliderValue + ' days';
+		//- 	});
+		//- });
 		$(window).on('load', function() {
-			var slider = new Slider("#expirationWindowSlider")
-			slider.on("slide", function(sliderValue) {
-				document.getElementById("currentSliderValue").textContent = 'Expiration time frame: ' + sliderValue + ' days';
-			});
-		});
+			// This gets passed in from the route
+			$('.combo-box').removeClass('active')
+			expirationTimeFrame = '#{expirationTimeFrame}'
+			console.log(expirationTimeFrame)
+			$elements = $(`.combo-box:contains(${expirationTimeFrame})`).eq(0).addClass('active')
+			//- for (elem in $elements){
+			//- 	console.log($elements[elem].innerHTML)
+			//- 	if($elements[elem].innerHTML == expirationTimeFrame){
+			//- 		elem.addClass('active')
+			//- 	}
+			//- }
+			
+			console.log($(`.combo-box:contains(${expirationTimeFrame})`))
+
+			$('.combo-box').click(function printExpirationValue(){
+				let value = $(this).text()
+				$('.combo-box').removeClass('active')
+				$(this).addClass('active')
+				$.ajax({
+					type: 'POST',
+					url: '/pantry/setExpirationTimeFrame',
+					data: { expirationTimeFrameValue: value },
+					success: function () {},
+					error: function (err) {
+						console.log(err)
+					}
+				})
+
+			})
+		})
 		function edit(){
 			document.getElementById('name').setAttribute("contenteditable", "true");
 			document.getElementById('name').focus()

@@ -4,6 +4,7 @@ const moment = require('moment')
 const ingredientInRecipe = require('../DB_models/ingredients_in_a_recipe')
 const ingredient_t = require('../DB_models/Ingredients')
 const ing_in_stock = require('../DB_models/ingredients_in_pantry')
+const pantry_table = require('../DB_models/Pantry')
 const aw = require('../algorithm/auto_weight')
 const User = require('../DB_models/Users')
 const op = require('sequelize').Op
@@ -24,9 +25,15 @@ const upload = multer({ storage: storage })
 
 // Render page with data from database
 // GET request to localhost:3000/users/login
-router.get('/showall', function(req, res) {
+router.get('/showall', async function(req, res) {
   // renders showall_recipes with all the available ingredients
-
+  const currentUserId  = req.session.passport['user'];
+  var currentPantryId = await User.findOne({
+    attributes: ["pantry_id"],
+    where:{
+      user_id:currentUserId
+    }
+  })
   ////////////////////////////////
   // need to add pantry id feching//
   /////////////////////////////////

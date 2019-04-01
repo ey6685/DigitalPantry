@@ -71,6 +71,7 @@ html
 		link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
 		link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
 		link(rel='stylesheet' type='text/css' href='/css/digital_pantry.css')
+		link(rel='stylesheet' href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous")
 		script(src='/bower_components/jquery/dist/jquery.js')
 		//- script(type='text/javascript', src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js')
 	body
@@ -84,39 +85,39 @@ html
 				hr
 				li.nav-item
 					a.nav-link(href='/users/dashboard')
-						i.fa.fa-tachometer
+						i.fas.fa-tachometer-alt
 						| Home
 				li.nav-item
 					a.nav-link(href='/ingredients/showall')
-						i.fa.fa-spoon
-						| View Ingredients
+						i.fas.fa-bacon
+						| Your Ingredients
 				li.nav-item
 					a.nav-link(href='/ingredients/expired')
-						i.fa.fa-spoon
-						| View Expired Ingredients
+						i.fas.fa-dumpster
+						| Expired Ingredients
 				li.nav-item
 					a.nav-link(href='/ingredients/add')
-						i.fa.fa-spoon
-						| Add Multiple Ingredients
+						i.fas.fa-plus
+						| Add Ingredients
 				li.nav-item
 					a.nav-link(href='/recipes/showall')
-						i.fa.fa-spoon
-						| View Recipes
+						i.fa.fa-hamburger
+						| Your Recipes
 				li.nav-item
 					a.nav-link(href='/recipes/add')
-						i.fa.fa-spoon
-						| Add Recipe
+						i.fas.fa-utensils
+						| Add New Recipe
 				li.nav-item
 					a.nav-link(href='/recipes/showCommunityRecipes')
-						i.fa.fa-cutlery
+						i.fas.fa-award
 						| Community Recipes
 				li.nav-item
 					a.nav-link(href='/users/adminPanel')
-						i.fa.fa-user-o
+						i.fas.fa-user-cog
 						| Admin Panel
 				li.nav-item
 					a.nav-link(href='/users/logout')
-						i.fa.fa-sign-out
+						i.fas.fa-sign-out-alt
 						| Logout
 				a.btn.symbol(href='/users/settings')
 					i.fa.fa-cogs.fa-2x

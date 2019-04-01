@@ -191,12 +191,25 @@ async function main2(window, pantry_id)
       },
       order:['ingredient_expiration_date']
     })
-
+    //calulate the number of days it is exipring in for the front enf
+    var ingredient_date = new Date(ing_in_pan_data[0].ingredient_expiration_date);
+    var diff_time = Math.abs(ingredient_date.getTime()-today.getTime())
+    var diff_days = Math.round(diff_time / (1000*3600*24)) //coverting to days
+    if(diff_days != (diff_time / (1000* 3600 * 24)))
+    {
+      //add one day the rounding function always goes down.
+      diff_days++
+    }
+    var string_days = diff_days + " day"
+    if(diff_days >1)
+    {
+      string_days += "s"
+    }
     returing_JSON.push({
       "ingredient_name" : ingredient_data.ingredient_name,
       "ingredient_amount" : ing_in_pan_data[0].ingredient_amount,
       "ingredient_unit_of_measurement": ing_in_pan_data[0].ingredient_unit_of_measurement,
-      "ingredient_expiration_date": ing_in_pan_data[0].ingredient_expiration_date,
+      "ingredient_expiration_date": string_days,
       "recipe_data": await recipe_id_finder.find_recipes_no_inv(ex_ids_array[i],pantry_id)
       })
   }
