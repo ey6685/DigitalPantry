@@ -38,7 +38,7 @@ router.get('/showall', async function(req, res) {
   // need to add pantry id feching//
   /////////////////////////////////
   db.query(
-    'select ingredients.ingredient_image_path, ingredients.ingredient_id, ingredients.ingredient_name, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date from ingredients_in_pantry inner join ingredients on ingredients_in_pantry.ingredient_id = ingredients.ingredient_id and ingredients_in_pantry.ingredient_expiration_date is not null AND ingredient_expiration_date >= CURDATE() and pantry_id =' + currentPantryId.pantry_id +';',
+    'select ingredients.ingredient_image_path, ingredients.ingredient_id, ingredients.ingredient_name, ingredients.priority, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date from ingredients_in_pantry inner join ingredients on ingredients_in_pantry.ingredient_id = ingredients.ingredient_id and ingredients_in_pantry.ingredient_expiration_date is not null AND ingredient_expiration_date >= CURDATE();',
     function(err, results) {
       for (key in results) {
         results[key]['ingredient_expiration_date'] = moment(
@@ -70,6 +70,7 @@ router.post('/showall', async function(req, res) {
   var ingredient_amount = req.body.ingredient_total
   var ingredient_unit = req.body.ingredient_measurement
   var ingredient_date = req.body.ingredient_expiration_date
+  var ingredient_priority = req.body.priority
   var final_id
 
   var does_ingredient_exist = await ingredient_t.findOne({
@@ -183,11 +184,13 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
       console.log('1 is ' + block_oF_data[1])
       console.log('2 is ' + block_oF_data[2])
       console.log('3 is ' + block_oF_data[3])
+      console.log('4 is ' + block_oF_data[4])
       //seperate the data
       var ingredient_name = block_oF_data[0]
       var ingredient_amount = block_oF_data[1]
       var ingredient_unit = block_oF_data[2]
       var ingredient_date = block_oF_data[3]
+      var priority = block_oF_data[4]
       var final_id
 
       var does_ingredient_exist = await ingredient_t.findOne({
@@ -203,7 +206,8 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
         var new_ingredient = await ingredient_t.create({
           ingredient_name: ingredient_name,
           ingredient_weight: new_weight,
-          ingredient_image_path: '/images/' + imagePath
+          ingredient_image_path: '/images/' + imagePath,
+          priority: priority
         })
         final_id = new_ingredient.ingredient_id
       }
@@ -213,7 +217,8 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
         ingredient_id: final_id,
         ingredient_amount: ingredient_amount,
         ingredient_unit_of_measurement: ingredient_unit,
-        ingredient_expiration_date: ingredient_date
+        ingredient_expiration_date: ingredient_date,
+        priority: priority
       })
       console.log('ingredient add: \n' + JSON.stringify(new_inv))
     }
@@ -293,7 +298,7 @@ router.delete('/remove/recipe_ingredient/:name', async function deleteIngredient
       recipe_id: recipeId
     }
   })
-  
+
   res.send('Success')
 })
 

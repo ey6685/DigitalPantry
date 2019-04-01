@@ -27,13 +27,13 @@ block content
 				form(method= 'POST', action= '/ingredients/add', class= 'form', enctype="multipart/form-data")
 					.form-row.row-dark(class='rounded')
 						.form-group.col-md-4
-							img#output.mr-2.ml-3.mt-2(width='50', height='50')
+							img#output.mr-2.ml-2.mt-2(width='40', height='40')
 							input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='align-middle')
 						.form-group.col-md-2
 							input.form-control.mt-3(name='ingredientProperties[0]', type='text', placeholder='Name = Tuna')
 						.form-group.col-md-1
 							input.form-control.mt-3(name='ingredientProperties[1]', type='text', placeholder='Total = 2')
-						.form-group.col-md-2
+						.form-group.col-md-1
 							.dropdown-inline
 							select.form-control.mt-3(name='ingredientProperties[2]', required)
 								option(value='') Measurement
@@ -47,7 +47,13 @@ block content
 								option(value='oz') Dry Ounce
 						.form-group.col-md-2
 							input.form-control.mt-3(name='ingredientProperties[3]', type='date')
-						input.btn.btn-primary.col-md-1.mt-3(type='submit', value='Add', class='form-group')
+						.form-group.col-md-1
+							.dropdown-inline
+							select.form-control.mt-3(name='ingredientProperties[4]', required)
+								option(value='') Priority Item?
+								option(value='Yes') Yes
+								option(value='No') No
+						input.btn.btn-primary.col-md-1.mt-3(type='submit', value='Submit', class='form-group')
 		br
 		.form-row
 			//-for each ingredient in data
