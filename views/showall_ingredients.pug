@@ -1,4 +1,4 @@
-extends new_template
+extends admin_template
 
 //- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
 
@@ -7,7 +7,7 @@ block content
 	br
 	br
 	br
-	div.content(class='container-fluid', class='rounded', style='width: 80%')
+	div(class='container-fluid', class='rounded', style='width: 80%')
 		h1 #{title}
 		br
 		a.btn.btn-default(href='/ingredients/cards')

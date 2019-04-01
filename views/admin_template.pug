@@ -19,17 +19,38 @@ html
 				box-shadow: 0 50vh 0 50vh #343a40;
 			}
 			.nav{
-				top:0;
-				bottom:0;
-				width:200px;
+				padding-top: 50px;
+				margin-bottom: 100px;
+				margin: 0;
+				padding: 0;
+				width: 250px;
+				background-color: #f1f1f1;
+				position: fixed;
+				height: 100%;
+				overflow: auto;
+				box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+			}
+			.nav a{
+				display: block;
+				color: white;
+				padding: 16px;
+				text-decoration: none;
+			}
+			.nav a.active{
+				background-color: #4CAF50;
+				color: white;
+			}
+			.nav a:hover:not(.active){
+				background-color: #555;
+				color: white;
 			}
 			.sidebar-sticky {
 				padding-top:50px;
+				margin: 0;
+				padding: 0;
 				position:fixed;
-				float:left;
 				/*height is 100% - the footer height*/
 				height: 100%;
-				padding-top: 5px;
 				box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
 				overflow: auto;
 			}
@@ -67,22 +88,28 @@ html
 			.symbol{
 				position:absolute;
 				bottom:60px;
-				color:white; div.content {
-
+				color:white;
 			}
 			div.content{
 				margin-left: 200px;
-				padding: 1px 16px;
-				height: 1000px;
+				padding-left: 150px;
 			}
-			@media screen and (max-width: 700px){
-				.sidebar{
+			@media screen and (max-width: 992px){
+				.nav{
 					width: 100%;
 					height: auto;
 					position: relative;
 				}
-				.sidebar a {float: left;}
-				div.content {margin-left: 0;}
+				.nav a {float: left;}
+				div.content {
+					margin-left: 0;
+					padding-left: 16px;
+				}
+				.filler{
+					display: collapse;
+				}
+			}
+			.filler{
 			}
 		link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
 		link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
@@ -92,7 +119,7 @@ html
 		//- script(type='text/javascript', src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js')
 	body
 		.nav
-			.sidebar-sticky.bg-secondary.text-white
+			.nav.bg-secondary.text-white
 				ul.flex-column
 				li.header
 					div(style='display: table-row')
@@ -135,6 +162,22 @@ html
 					a.nav-link(href='/users/logout')
 						i.fas.fa-sign-out-alt
 						| Logout
+				li.filler
+					br
+					br
+					br
+					br
+					br
+					br
+					br
+					br
+					br
+					br
+					br
+					br
+					br
+					br
+					br
 				a.btn.symbol(href='/users/settings')
 					i.fa.fa-cogs.fa-2x
 		.containter
