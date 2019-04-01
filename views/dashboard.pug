@@ -48,17 +48,27 @@ block content
 						#recipeStepsOverlay
 					.modal-footer
 		//-Overlay form end
+		//- #accordionExample.accordion
+		//- 	.card
+		//- 		#headingTwo.card-header
+		//- 			h5.mb-0
+		//- 				button.btn.btn-link.collapsed(type='button', data-toggle='collapse', data-target='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
+		//- 					| Show settings
+		//- 		#collapseTwo.collapse(aria-labelledby='headingTwo', data-parent='#accordionExample')
+		//- 			.card-body
 		.row
 			.col-sm-8 Show me recipes for ingredients expiring in 
 				btn-toolbar(role='toolbar', aria-label='Toolbar with button groups')
-					.btn-group.mr-2(role='group', aria-label='First group')
+					.btn-group.btn-group-sm.mr-2(role='group', aria-label='First group')
 						button.btn.btn-secondary(class='combo-box' type='button') 1
 						button.btn.btn-secondary(class='combo-box' type='button') 5
 						button.btn.btn-secondary(class='combo-box' type='button') 10
 						button.btn.btn-secondary(class='combo-box' type='button') 15
-				| days
-		hr
-
+					| days
+		.row.mt-2
+			.col-sm-8
+				| Show me recipes where i am missing a few ingredients. 
+				button.btn.btn-sm.btn-success#ingredientFilterBtn(type='button') Yes
 			//- .row
 			//- 	.col-sm
 			//- 		input#expirationWindowSlider(data-slider-id='expirationWindowSlider', type='text', data-slider-min='0', data-slider-max='30', data-slider-step='1', data-slider-value='10')
@@ -72,6 +82,7 @@ block content
 
 		br
 		!= messages('message', locals)
+		- var test;
 		for i in data
 			div.bg-dark.card-container(class='container-fluid', class='rounded')
 				h3.text-white 
@@ -79,27 +90,30 @@ block content
 				div(class='row')
 					for recipe in i.recipe_data
 						if recipe.num_of_ingredients_on_hand == recipe.num_of_ingredients
-							div(class='col-4')
-								div.card.h-100(recipe-id=recipe.recipe_id , style='width: 100%')
-									img.image(class='card-img-top', src=recipe.recipe_image_path, alt="#{(recipe.recipe_name)}")
-									.card-body
-										h4(id='recipeName', lass='card-title') #{recipe.recipe_name}
-										br
-										p(class="card-text") Cooked #{recipe.num_of_times_cooked} times.
-										br
-										p(class='card-text') Ingredients: #{(recipe.num_of_ingredients_on_hand)} out of #{recipe.num_of_ingredients}
+							- test = "div class='col-4 haveAllIngredientsRecipe'";
+						else
+							- test = "div class='col-4 dontHaveAllIngredients' style='display: none;'";
+						#{test}
+							div.card.h-100(recipe-id=recipe.recipe_id , style='width: 100%')
+								img.image(class='card-img-top', src=recipe.recipe_image_path, alt="#{(recipe.recipe_name)}")
+								.card-body
+									h4(id='recipeName', lass='card-title') #{recipe.recipe_name}
+									br
+									p(class="card-text") Cooked #{recipe.num_of_times_cooked} times.
+									br
+									p(class='card-text') Ingredients: #{(recipe.num_of_ingredients_on_hand)} out of #{recipe.num_of_ingredients}
 
-										//- For each steps inside of the array of steps
-										for step in recipe.recipe_directions
-											p.card-text.recipeStep= step
-										//- btn_card is a custom class used for CSS for buttons
-										.card-footer
-											.container
-												.row
-													.col
-														.text-center
-															button.btn.btn-primary(class='test', id='showRecipeDetails', type='button', data-toggle='modal', data-target='#viewRecipeDetails') Details
-															button.btn.btn-primary(recipe-id=rid, id='card-one', type='button') Cook It!
+									//- For each steps inside of the array of steps
+									for step in recipe.recipe_directions
+										p.card-text.recipeStep= step
+									//- btn_card is a custom class used for CSS for buttons
+								.card-footer
+									.container
+										.row
+											.col
+												.text-center
+													button.btn.btn-primary(class='test', id='showRecipeDetails', type='button', data-toggle='modal', data-target='#viewRecipeDetails') Details
+													button.btn.btn-primary(recipe-id=rid, id='card-one', type='button') Cook It!
 			br
 
 
@@ -108,27 +122,11 @@ block content
 	script(type='text/javascript').
 		var allData = '!{storedData}'
 		allData = JSON.parse(allData)
-		// Creates the slider for expiration time frame
-		//- $(window).on('load', function() {
-		//- 	var slider = new Slider("#expirationWindowSlider")
-		//- 	slider.on("slide", function(sliderValue) {
-		//- 		document.getElementById("currentSliderValue").textContent = 'Expiration time frame: ' + sliderValue + ' days';
-		//- 	});
-		//- });
 		$(window).on('load', function() {
 			// This gets passed in from the route
 			$('.combo-box').removeClass('active')
 			expirationTimeFrame = '#{expirationTimeFrame}'
-			console.log(expirationTimeFrame)
 			$elements = $(`.combo-box:contains(${expirationTimeFrame})`).eq(0).addClass('active')
-			//- for (elem in $elements){
-			//- 	console.log($elements[elem].innerHTML)
-			//- 	if($elements[elem].innerHTML == expirationTimeFrame){
-			//- 		elem.addClass('active')
-			//- 	}
-			//- }
-			
-			console.log($(`.combo-box:contains(${expirationTimeFrame})`))
 
 			$('.combo-box').click(function printExpirationValue(){
 				let value = $(this).text()
@@ -143,7 +141,22 @@ block content
 						console.log(err)
 					}
 				})
+			})
 
+			$('#ingredientFilterBtn').click(function filter(){
+				buttonText = $(this).text()
+				if (buttonText == 'Yes'){
+					$(this).text('No')
+					$(this).removeClass('btn-primary')
+					$(this).addClass('btn-danger')
+					$('.dontHaveAllIngredients').show()
+				}else{
+					$(this).text('Yes')
+					$(this).removeClass('btn-danger')
+					$(this).addClass('btn-success')
+					$('.dontHaveAllIngredients').hide()
+				}
+				
 			})
 		})
 		function edit(){
