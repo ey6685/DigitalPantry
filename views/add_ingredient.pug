@@ -18,36 +18,63 @@ block content
 		br
 		tbody
 			tr
-				form(method= 'POST', action= '/ingredients/add', class= 'form')
-					.form-row
+				form(method= 'POST', action= '/ingredients/add', class= 'form', enctype="multipart/form-data")
+					.form-row(class='rounded')
 						.form-group.col-md-2
-							input.form-control(name='ingredientProperties[1]', type='text', placeholder='Name = Tuna', class= 'input-form')
+							img#output.mr-1.ml-2.mt-2(width='40', height='40')
+							input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='align-middle')
+						.form-group.col-md-2
+							input.form-control.mt-3(name='ingredientProperties[0]', type='text', placeholder='Name = Tuna')
 						.form-group.col-md-1
-							input.form-control(name='ingredientProperties[1]', type='text', placeholder='Total = 2' class= 'input-form')
-						.form-group.col-md-3
+							input.form-control.mt-3(name='ingredientProperties[1]', type='text', placeholder='Total = 2')
+						.form-group.col-md-1
 							.dropdown-inline
-							select.form-control(name='ingredientProperties[1]', required, class= 'selection-drop')
+							select.form-control.mt-3(name='ingredientProperties[2]', required)
 								option(value='') Measurement
 								option(value='tsp.') Teaspoon
 								option(value='tbsp.') Tablespoon
 								option(value='fl oz') Fluid Ounce
 								option(value='cup') Cup
 								option(value='quart') Quart
-								option(value='ml') Milliliter
+								option(value='ml') Millilitre
 								option(value='lb') Pound
 								option(value='oz') Dry Ounce
-						.form-group.col-md-3
-							input.form-control(name='ingredientProperties[1]', type='date', class= 'input-form')
+						.form-group.col-md-2
+							input.form-control.mt-3(name='ingredientProperties[3]', type='date')
+						.form-group.col-md-1
+							.dropdown-inline
+							select.form-control.mt-3(name='ingredientProperties[4]', required)
+								option(value='') Priority Item?
+								option(value='Yes') Yes
+								option(value='No') No
 					#ingredient-container
 					button.btn.btn-secondary(type='button' onclick='addIngredient()', id='add-ingredient', class='form-group') Add Ingredient
 					input.btn.btn-primary.col-md-2(type='submit', value='Submit', class='form-group')
 
 		script.
-
+			var loadFile = function(event) {
+				var output = document.getElementById('output');
+				output.src = URL.createObjectURL(event.target.files[0]);
+				output.classList.add("img-thumbnail");
+				document.getElementById("output").style.display = 'block';
+				document.getElementById("output").style.width = '40px';
+				document.getElementById("output").style.height = '40px';
+				}
 			let i = 2;
 				function addIngredient(){
 					let template = `
 					<div class="form-row">
+						<div class="form-group col-md-2">
+							<img class="mr-2 ml-2 mt-2" id="output" width="40" height="40"/>
+							<input
+								class="align-middle"
+								type="file"
+								id="image"
+								name="image"
+								accept="image/*"
+								onchange="loadFile(event)"
+							/>
+						</div>
 						<div class="form-group col-md-2">
 							<input
 								class="form-control"
@@ -66,7 +93,7 @@ block content
 								required="required"
 							/>
 						</div>
-						<div class="dropdown-inline col-md-3">
+						<div class="dropdown-inline col-md-1">
 							<select class="form-control" name="ingredientProperties[${i}]" required="required">
 								<option value="">Measurement</option>
 								<option value="tsp.">Teaspoon</option>
@@ -79,8 +106,15 @@ block content
 								<option value="oz">Dry Ounce</option>
 							</select>
 						</div>
-						<div class="form-group col-md-3">
+						<div class="form-group col-md-2">
 							<input class="form-control" name="ingredientProperties[${i}]" type="date" required="required" />
+						</div>
+						<div class="dropdown-inline col-md-1">
+							<select class="form-control" name="ingredientProperties[${i}]" required="required">
+								<option value="">Priority Item?</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
 						</div>
 						<div class="form-group col-md-1">
 							<button type="button" class="btn btn-danger delete-row" aria-label="Close">

@@ -20,9 +20,9 @@ const ing_table = require('../DB_models/Ingredients')
 const ing_in_pan_table = require('../DB_models/ingredients_in_pantry')
 const logger = require('../functions/logger')
 const algorithm = require('../algorithm/main')
-const mail = require("../functions/mailer");
-const fs = require('fs');
-const str_generater = require('randomstring');
+const mail = require('../functions/mailer')
+const fs = require('fs')
+const str_generater = require('randomstring')
 
 //defines where to store image
 const storage = multer.diskStorage({
@@ -258,6 +258,7 @@ router.post('/register', async function registerUser(req, res) {
       if (err) throw err
       const recipe_id_inserted = results.insertId
       const newUser = new User({
+        user_type: 'Administrator',
         username: 'admin',
         user_email: email,
         user_password: password,
@@ -505,8 +506,6 @@ router.post('/changePassword', async function changePassword(req, res) {
   }
 })
 
-
-
 router.post('/addImg', upload.single('image'), async function addImg(req, res) {
   if (req.file) {
     var imagePath = req.file.filename
@@ -530,61 +529,55 @@ router.post('/addImg', upload.single('image'), async function addImg(req, res) {
   res.redirect('/users/adminPanel')
 })
 
-router.get('/forgotpass', function (req,res){
-  res.render("password_reset",{
-    title: "Reset Password"
+router.get('/forgotpass', function(req, res) {
+  res.render('password_reset', {
+    title: 'Reset Password'
   })
 })
-router.post('/forgotpass', async function(req,res){
+router.post('/forgotpass', async function(req, res) {
   //pull email from the page
   const email = req.body.email
   //check to see if email in db
-  console.log("email:")
-  console.log("======")
-  console.log(email);
+  console.log('email:')
+  console.log('======')
+  console.log(email)
   var db_data = await User.findOne({
-    where:{
+    where: {
       user_email: email
     }
   })
-  console.log("user data")
-  console.log("=========")
+  console.log('user data')
+  console.log('=========')
   console.log(JSON.stringify(db_data))
-  if(db != null)
-  {
+  if (db != null) {
     //help by okasers you are my only hope
     //randomly generate a new password
     var new_pass = await str_generater.generate({
       length: 8,
-      charset: "alphanumeric"
+      charset: 'alphanumeric'
     })
-    console.log("new pass")
-    console.log("========")
+    console.log('new pass')
+    console.log('========')
     console.log(new_pass)
     //send out the email
-    
+
     //salt the password please
     const salt = bcrypt.genSaltSync(10)
     const hash = bcrypt.hashSync(new_pass, salt)
     const query = `Update users set user_password='${hash}' where user_id=${db_data.user_id};`
-    console.log("the query")
-    console.log("=========")
+    console.log('the query')
+    console.log('=========')
     console.log(query)
     db.query(query, function(err) {
       if (err) throw err
-      mail.password_reset(email,new_pass);
+      mail.password_reset(email, new_pass)
       req.flash('success', 'Password Reset!')
       res.redirect('/users/login')
     })
-
-    
-  }
-  else{
-    req.flash("error","Email Unknown")
+  } else {
+    req.flash('error', 'Email Unknown')
     res.redirect('user/forgotpass')
   }
-  
-  
 })
 
 // Function to call from any route to check if user is authenticated
