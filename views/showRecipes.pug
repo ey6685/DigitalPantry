@@ -46,6 +46,45 @@ block content
 			.form-group.col-md-2
 				form(method='GET', action='/recipes/add')
 					input.btn.btn-primary(type='submit', value='Add Recipe', class='form-group', id='submit-showrec', class='h-75')
+					p
+					//- Overlay form start. In other words edit recipe form
+					#editRecipe.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
+						.modal-dialog.modal-dialog-centered.modal-lg(role='document')
+							.modal-content
+								.modal-body
+									form(method= 'POST', action='/recipes/edit', class='form')
+										h4
+										hr
+										br
+										//- Edit recipe information fields
+										.form-row
+											.form-group.col-md-6
+												label(for='recipe-name') Recipe name
+												input.form-control(name="recipeName", type='text', placeholder="Recipe name", class='form-group', id='recipe-name')
+											.form-group.col-md-6
+												label(for='serving-size') Serving size
+												input.form-control(name="recipeSize", type='text', placeholder="Serving Size", class='form-group', id='recipe-size')
+										br
+										h5 Ingredients
+										hr
+										br
+										//- Edit ingredient information fields
+										.form-row
+											.form-group.col-md-4
+												| Name
+											.form-group.col-md-3
+												| Qty
+											.form-group.col-md-3
+												| Measurement
+										//- Although it might seem like ingredient row does nothing
+										//- #ingredient-rows is used for Jquery 
+										#ingredient-rows
+										#dynamic-ingredient-row
+										button.btn.btn-secondary.btn-success(type='button', onclick='addIngredient()', id='add-showall-rec') Add Ingredient
+										hr
+										br
+										button.btn.btn-secondary(type='button', data-dismiss='modal', id='close-showall-rec') Close
+										button.btn.btn-primary(type='submit', id='save-showall-rec') Save changes
 		.form-row
 			//-for each recipe in data
 			for recipe,i in data
@@ -60,7 +99,9 @@ block content
 							for step in recipe_steps[i]
 								p(class='card-text')= step
 						div(class='card-foot', padding='.75rem')
-							button.btn_card.btn.delete-button(class='delete-recipe', data-id= recipe.recipe_id, type='button', id='delete-showrec') Delete Recipe
+							center
+								a.btn.btn-danger.delete-recipe.mr-2(,href='#', data-id=recipe.recipe_id, id= 'delete-button') DELETE
+								a.btn.btn-primary.edit-recipe(type='button', data-toggle='modal', data-target='#editRecipe', id= 'edit-button') EDIT
 
 	script.
 		//This will trigger once user stars to type text into a search bar
