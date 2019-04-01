@@ -409,3 +409,7 @@ $('#sortByTimeFrameBtn').click(function sortByTimeFrame () {
     }
   })
 })
+
+$('#cookForNumberOfPeople').focusout(function updateCookForNumberOfPeople () {
+  console.log('')
+})

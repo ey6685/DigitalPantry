@@ -69,16 +69,14 @@ block content
 			.col-sm-8
 				| Show me recipes where i am missing a few ingredients. 
 				button.btn.btn-sm.btn-success#ingredientFilterBtn(type='button') Yes
-			//- .row
-			//- 	.col-sm
-			//- 		input#expirationWindowSlider(data-slider-id='expirationWindowSlider', type='text', data-slider-min='0', data-slider-max='30', data-slider-step='1', data-slider-value='10')
-			//- .row
-			//- 	.col-sm-5
-			//- 		h3.text-white#currentSliderValue Expiration time frame: #{expirationTimeFrame} days
-			//- 	.col-sm-2
-			//- 		input.btn.btn-primary(id='sortByTimeFrameBtn', type='submit', value='Sort')
-			//- .row
-			//- 	.col-sm
+		.row.mt-2
+			.col-sm-8
+				.form-inline
+					| I am cooking for
+					.col-sm-2
+						.input-group.input-group-sm
+							input.form-control(id='cookForNumberOfPeople' style="text-align:center;valign:middle;" type='text') 
+					| people
 
 		br
 		!= messages('message', locals)
