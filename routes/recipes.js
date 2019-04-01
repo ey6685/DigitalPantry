@@ -171,19 +171,22 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
   if (req.file) {
     
     console.log('File Uploaded Successfully')
+    var currentDate= Date.now()
+    var imagePath = currentDate + '.jpg'
     gm(req.file.path) // uses graphicsmagic and takes in image path
       .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
       .write(req.file.path, err => {
+
+        fs.rename(req.file.path, './public/images/' + currentDate + '.jpg', function (err) {
+          if (err) throw err;
+          console.log('File Renamed.');
+        })
         if (err) {
           console.log(err)
         }
       })
-      var currentDate= Date.now()
-      var imagePath = currentDate + '.jpg'
-      fs.rename(req.file.path, './public/images/' + currentDate + '.jpg', function (err) {
-        if (err) throw err;
-        console.log('File Renamed.');
-      });
+      
+      
   } else {
       var imagePath = 'placeholder.jpg'
       console.log('File Upload Failed')

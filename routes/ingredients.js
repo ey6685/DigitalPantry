@@ -158,19 +158,22 @@ router.get('/expiredAdmin', function expiredTable(req, res) {
 router.post('/add', upload.single('image'), async function addIngredient(req, res) {
   if (req.file) {
     console.log('File Uploaded Successfully')
+    var currentDate = Date.now()
+    var imagePath = currentDate + '.jpg'
     gm(req.file.path) // uses graphicsmagic and takes in image path
       .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
       .write(req.file.path, err => {
+
+        fs.rename(req.file.path, './public/images/' + currentDate + '.jpg', function(err) {
+          if (err) throw err
+          console.log('File Renamed.')
+        })
+
         if (err) {
           console.log(err)
         }
       })
-    var currentDate = Date.now()
-    var imagePath = currentDate + '.jpg'
-    fs.rename(req.file.path, './public/images/' + currentDate + '.jpg', function(err) {
-      if (err) throw err
-      console.log('File Renamed.')
-    })
+
   } else {
     var imagePath = 'placeholder.jpg'
     console.log('File Upload Failed')
@@ -207,7 +210,7 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
           ingredient_name: ingredient_name,
           ingredient_weight: new_weight,
           ingredient_image_path: '/images/' + imagePath,
-          priority: priority
+          priority: 1
         })
         final_id = new_ingredient.ingredient_id
       }
@@ -218,7 +221,7 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
         ingredient_amount: ingredient_amount,
         ingredient_unit_of_measurement: ingredient_unit,
         ingredient_expiration_date: ingredient_date,
-        priority: priority
+        priority: 1
       })
       console.log('ingredient add: \n' + JSON.stringify(new_inv))
     }
