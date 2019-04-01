@@ -1,0 +1,86 @@
+doctype html
+html
+	head
+		style.
+			.nav-link{
+				color:black;
+			}
+			.sidebar{
+				margin: 0;
+				padding: 0;
+				width: 200px;
+				background-color: #f1f1f1;
+				position: fixed;
+				height: 100%;
+				overflow: auto;
+			}
+			.sidebar a{
+				display: block;
+				color: black;
+				padding: 16px;
+				text-decoration: none;
+			}
+			.sidebar a.active{
+				background-color: #4CAF50;
+				color: white;
+			}
+			.sidebar a:hover:not(.active){
+				background-color: #555;
+				color: white;
+			}
+			div.content{
+				margin-left: 200px;
+				padding: 1px 16px;
+			}
+			@media screen and (max-width: 700px){
+				.sidebar{
+					width: 100%;
+					height: auto;
+					position: relative;
+				}
+				.sidebar a {float: left;}
+				div.content{margin-left:0;}
+			}
+			
+
+
+		link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+		script(src='/bower_components/jquery/dist/jquery.js')
+	body
+		.sidebar
+			a(href='/users/dashboard')
+				|Home
+			a(href='/ingredients/showall')
+				|Your Ingredients
+			a(href='/ingredients/expired')
+				|Expired Ingredients
+			a(href='/ingredients/add')
+				|Add Ingredients
+			a(href='/recipes/showall')
+				|Your Recipes
+			a(href='/recipes/add')
+				|Add Recipe
+			a(href='/recipes/showCommunityRecipes')
+				|Community Recipes
+			a(href='/users/adminPanel')
+				|Admin Panel
+			a(href='/users/logout')
+				|Logout
+			a(href='/users/settings')
+				|User Settings
+			script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
+			script(src="/js/main.js")
+		.containter
+			block content
+			footer.footer.bg-dark.text-light
+				p.mb-1 © 2019 Digital Pantry
+				ul.list-inline
+					//- TODO link these to proper files
+					li.list-inline-item
+						a(href='#') Privacy
+					li.list-inline-item
+						a(href='#') Terms
+					li.list-inline-item
+						a(href='#') Support
+
+
