@@ -80,11 +80,11 @@ block content
 						td
 							//- i.fa.fa-plus
 							img.ml-3(src=item.recipe_image_path, alt='image', width='50', height='50')
-						td(class='align-middle')= item.recipe_id
-						td(class='align-middle')= item.pantry_id
-						td(class='align-middle')= item.recipe_name
-						td(class='align-middle')= item.num_people_it_feeds
-						td(class='align-middle')
+						td(align='right')= item.recipe_id
+						td(align='right')= item.pantry_id
+						td(align='left')= item.recipe_name
+						td(align='right')= item.num_people_it_feeds
+						td(align='left')
 							//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
 							a.btn.btn-danger.delete-recipe(href='#', data-id=item.recipe_id, id= 'delete-button') DELETE
 							a.btn.btn-primary.edit-recipe(type='button', data-toggle='modal', data-target='#editRecipe', id= 'edit-button') EDIT

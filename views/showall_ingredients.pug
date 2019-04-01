@@ -59,10 +59,10 @@ block content
 					tr
 						td
 							img.ml-3(src=item.ingredient_image_path, alt='image', width='50', height='50')
-						td(class='align-middle')= item.ingredient_name
-						td(class='align-middle')= item.ingredient_amount
-						td(class='align-middle')= item.ingredient_unit_of_measurement
-						td(class='align-middle')= item.ingredient_expiration_date
-						td(class='align-middle') 
+						td(align='left')= item.ingredient_name
+						td(align='right')= item.ingredient_amount
+						td(align='left')= item.ingredient_unit_of_measurement
+						td(align='left')= item.ingredient_expiration_date
+						td(align='left') 
 							//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
 							a.btn.btn-danger.delete-ingredient.mr-0(data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount) DELETE
