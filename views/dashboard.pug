@@ -119,8 +119,11 @@ block content
 	script(src="/js/viewRecipeDetailsDashboard.js")
 	script(type='text/javascript').
 		var allData = '!{storedData}'
+		var people_feeding = '#{people_cooking_for}'
 		allData = JSON.parse(allData)
 		$(window).on('load', function() {
+			console.log(people_feeding);
+			document.getElementById("cookForNumberOfPeople").setAttribute('value', people_feeding)
 			// This gets passed in from the route
 			$('.combo-box').removeClass('active')
 			expirationTimeFrame = '#{expirationTimeFrame}'
