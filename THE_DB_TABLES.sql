@@ -28,9 +28,9 @@ CREATE TABLE `ingredients` (
   `ingredient_weight` int(11) DEFAULT NULL,
   `ingredient_image_path` text,
   `ingredient_num_times_cooked` int(11) DEFAULT '0',
-  `priority` tinyint(1) DEFAULT '0',
+  `priority` enum('Yes','No') DEFAULT 'No',
   PRIMARY KEY (`ingredient_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `ingredients` (
 
 LOCK TABLES `ingredients` WRITE;
 /*!40000 ALTER TABLE `ingredients` DISABLE KEYS */;
-INSERT INTO `ingredients` VALUES (1,'Chicken',3,'/images/chicken.jpg',0,0),(2,'Canned Black Beans',1,'/images/black_beans.jpg',0,0),(3,'Carrot',3,'/images/placeholder.jpg',0,0),(4,'Potato chips',1,'/images/placeholder.jpg',0,0),(5,'Ground Pepper',0,'/images/placeholder.jpg',0,0),(6,'Chicken Broth',3,'/images/placeholder.jpg',0,0),(7,'Canned Tuna',1,'/images/placeholder.jpg',0,0),(8,'Frozen Mixed Vegetables',1,'/images/placeholder.jpg',0,0),(9,'Slice Mozzarella Cheeze',2,'/images/placeholder.jpg',0,0),(10,'Condensed Ckicken Soup',1,'/images/condensed_chicken.jpg',0,0),(11,'Water',0,'/images/water.jpg',0,0),(12,'Mixed Vegetables',2,'/images/mixed_veggies.jpg',0,0),(13,'Cream of Chicken Soup',1,'/images/placeholder.jpg',0,0),(14,'Milk',3,'/images/placeholder.jpg',0,0),(15,'Biscuits Mix',1,'/images/placeholder.jpg',0,0),(16,'Noodles',1,'/images/placeholder.jpg',0,0),(17,'Green Peas',2,'/images/placeholder.jpg',0,0),(18,'Cream of Mushroom Soup',1,'/images/placeholder.jpg',0,0),(19,'Tuna',2,'/images/placeholder.jpg',0,0),(20,'Onions',2,'/images/placeholder.jpg',0,0),(21,'French Bread',3,'/images/placeholder.jpg',0,0),(22,'Shredded Mozzarella Cheese',2,'/images/placeholder.jpg',0,0),(23,'Mayonnaise',1,'/images/placeholder.jpg',0,0),(24,'Corn',2,'/images/corn.jpg',0,0),(25,'Tortilla Chips',1,'/images/tortilla_chips.jpg',0,0),(26,'Salsa',2,'/images/placeholder.jpg',0,0),(27,'Canned Cream Corn',2,'/images/corn.jpg',0,0),(28,'Vegetable Oil',1,'/images/placeholder.jpg',0,0),(29,'Garlic',2,'/images/placeholder.jpg',0,0),(30,'Turkey',3,'/images/placeholder.jpg',0,0),(31,'Canned Diced Tomatoes',1,'/images/placeholder.jpg',0,0),(32,'Chili Powder',1,'/images/placeholder.jpg',0,0),(33,'Popcorn',1,NULL,0,0);
+INSERT INTO `ingredients` VALUES (1,'Chicken',3,'/images/chicken.jpg',0,'Yes'),(2,'Canned Black Beans',1,'/images/black_beans.jpg',0,'No'),(3,'Carrot',3,'/images/placeholder.jpg',0,'Yes'),(4,'Potato chips',1,'/images/placeholder.jpg',0,'No'),(5,'Ground Pepper',0,'/images/placeholder.jpg',0,'No'),(6,'Chicken Broth',3,'/images/placeholder.jpg',0,'No'),(7,'Canned Tuna',1,'/images/placeholder.jpg',0,'No'),(8,'Frozen Mixed Vegetables',1,'/images/placeholder.jpg',0,'No'),(9,'Slice Mozzarella Cheeze',2,'/images/placeholder.jpg',0,'No'),(10,'Condensed Ckicken Soup',1,'/images/condensed_chicken.jpg',0,'No'),(11,'Water',0,'/images/water.jpg',0,'No'),(12,'Mixed Vegetables',2,'/images/mixed_veggies.jpg',0,'No'),(13,'Cream of Chicken Soup',1,'/images/placeholder.jpg',0,'No'),(14,'Milk',3,'/images/placeholder.jpg',0,'Yes'),(15,'Biscuits Mix',1,'/images/placeholder.jpg',0,'No'),(16,'Noodles',1,'/images/placeholder.jpg',0,'No'),(17,'Green Peas',2,'/images/placeholder.jpg',0,'No'),(18,'Cream of Mushroom Soup',1,'/images/placeholder.jpg',0,'No'),(19,'Tuna',2,'/images/placeholder.jpg',0,'No'),(20,'Onions',2,'/images/placeholder.jpg',0,'No'),(21,'French Bread',3,'/images/placeholder.jpg',0,'No'),(22,'Shredded Mozzarella Cheese',2,'/images/placeholder.jpg',0,'No'),(23,'Mayonnaise',1,'/images/placeholder.jpg',0,'No'),(24,'Corn',2,'/images/corn.jpg',0,'No'),(25,'Tortilla Chips',1,'/images/tortilla_chips.jpg',0,'No'),(26,'Salsa',2,'/images/placeholder.jpg',0,'No'),(27,'Canned Cream Corn',2,'/images/corn.jpg',0,'No'),(28,'Vegetable Oil',1,'/images/placeholder.jpg',0,'No'),(29,'Garlic',2,'/images/placeholder.jpg',0,'No'),(30,'Turkey',3,'/images/placeholder.jpg',0,'No'),(31,'Canned Diced Tomatoes',1,'/images/placeholder.jpg',0,'No'),(32,'Chili Powder',1,'/images/placeholder.jpg',0,'No'),(33,'Popcorn',1,NULL,0,'No');
 /*!40000 ALTER TABLE `ingredients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -101,7 +101,7 @@ CREATE TABLE `ingredients_in_pantry` (
 
 LOCK TABLES `ingredients_in_pantry` WRITE;
 /*!40000 ALTER TABLE `ingredients_in_pantry` DISABLE KEYS */;
-INSERT INTO `ingredients_in_pantry` VALUES (1,1,6,'cup','2019-03-21'),(2,1,12,'oz','2019-04-01'),(5,1,4,'cup','2019-03-30'),(9,1,3,'lb','2019-03-25'),(10,1,24,'oz','2019-03-22'),(11,1,12,'oz',NULL),(12,1,6,'cup','2019-04-02'),(13,1,12,'oz','2019-04-03'),(14,1,3,'cup','2019-04-04'),(15,1,4,'cup','2019-04-05'),(16,1,12,'oz','2019-04-06'),(17,1,2,'cup','2019-04-07'),(18,1,24,'oz','2019-03-22'),(19,1,24,'oz','2019-03-22'),(20,1,10,'oz','2019-04-09'),(21,1,1,'lb','2019-04-01'),(22,1,2,'tbsp.','2019-04-19'),(23,1,10,'cup','2019-04-11'),(26,1,16,'oz','2019-04-14'),(28,1,1,'tbsp.','2019-04-15'),(29,1,2,'oz','2019-04-16'),(30,1,1,'lb','2019-04-17'),(31,1,15,'oz','2019-04-18'),(32,1,200,'oz','2019-03-29'),(1,1,5,'lb','2019-02-28'),(5,1,5,'oz','2019-03-10'),(1,1,4,'lb','2019-03-29'),(33,1,4.1,'lb','2019-09-19');
+INSERT INTO `ingredients_in_pantry` VALUES (1,1,6,'cup','2019-04-20'),(2,1,12,'oz','2019-04-01'),(5,1,4,'cup','2019-03-30'),(9,1,3,'lb','2019-03-25'),(10,1,24,'oz','2019-03-22'),(11,1,12,'oz',NULL),(12,1,6,'cup','2019-04-02'),(13,1,12,'oz','2019-04-03'),(14,1,3,'cup','2019-04-04'),(15,1,4,'cup','2019-04-05'),(16,1,12,'oz','2019-04-06'),(17,1,2,'cup','2019-04-07'),(18,1,24,'oz','2019-03-22'),(19,1,24,'oz','2019-03-22'),(20,1,10,'oz','2019-04-09'),(21,1,1,'lb','2019-04-01'),(22,1,2,'tbsp.','2019-04-19'),(23,1,10,'cup','2019-04-11'),(26,1,16,'oz','2019-04-14'),(28,1,1,'tbsp.','2019-04-15'),(29,1,2,'oz','2019-04-16'),(30,1,1,'lb','2019-04-17'),(31,1,15,'oz','2019-04-18'),(32,1,200,'oz','2019-03-29'),(1,1,5,'lb','2019-04-20'),(5,1,5,'oz','2019-03-10'),(1,1,4,'lb','2019-04-20'),(33,1,4.1,'lb','2019-09-19');
 /*!40000 ALTER TABLE `ingredients_in_pantry` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -117,8 +117,9 @@ CREATE TABLE `pantry` (
   `pantry_name` varchar(255) DEFAULT NULL,
   `expire_window` int(11) DEFAULT '5',
   `pantry_image_path` text,
+  `people_cooking_for` int(11) DEFAULT '2',
   PRIMARY KEY (`pantry_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -127,7 +128,7 @@ CREATE TABLE `pantry` (
 
 LOCK TABLES `pantry` WRITE;
 /*!40000 ALTER TABLE `pantry` DISABLE KEYS */;
-INSERT INTO `pantry` VALUES (1,'Jons digial checkin pantry',5,NULL),(2,'Jons digial checkin pantry',5,NULL),(3,'',5,NULL),(4,'',5,NULL),(5,'',5,NULL),(6,'',5,NULL),(7,'',5,NULL),(8,'',5,NULL);
+INSERT INTO `pantry` VALUES (1,'Jons digial checkin pantry',5,NULL,2),(2,'Jons digial checkin pantry',5,NULL,2),(3,'',5,NULL,2),(4,'',5,NULL,2),(5,'',5,NULL,2),(6,'',5,NULL,2),(7,'',5,NULL,2),(8,'',5,NULL,2),(9,'',5,NULL,2);
 /*!40000 ALTER TABLE `pantry` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,7 +152,7 @@ CREATE TABLE `recipes` (
   PRIMARY KEY (`recipe_id`),
   KEY `pantry_id` (`pantry_id`),
   CONSTRAINT `recipes_ibfk_1` FOREIGN KEY (`pantry_id`) REFERENCES `pantry` (`pantry_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -181,7 +182,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`user_id`),
   KEY `pantry_id` (`pantry_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`pantry_id`) REFERENCES `pantry` (`pantry_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -190,7 +191,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('test','test','test@test.com',1,4,'Volunteer'),('admin','$2a$10$lZ1kSUDEAMriZLdfVNjuTO9BEud5RMk6LJYfz2xKystQnD7YQNl8G','et8492@wayne.edu',1,9,'Volunteer'),('admin','$2a$10$S5tTpwlmQEQY03U.G1mpbOWjU9wPGtApKX9RyiDMdc.gvQeWjJrsO','et8492@wayne.edu',1,10,'Volunteer'),('quastan@live.com','$2a$10$R0/SpFJOHHUyKiz5Yzy4xeUv33cgbdQ.bboHuY1Vl.4v8FiFpnh8W','quastan@live.com',1,11,'Administrator'),('admin','$2a$10$wRudyksT/2MCVOcj4TctVu5QrJg4gUlLQWKsTyJ8HDc5PYMBvHBsC','jenna291991@gmail.com',3,12,'Volunteer'),('admin','$2a$10$Zg3f7FieL/J6Ch9hHefSYuJ.e6PDZIJmiLk3oLRl0Xqm35ctsiZS6','pat9592@yahoo.com',8,15,'Volunteer'),('quastan@live.com','$2a$10$DOl83/1nofHtU/auUA4J6esckvkCOZt9qfgNJQxHE4E/rhgZHn0B6','quastan@live.com',1,16,'Volunteer');
+INSERT INTO `users` VALUES ('test','test','test@test.com',1,4,'Volunteer'),('admin','$2a$10$qotOtv0VfegBp36/muW9neIGJYPmv470PYR7oS11.Lrjwo/WUkd1y','et8492@wayne.edu',1,9,'Volunteer'),('admin','$2a$10$S5tTpwlmQEQY03U.G1mpbOWjU9wPGtApKX9RyiDMdc.gvQeWjJrsO','et8492@wayne.edu',1,10,'Volunteer'),('quastan@live.com','$2a$10$R0/SpFJOHHUyKiz5Yzy4xeUv33cgbdQ.bboHuY1Vl.4v8FiFpnh8W','quastan@live.com',1,11,'Administrator'),('admin','$2a$10$wRudyksT/2MCVOcj4TctVu5QrJg4gUlLQWKsTyJ8HDc5PYMBvHBsC','jenna291991@gmail.com',3,12,'Volunteer'),('admin','$2a$10$Zg3f7FieL/J6Ch9hHefSYuJ.e6PDZIJmiLk3oLRl0Xqm35ctsiZS6','pat9592@yahoo.com',8,15,'Volunteer'),('quastan@live.com','$2a$10$DOl83/1nofHtU/auUA4J6esckvkCOZt9qfgNJQxHE4E/rhgZHn0B6','quastan@live.com',1,16,'Volunteer'),('quastan@live.com','$2a$10$86EfDlHxR.Bw/Ki/5E1.SezL6DoSL.RR7UvGQtu9Z7yz/8qxSykS.','quastan@live.com',1,17,'Administrator'),('thisis@test.com','$2a$10$pOhWQpNZGnXPoSaAMQ0reuE0bx5MhlabdenGwkcT0gv03YbmkfRza','thisis@test.com',1,18,'Administrator'),('quastan@live.com','$2a$10$.hktGT/xusiDZoIRCYGDvukz/UoRw6AGhXa87RqmvXwpq4BhPr75S','quastan@live.com',1,19,'Administrator'),('admin','$2a$10$Un4KynrwZ38dqoKC5Wk2/uyvR6BW0ggrmckI8upbuyIYSfDELpo2a','pat9592@yahoo.com',9,20,'Volunteer');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -203,4 +204,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-29  0:01:04
+-- Dump completed on 2019-04-01  1:30:06
