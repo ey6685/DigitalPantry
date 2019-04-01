@@ -210,7 +210,7 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
           ingredient_name: ingredient_name,
           ingredient_weight: new_weight,
           ingredient_image_path: '/images/' + imagePath,
-          priority: 1
+          priority: priority
         })
         final_id = new_ingredient.ingredient_id
       }
@@ -221,7 +221,7 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
         ingredient_amount: ingredient_amount,
         ingredient_unit_of_measurement: ingredient_unit,
         ingredient_expiration_date: ingredient_date,
-        priority: 1
+        priority: priority
       })
       console.log('ingredient add: \n' + JSON.stringify(new_inv))
     }
