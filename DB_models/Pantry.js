@@ -27,7 +27,7 @@ const Pantry = db.define(
     expire_window: {
       type: Sequelize.INTEGER
     },
-    default_people_cooking_for:{
+    people_cooking_for:{
       type: Sequelize.INTEGER
     }
   },
