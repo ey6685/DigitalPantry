@@ -89,8 +89,10 @@ $(document).on('focusout', '#ingredient_amount_available', function(){
   // Extract digit from new ingredient amount
   var ingredientAmountAvailableDigit = ingredientAmountAvailableString.match(/\d+/)
   // Extract digit from ingredient amount required
-  var ingredientAmountRequiredDigit = ingredientAmountRequiredString.match(/\d+/)
-  if(ingredientAmountAvailableDigit[0] > ingredientAmountRequiredDigit[0]){
+  ingredientAmountRequiredDigit = ingredientAmountRequiredString.match(/\d+/)
+  if(parseInt(ingredientAmountAvailableDigit) >= parseInt(ingredientAmountRequiredDigit)){
+    console.log("AVAILABLE:"+ingredientAmountAvailableDigit)
+    console.log("REQUIRED:"+ingredientAmountRequiredDigit)
     $(this).closest('tr').css('background-color', '#d5f5ee')
     $(this).closest('tr').find('button').remove()
   }
@@ -102,7 +104,8 @@ $(document).on('focusout', '#ingredient_amount_available', function(){
       ingredient_amount: parseInt(ingredientAmountAvailableDigit, 10),
       ingredient_id: ingredientId 
     },
-    success: function () {},
+    success: function () {
+    },
     error: function (err) {
       console.log(err)
     }

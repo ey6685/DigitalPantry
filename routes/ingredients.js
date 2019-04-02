@@ -258,11 +258,14 @@ router.post('/editIngredientAmount', async function editIngredientAmount(req, re
   const ingredientId = req.body.ingredient_id
   const newAmount = req.body.ingredient_amount
   ing_in_stock.update(
+  await ing_in_stock.update(
     {
       ingredient_amount: newAmount
     },
     { where: { ingredient_id: ingredientId, pantry_id: currentPantryId.pantry_id } }
   )
+  console.log("DONE!")
+  res.send('success')
 })
 
 // remove ingredient by id
@@ -280,6 +283,8 @@ router.delete('/remove/', async function remove(req, res) {
       ingredient_unit_of_measurement: unit,
       ingredient_amount: qty
     }
+  }).catch(function handleError(error){
+    console.log(error)
   })
   res.send('success')
 })
