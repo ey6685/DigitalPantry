@@ -7,7 +7,7 @@ block content
 	br
 	br
 	br
-	div(class='container-fluid', class='rounded', style='width: 80%')
+	div(class='container-fluid', class='rounded', style='width: 90%')
 		h1 #{title}
 		br
 		a.btn.btn-default(href='/ingredients/cards')
@@ -59,7 +59,7 @@ block content
 									select.form-control.mt-3(name='ingredientProperties[4]', required)
 										option(value='') Priority Item?
 										option(value='High') Yes
-										option(value='Non') No
+										option(value='Low') No
 								.col-md-1
 									input.btn.btn-primary.mt-3(type='submit', value='Add', class='form-group')
 		table.table.table-dark(class='rounded')
@@ -71,7 +71,7 @@ block content
 					th(scope='col') Total
 					th(scope='col') Measurement
 					th(scope='col') Expiration Date
-					th(scope='col') Priority Item
+					th(scope='col') Item Priority
 					th(scope='col') Action
 			tbody
 				for item in results

@@ -27,18 +27,20 @@ const upload = multer({ storage: storage })
 // GET request to localhost:3000/users/login
 router.get('/showall', async function(req, res) {
   // renders showall_recipes with all the available ingredients
-  const currentUserId  = req.session.passport['user'];
+  const currentUserId = req.session.passport['user']
   var currentPantryId = await User.findOne({
-    attributes: ["pantry_id"],
-    where:{
-      user_id:currentUserId
+    attributes: ['pantry_id'],
+    where: {
+      user_id: currentUserId
     }
   })
   ////////////////////////////////
   // need to add pantry id feching//
   /////////////////////////////////
   db.query(
-    'select ingredients.ingredient_image_path, ingredients.ingredient_id, ingredients.ingredient_name, ingredients.priority, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date from ingredients_in_pantry inner join ingredients on ingredients_in_pantry.ingredient_id = ingredients.ingredient_id and ingredients_in_pantry.ingredient_expiration_date is not null AND ingredient_expiration_date >= CURDATE() and pantry_id=' + currentPantryId.pantry_id+';',
+    'select ingredients.ingredient_image_path, ingredients.ingredient_id, ingredients.ingredient_name, ingredients.priority, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date from ingredients_in_pantry inner join ingredients on ingredients_in_pantry.ingredient_id = ingredients.ingredient_id and ingredients_in_pantry.ingredient_expiration_date is not null AND ingredient_expiration_date >= CURDATE() and pantry_id=' +
+      currentPantryId.pantry_id +
+      ';',
     function(err, results) {
       for (key in results) {
         results[key]['ingredient_expiration_date'] = moment(
@@ -117,7 +119,7 @@ router.get('/expired', function(req, res) {
       }
       if (err) throw err
       res.render('expired_ingredients_np', {
-        title: 'Your Ingredients',
+        title: 'Your Expired Ingredients',
         results: results
       })
     }
@@ -128,7 +130,7 @@ router.get('/expired', function(req, res) {
 // GET request to localhost:3000/ingredients/add
 router.get('/add', function(req, res) {
   res.render('add_ingredient', {
-    title: 'Add Ingredient'
+    title: 'Add Ingredients'
   })
 })
 
@@ -146,7 +148,7 @@ router.get('/expiredAdmin', function expiredTable(req, res) {
       }
       if (err) throw err
       res.render('expiredAdmin_ingredients', {
-        title: 'Expired Ingredients',
+        title: 'Your Expired Ingredients',
         results: results
       })
     }
@@ -163,7 +165,6 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
     gm(req.file.path) // uses graphicsmagic and takes in image path
       .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
       .write(req.file.path, err => {
-
         fs.rename(req.file.path, './public/images/' + currentDate + '.jpg', function(err) {
           if (err) throw err
           console.log('File Renamed.')
@@ -173,7 +174,6 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
           console.log(err)
         }
       })
-
   } else {
     var imagePath = 'placeholder.jpg'
     console.log('File Upload Failed')
