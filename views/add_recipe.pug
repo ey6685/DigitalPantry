@@ -8,7 +8,7 @@ block content
 	br
 	br
 	div(class='container-fluid', class='rounded', style='width: 90%')
-		h1 #{title}
+		h1.dp-title-text #{title}
 		hr
 		br
 		form(method= 'POST', action= '/recipes/add', class= 'form', enctype="multipart/form-data")
@@ -35,7 +35,7 @@ block content
 						option(value='tbsp.') Tablespoon
 						option(value='tsp.') Teaspoon
 			#recipe-container
-			button.btn.btn-secondary(type='button' onclick='addIngredient()', id='add-ingredient-recipe') <b>+</b>
+			button.btn.dp-btn-secondary(type='button' onclick='addIngredient()', id='add-ingredient-recipe') <b>+</b>
 			.form-row
 				.col-md-7
 					br
@@ -54,7 +54,7 @@ block content
 						img#output
 					.form-group
 						input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='form-group')
-			input.btn.btn-primary(type='submit', value='Add Recipe', class='form-group', id='submit-recipe')
+			input.btn.dp-btn-primary(type='submit', value='Add Recipe', class='form-group', id='submit-recipe')
 
 
 		script.
