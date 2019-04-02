@@ -29,6 +29,7 @@ html
 				height: 100%;
 				overflow: auto;
 				box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+				display: block !important;
 			}
 			.nav a{
 				display: block;
@@ -36,23 +37,13 @@ html
 				padding: 16px;
 				text-decoration: none;
 			}
-			.nav a.active{
+			.nav li.active{
 				background-color: #4CAF50;
 				color: white;
 			}
-			.nav a:hover:not(.active){
+			.nav-item:hover:not(.active){
 				background-color: #555;
 				color: white;
-			}
-			.sidebar-sticky {
-				padding-top:50px;
-				margin: 0;
-				padding: 0;
-				position:fixed;
-				/*height is 100% - the footer height*/
-				height: 100%;
-				box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-				overflow: auto;
 			}
 			main{
 				margin-bottom:100px;
@@ -70,10 +61,12 @@ html
 				padding-right:10px;
 				padding-left:10px;
 				border-bottom:1px solid black;
+				width: 100%;
 			}
 			.header{
 				text-align:center;
 				font-size:25px;
+				
 			}
 			.fa-spoon{
 				margin-left:5px;
@@ -108,8 +101,14 @@ html
 				.filler{
 					display: collapse;
 				}
+				.nav-item{
+					width: 100px;
+				}
 			}
 			.filler{
+			}
+			.selected{
+				background-color:orange;
 			}
 		link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
 		link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
@@ -162,22 +161,6 @@ html
 					a.nav-link(href='/users/logout')
 						i.fas.fa-sign-out-alt
 						| Logout
-				li.filler
-					br
-					br
-					br
-					br
-					br
-					br
-					br
-					br
-					br
-					br
-					br
-					br
-					br
-					br
-					br
 				a.btn.symbol(href='/users/settings')
 					i.fa.fa-cogs.fa-2x
 		.containter
@@ -195,3 +178,5 @@ html
 						a(href='#') Support
 		script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
 		script(src="/js/main.js")
+		script.
+			$(`a[class='nav-link'][href='${location.pathname}']`).parent().addClass("selected");
