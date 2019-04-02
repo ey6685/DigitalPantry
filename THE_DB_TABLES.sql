@@ -39,7 +39,38 @@ CREATE TABLE `ingredients` (
 
 LOCK TABLES `ingredients` WRITE;
 /*!40000 ALTER TABLE `ingredients` DISABLE KEYS */;
-INSERT INTO `ingredients` VALUES (1,'Chicken',3,'/images/chicken.jpg',0,'Yes'),(2,'Canned Black Beans',1,'/images/black_beans.jpg',0,'No'),(3,'Carrot',3,'/images/placeholder.jpg',0,'Yes'),(4,'Potato chips',1,'/images/placeholder.jpg',0,'No'),(5,'Ground Pepper',0,'/images/placeholder.jpg',0,'No'),(6,'Chicken Broth',3,'/images/placeholder.jpg',0,'No'),(7,'Canned Tuna',1,'/images/placeholder.jpg',0,'No'),(8,'Frozen Mixed Vegetables',1,'/images/placeholder.jpg',0,'No'),(9,'Slice Mozzarella Cheeze',2,'/images/placeholder.jpg',0,'No'),(10,'Condensed Ckicken Soup',1,'/images/condensed_chicken.jpg',0,'No'),(11,'Water',0,'/images/water.jpg',0,'No'),(12,'Mixed Vegetables',2,'/images/mixed_veggies.jpg',0,'No'),(13,'Cream of Chicken Soup',1,'/images/placeholder.jpg',0,'No'),(14,'Milk',3,'/images/placeholder.jpg',0,'Yes'),(15,'Biscuits Mix',1,'/images/placeholder.jpg',0,'No'),(16,'Noodles',1,'/images/placeholder.jpg',0,'No'),(17,'Green Peas',2,'/images/placeholder.jpg',0,'No'),(18,'Cream of Mushroom Soup',1,'/images/placeholder.jpg',0,'No'),(19,'Tuna',2,'/images/placeholder.jpg',0,'No'),(20,'Onions',2,'/images/placeholder.jpg',0,'No'),(21,'French Bread',3,'/images/placeholder.jpg',0,'No'),(22,'Shredded Mozzarella Cheese',2,'/images/placeholder.jpg',0,'No'),(23,'Mayonnaise',1,'/images/placeholder.jpg',0,'No'),(24,'Corn',2,'/images/corn.jpg',0,'No'),(25,'Tortilla Chips',1,'/images/tortilla_chips.jpg',0,'No'),(26,'Salsa',2,'/images/placeholder.jpg',0,'No'),(27,'Canned Cream Corn',2,'/images/corn.jpg',0,'No'),(28,'Vegetable Oil',1,'/images/placeholder.jpg',0,'No'),(29,'Garlic',2,'/images/placeholder.jpg',0,'No'),(30,'Turkey',3,'/images/placeholder.jpg',0,'No'),(31,'Canned Diced Tomatoes',1,'/images/placeholder.jpg',0,'No'),(32,'Chili Powder',1,'/images/placeholder.jpg',0,'No');
+INSERT INTO `ingredients` VALUES (1, 'Chicken', 3, '/images/1554173732619.jpg', 0, 'Yes'),
+(2, 'Canned Black Beans', 1, '/images/1554174096072.jpg', 0, 'No'),
+(3, 'Carrot', 3, '/images/placeholder.jpg', 0, 'Yes'),
+(4, 'Potato chips', 1, '/images/placeholder.jpg', 0, 'No'),
+(5, 'Ground Pepper', 0, '/images/1554174281993.jpg', 0, 'No'),
+(6, 'Chicken Broth', 3, '/images/placeholder.jpg', 0, 'No'),
+(7, 'Canned Tuna', 1, '/images/placeholder.jpg', 0, 'No'),
+(8, 'Frozen Mixed Vegetables', 1, '/images/placeholder.jpg', 0, 'No'),
+(9, 'Slice Mozzarella Cheeze', 2, '/images/1554174459952.jpg', 0, 'No'),
+(10, 'Condensed Ckicken Soup', 1, '/images/condensed_chicken.jpg', 0, 'No'),
+(11, 'Water', 0, '/images/water.jpg', 0, 'No'),
+(12, 'Mixed Vegetables', 2, '/images/1554173885043.jpg', 0, 'No'),
+(13, 'Cream of Chicken Soup', 1, '/images/1554174059749.jpg', 0, 'No'),
+(14, 'Milk', 3, '/images/1554174134107.jpg', 0, 'Yes'),
+(15, 'Biscuits Mix', 1, '/images/1554174237381.jpg', 0, 'No'),
+(16, 'Noodles', 1, '/images/1554174318249.jpg', 0, 'No'),
+(17, 'Green Peas', 2, '/images/1554175099505.jpg', 0, 'No'),
+(18, 'Cream of Mushroom Soup', 1, '/images/1554174951929.jpg', 0, 'No'),
+(19, 'Tuna', 2, '/images/1554174668636.jpg', 0, 'No'),
+(20, 'Onions', 2, '/images/1554175725241.jpg', 0, 'No'),
+(21, 'French Bread', 3, '/images/1554175756719.jpg', 0, 'No'),
+(22, 'Shredded Mozzarella Cheese', 2, '/images/1554174459952.jpg', 0, 'No'),
+(23, 'Mayonnaise', 1, '/images/1554175695449.jpg', 0, 'No'),
+(24, 'Corn', 2, '/images/1554174840465.jpg', 0, 'No'),
+(25, 'Tortilla Chips', 1, '/images/tortilla_chips.jpg', 0, 'No'),
+(26, 'Salsa', 2, '/images/1554175182305.jpg', 0, 'No'),
+(27, 'Canned Cream Corn', 2, '/images/1554174840465.jpg', 0, 'No'),
+(28, 'Vegetable Oil', 1, '/images/1554175925139.jpg', 0, 'No'),
+(29, 'Garlic', 2, '/images/1554175948246.jpg', 0, 'No'),
+(30, 'Turkey', 3, '/images/1554175982930.jpg', 0, 'No'),
+(31, 'Canned Diced Tomatoes', 1, '/images/1554176022125.jpg', 0, 'No'),
+(32, 'Chili Powder', 1, '/images/1554174995805.jpg', 0, 'No');
 /*!40000 ALTER TABLE `ingredients` ENABLE KEYS */;
 UNLOCK TABLES;
 
