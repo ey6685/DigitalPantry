@@ -29,6 +29,10 @@ block content
 			color: red;
 			font-weight: bold;
 		}
+		a.morelink:link {color:#58534d; TEXT-DECORATION: none}
+		a.morelink:visited {color:#58534d; TEXT-DECORATION: none}
+		a.morelink:active {color:#f5f5dc; TEXT-DECORATION: none}
+		a.morelink:hover {color:#f5f5dc; TEXT-DECORATION: none}
 	div(class='container-fluid', class='rounded', style='width: 80%')
 		br
 		br
@@ -71,52 +75,57 @@ block content
 
 	script.
 		$(window).on('load', function() {
-			var showChar = 50
-			var previousCharacterLength = 0
-			var recipeStep = -1
-
+			var maxCharactersToShow = 40
+			// For each card
 			$('.card-body').each(function(index) {
-				var fullContent = ""
+				var totalCharacterLength = 0
+				var previousCharacterLength= 0
 				var $steps = $(this).find('.recipeStep')
-				var ellipsestext = "..."
-				var moretext = "Show more"
-				var lesstext = "Show less"
-				var newStepLength = 0
-				var html = ""
-
+				html = ""
+				console.log($steps)
+				currentStepLength = ""
+				foundHidePoint = false
+				//For each recipe step
 				$.each($steps, function (index, value) {
-					newStepLength = newStepLength + value.innerText.length
-					console.log("new step length")
-					console.log(newStepLength)
-					if (showChar < newStepLength)
-					{
-						console.log("VIOLATION")
-						//- difference = newStepLength - previousCharacterLength
-						//- var c = fullContent.substr(0, showChar);
-						var h = fullContent.substr(showChar, fullContent.length - showChar);
-						//- recipeStep = index
-						html = html + '<span class="moreellipses">' + ellipsestext+ '</span><span class="morecontent"><span>' + h + '</span><a href="" class="morelink">' + moretext + '</a></span>';
-						return false
+					// Text content of a recipe step
+					fullContent = value.textContent
+					// number of characters in the current step
+					currentStepLength = currentStepLength + value.innerText.length
+					// update total number of characters
+					totalCharacterLength = totalCharacterLength + currentStepLength
+					if(totalCharacterLength > maxCharactersToShow && foundHidePoint == false){
+						console.log("FOUND BREAK POINT")
+						var difference =  maxCharactersToShow - previousCharacterLength
+						var stillHaveSpaceFor = fullContent.substr(0, difference)
+						var overflow = fullContent.substr(difference, currentStepLength-difference);
+						html = html + `<p><span>${stillHaveSpaceFor}</span><span class='extra' style='display:none'>${overflow}</span></p>`
+						foundHidePoint = true
+					}
+					else if(totalCharacterLength > maxCharactersToShow && foundHidePoint == true){
+						console.log("AFTER BREAK POINT")
+						html = html + `<p class='overflow' style='display:none'>${fullContent}</p>`
 					}
 					else{
-						console.log("NOT VIOLATING")
-						//- previousCharacterLength = previousCharacterLength + newStepLength
-						html = html + `<p>${value.innerText}</p>`
+						html = html + `<p>${fullContent}</p>`
 					}
-					//- fullContent = fullContent + value.innerText
-					console.log("html")
-					console.log(html)
+					previousCharacterLength = previousCharacterLength + currentStepLength
 				});
-				//- if(fullContent.length > showChar) {
-		
-				//- 	var c = fullContent.substr(0, showChar);
-				//- 	var h = fullContent.substr(showChar, fullContent.length - showChar);
-		
-					//- var html = c + '<span class="moreellipses">' + ellipsestext+ '</span><span class="morecontent"><span>' + h + '</span><a href="" class="morelink">' + moretext + '</a></span>';
-					console.log(html)
-					$(this).html(html);
-				//- }
+				html = html + `<a href="" class="morelink">Show more</a>`
+				$(this).html(html)
 			});
+			$(".morelink").click(function(e){
+				e.preventDefault() 
+				if($(this).hasClass("less")){
+					$(this).removeClass("less")
+					$(this).closest('.card-body').find('.overflow').hide()
+					$(this).closest('.card-body').find('.extra').hide()
+				}else{
+					$(this).addClass("less")
+					$(this).text('Show less')
+					$(this).closest('.card-body').find('.overflow').show()
+					$(this).closest('.card-body').find('.extra').show()
+				}
+			})
 		})
 		//This will trigger once user stars to type text into a search bar
 		function search() {
