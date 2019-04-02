@@ -98,19 +98,18 @@ block content
 									h4(id='recipeName', lass='card-title') #{recipe.recipe_name}
 									br
 									p(class="card-text") Cooked #{recipe.num_of_times_cooked} times.
-									br
-									p(class='card-text') Ingredients: #{(recipe.num_of_ingredients_on_hand)} out of #{recipe.num_of_ingredients}
+									p(class='card-text') You have #{(recipe.num_of_ingredients_on_hand)} out of #{recipe.num_of_ingredients} ingredients
 
 									//- For each steps inside of the array of steps
-									for step in recipe.recipe_directions
-										p.card-text.recipeStep= step
+									//- for step in recipe.recipe_directions
+									//- 	p.card-text.recipeStep= step
 									//- btn_card is a custom class used for CSS for buttons
 								.card-footer
 									.container
 										.row
 											.col
 												.text-center
-													button.btn.btn-primary(class='test', id='showRecipeDetails', type='button', data-toggle='modal', data-target='#viewRecipeDetails') Details
+													button.btn.btn-primary.mr-3(class='test', id='showRecipeDetails', type='button', data-toggle='modal', data-target='#viewRecipeDetails') Details
 													button.btn.btn-primary(recipe-id=rid, id='card-one', type='button') Cook It!
 			br
 

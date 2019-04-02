@@ -16,6 +16,12 @@ block content
 			background-color: #a2f02d;
 			color:black;
 		}
+		.morecontent span {
+			display: none;
+		}
+		.morelink {
+			display: block;
+		}
 		.delete-button{
 			outline-style: solid;
 			outline-color: red;
@@ -23,6 +29,10 @@ block content
 			color: red;
 			font-weight: bold;
 		}
+		a.morelink:link {color:#58534d; TEXT-DECORATION: none}
+		a.morelink:visited {color:#58534d; TEXT-DECORATION: none}
+		a.morelink:active {color:#f5f5dc; TEXT-DECORATION: none}
+		a.morelink:hover {color:#f5f5dc; TEXT-DECORATION: none}
 	div(class='container-fluid', class='rounded', style='width: 80%')
 		br
 		br
@@ -96,8 +106,9 @@ block content
 						div(class='card-body')
 							h5(class='card-title') #{recipe.recipe_name}
 							//- For each steps inside of the array of steps
-							for step in recipe_steps[i]
-								p(class='card-text')= step
+							for step,x in recipe_steps[i]
+								p(id='recipeStep'+x class='recipeStep' class='card-text')= step
+								p#step
 						div(class='card-foot', padding='.75rem')
 							center
 								a.btn.btn-danger.delete-recipe.mr-2(,href='#', data-id=recipe.recipe_id, id= 'delete-button') DELETE
@@ -140,6 +151,59 @@ block content
 			container.appendChild(element);
 			i++
 		}
+		$(window).on('load', function() {
+			var maxCharactersToShow = 40
+			// For each card
+			$('.card-body').each(function(index) {
+				var totalCharacterLength = 0
+				var previousCharacterLength= 0
+				var $steps = $(this).find('.recipeStep')
+				html = ""
+				console.log($steps)
+				currentStepLength = ""
+				foundHidePoint = false
+				//For each recipe step
+				$.each($steps, function (index, value) {
+					// Text content of a recipe step
+					fullContent = value.textContent
+					// number of characters in the current step
+					currentStepLength = currentStepLength + value.innerText.length
+					// update total number of characters
+					totalCharacterLength = totalCharacterLength + currentStepLength
+					if(totalCharacterLength > maxCharactersToShow && foundHidePoint == false){
+						console.log("FOUND BREAK POINT")
+						var difference =  maxCharactersToShow - previousCharacterLength
+						var stillHaveSpaceFor = fullContent.substr(0, difference)
+						var overflow = fullContent.substr(difference, currentStepLength-difference);
+						html = html + `<p><span>${stillHaveSpaceFor}</span><span class='extra' style='display:none'>${overflow}</span></p>`
+						foundHidePoint = true
+					}
+					else if(totalCharacterLength > maxCharactersToShow && foundHidePoint == true){
+						console.log("AFTER BREAK POINT")
+						html = html + `<p class='overflow' style='display:none'>${fullContent}</p>`
+					}
+					else{
+						html = html + `<p>${fullContent}</p>`
+					}
+					previousCharacterLength = previousCharacterLength + currentStepLength
+				});
+				html = html + `<a href="" class="morelink">Show more</a>`
+				$(this).html(html)
+			});
+			$(".morelink").click(function(e){
+				e.preventDefault() 
+				if($(this).hasClass("less")){
+					$(this).removeClass("less")
+					$(this).closest('.card-body').find('.overflow').hide()
+					$(this).closest('.card-body').find('.extra').hide()
+				}else{
+					$(this).addClass("less")
+					$(this).text('Show less')
+					$(this).closest('.card-body').find('.overflow').show()
+					$(this).closest('.card-body').find('.extra').show()
+				}
+			})
+		})
 		//This will trigger once user stars to type text into a search bar
 		function search() {
 			// Declare variables

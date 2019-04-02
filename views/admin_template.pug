@@ -19,18 +19,31 @@ html
 				box-shadow: 0 50vh 0 50vh #343a40;
 			}
 			.nav{
-				top:0;
-				bottom:0;
-				width:200px;
-			}
-			.sidebar-sticky {
-				padding-top:50px;
-				position:fixed;
-				float:left;
-				/*height is 100% - the footer height*/
+				padding-top: 50px;
+				margin-bottom: 100px;
+				margin: 0;
+				padding: 0;
+				width: 250px;
+				background-color: #f1f1f1;
+				position: fixed;
 				height: 100%;
-				padding-top: 5px;
+				overflow: auto;
 				box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+				display: block !important;
+			}
+			.nav a{
+				display: block;
+				color: white;
+				padding: 16px;
+				text-decoration: none;
+			}
+			.nav li.active{
+				background-color: #4CAF50;
+				color: white;
+			}
+			.nav-item:hover:not(.active){
+				background-color: #555;
+				color: white;
 			}
 			main{
 				margin-bottom:100px;
@@ -48,10 +61,12 @@ html
 				padding-right:10px;
 				padding-left:10px;
 				border-bottom:1px solid black;
+				width: 100%;
 			}
 			.header{
 				text-align:center;
 				font-size:25px;
+				
 			}
 			.fa-spoon{
 				margin-left:5px;
@@ -68,6 +83,33 @@ html
 				bottom:60px;
 				color:white;
 			}
+			div.content{
+				margin-left: 200px;
+				padding-left: 150px;
+			}
+			@media screen and (max-width: 992px){
+				.nav{
+					width: 100%;
+					height: auto;
+					position: relative;
+				}
+				.nav a {float: left;}
+				div.content {
+					margin-left: 0;
+					padding-left: 16px;
+				}
+				.filler{
+					display: collapse;
+				}
+				.nav-item{
+					width: 100px;
+				}
+			}
+			.filler{
+			}
+			.selected{
+				background-color:orange;
+			}
 		link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
 		link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
 		link(rel='stylesheet' type='text/css' href='/css/digital_pantry.css')
@@ -76,8 +118,8 @@ html
 		//- script(type='text/javascript', src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js')
 	body
 		.nav
-			.sidebar-sticky.bg-secondary.text-white
-				ul.nav.flex-column
+			.nav.bg-secondary.text-white
+				ul.flex-column
 				li.header
 					div(style='display: table-row')
 						img.mt-3.ml-3.mb-2.mr-3(src='/images/milk.jpg', alt='image', width='50', height='50', padding-right='30px')
@@ -136,3 +178,5 @@ html
 						a(href='#') Support
 		script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
 		script(src="/js/main.js")
+		script.
+			$(`a[class='nav-link'][href='${location.pathname}']`).parent().addClass("selected");
