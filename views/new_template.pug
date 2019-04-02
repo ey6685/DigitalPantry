@@ -1,0 +1,121 @@
+doctype html
+html
+	head
+		style.
+			.nav-link{
+				color: white;
+			}
+			.nav-item{
+				padding-right: 10px;
+				padding-left: 10px;
+				border-bottom: 1px solid black;
+			}
+			.sidebar{
+				padding-top: 50px;
+				margin: 0;
+				padding: 0;
+				width: 200px;
+				background-color: #f1f1f1;
+				position: fixed;
+				height: 100%;
+				overflow: auto;
+				box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+			}
+			.sidebar a{
+				display: block;
+				color: black;
+				padding: 16px;
+				text-decoration: none;
+			}
+			.sidebar a.active{
+				background-color: #4CAF50;
+				color: white;
+			}
+			.sidebar a:hover:not(.active){
+				background-color: #555;
+				color: white;
+			}
+			div.content{
+				margin-left: 200px;
+				padding-left: 150px;
+			}
+			@media screen and (max-width: 992px){
+				.sidebar{
+					width: 100%;
+					height: auto;
+					position: relative;
+				}
+				.sidebar a {float: left;}
+				div.content{
+					margin-left:0;
+					padding-left: 16px;
+				}
+			}
+			hr{
+				background-color: white;
+				margin-bottom: 0px !important;
+				margin-bottom: 0px !important;
+				padding-bottom: 0px !important;
+			}
+			i{
+				padding-right: 15px;
+				width: 35px;
+				color: white;
+			}
+			.symbol{
+				position: absolute;
+				bottom: 60px;
+				color: white;
+			}
+			
+
+
+		link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+		link(rel='stylesheet' href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous")
+		script(src='/bower_components/jquery/dist/jquery.js')
+	body
+		.sidebar.bg-secondary.text.white
+			ul.flex-column
+			header
+				div(style='display: table-row')
+				img.mt-3.ml-3.mb-2.mr-3(src='/images/milk.jpg', alt='image', width='50', height='50', padding-right='30px')
+				|Digital Pantry
+			hr
+			nav-item
+				a.nav-link(href='/users/dashboard')
+					i.fas.fa-tachometer-alt
+						|Home
+			a(href='/ingredients/showall')
+				|Your Ingredients
+			a(href='/ingredients/expired')
+				|Expired Ingredients
+			a(href='/ingredients/add')
+				|Add Ingredients
+			a(href='/recipes/showall')
+				|Your Recipes
+			a(href='/recipes/add')
+				|Add Recipe
+			a(href='/recipes/showCommunityRecipes')
+				|Community Recipes
+			a(href='/users/adminPanel')
+				|Admin Panel
+			a(href='/users/logout')
+				|Logout
+			a(href='/users/settings')
+				|User Settings
+			script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
+			script(src="/js/main.js")
+		.containter
+			block content
+			footer.footer.bg-dark.text-light
+				p.mb-1 © 2019 Digital Pantry
+				ul.list-inline
+					//- TODO link these to proper files
+					li.list-inline-item
+						a(href='#') Privacy
+					li.list-inline-item
+						a(href='#') Terms
+					li.list-inline-item
+						a(href='#') Support
+
+
