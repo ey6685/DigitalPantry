@@ -299,6 +299,17 @@ router.get('/getPantryRecipes', async function getPantryRecipes(req, res) {
   res.json(result)
 })
 
+router.get('/getRecipeDirections/:id', async function getDirections(req, res){
+  const recipeId = req.params.id
+  const directions = await recipe_t.findOne({
+    attributes:['recipe_directions'],
+    where:{recipe_id:recipeId}
+  })
+  const recipe_steps = await steps.parse_recipe_directions_by_string(directions.recipe_directions)
+  let recipeStepsArray = recipe_steps.split('${<br>}')
+  res.json(recipeStepsArray)
+})
+
 //Share a recipe into community
 router.post('/share', async function(req, res){
     share_query=`UPDATE recipes SET sharable=1 WHERE recipe_name='${req.body.recipe_name}';`
@@ -335,16 +346,35 @@ router.post('/edit', async function editRecipe(req, res) {
   const newIngredientNames = req.body.ingredientName
   const newIngredientQtys = req.body.ingredientQty
   const newIngredientMeasurements = req.body.ingredientMeasurement
+  const recipeDirections = req.body.recipeDirections
 
-  // Get current user from session auth
-  const userId = req.session.passport['user']
-  // Get pantry ID which user belongs to
-  const pantryId = await User.findOne({
-    attributes: ['pantry_id'],
-    where: {
-      user_id: userId
+  if(recipeDirections != ""){
+    let replaceNewLine = ''
+    for (char in recipeDirections) {
+      replaceNewLine = replaceNewLine.concat(
+        recipeDirections[char].replace('\r', '').replace('\n', '#')
+      );
+      console.log(recipeDirections)
     }
-  })
+
+    recipe_t.update({
+      recipe_directions:replaceNewLine
+    },
+    {where:{recipe_id:recipeId}}
+    ).catch(function (err){
+      console.log(err)
+    })
+  }
+
+    // Get current user from session auth
+    const userId = req.session.passport['user']
+    // Get pantry ID which user belongs to
+    const pantryId = await User.findOne({
+      attributes: ['pantry_id'],
+      where: {
+        user_id: userId
+      }
+    })
 
   // Check if user has added new ingredients
   if(newIngredientNames != undefined && newIngredientNames != ""){
@@ -431,7 +461,7 @@ router.post('/edit', async function editRecipe(req, res) {
         else if (data[key][1] == ""){
           message = message + "Missing value for quantity"
         }
-        req.flash('error', "INGREDIENT NAME: " + key + "  ERROR: " + message)
+        // req.flash('error', "INGREDIENT NAME: " + key + "  ERROR: " + message)
       }
       // Show how many ingredients have been updated
     }

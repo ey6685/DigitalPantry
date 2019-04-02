@@ -71,7 +71,7 @@ block content
 							for step,x in recipe_steps[i]
 								p(id='recipeStep'+x class='recipeStep' class='card-text')= step
 						div(class='card-foot', padding='.75rem')
-							button.btn_card.btn.delete-button(class='delete-recipe', data-id= recipe.recipe_id, type='button', id='delete-showrec') Delete Recipe
+							button.btn_card.btn.btn-outline-danger(class='delete-recipe', data-id= recipe.recipe_id, type='button', id='delete-showrec') Delete Recipe
 
 	script.
 		$(window).on('load', function() {
