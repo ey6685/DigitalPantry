@@ -101,8 +101,8 @@ block content
 									p(class='card-text') You have #{(recipe.num_of_ingredients_on_hand)} out of #{recipe.num_of_ingredients} ingredients
 
 									//- For each steps inside of the array of steps
-									//- for step in recipe.recipe_directions
-									//- 	p.card-text.recipeStep= step
+									for step in recipe.recipe_directions
+										p(style='display:none').card-text.recipeStep= step
 									//- btn_card is a custom class used for CSS for buttons
 								.card-footer
 									.container
