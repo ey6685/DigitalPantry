@@ -58,6 +58,14 @@
   background-color: #d93711 !important;
   border-color: #d93711 !important;
 }
+.dp-container{
+  background-color: #faf8eb !important;
+  color: #eeaf2c !important;
+}
+.dp-btn-orange-white-text{
+  background-color: #eeaf2c !important;
+  color:white !important;
+}
 .dp-nav-text {
   color: #eeaf2c !important;
 }
