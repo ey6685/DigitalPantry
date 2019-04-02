@@ -60,13 +60,18 @@
   background-color: #d93711 !important;
   border-color: #d93711 !important;
 }
-.dp-container{
+.dp-container {
   background-color: #faf8eb !important;
   color: #eeaf2c !important;
 }
-.dp-btn-orange-white-text{
+.dp-btn-orange-white-text {
   background-color: #eeaf2c !important;
-  color:white !important;
+  color: white !important;
+}
+.dp-btn-edit {
+  background-color: #570573 !important;
+  border-color: #eeaf2c !important;
+  color: white !important;
 }
 .dp-nav-text {
   color: #eeaf2c !important;
@@ -84,7 +89,5 @@
 }
 .dp-highlight-green {
   background-color: #ebf5d6 !important;
-  color: #570573 !important;
+  color: white !important;
 }
-
-/* f1cefd */
