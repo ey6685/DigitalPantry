@@ -257,7 +257,6 @@ router.post('/editIngredientAmount', async function editIngredientAmount(req, re
   })
   const ingredientId = req.body.ingredient_id
   const newAmount = req.body.ingredient_amount
-  ing_in_stock.update(
   await ing_in_stock.update(
     {
       ingredient_amount: newAmount

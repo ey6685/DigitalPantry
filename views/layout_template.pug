@@ -3,17 +3,25 @@ html
 	head
 		//-Style for the sticky footer
 		style.
-			.footer {
+			footer {
 				left: 0;
 				bottom: 0;
 				width: 100%;
 				text-align: center;
-				box-shadow: 0 50vh 0 50vh #343a40;
+				box-shadow: 0 50vh 0 50vh #570573;
+				background-color: #570573 !important;
+				color: white !important;
 			}
 			.btn{
 				/*Adds button separation so they are not glued to each other
 				Used for the signin and register pages*/
 				margin: 0px 10px 0px 0px;
+			}
+			a{
+				color:#eeaf2c !important
+			}
+			nav{
+				background-color: #570573 !important;
 			}
 		title Digital Pantry
 		link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
@@ -25,21 +33,17 @@ html
 		//- Navigation section
 		//- TODO when window is small navigation should display a dropdown
 		//- Have to include some javascript files from bootstrap folder and i dont know which ones
-		nav.navbar.navbar-expand-md.navbar-dark.bg-dark
+		nav.navbar.navbar-expand-md
 			a.navbar-brand(href='/') Food Pantry
 			button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
 				span.navbar-toggler-icon
 			#navbarCollapse.collapse.navbar-collapse
 				if !user
-					ul.navbar-nav.mr-auto
-						li.nnav-item.active
-							a.nav-link(href='/users/register')
-								| Register
+					a.nav-link(href='/users/register')
+						| Register
 				else
-					ul.navbar-nav.mr-auto
-						li.nnav-item.active
-							a.nav-link(href='/users/logout')
-								| Logout
+					a.nav-link(href='/users/logout')
+						| Logout
 		.container
 			br
 			//- block content will get replaced with another .pug file
@@ -48,7 +52,7 @@ html
 			br
 			br
 			br
-			footer.footer.bg-dark.text-light
+			footer
 				p.mb-1 © 2019 Digital Pantry
 				ul.list-inline
 					//- TODO link these to proper files
