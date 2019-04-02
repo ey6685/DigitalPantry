@@ -233,7 +233,7 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
 // GET request to localhost:3000/ingredients/cards
 router.get('/cards', function showCards(req, res) {
   const query =
-    'select ingredients.ingredient_image_path, ingredients.ingredient_id, ingredients.ingredient_name, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date from ingredients_in_pantry inner join ingredients on ingredients_in_pantry.ingredient_id = ingredients.ingredient_id and ingredients_in_pantry.ingredient_expiration_date is not null AND ingredient_expiration_date >= CURDATE();'
+    'select ingredients.ingredient_image_path, ingredients.priority, ingredients.ingredient_id, ingredients.ingredient_name, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date from ingredients_in_pantry inner join ingredients on ingredients_in_pantry.ingredient_id = ingredients.ingredient_id and ingredients_in_pantry.ingredient_expiration_date is not null AND ingredient_expiration_date >= CURDATE();'
   db.query(query, function getResults(err, results) {
     for (key in results) {
       results[key]['ingredient_expiration_date'] = moment(
