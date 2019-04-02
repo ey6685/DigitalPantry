@@ -77,7 +77,7 @@ router.get('/showall', async function(req, res){
         {
             ingredient_list[i] = ingredient_list[i].split("#");
         }
-        var data = await ingredient_t.findAll()
+        var data = await ingredient_t.findAll({})
         res.render('showall_recipes', {
             title: 'Your Recipes',
             results: recipe_res,
@@ -100,10 +100,48 @@ router.get('/showRecipes', async function showRecipes(req, res) {
     const recipe_steps = await steps.parse_recipe_directions_by_string(results[every_recipe_directions].recipe_directions);
     recipeStepsArray.push(recipe_steps.split('${<br>}'));
   }
+  //code to copy to get the edit menu to work.
+  var ingredient_list = new Array(results.length).fill('');
+        console.log("starting ingreditents list: \n" + ingredient_list);
+  for (var i  = 0;i<results.length;i++)
+  {
+    //grabs the ingredient names for the ingredients tables for each recipe id
+    //and stores them in to ingredients list in a formated str where
+    //each ingredient is seperated by a #
+    var IiR_res = await IiR_t.findAll({
+      where:{
+          recipe_id: results[i].recipe_id
+      }
+  });
+  console.log("\ningredients for recipe " + results[i].recipe_id +'\n' + JSON.stringify(IiR_res));
+  for(var o=0; o<IiR_res.length;o++)
+  {
+      var new_ingredient = await ingredient_t.findOne({
+          attributes: ['ingredient_name'],
+          where:{
+              ingredient_id: IiR_res[o].ingredient_id
+          }
+      })
+      if(ingredient_list[i] != '')
+          ingredient_list[i] = ingredient_list[i] + "#";
+      ingredient_list[i] = ingredient_list[i]   + new_ingredient.ingredient_name + ", " + IiR_res[o].amount_of_ingredient_needed + " " + IiR_res[o].ingredient_unit_of_measurement; 
+  }
+}
+for(var i =0; i<ingredient_list.length; i++)
+{
+  ingredient_list[i] = ingredient_list[i].split("#");
+}
+  
+  var ings = await ingredient_t.findAll({})
+  console.log(JSON.stringify(ingredient_list))
+ 
   res.render('showRecipes', {
     title: 'Your Recipes',
-    data: results,
-    recipe_steps: recipeStepsArray
+    results: results,
+    str_res: JSON.stringify(results),
+    recipe_steps: recipeStepsArray,
+    ingredients: ingredient_list,
+    data: JSON.stringify(ings)
   })
 })
 
