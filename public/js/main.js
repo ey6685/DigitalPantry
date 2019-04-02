@@ -246,6 +246,7 @@ $('#editRecipeCard').on('show.bs.modal', function (event) {
   console.log("ingredient_list: " + $ingredient_list)
   //pop up menu time
   $('h4').text('Editing Recipe - ' + $recipe_name)
+  $('h4').addClass('data-id')
   $('#recipe-name').attr('placeholder', $recipe_name)
   $('#recipe-size').attr('placeholder', $people)
   $('#ingredient-rows').html('')
