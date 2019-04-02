@@ -28,7 +28,7 @@ CREATE TABLE `ingredients` (
   `ingredient_weight` int(11) DEFAULT NULL,
   `ingredient_image_path` text,
   `ingredient_num_times_cooked` int(11) DEFAULT '0',
-  `priority` enum('Yes','No') DEFAULT 'No',
+  `priority` enum('High','Non') DEFAULT 'Non',
   PRIMARY KEY (`ingredient_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -39,7 +39,39 @@ CREATE TABLE `ingredients` (
 
 LOCK TABLES `ingredients` WRITE;
 /*!40000 ALTER TABLE `ingredients` DISABLE KEYS */;
-INSERT INTO `ingredients` VALUES (1,'Chicken',3,'/images/chicken.jpg',0,'Yes'),(2,'Canned Black Beans',1,'/images/black_beans.jpg',0,'No'),(3,'Carrot',3,'/images/placeholder.jpg',0,'Yes'),(4,'Potato chips',1,'/images/placeholder.jpg',0,'No'),(5,'Ground Pepper',0,'/images/placeholder.jpg',0,'No'),(6,'Chicken Broth',3,'/images/placeholder.jpg',0,'No'),(7,'Canned Tuna',1,'/images/placeholder.jpg',0,'No'),(8,'Frozen Mixed Vegetables',1,'/images/placeholder.jpg',0,'No'),(9,'Slice Mozzarella Cheeze',2,'/images/placeholder.jpg',0,'No'),(10,'Condensed Ckicken Soup',1,'/images/condensed_chicken.jpg',0,'No'),(11,'Water',0,'/images/water.jpg',0,'No'),(12,'Mixed Vegetables',2,'/images/mixed_veggies.jpg',0,'No'),(13,'Cream of Chicken Soup',1,'/images/placeholder.jpg',0,'No'),(14,'Milk',3,'/images/placeholder.jpg',0,'Yes'),(15,'Biscuits Mix',1,'/images/placeholder.jpg',0,'No'),(16,'Noodles',1,'/images/placeholder.jpg',0,'No'),(17,'Green Peas',2,'/images/placeholder.jpg',0,'No'),(18,'Cream of Mushroom Soup',1,'/images/placeholder.jpg',0,'No'),(19,'Tuna',2,'/images/placeholder.jpg',0,'No'),(20,'Onions',2,'/images/placeholder.jpg',0,'No'),(21,'French Bread',3,'/images/placeholder.jpg',0,'No'),(22,'Shredded Mozzarella Cheese',2,'/images/placeholder.jpg',0,'No'),(23,'Mayonnaise',1,'/images/placeholder.jpg',0,'No'),(24,'Corn',2,'/images/corn.jpg',0,'No'),(25,'Tortilla Chips',1,'/images/tortilla_chips.jpg',0,'No'),(26,'Salsa',2,'/images/placeholder.jpg',0,'No'),(27,'Canned Cream Corn',2,'/images/corn.jpg',0,'No'),(28,'Vegetable Oil',1,'/images/placeholder.jpg',0,'No'),(29,'Garlic',2,'/images/placeholder.jpg',0,'No'),(30,'Turkey',3,'/images/placeholder.jpg',0,'No'),(31,'Canned Diced Tomatoes',1,'/images/placeholder.jpg',0,'No'),(32,'Chili Powder',1,'/images/placeholder.jpg',0,'No'),(33,'Popcorn',1,NULL,0,'No');
+INSERT INTO `ingredients` VALUES
+(1, 'Chicken', 3, '/images/1554173732619.jpg', 0, 'High'),
+(2, 'Canned Black Beans', 1, '/images/1554174096072.jpg', 0, 'Non'),
+(3, 'Carrot', 3, '/images/placeholder.jpg', 0, 'Non'),
+(4, 'Potato chips', 1, '/images/placeholder.jpg', 0, 'Non'),
+(5, 'Ground Pepper', 0, '/images/1554174281993.jpg', 0, 'Non'),
+(6, 'Chicken Broth', 3, '/images/placeholder.jpg', 0, 'Non'),
+(7, 'Canned Tuna', 1, '/images/placeholder.jpg', 0, 'Non'),
+(8, 'Frozen Mixed Vegetables', 1, '/images/placeholder.jpg', 0, 'Non'),
+(9, 'Slice Mozzarella Cheeze', 2, '/images/1554174459952.jpg', 0, 'Non'),
+(10, 'Condensed Ckicken Soup', 1, '/images/condensed_chicken.jpg', 0, 'Non'),
+(11, 'Water', 0, '/images/water.jpg', 0, 'Non'),
+(12, 'Mixed Vegetables', 2, '/images/1554173885043.jpg', 0, 'Non'),
+(13, 'Cream of Chicken Soup', 1, '/images/1554174059749.jpg', 0, 'Non'),
+(14, 'Milk', 3, '/images/1554174134107.jpg', 0, 'High'),
+(15, 'Biscuits Mix', 1, '/images/1554174237381.jpg', 0, 'Non'),
+(16, 'Noodles', 1, '/images/1554174318249.jpg', 0, 'Non'),
+(17, 'Green Peas', 2, '/images/1554175099505.jpg', 0, 'Non'),
+(18, 'Cream of Mushroom Soup', 1, '/images/1554174951929.jpg', 0, 'Non'),
+(19, 'Tuna', 2, '/images/1554174668636.jpg', 0, 'High'),
+(20, 'Onions', 2, '/images/1554175725241.jpg', 0, 'Non'),
+(21, 'French Bread', 3, '/images/1554175756719.jpg', 0, 'Non'),
+(22, 'Shredded Mozzarella Cheese', 2, '/images/1554174459952.jpg', 0, 'Non'),
+(23, 'Mayonnaise', 1, '/images/1554175695449.jpg', 0, 'Non'),
+(24, 'Corn', 2, '/images/1554174840465.jpg', 0, 'Non'),
+(25, 'Tortilla Chips', 1, '/images/tortilla_chips.jpg', 0, 'Non'),
+(26, 'Salsa', 2, '/images/1554175182305.jpg', 0, 'Non'),
+(27, 'Canned Cream Corn', 2, '/images/1554174840465.jpg', 0, 'Non'),
+(28, 'Vegetable Oil', 1, '/images/1554175925139.jpg', 0, 'Non'),
+(29, 'Garlic', 2, '/images/1554175948246.jpg', 0, 'Non'),
+(30, 'Turkey', 3, '/images/1554175982930.jpg', 0, 'High'),
+(31, 'Canned Diced Tomatoes', 1, '/images/1554176022125.jpg', 0, 'Non'),
+(32, 'Chili Powder', 1, '/images/1554174995805.jpg', 0, 'Non');
 /*!40000 ALTER TABLE `ingredients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -101,7 +133,7 @@ CREATE TABLE `ingredients_in_pantry` (
 
 LOCK TABLES `ingredients_in_pantry` WRITE;
 /*!40000 ALTER TABLE `ingredients_in_pantry` DISABLE KEYS */;
-INSERT INTO `ingredients_in_pantry` VALUES (1,1,6,'cup','2019-04-20'),(2,1,12,'oz','2019-04-01'),(5,1,4,'cup','2019-03-30'),(9,1,3,'lb','2019-03-25'),(10,1,24,'oz','2019-03-22'),(11,1,12,'oz',NULL),(12,1,6,'cup','2019-04-02'),(13,1,12,'oz','2019-04-03'),(14,1,3,'cup','2019-04-04'),(15,1,4,'cup','2019-04-05'),(16,1,12,'oz','2019-04-06'),(17,1,2,'cup','2019-04-07'),(18,1,24,'oz','2019-03-22'),(19,1,24,'oz','2019-03-22'),(20,1,10,'oz','2019-04-09'),(21,1,1,'lb','2019-04-01'),(22,1,2,'tbsp.','2019-04-19'),(23,1,10,'cup','2019-04-11'),(26,1,16,'oz','2019-04-14'),(28,1,1,'tbsp.','2019-04-15'),(29,1,2,'oz','2019-04-16'),(30,1,1,'lb','2019-04-17'),(31,1,15,'oz','2019-04-18'),(32,1,200,'oz','2019-03-29'),(1,1,5,'lb','2019-04-20'),(5,1,5,'oz','2019-03-10'),(1,1,4,'lb','2019-04-20'),(33,1,4.1,'lb','2019-09-19');
+INSERT INTO `ingredients_in_pantry` VALUES (1,1,6,'cup','2019-04-20'),(2,1,12,'oz','2019-04-01'),(5,1,4,'cup','2019-03-30'),(9,1,3,'lb','2019-03-25'),(10,1,24,'oz','2019-03-22'),(11,1,12,'oz',NULL),(12,1,6,'cup','2019-04-02'),(13,1,12,'oz','2019-04-03'),(14,1,3,'cup','2019-04-04'),(15,1,4,'cup','2019-04-05'),(16,1,12,'oz','2019-04-06'),(17,1,2,'cup','2019-04-07'),(18,1,24,'oz','2019-03-22'),(19,1,24,'oz','2019-03-22'),(20,1,10,'oz','2019-04-09'),(21,1,1,'lb','2019-04-01'),(22,1,2,'tbsp.','2019-04-19'),(23,1,10,'cup','2019-04-11'),(26,1,16,'oz','2019-04-14'),(28,1,1,'tbsp.','2019-04-15'),(29,1,2,'oz','2019-04-16'),(30,1,1,'lb','2019-04-17'),(31,1,15,'oz','2019-04-18'),(32,1,200,'oz','2019-03-29'),(1,1,5,'lb','2019-04-20'),(5,1,5,'oz','2019-03-10'),(1,1,4,'lb','2019-04-20');
 /*!40000 ALTER TABLE `ingredients_in_pantry` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,7 +193,13 @@ CREATE TABLE `recipes` (
 
 LOCK TABLES `recipes` WRITE;
 /*!40000 ALTER TABLE `recipes` DISABLE KEYS */;
-INSERT INTO `recipes` VALUES (1,'Chicken Noodle Soup','/images/chicken_noodle_soup.jpg','Combine ingredients into pot#Boil and stir till cooked#Serve warm',0,1,1,0,6),(2,'Chip n Beans','/images/bean_salsa.jpg','Boil beans in pot.#Serve warm with chips.',0,1,1,1,2),(4,'Ckicken Pot Pie','/images/chicken_pot_pie.jpg','Heat the oven to 400°F.  Stir the soup, 1/2 cup milk, vegetables and chicken in a 9-inch pie plate.#Stir the remaining 1/2 cup milk, egg and baking mix in a small bowl.  Spread the batter over the chicken mixture (the batter is thin but will bake up into a perfect crust).#Bake for 20 minutes or until the topping is golden brown.',0,1,5,0,10),(5,'Tuna Casserole','/images/placeholder.jpg','Bring a large pot of water to a boil.#Add noodles and frozen peas.#Cook until noodles are al dente, drain well.#Return noodles and peas to the pot.#Mix soup, tuna fish, onions, processed cheese and pepper into the pot.#Stir constantly until all of the ingredients are well mixed and the cheese has melted. Serve.',0,1,5,0,8),(6,'Tuna Melt','/images/placeholder.jpg','Preheat oven to 350 degrees F (175 degrees C).#In a mixing bowl, combine sweet onion, drained tuna, mozzarella, and mayonnaise. Mix thoroughly.#Spread tuna mixture on slices of French bread to form a sandwich. Place sandwiches on a cookie sheet.#Bake in a preheated oven for 10 minutes.',0,1,5,0,10),(7,'Black Bean Salsa','/images/bean_salsa.jpg','In a large bowl combine the black beans, corn, and salsa.#Let it sit for 30 minutes.# Serve',0,1,5,0,6),(8,'Black Bean Chili','/images/placeholder.jpg','Heat the oil in a large heavy pot over medium heat.#cook onion and garlic until onions are translucent.#Add turkey and cook, stirring, until meat is brown. Stir in beans, tomatoes, chili powder, oregano, basil and vinegar.#Reduce heat to low, cover and simmer 60 minutes or more, until flavors are well blended.',0,1,10,0,11);
+INSERT INTO `recipes` VALUES (1, 'Chicken Noodle Soup', '/images/chicken_noodle_soup.jpg', 'Combine ingredients into pot#Boil and stir till cooked#Serve warm', 0, 1, 1, 0, 6),
+(2, 'Chip n Beans', '/images/bean_salsa.jpg', 'Boil beans in pot.#Serve warm with chips.', 0, 1, 1, 1, 2),
+(4, 'Chicken Pot Pie', '/images/chicken_pot_pie.jpg', 'Heat the oven to 400°F.  Stir the soup, 1/2 cup milk, vegetables and chicken in a 9-inch pie plate.#Stir the remaining 1/2 cup milk, egg and baking mix in a small bowl.  Spread the batter over the chicken mixture (the batter is thin but will bake up into a perfect crust).#Bake for 20 minutes or until the topping is golden brown.', 0, 1, 5, 0, 10),
+(5, 'Tuna Casserole', '/images/1554177436001.jpg', 'Bring a large pot of water to a boil.#Add noodles and frozen peas.#Cook until noodles are al dente, drain well.#Return noodles and peas to the pot.#Mix soup, tuna fish, onions, processed cheese and pepper into the pot.#Stir constantly until all of the ingredients are well mixed and the cheese has melted. Serve.', 0, 1, 5, 0, 8),
+(6, 'Tuna Melt', '/images/1554177393883.jpg', 'Preheat oven to 350 degrees F (175 degrees C).#In a mixing bowl, combine sweet onion, drained tuna, mozzarella, and mayonnaise. Mix thoroughly.#Spread tuna mixture on slices of French bread to form a sandwich. Place sandwiches on a cookie sheet.#Bake in a preheated oven for 10 minutes.', 0, 1, 5, 0, 10),
+(7, 'Black Bean Salsa', '/images/bean_salsa.jpg', 'In a large bowl combine the black beans, corn, and salsa.#Let it sit for 30 minutes.# Serve', 0, 1, 5, 0, 6),
+(8, 'Black Bean Chili', '/images/1554177341501.jpg', 'Heat the oil in a large heavy pot over medium heat.#cook onion and garlic until onions are translucent.#Add turkey and cook, stirring, until meat is brown. Stir in beans, tomatoes, chili powder, oregano, basil and vinegar.#Reduce heat to low, cover and simmer 60 minutes or more, until flavors are well blended.', 0, 1, 10, 0, 11);
 /*!40000 ALTER TABLE `recipes` ENABLE KEYS */;
 UNLOCK TABLES;
 

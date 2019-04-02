@@ -51,8 +51,8 @@ block content
 							.dropdown-inline
 							select.form-control.mt-3(name='ingredientProperties[4]', required)
 								option(value='') Priority Item?
-								option(value='Yes') Yes
-								option(value='No') No
+								option(value='High') Yes
+								option(value='Non') No
 						input.btn.btn-primary.col-md-1.mt-3(type='submit', value='Add', class='form-group')
 		br
 		.form-row
@@ -67,6 +67,7 @@ block content
 						div(class='card-body')
 							h5(class='card-title') #{item.ingredient_name}
 							p(class='card-text') #{item.ingredient_amount} #{item.ingredient_unit_of_measurement} that expires on #{item.ingredient_expiration_date}
+							p(class='card-text') This is a #{item.priority} priority item.
 
 						div(class='card-foot')
 							button.btn_card.btn.btn-danger.delete-ingredient(href='#',data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount)  DELETE
