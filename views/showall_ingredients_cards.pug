@@ -7,13 +7,17 @@ block content
 			width: 93%;
 			margin: 0px 10px 10px 10px;
 		}
+		.card-content{
+			color:#570573;
+			background-color:#faf8eb;
+		}
 
 	div(class='container-fluid', class='rounded', style='width: 90%')
 		br
 		br
 		br
 		br
-		h1 #{title}
+		h1.dp-title-text #{title}
 		br
 		a.btn.btn-default(href='/ingredients/cards')
 			i(style='color:black').fa.fa-th-large.fa-2x
@@ -74,7 +78,7 @@ block content
 				//-get recipe image
 				- ingredient_image= item.ingredient_image_path
 				.form-group.col-md-3
-					div(id=item.ingredient_id, class='card', class='h-100')
+					div.card-content(id=item.ingredient_id, class='card', class='h-100')
 						img.image(class='card-img-top', src=ingredient_image, alt='image')
 						div(class='card-body')
 							h5(class='card-title') #{item.ingredient_name}
