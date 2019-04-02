@@ -33,6 +33,7 @@
     "pug": "^2.0.3",
     "randomstring": "^1.1.5",
     "sequelize": "^4.43.1",
+    "sort-json-array": "^0.1.7",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^3.8.0"
   },

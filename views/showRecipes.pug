@@ -22,6 +22,13 @@ block content
 		.morelink {
 			display: block;
 		}
+		.delete-button{
+			outline-style: solid;
+			outline-color: red;
+			outline-width: medium;
+			color: red;
+			font-weight: bold;
+		}
 	div(class='container-fluid', class='rounded', style='width: 80%')
 		br
 		br
@@ -60,7 +67,7 @@ block content
 								p(id='recipeStep'+x class='recipeStep' class='card-text')= step
 								p#step
 						div(class='card-foot', padding='.75rem')
-							button.btn_card.btn.btn-danger(class='delete-recipe', data-id= recipe.recipe_id, type='button', id='delete-showrec') Delete Recipe
+							button.btn_card.btn.delete-button(class='delete-recipe', data-id= recipe.recipe_id, type='button', id='delete-showrec') Delete Recipe
 
 	script.
 		$(window).on('load', function() {

@@ -18,6 +18,7 @@ const logger = require('../functions/logger');
 const ing_totaler = require('./total_of_ingredient');
 const ingredient_t = require('../DB_models/Ingredients');
 const direction_parser = require('../recipe_direction_parser');
+const JSON_sort = require('sort-json-array');
 async function find_recipes(exp_id,pantry_id)
 {
     try{
@@ -289,7 +290,8 @@ async function find_recipes_no_inv(ingredient_id, pantry_id,scale){
                     "num_of_ingredients_on_hand": num_ing_we_have,
                     "ingredients_required":  ingredients_recipe,
                     "ingredients_on_hand" : ingredients_we_have,
-                    "num_of_times_cooked": recipe_table_data.recipe_num_times_cooked
+                    "num_of_times_cooked": recipe_table_data.recipe_num_times_cooked,
+                    "persent_have": parseFloat(num_ing_we_have/ingredients_recipe.length)
 
                 })
             }
@@ -331,11 +333,11 @@ async function find_recipes_no_inv(ingredient_id, pantry_id,scale){
         for(var i = 0;i<returning_JSON.length;i++)
             {console.log(JSON.stringify(returning_JSON[i]));}
 
-        return returning_JSON;
+        return JSON_sort(returning_JSON,"persent_have",'des');
     }catch(err){
         console.log(err)
         return -1;
     }
 }
-find_recipes_no_inv(19,1,10);
+// find_recipes_no_inv(19,1,10);
 module.exports.find_recipes_no_inv = find_recipes_no_inv;
