@@ -17,6 +17,8 @@ html
 				width: 100%;
 				text-align: center;
 				box-shadow: 0 50vh 0 50vh #343a40;
+				background-color: #570573 !important;
+				color: white !important;
 			}
 			.nav{
 				padding-top: 50px;
@@ -24,7 +26,8 @@ html
 				margin: 0;
 				padding: 0;
 				width: 260px;
-				background-color: #f1f1f1;
+				background-color: #faf8eb !important;
+				color: #570573 !important;
 				position: fixed;
 				height: 100%;
 				overflow: auto;
@@ -33,7 +36,8 @@ html
 			}
 			.nav a{
 				display: block;
-				color: white;
+				background-color: #faf8eb !important;
+				color: #570573 !important;
 				padding: 16px;
 				text-decoration: none;
 			}
@@ -69,15 +73,15 @@ html
 
 			}
 			.btn-outline-danger {
-				color: #dc3545 !important
+				color: #d93711 !important;
 			}
 			.btn-outline-danger:hover {
-				color: white !important
+				color: white !important;
 			}
 			i{
 				padding-right: 8px;
 				width:35px;
-				color:white;
+				color: #570573 !important;
 			}
 			.symbol{
 				position:absolute;
@@ -119,7 +123,7 @@ html
 		//- script(type='text/javascript', src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js')
 	body
 		.nav
-			.nav.bg-secondary.text-white
+			.nav
 				ul.flex-column
 				li.header
 					div(style='display: table-row')
@@ -167,16 +171,16 @@ html
 		.containter
 			main.ml-sm-auto.col-lg-10.px-4(role='main')
 				block content
-			footer.footer.bg-dark.text-light
+			footer.footer
 				p.mb-1 © 2019 Digital Pantry
 				ul.list-inline
 					//- TODO link these to proper files
 					li.list-inline-item
-						a(href='#') Privacy
+						a.dp-nav-text(href='#') Privacy
 					li.list-inline-item
-						a(href='#') Terms
+						a.dp-nav-text(href='#') Terms
 					li.list-inline-item
-						a(href='#') Support
+						a.dp-nav-text(href='#') Support
 		script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
 		script(src="/js/main.js")
 		script.

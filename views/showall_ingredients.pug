@@ -8,20 +8,20 @@ block content
 	br
 	br
 	div(class='container-fluid', class='rounded', style='width: 90%')
-		h1 #{title}
+		h1.dp-title-text #{title}
 		br
 		a.btn.btn-default(href='/ingredients/cards')
-			i(style='color:black').fa.fa-th-large.fa-2x
+			i.dp-title-text.fa.fa-th-large.fa-2x
 		a.btn.btn-default(href='/ingredients/showall')
-			i(style='color:black').fa.fa-list.fa-2x
-		a.btn.btn-primary(href='/ingredients/add', class='h-75')
+			i.dp-title-text.fa.fa-list.fa-2x
+		a.btn.btn-primary.dp-btn-secondary(href='/ingredients/add', class='h-75')
 			| Add Multiple Ingredients
 		p
 		#accordion
 			.card
 				#headingTwo.card-header
 					h5.mb-0
-					button.btn.btn-primary.collapsed(data-toggle='collapse', data-target='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
+					button.btn.btn-primary.dp-btn-primary.collapsed(data-toggle='collapse', data-target='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
 						| Add ingredient
 				#collapseTwo.collapse(aria-labelledby='headingTwo', data-parent='#accordion')
 					.card-body
@@ -30,7 +30,7 @@ block content
 								.col-sm-1.mt-3
 									img#output(width='40', height='40')
 								.form-group.col-md-2.mt-3
-									label.btn.btn-primary.btn.btn-file Browse image
+									label.btn.btn-primary.dp-btn-secondary.btn.btn-file Choose Image
 										input(type='file', style='display: none;', onchange='loadFile(event)')
 
 								//- .form-group.col-md-4
@@ -61,8 +61,8 @@ block content
 										option(value='High') Yes
 										option(value='Low') No
 								.col-md-1
-									input.btn.btn-primary.mt-3(type='submit', value='Add', class='form-group')
-		table.table(class='rounded')
+									input.btn.btn-primary.dp-btn-primary.mt-3(type='submit', value='Add', class='form-group')
+		table.table.dp-table(class='rounded')
 			//-caption Available Ingredients
 			thead
 				tr
