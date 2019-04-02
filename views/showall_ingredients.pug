@@ -32,9 +32,15 @@ block content
 				tr
 					form(method= 'POST', action= '/ingredients/add', class= 'form', enctype="multipart/form-data")
 						.form-row.row-dark(class='rounded')
-							.form-group.col-md-4
-								img#output.mr-2.ml-2.mt-2(width='40', height='40')
-								input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='align-middle')
+							.col-sm-1.mt-3
+								img#output(width='40', height='40')
+							.form-group.col-md-2.mt-3
+								label.btn.btn-primary.btn-sm.btn-file Browse 
+									input(type='file', style='display: none;', onchange='loadFile(event)')
+
+							//- .form-group.col-md-4
+							//- 	img#output.mr-2.ml-2.mt-2(width='40', height='40')
+							//- 	input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='align-middle')
 							.form-group.col-md-2
 								input.form-control.mt-3(name='ingredientProperties[0]', type='text', placeholder='Name = Tuna')
 							.form-group.col-md-1
@@ -83,3 +89,15 @@ block content
 				document.getElementById("output").style.width = '40px';
 				document.getElementById("output").style.height = '40px';
 				}
+			//- $(document).on('change', ':file', function() {
+			//- 	var input = $(this),
+			//- 		numFiles = input.get(0).files ? input.get(0).files.length : 1,
+			//- 		label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+			//- 	input.trigger('fileselect', [numFiles, label]);
+			//- });
+			//- $(document).ready( function() {
+			//- 	$(':file').on('fileselect', function(event, numFiles, label) {
+			//- 		console.log(numFiles);
+			//- 		console.log(label);
+			//- 	});
+			//- });

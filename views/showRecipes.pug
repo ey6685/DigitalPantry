@@ -66,10 +66,10 @@ block content
 						img.image(class='card-img-top', src=recipe_image, alt='image')
 						div(class='card-body')
 							h5(class='card-title') #{recipe.recipe_name}
+							p#servingSize Serves #{(recipe.num_people_it_feeds)} people
 							//- For each steps inside of the array of steps
 							for step,x in recipe_steps[i]
 								p(id='recipeStep'+x class='recipeStep' class='card-text')= step
-								p#step
 						div(class='card-foot', padding='.75rem')
 							button.btn_card.btn.delete-button(class='delete-recipe', data-id= recipe.recipe_id, type='button', id='delete-showrec') Delete Recipe
 
@@ -80,8 +80,11 @@ block content
 			$('.card-body').each(function(index) {
 				var totalCharacterLength = 0
 				var previousCharacterLength= 0
+				var $recipeName = $(this).find('h5').text()
+				var $recipeIngredients = $(this).find('#servingSize').text()
+				console.log($recipeIngredients)
 				var $steps = $(this).find('.recipeStep')
-				html = ""
+				html = `<h5 class='card-title'>${$recipeName}</h5><p id='currentAmountOfIngredients'>${$recipeIngredients}</p><h5 class='card-title'>Recipe steps</h6>`
 				console.log($steps)
 				currentStepLength = ""
 				foundHidePoint = false
@@ -94,7 +97,6 @@ block content
 					// update total number of characters
 					totalCharacterLength = totalCharacterLength + currentStepLength
 					if(totalCharacterLength > maxCharactersToShow && foundHidePoint == false){
-						console.log("FOUND BREAK POINT")
 						var difference =  maxCharactersToShow - previousCharacterLength
 						var stillHaveSpaceFor = fullContent.substr(0, difference)
 						var overflow = fullContent.substr(difference, currentStepLength-difference);
@@ -102,7 +104,6 @@ block content
 						foundHidePoint = true
 					}
 					else if(totalCharacterLength > maxCharactersToShow && foundHidePoint == true){
-						console.log("AFTER BREAK POINT")
 						html = html + `<p class='overflow' style='display:none'>${fullContent}</p>`
 					}
 					else{
@@ -117,6 +118,7 @@ block content
 				e.preventDefault() 
 				if($(this).hasClass("less")){
 					$(this).removeClass("less")
+					$(this).text('Show more')
 					$(this).closest('.card-body').find('.overflow').hide()
 					$(this).closest('.card-body').find('.extra').hide()
 				}else{
