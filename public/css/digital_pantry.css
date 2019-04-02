@@ -49,10 +49,12 @@
 .dp-btn-primary {
   background-color: #91c02e !important;
   border-color: #91c02e !important;
+  color:white !important;
 }
 .dp-btn-secondary {
   background-color: #eeaf2c !important;
   border-color: #eeaf2c !important;
+  color:white !important;
 }
 .dp-btn-danger {
   background-color: #d93711 !important;
