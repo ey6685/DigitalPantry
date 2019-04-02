@@ -23,7 +23,7 @@ block content
 	- card3_image= pot_pie_image
 	- rid_variable= rid
 	br
-	div(class='container-fluid', class='rounded', style='width: 80%')
+	div(class='container-fluid', class='rounded', style='width: 90%')
 		//- Overlay form start. In other words view recipe form
 		#viewRecipeDetails.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
 			.modal-dialog.modal-dialog-centered.modal-lg(role='document')
@@ -88,9 +88,9 @@ block content
 				div(class='row')
 					for recipe in i.recipe_data
 						if recipe.num_of_ingredients_on_hand == recipe.num_of_ingredients
-							- test = "div class='col-4 haveAllIngredientsRecipe'";
+							- test = "div class='col-3 haveAllIngredientsRecipe'";
 						else
-							- test = "div class='col-4 dontHaveAllIngredients' style='display: none;'";
+							- test = "div class='col-3 dontHaveAllIngredients' style='display: none;'";
 						#{test}
 							div.card.h-100(recipe-id=recipe.recipe_id , style='width: 100%')
 								img.image(class='card-img-top', src=recipe.recipe_image_path, alt="#{(recipe.recipe_name)}")
