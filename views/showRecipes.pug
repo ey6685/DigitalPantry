@@ -16,6 +16,13 @@ block content
 			background-color: #a2f02d;
 			color:black;
 		}
+		.delete-button{
+			outline-style: solid;
+			outline-color: red;
+			outline-width: medium;
+			color: red;
+			font-weight: bold;
+		}
 	div(class='container-fluid', class='rounded', style='width: 80%')
 		br
 		br
@@ -53,7 +60,7 @@ block content
 							for step in recipe_steps[i]
 								p(class='card-text')= step
 						div(class='card-foot', padding='.75rem')
-							button.btn_card.btn.btn-danger(class='delete-recipe', data-id= recipe.recipe_id, type='button', id='delete-showrec') Delete Recipe
+							button.btn_card.btn.delete-button(class='delete-recipe', data-id= recipe.recipe_id, type='button', id='delete-showrec') Delete Recipe
 
 	script.
 		//This will trigger once user stars to type text into a search bar

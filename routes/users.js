@@ -158,7 +158,7 @@ router.get('/dashboard', async function showDashboard(req, res) {
   })
   //need window
   const window = await Pantry.findOne({
-    attributes: ['expire_window'],
+    attributes: ['expire_window','people_cooking_for'],
     where: {
       pantry_id: currentPantryID.pantry_id
     }
@@ -173,7 +173,8 @@ router.get('/dashboard', async function showDashboard(req, res) {
     title: 'Dashboard',
     data: data,
     expirationTimeFrame: window.expire_window,
-    storedData: JSON.stringify(data)
+    storedData: JSON.stringify(data),
+    people_cooking_for: window.people_cooking_for
   })
   //Send individual recipe steps inside the array
   // res.render('dashboard',{
