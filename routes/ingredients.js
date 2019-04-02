@@ -130,7 +130,7 @@ router.get('/expired', function(req, res) {
 // GET request to localhost:3000/ingredients/add
 router.get('/add', function(req, res) {
   res.render('add_ingredient', {
-    title: 'Add Ingredient'
+    title: 'Add Ingredients'
   })
 })
 

@@ -48,7 +48,7 @@ block content
 							select.form-control.mt-3(name='ingredientProperties[4]', required)
 								option(value='') Priority Item?
 								option(value='High') Yes
-								option(value='Non') No
+								option(value='Low') No
 					#ingredient-container
 					.form-row
 						button.btn.btn-secondary(type='button' onclick='addIngredient()', id='add-ingredient', class='form-group') +
@@ -114,7 +114,7 @@ block content
 							<select class="form-control" name="ingredientProperties[${i}]" required="required">
 								<option value="">Priority Item?</option>
 								<option value="High">Yes</option>
-								<option value="Non">No</option>
+								<option value="Low">No</option>
 							</select>
 						</div>
 						<div class="form-group col-md-1">
