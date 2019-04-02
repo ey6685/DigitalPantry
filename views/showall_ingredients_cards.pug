@@ -87,3 +87,13 @@ block content
 
 						div(class='card-foot')
 							button.btn_card.btn.btn-outline-danger.delete-ingredient(href='#',data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount)  DELETE
+
+	script.
+			var loadFile = function(event) {
+				var output = document.getElementById('output');
+				output.src = URL.createObjectURL(event.target.files[0]);
+				output.classList.add("img-thumbnail");
+				document.getElementById("output").style.display = 'block';
+				document.getElementById("output").style.width = '40px';
+				document.getElementById("output").style.height = '40px';
+				}
