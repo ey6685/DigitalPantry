@@ -32,3 +32,30 @@
   background-color: #212529 !important;
   color: white !important;
 }
+.dp-table {
+  background-color: #faf8eb !important;
+  color: #570573 !important;
+}
+.dp-background {
+  background-color: #faf8eb !important;
+}
+.dp-title-text {
+  color: #570573 !important;
+}
+.dp-btn-primary {
+  background-color: #91c02e !important;
+  border-color: #91c02e !important;
+}
+.dp-btn-secondary {
+  background-color: #eeaf2c !important;
+  border-color: #eeaf2c !important;
+}
+.dp-btn-danger {
+  background-color: #d93711 !important;
+  border-color: #d93711 !important;
+}
+.dp-nav-text {
+  color: #eeaf2c !important;
+}
+
+/* f1cefd */
