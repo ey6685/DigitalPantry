@@ -79,7 +79,7 @@ block content
 						td(class='align-middle')= item.priority
 						td(class='align-middle') 
 							//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
-							a.btn.btn-danger.delete-ingredient.mr-0(data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount) DELETE
+							a.btn.btn-outline-danger.delete-ingredient.mr-0(data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount) DELETE
 		script.
 			var loadFile = function(event) {
 				var output = document.getElementById('output');

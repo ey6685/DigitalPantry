@@ -148,11 +148,11 @@ block content
 				if (buttonText == 'Yes'){
 					$(this).text('No')
 					$(this).removeClass('btn-primary')
-					$(this).addClass('btn-danger')
+					$(this).addClass('btn-outline-danger')
 					$('.dontHaveAllIngredients').show()
 				}else{
 					$(this).text('Yes')
-					$(this).removeClass('btn-danger')
+					$(this).removeClass('btn-outline-danger')
 					$(this).addClass('btn-success')
 					$('.dontHaveAllIngredients').hide()
 				}

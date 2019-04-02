@@ -98,7 +98,7 @@ block content
 						td(align='right')= item.num_people_it_feeds
 						td(align='middle')
 							//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
-							a.btn.btn-danger.delete-recipe.mr-2(href='#', data-id=item.recipe_id, id= 'delete-button') DELETE
+							a.btn.btn-outline-danger.delete-recipe.mr-2(href='#', data-id=item.recipe_id, id= 'delete-button') DELETE
 							a.btn.btn-primary.edit-recipe(type='button', data-toggle='modal', data-target='#editRecipe', id= 'edit-button') EDIT
 					//- Body of a drop-down row with ID linked to the parent row
 					tbody(id=row2).collapse.bg-secondary.text-white
@@ -145,7 +145,7 @@ block content
 					</select>
 					</div>
 				<div class="form-group col-1">
-					<button type="button" class="btn btn-danger delete-row">X</button>
+					<button type="button" class="btn btn-outline-danger delete-row">X</button>
 				</div>
 			</div>`;
 			let container = document.getElementById('dynamic-ingredient-row');

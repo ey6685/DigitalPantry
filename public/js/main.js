@@ -212,7 +212,7 @@ $('#editRecipe').on('show.bs.modal', async function (event) {
                 </select>
             </div>
             <div class="form-group col-1">
-                <button type="button" data-id="${values[0]}" class="btn btn-danger delete-current-ingredient">X</button>
+                <button type="button" data-id="${values[0]}" class="btn btn-outline-danger delete-current-ingredient">X</button>
             </div>
         </div>`
     // shows what measurement has already been selected for that specific ingredient
@@ -399,7 +399,7 @@ $('#editEmailButton').click(function showEditField (e) {
     $('#newUsername')
   )
   // show cancel button
-  $("<button class='btn btn-danger' type='button' id='cancelPassEdit'>Cancel</button>").insertAfter(
+  $("<button class='btn btn-outline-danger' type='button' id='cancelPassEdit'>Cancel</button>").insertAfter(
     $('#saveEmailButton')
   )
 })
