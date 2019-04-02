@@ -39,7 +39,6 @@ block content
 								.form-group.col-md-6
 									label(for='serving-size') Serving size
 									input.form-control(name="recipeSize", type='text', placeholder="Serving Size", class='form-group', id='recipe-size')
-							br
 							h5 Ingredients
 							hr
 							br
@@ -56,8 +55,18 @@ block content
 							#ingredient-rows
 							#dynamic-ingredient-row
 							button.btn.btn-secondary.btn-success(type='button', onclick='addIngredient()', id='add-showall-rec') Add Ingredient
+							br
+							br
+							h5 Current recipe steps
 							hr
 							br
+							#currentRecipeSteps
+							h5 Recipe steps
+							hr
+							br
+							.form-group
+								textarea#textarea.form-control(name='recipeDirections', placeholder= 'Describe first step\nDescribe second step \nContinue with each step on new line', rows='8', class='form-group')
+							hr
 							button.btn.btn-secondary(type='button', data-dismiss='modal', id='close-showall-rec') Close
 							button.btn.btn-primary(type='submit', id='save-showall-rec') Save changes
 		//-Alert form end
@@ -103,6 +112,10 @@ block content
 								td(colspan='5') #{ingredient}
 		//- Page content end
 	script(type='text/javascript').
+		var textAreas = document.getElementsByTagName('textarea');
+			Array.prototype.forEach.call(textAreas, function(elem) {
+				elem.placeholder = elem.placeholder.replace(/\\n/g, '\n');
+			});
 		var allData = '!{data}'
 		allData = JSON.parse(allData)
 		//i is used for numbering new dynamic rows
