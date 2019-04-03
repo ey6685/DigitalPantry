@@ -22,6 +22,10 @@ block content
 		.morelink {
 			display: block;
 		}
+		.card{
+			color:#570573;
+			background-color:#faf8eb;
+		}
 		.delete-button{
 			outline-style: solid;
 			outline-color: red;
@@ -33,12 +37,12 @@ block content
 		a.morelink:visited {color:#58534d; TEXT-DECORATION: none}
 		a.morelink:active {color:#f5f5dc; TEXT-DECORATION: none}
 		a.morelink:hover {color:#f5f5dc; TEXT-DECORATION: none}
-	div(class='container-fluid', class='rounded', style='width: 80%')
+	div(class='container-fluid', class='rounded', style='width: 90%')
 		br
 		br
 		br
 		br
-		h1 #{title}
+		h1.dp-title-text #{title}
 		br
 		.form-row
 			a.btn.btn-default(href='/recipes/showRecipes', class='link')
@@ -55,46 +59,7 @@ block content
 						option(value='2') Sort Z-A
 			.form-group.col-md-2
 				form(method='GET', action='/recipes/add')
-					input.btn.btn-primary(type='submit', value='Add Recipe', class='form-group', id='submit-showrec', class='h-75')
-					p
-					//- Overlay form start. In other words edit recipe form
-					#editRecipeCard.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
-						.modal-dialog.modal-dialog-centered.modal-lg(role='document')
-							.modal-content
-								.modal-body
-									form(method= 'POST', action='/recipes/edit', class='form')
-										h4
-										hr
-										br
-										//- Edit recipe information fields
-										.form-row
-											.form-group.col-md-6
-												label(for='recipe-name') Recipe name
-												input.form-control(name="recipeName", type='text', placeholder="Recipe name", class='form-group', id='recipe-name')
-											.form-group.col-md-6
-												label(for='serving-size') Serving size
-												input.form-control(name="recipeSize", type='text', placeholder="Serving Size", class='form-group', id='recipe-size')
-										br
-										h5 Ingredients
-										hr
-										br
-										//- Edit ingredient information fields
-										.form-row
-											.form-group.col-md-4
-												| Name
-											.form-group.col-md-3
-												| Qty
-											.form-group.col-md-3
-												| Measurement
-										//- Although it might seem like ingredient row does nothing
-										//- #ingredient-rows is used for Jquery 
-										#ingredient-rows
-										#dynamic-ingredient-row
-										button.btn.btn-secondary.btn-success(type='button', onclick='addIngredient()', id='add-showall-rec') Add Ingredient
-										hr
-										br
-										button.btn.btn-secondary(type='button', data-dismiss='modal', id='close-showall-rec') Close
-										button.btn.btn-primary(type='submit', id='save-showall-rec') Save changes
+					input.btn.dp-btn-primary(type='submit', value='Add Recipe', class='form-group', id='submit-showrec', class='h-75')
 		.form-row
 			//-for each recipe in data
 			for recipe,i in results
@@ -105,14 +70,12 @@ block content
 						img.image(class='card-img-top', src=recipe_image, alt='image', )
 						div(class='card-body')
 							h5(class='card-title') #{recipe.recipe_name}
+							p#servingSize Serves #{(recipe.num_people_it_feeds)} people
 							//- For each steps inside of the array of steps
 							for step,x in recipe_steps[i]
 								p(id='recipeStep'+x class='recipeStep' class='card-text')= step
-								p#step
 						div(class='card-foot', padding='.75rem')
-							center
-								a.btn.btn-danger.delete-recipe.mr-2(,href='#', data-id=recipe.recipe_id, id= 'delete-button') DELETE
-								a.btn.btn-primary.edit-recipe(type='button', data-toggle='modal', data-target='#editRecipeCard', id= 'edit-button-card') EDIT
+							button.btn_card.btn.btn-outline-danger(class='delete-recipe', data-id= recipe.recipe_id, type='button', id='delete-showrec') Delete Recipe
 
 	script.
 		var allData = '!{data}'
@@ -157,8 +120,11 @@ block content
 			$('.card-body').each(function(index) {
 				var totalCharacterLength = 0
 				var previousCharacterLength= 0
+				var $recipeName = $(this).find('h5').text()
+				var $recipeIngredients = $(this).find('#servingSize').text()
+				console.log($recipeIngredients)
 				var $steps = $(this).find('.recipeStep')
-				html = ""
+				html = `<h5 class='card-title'>${$recipeName}</h5><p id='currentAmountOfIngredients'>${$recipeIngredients}</p><h5 class='card-title'>Recipe steps</h6>`
 				console.log($steps)
 				currentStepLength = ""
 				foundHidePoint = false
@@ -171,7 +137,6 @@ block content
 					// update total number of characters
 					totalCharacterLength = totalCharacterLength + currentStepLength
 					if(totalCharacterLength > maxCharactersToShow && foundHidePoint == false){
-						console.log("FOUND BREAK POINT")
 						var difference =  maxCharactersToShow - previousCharacterLength
 						var stillHaveSpaceFor = fullContent.substr(0, difference)
 						var overflow = fullContent.substr(difference, currentStepLength-difference);
@@ -179,7 +144,6 @@ block content
 						foundHidePoint = true
 					}
 					else if(totalCharacterLength > maxCharactersToShow && foundHidePoint == true){
-						console.log("AFTER BREAK POINT")
 						html = html + `<p class='overflow' style='display:none'>${fullContent}</p>`
 					}
 					else{
@@ -194,6 +158,7 @@ block content
 				e.preventDefault() 
 				if($(this).hasClass("less")){
 					$(this).removeClass("less")
+					$(this).text('Show more')
 					$(this).closest('.card-body').find('.overflow').hide()
 					$(this).closest('.card-body').find('.extra').hide()
 				}else{

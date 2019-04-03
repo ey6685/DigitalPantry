@@ -75,7 +75,7 @@ block content
 					option(value='0') Sort By
 					option(value='1') Sort A-Z
 					option(value='2') Sort Z-A
-	table.table.table-dark(class='rounded')
+	table.table.dp-table(class='rounded')
 		//-caption Available Ingredients
 		thead
 			tr
@@ -90,11 +90,11 @@ block content
 					td.user-name= item.username
 					td= item.user_type
 					td
-						a.btn.btn-danger(data-toggle='modal', data-target='#changePrivilege', id= 'change-admin') Change Privilege
+						a.btn.btn-outline-danger(data-toggle='modal', data-target='#changePrivilege', id= 'change-admin') Change Privilege
 					td
-						a.btn.btn-danger(data-toggle='modal', data-target='#resetForm', id= 'reset-admin') Reset
+						a.btn.btn-outline-danger(data-toggle='modal', data-target='#resetForm', id= 'reset-admin') Reset
 					td
-						a.btn.btn-danger(class="delete-user", data-id=item.user_id, id= 'delete-admin') DELETE
+						a.btn.btn-outline-danger(class="delete-user", data-id=item.user_id, id= 'delete-admin') DELETE
 	h4 Add New User
 	hr
 	br

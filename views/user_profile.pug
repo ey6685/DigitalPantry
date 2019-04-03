@@ -1,40 +1,40 @@
 extends admin_template
 
 block content
-  style.
-    hr{
-      margin-top:0px;
-    }
-  br
-  h1 #{title}
-  br
-  br
-  form(method= 'POST', action= '/users/changeUsername', class= 'form')
-    h4 Change Username
-    hr
-    br
-    != messages('message', locals)
-    p(id='userEmail') #{data.user_email} 
-      a(href='', id='editEmailButton') change
-  br
-  form(method= 'POST', action= '/users/changePassword', class= 'form')
-    h4 Change Password
-    hr
-    br
-    != messages('message', locals)
-    if errors
-      for error in errors
-        div(class='alert alert-danger') #{error.msg}
-    .form-row
-      .form-group.col-md-4
-        label Current password
-        input.form-control(name='currentPassword', type='password', placeholder="Current Password", required)
-    .form-row
-      .form-group.col-md-4
-        label New password
-        input.form-control(name='newPassword', type='password', placeholder="New Password", required)
-    .form-row
-      .form-group.col-md-4
-        label Confirm password
-        input.form-control(name='confirmNewPassword', type='password', placeholder="Confirm New Password", required)
-    button.btn.btn-primary(type='submit', id='savePasswordButton') Update
+	div(class='container-fluid', class='rounded', style='width: 90%')
+		br
+		br
+		br
+		br
+		h1 #{title}
+		br
+		br
+		form(method= 'POST', action= '/users/changeUsername', class= 'form')
+			h4 Change Username
+			hr
+			br
+			!= messages('message', locals)
+			p(id='userEmail') #{data.user_email} 
+				a(href='', id='editEmailButton') change
+		br
+		form(method= 'POST', action= '/users/changePassword', class= 'form')
+			h4 Change Password
+			hr
+			br
+			!= messages('message', locals)
+			if errors
+				for error in errors
+					div(class='alert alert-danger') #{error.msg}
+			.form-row
+				.form-group.col-md-4
+					label Current password
+					input.form-control(name='currentPassword', type='password', placeholder="Current Password", required)
+			.form-row
+				.form-group.col-md-4
+					label New password
+					input.form-control(name='newPassword', type='password', placeholder="New Password", required)
+			.form-row
+				.form-group.col-md-4
+					label Confirm password
+					input.form-control(name='confirmNewPassword', type='password', placeholder="Confirm New Password", required)
+			button.btn.btn-primary(type='submit', id='savePasswordButton') Update

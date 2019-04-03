@@ -124,7 +124,7 @@ $(document).on('click', '.delete-current-ingredient', function () {
 })
 
 // This will trigger when user tries to edit a recipe
-$('#editRecipe').on('show.bs.modal', function (event) {
+$('#editRecipe').on('show.bs.modal', async function (event) {
 
   // Button that triggered the display card
   var button = $(event.relatedTarget)
@@ -156,6 +156,7 @@ $('#editRecipe').on('show.bs.modal', function (event) {
       values.push($recipeRow[child].innerText)
     }
   }
+  console.log(values[0])
   // At this point we have
   // Recipe name and serving size
   // Recipe ingredients
@@ -176,6 +177,7 @@ $('#editRecipe').on('show.bs.modal', function (event) {
   // Otherwise the form will keep adding rows non stop
   $('#ingredient-rows').html('')
   $('#dynamic-ingredient-row').html('')
+  $('#currentRecipeSteps').html('')
   // Populate ingredient rows
   for (ingredient in ingredientList) {
     let ingredientCounter = 'ingredient' + ingredient
@@ -212,7 +214,7 @@ $('#editRecipe').on('show.bs.modal', function (event) {
                 </select>
             </div>
             <div class="form-group col-1">
-                <button type="button" data-id="${values[0]}" class="btn btn-danger delete-current-ingredient">X</button>
+                <button type="button" data-id="${values[0]}" class="btn btn-outline-danger delete-current-ingredient">X</button>
             </div>
         </div>`
     // shows what measurement has already been selected for that specific ingredient
@@ -221,6 +223,24 @@ $('#editRecipe').on('show.bs.modal', function (event) {
   }
   var $input = $('<input>').attr('type', 'hidden').attr('name', 'recipeId').val(values[0])
   $('#ingredient-rows').append($input)
+  $.ajax({
+    type: 'GET',
+    url: '/recipes//getRecipeDirections/' + values[0],
+    success: function (response) {
+      // Reload the page to update cards
+      console.log(response)
+      let recipeSteps = ""
+      for(step in response)
+      {
+        recipeSteps = recipeSteps + response[step] + '\n'
+        $('#currentRecipeSteps').append(`<p>${response[step]}</p>`)
+      }
+      $('#textarea').attr('placeholder',recipeSteps)
+    },
+    error: function (err) {
+      console.log('Could not get directions for recipe ' + values[0])
+    }
+  })
 })
 //////////////////////
 //this will trigger ediding recipes on the card view
@@ -456,7 +476,7 @@ $('#editEmailButton').click(function showEditField (e) {
     $('#newUsername')
   )
   // show cancel button
-  $("<button class='btn btn-danger' type='button' id='cancelPassEdit'>Cancel</button>").insertAfter(
+  $("<button class='btn btn-outline-danger' type='button' id='cancelPassEdit'>Cancel</button>").insertAfter(
     $('#saveEmailButton')
   )
 })
