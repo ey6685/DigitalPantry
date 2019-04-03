@@ -22,6 +22,8 @@ const wieght_finder= require('./recipe_weight_functions');
 const logger = require('../functions/logger');
 const ingredient_t = require('../DB_models/Ingredients.js')
 const ingredients_pan_t = require('../DB_models/ingredients_in_pantry')
+const weight = require('../algorithm/weight_calc')
+const JSON_sort = require("sort-json-array")
 // async function main(window,pantry_id) {
 //   // first check the window date
 //   // if it is null just assume the window is today
@@ -214,13 +216,16 @@ async function main2(window, pantry_id,scale)
       "ingredient_amount" : ing_in_pan_data[0].ingredient_amount,
       "ingredient_unit_of_measurement": ing_in_pan_data[0].ingredient_unit_of_measurement,
       "ingredient_expiration_date": string_days,
-      "recipe_data": await recipe_id_finder.find_recipes_no_inv(ex_ids_array[i],pantry_id,scale)
+      "recipe_data": await recipe_id_finder.find_recipes_no_inv(ex_ids_array[i],pantry_id,scale),
+      "weight": await weight.just_one(expiring_ingredients[i].ingredient_id,pantry_id)
       })
   }
 
+  returing_JSON = await JSON_sort(returing_JSON,"weight","des")
   console.log("==========")
   console.log("FINAL DATA")
   console.log("==========")
+
   for(var i=0;i<returing_JSON.length; i++)
   {
     console.log(JSON.stringify(returing_JSON[i]));

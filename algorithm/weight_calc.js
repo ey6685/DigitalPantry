@@ -24,8 +24,12 @@ const ingredient_in_pantry = require("../DB_models/ingredients_in_pantry");
 const converter = require('./Convert_unts');
 const op = require('sequelize').Op;
 
+//some constants
+const ONE_DAY = 1000 * 60 * 60 * 24;
 
-
+///change this page globle to fit the needs of weight comparions 
+///it should be changed to a unit that can be uniserally converted to
+const UNIVERSAL_UNIT = 'cup';
 /*
 ingredient()
 
@@ -47,9 +51,7 @@ query the ingredients in pantry table for all the ingredients that are curretly 
 return the value
 */
 
-///change this page globle to fit the needs of weight comparions 
-///it should be changed to a unit that can be uniserally converted to
-const UNIVERSAL_UNIT = 'cup';
+
 
 
 
@@ -109,7 +111,7 @@ async function ingredient(ingredient_id,pantry_id)
         console.log("The weight Fator: " + ingredient_weight_factor.ingredient_weight + "\nlist of ingredient data: " + JSON.stringify(ingredient_list) );
 
         //now all the data is here for the db
-        var ONE_DAY = 1000 * 60 * 60 * 24;
+        
         console.log("\nSTARTING FOR LOOP\n=================")
         for(var i=0; i< ingredient_list.length; i++)
         {
@@ -161,6 +163,101 @@ module.exports.ingredient = ingredient
 //ingredient(1,1);
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+/*just one ingredient now
+same as the fuction above bit just for one specific item in the pantry and not all of them as a whole
+
+*/
+async function just_one(ingredient_id,pantry_id)
+{
+    console.log("starting ingredient weight calulation with id: " + ingredient_id + "\n===========================================\n")
+    //hello this is data, and i just sent you, validate maybe?
+    //pantry id
+    if(pantry_id == null)
+    {
+        console.log("no pantry_d\n==========\n");
+        return 0;
+    }
+    else if(typeof pantry_id != "number")
+    {
+        console.log("pantry id: "+ pantry_id + " not a number\n========================");
+        return 0 ;
+    }
+
+    //ingredinet id
+    if(ingredient_id == null)
+    {
+        console.log("no ingredient id\n===============\n")
+        return 0;
+    }
+    else if(typeof ingredient_id != "number"){
+        console.log("ingredient id " + ingredient_id + " is not a number\n================================================\n");
+        return 0;
+    }
+
+    //data good then lets get started
+    //var declarations)
+    var today = new Date()
+    today = today.getTime()
+    var wieght;
+    console.log("todays date: " + today + " MS \n=============================");
+    console.log("\nquerying the db\n===============");
+    try{
+        var the_ingrdrient = await ingredient_in_pantry.findOne({
+            where:{
+                ingredient_id: ingredient_id,
+                ingredient_expiration_date: {
+                    [op.gte] :today
+                }
+            },
+            order : ["ingredient_expiration_date"]
+        })
+        console.log("data recived")
+        console.log("============")
+        console.log(JSON.stringify(the_ingrdrient))
+
+        //now for the fromula
+        //first to the cups
+        var ingredient_con_amount;
+        var days
+            if(the_ingrdrient.ingredient_unit_of_measurement == "cup")
+            {
+                ingredient_con_amount = the_ingrdrient.ingredient_amount;
+            }
+            else{
+                ingredient_con_amount = await converter.converter_raw(the_ingrdrient.ingredient_amount, the_ingrdrient.ingredient_unit_of_measurement, UNIVERSAL_UNIT);
+            }
+            //now the number of days
+            var later_date = new Date(the_ingrdrient.ingredient_expiration_date)
+            later_date = later_date.getTime()
+            days = Math.round((later_date-today) / ONE_DAY) +1
+            console.log("number of days till exp: " + days)
+            console.log("================================")
+
+            console.log("formula data:")
+            console.log("=============")
+            console.log("amount of ingredient in cups :" +ingredient_con_amount)
+            console.log("number of days till death: " +days)
+            //noe the calc and store it into the var wieght
+            
+            weight = parseFloat(ingredient_con_amount/days)
+
+            console.log("weight")
+            console.log("======")
+            console.log(weight)
+
+            return weight;
+    }
+    catch(e){
+        console.log(e)
+        return 0
+    }
+}
+
+//test code
+//just_one(16,1)
+module.exports.just_one = just_one
+///////////////////////////////////////////////////////////////////////////////////////////////////
 /*
 recipe()
 
@@ -267,4 +364,4 @@ async function recipe(recipe_id, pantry_id)
 }
 
 //testing code for recipes
-recipe(2,1);
+//recipe(2,1);
