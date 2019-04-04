@@ -282,7 +282,7 @@ async function find_recipes_no_inv(ingredient_id, pantry_id,scale){
             {
                 var direction_array = await direction_parser.parse_by_str_for_dashboard(recipe_table_data.recipe_directions)
                 returning_JSON.push({
-                    "recipe_id" : recipe_ids_arr[i],
+                    "recipe_id" : recipe_ids_arr[0],
                     "recipe_name" : recipe_table_data.recipe_name,
                     "recipe_image_path": recipe_table_data.recipe_image_path,
                     "recipe_directions" : direction_array,

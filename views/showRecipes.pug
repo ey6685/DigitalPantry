@@ -22,6 +22,10 @@ block content
 		.morelink {
 			display: block;
 		}
+		.card{
+			color:#570573;
+			background-color:#faf8eb;
+		}
 		.delete-button{
 			outline-style: solid;
 			outline-color: red;
@@ -33,12 +37,12 @@ block content
 		a.morelink:visited {color:#58534d; TEXT-DECORATION: none}
 		a.morelink:active {color:#f5f5dc; TEXT-DECORATION: none}
 		a.morelink:hover {color:#f5f5dc; TEXT-DECORATION: none}
-	div(class='container-fluid', class='rounded', style='width: 80%')
+	div(class='container-fluid', class='rounded', style='width: 90%')
 		br
 		br
 		br
 		br
-		h1 #{title}
+		h1.dp-title-text #{title}
 		br
 		.form-row
 			a.btn.btn-default(href='/recipes/showRecipes', class='link')
@@ -55,7 +59,7 @@ block content
 						option(value='2') Sort Z-A
 			.form-group.col-md-2
 				form(method='GET', action='/recipes/add')
-					input.btn.btn-primary(type='submit', value='Add Recipe', class='form-group', id='submit-showrec', class='h-75')
+					input.btn.dp-btn-primary(type='submit', value='Add Recipe', class='form-group', id='submit-showrec', class='h-75')
 		.form-row
 			//-for each recipe in data
 			for recipe,i in data

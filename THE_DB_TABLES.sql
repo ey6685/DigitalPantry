@@ -28,9 +28,9 @@ CREATE TABLE `ingredients` (
   `ingredient_weight` int(11) DEFAULT NULL,
   `ingredient_image_path` text,
   `ingredient_num_times_cooked` int(11) DEFAULT '0',
-  `priority` enum('High','Non') DEFAULT 'Non',
+  `priority` enum('High','Low') DEFAULT 'Low',
   PRIMARY KEY (`ingredient_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,37 +41,37 @@ LOCK TABLES `ingredients` WRITE;
 /*!40000 ALTER TABLE `ingredients` DISABLE KEYS */;
 INSERT INTO `ingredients` VALUES
 (1, 'Chicken', 3, '/images/1554173732619.jpg', 0, 'High'),
-(2, 'Canned Black Beans', 1, '/images/1554174096072.jpg', 0, 'Non'),
-(3, 'Carrot', 3, '/images/placeholder.jpg', 0, 'Non'),
-(4, 'Potato chips', 1, '/images/placeholder.jpg', 0, 'Non'),
-(5, 'Ground Pepper', 0, '/images/1554174281993.jpg', 0, 'Non'),
-(6, 'Chicken Broth', 3, '/images/placeholder.jpg', 0, 'Non'),
-(7, 'Canned Tuna', 1, '/images/placeholder.jpg', 0, 'Non'),
-(8, 'Frozen Mixed Vegetables', 1, '/images/placeholder.jpg', 0, 'Non'),
-(9, 'Slice Mozzarella Cheeze', 2, '/images/1554174459952.jpg', 0, 'Non'),
-(10, 'Condensed Ckicken Soup', 1, '/images/condensed_chicken.jpg', 0, 'Non'),
-(11, 'Water', 0, '/images/water.jpg', 0, 'Non'),
-(12, 'Mixed Vegetables', 2, '/images/1554173885043.jpg', 0, 'Non'),
-(13, 'Cream of Chicken Soup', 1, '/images/1554174059749.jpg', 0, 'Non'),
+(2, 'Canned Black Beans', 1, '/images/1554174096072.jpg', 0, 'Low'),
+(3, 'Carrot', 3, '/images/placeholder.jpg', 0, 'Low'),
+(4, 'Potato chips', 1, '/images/placeholder.jpg', 0, 'Low'),
+(5, 'Ground Pepper', 0, '/images/1554174281993.jpg', 0, 'Low'),
+(6, 'Chicken Broth', 3, '/images/placeholder.jpg', 0, 'Low'),
+(7, 'Canned Tuna', 1, '/images/placeholder.jpg', 0, 'Low'),
+(8, 'Frozen Mixed Vegetables', 1, '/images/placeholder.jpg', 0, 'Low'),
+(9, 'Slice Mozzarella Cheeze', 2, '/images/1554174459952.jpg', 0, 'Low'),
+(10, 'Condensed Ckicken Soup', 1, '/images/condensed_chicken.jpg', 0, 'Low'),
+(11, 'Water', 0, '/images/water.jpg', 0, 'Low'),
+(12, 'Mixed Vegetables', 2, '/images/1554173885043.jpg', 0, 'Low'),
+(13, 'Cream of Chicken Soup', 1, '/images/1554174059749.jpg', 0, 'Low'),
 (14, 'Milk', 3, '/images/1554174134107.jpg', 0, 'High'),
-(15, 'Biscuits Mix', 1, '/images/1554174237381.jpg', 0, 'Non'),
-(16, 'Noodles', 1, '/images/1554174318249.jpg', 0, 'Non'),
-(17, 'Green Peas', 2, '/images/1554175099505.jpg', 0, 'Non'),
-(18, 'Cream of Mushroom Soup', 1, '/images/1554174951929.jpg', 0, 'Non'),
+(15, 'Biscuits Mix', 1, '/images/1554174237381.jpg', 0, 'Low'),
+(16, 'Noodles', 1, '/images/1554174318249.jpg', 0, 'Low'),
+(17, 'Green Peas', 2, '/images/1554175099505.jpg', 0, 'Low'),
+(18, 'Cream of Mushroom Soup', 1, '/images/1554174951929.jpg', 0, 'Low'),
 (19, 'Tuna', 2, '/images/1554174668636.jpg', 0, 'High'),
-(20, 'Onions', 2, '/images/1554175725241.jpg', 0, 'Non'),
-(21, 'French Bread', 3, '/images/1554175756719.jpg', 0, 'Non'),
-(22, 'Shredded Mozzarella Cheese', 2, '/images/1554174459952.jpg', 0, 'Non'),
-(23, 'Mayonnaise', 1, '/images/1554175695449.jpg', 0, 'Non'),
-(24, 'Corn', 2, '/images/1554174840465.jpg', 0, 'Non'),
-(25, 'Tortilla Chips', 1, '/images/tortilla_chips.jpg', 0, 'Non'),
-(26, 'Salsa', 2, '/images/1554175182305.jpg', 0, 'Non'),
-(27, 'Canned Cream Corn', 2, '/images/1554174840465.jpg', 0, 'Non'),
-(28, 'Vegetable Oil', 1, '/images/1554175925139.jpg', 0, 'Non'),
-(29, 'Garlic', 2, '/images/1554175948246.jpg', 0, 'Non'),
+(20, 'Onions', 2, '/images/1554175725241.jpg', 0, 'Low'),
+(21, 'French Bread', 3, '/images/1554175756719.jpg', 0, 'Low'),
+(22, 'Shredded Mozzarella Cheese', 2, '/images/1554174459952.jpg', 0, 'Low'),
+(23, 'Mayonnaise', 1, '/images/1554175695449.jpg', 0, 'Low'),
+(24, 'Corn', 2, '/images/1554174840465.jpg', 0, 'Low'),
+(25, 'Tortilla Chips', 1, '/images/tortilla_chips.jpg', 0, 'Low'),
+(26, 'Salsa', 2, '/images/1554175182305.jpg', 0, 'Low'),
+(27, 'Canned Cream Corn', 2, '/images/1554174840465.jpg', 0, 'Low'),
+(28, 'Vegetable Oil', 1, '/images/1554175925139.jpg', 0, 'Low'),
+(29, 'Garlic', 2, '/images/1554175948246.jpg', 0, 'Low'),
 (30, 'Turkey', 3, '/images/1554175982930.jpg', 0, 'High'),
-(31, 'Canned Diced Tomatoes', 1, '/images/1554176022125.jpg', 0, 'Non'),
-(32, 'Chili Powder', 1, '/images/1554174995805.jpg', 0, 'Non');
+(31, 'Canned Diced Tomatoes', 1, '/images/1554176022125.jpg', 0, 'Low'),
+(32, 'Chili Powder', 1, '/images/1554174995805.jpg', 0, 'Low');
 /*!40000 ALTER TABLE `ingredients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -94,7 +94,7 @@ CREATE TABLE `ingredients_in_a_recipe` (
   CONSTRAINT `ingredients_in_a_recipe_ibfk_1` FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`recipe_id`),
   CONSTRAINT `ingredients_in_a_recipe_ibfk_2` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredients` (`ingredient_id`),
   CONSTRAINT `ingredients_in_a_recipe_ibfk_3` FOREIGN KEY (`pantry_id`) REFERENCES `pantry` (`pantry_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,7 +124,7 @@ CREATE TABLE `ingredients_in_pantry` (
   KEY `pantry_id` (`pantry_id`),
   CONSTRAINT `ingredients_in_pantry_ibfk_1` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredients` (`ingredient_id`),
   CONSTRAINT `ingredients_in_pantry_ibfk_2` FOREIGN KEY (`pantry_id`) REFERENCES `pantry` (`pantry_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,7 +151,7 @@ CREATE TABLE `pantry` (
   `pantry_image_path` text,
   `people_cooking_for` int(11) DEFAULT '2',
   PRIMARY KEY (`pantry_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +184,7 @@ CREATE TABLE `recipes` (
   PRIMARY KEY (`recipe_id`),
   KEY `pantry_id` (`pantry_id`),
   CONSTRAINT `recipes_ibfk_1` FOREIGN KEY (`pantry_id`) REFERENCES `pantry` (`pantry_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -220,7 +220,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`user_id`),
   KEY `pantry_id` (`pantry_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`pantry_id`) REFERENCES `pantry` (`pantry_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

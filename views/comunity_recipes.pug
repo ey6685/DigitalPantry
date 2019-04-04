@@ -10,15 +10,19 @@ block content
 			padding:3px;
 		}
 		.individual-recipe:hover{
-			background-color: #5f5d5d;
+			background-color: #ebf5d6;
 			color:black;
 		}
-	div(class='container-fluid', class='rounded', style='width: 80%')
+		.card{
+			color:#570573;
+			background-color:#faf8eb;
+		}
+	div(class='container-fluid', class='rounded', style='width: 90%')
 		br
 		br
 		br
 		br
-		h1 #{title}
+		h1.dp-title-text #{title}
 		br
 		//- Overlay form start. In other words edit recipe form
 		#shareForm.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
@@ -41,7 +45,7 @@ block content
 						option(value='1') Sort A-Z
 						option(value='2') Sort Z-A
 			.form-group.col-md-2
-				input.btn.btn-primary(data-toggle='modal', type='button', value='Share Your Recipe', data-target='#shareForm', id='share-community')
+				input.btn.dp-btn-primary(data-toggle='modal', type='button', value='Share Your Recipe', data-target='#shareForm', id='share-community')
 		br
 		.form-row
 			//-for each recipe in data
@@ -57,7 +61,7 @@ block content
 							for step in recipe_steps[i]
 								p(class='card-text')= step
 						div(class='card-foot', padding='.75rem')
-							button.btn_card.btn.btn-primary(class='saveRecipe', id='card'+i, type='button') Copy recipe
+							button.btn_card.btn.dp-btn-primary(class='saveRecipe', id='card'+i, type='button') Copy recipe
 
 	script.
 		// This will trigger once user stars to type text into a search bar

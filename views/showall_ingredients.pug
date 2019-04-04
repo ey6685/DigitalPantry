@@ -7,17 +7,62 @@ block content
 	br
 	br
 	br
-	div(class='container-fluid', class='rounded', style='width: 80%')
-		h1 #{title}
+	div(class='container-fluid', class='rounded', style='width: 90%')
+		h1.dp-title-text #{title}
 		br
 		a.btn.btn-default(href='/ingredients/cards')
-			i(style='color:black').fa.fa-th-large.fa-2x
+			i.dp-title-text.fa.fa-th-large.fa-2x
 		a.btn.btn-default(href='/ingredients/showall')
-			i(style='color:black').fa.fa-list.fa-2x
-		a.btn.btn-primary(href='/ingredients/add', class='h-75')
+			i.dp-title-text.fa.fa-list.fa-2x
+		a.btn.btn-primary.dp-btn-secondary(href='/ingredients/add', class='h-75')
 			| Add Multiple Ingredients
 		p
-		table.table.table-dark(class='rounded')
+		#accordion
+			.card
+				#headingTwo.card-header
+					h5.mb-0
+					button.btn.btn-primary.dp-btn-primary.collapsed(data-toggle='collapse', data-target='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
+						| Add ingredient
+				#collapseTwo.collapse(aria-labelledby='headingTwo', data-parent='#accordion')
+					.card-body
+						form(method= 'POST', action= '/ingredients/add', class= 'form', enctype="multipart/form-data")
+							.form-row(class='rounded')
+								.col-sm-1.mt-3
+									img#output(width='40', height='40')
+								.form-group.col-md-2.mt-3
+									label.btn.btn-primary.dp-btn-secondary.btn.btn-file Choose Image
+										input(name='image', accept='image/*' ,type='file', style='display: none;', onchange='loadFile(event)')
+
+								//- .form-group.col-md-4
+								//- 	img#output.mr-2.ml-2.mt-2(width='40', height='40')
+								//- 	input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='align-middle')
+								.form-group.col-md-2
+									input.form-control.mt-3(name='ingredientProperties[0]', type='text', placeholder='Name = Tuna')
+								.form-group.col-md-1
+									input.form-control.mt-3(name='ingredientProperties[1]', type='text', placeholder='Total = 2')
+								.form-group.col-md-1
+									.dropdown-inline
+									select.form-control.mt-3(name='ingredientProperties[2]', required)
+										option(value='') Measurement
+										option(value='tsp.') Teaspoon
+										option(value='tbsp.') Tablespoon
+										option(value='fl oz') Fluid Ounce
+										option(value='cup') Cup
+										option(value='quart') Quart
+										option(value='ml') Millilitre
+										option(value='lb') Pound
+										option(value='oz') Dry Ounce
+								.form-group.col-md-2
+									input.form-control.mt-3(name='ingredientProperties[3]', type='date')
+								.form-group.col-md-1
+									.dropdown-inline
+									select.form-control.mt-3(name='ingredientProperties[4]', required)
+										option(value='') Priority Item?
+										option(value='High') Yes
+										option(value='Low') No
+								.col-md-1
+									input.btn.btn-primary.dp-btn-primary.mt-3(type='submit', value='Add', class='form-group')
+		table.table.dp-table(class='rounded')
 			//-caption Available Ingredients
 			thead
 				tr
@@ -26,48 +71,9 @@ block content
 					th(scope='col') Total
 					th(scope='col') Measurement
 					th(scope='col') Expiration Date
-					th(scope='col') Priority Item
+					th(scope='col') Item Priority
 					th(scope='col') Action
 			tbody
-				tr
-					form(method= 'POST', action= '/ingredients/add', class= 'form', enctype="multipart/form-data")
-						.form-row.row-dark(class='rounded')
-							.col-sm-1.mt-3
-								img#output(width='40', height='40')
-							.form-group.col-md-2.mt-3
-								label.btn.btn-primary.btn-sm.btn-file Browse 
-									input(type='file', style='display: none;', onchange='loadFile(event)')
-
-							//- .form-group.col-md-4
-							//- 	img#output.mr-2.ml-2.mt-2(width='40', height='40')
-							//- 	input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='align-middle')
-							.form-group.col-md-2
-								input.form-control.mt-3(name='ingredientProperties[0]', type='text', placeholder='Name = Tuna')
-							.form-group.col-md-1
-								input.form-control.mt-3(name='ingredientProperties[1]', type='text', placeholder='Total = 2')
-							.form-group.col-md-1
-								.dropdown-inline
-								select.form-control.mt-3(name='ingredientProperties[2]', required)
-									option(value='') Measurement
-									option(value='tsp.') Teaspoon
-									option(value='tbsp.') Tablespoon
-									option(value='fl oz') Fluid Ounce
-									option(value='cup') Cup
-									option(value='quart') Quart
-									option(value='ml') Millilitre
-									option(value='lb') Pound
-									option(value='oz') Dry Ounce
-							.form-group.col-md-2
-								input.form-control.mt-3(name='ingredientProperties[3]', type='date')
-							.form-group.col-md-1
-								.dropdown-inline
-								select.form-control.mt-3(name='ingredientProperties[4]', required)
-									option(value='') Priority Item?
-									option(value='High') Yes
-									option(value='Non') No
-							input.btn.btn-primary.col-md-1.mt-3(type='submit', value='Add', class='form-group')
-						.form-row
-							p
 				for item in results
 					tr
 						td

@@ -7,54 +7,70 @@ block content
 			width: 93%;
 			margin: 0px 10px 10px 10px;
 		}
+		.card-content{
+			color:#570573;
+			background-color:#faf8eb;
+		}
 
-	div(class='container-fluid', class='rounded', style='width: 80%')
+	div(class='container-fluid', class='rounded', style='width: 90%')
 		br
 		br
 		br
 		br
-		h1 #{title}
+		h1.dp-title-text #{title}
 		br
 		a.btn.btn-default(href='/ingredients/cards')
 			i(style='color:black').fa.fa-th-large.fa-2x
 		a.btn.btn-default(href='/ingredients/showall')
 			i(style='color:black').fa.fa-list.fa-2x
-		a.btn.btn-primary(href='/ingredients/add', class='h-75')
+		a.btn.dp-btn-secondary(href='/ingredients/add', class='h-75')
 			| Add Multiple Ingredients
 		p
-		tbody
-			tr
-				form(method= 'POST', action= '/ingredients/add', class= 'form', enctype="multipart/form-data")
-					.form-row.row-dark(class='rounded')
-						.form-group.col-md-4
-							img#output.mr-2.ml-2.mt-2(width='40', height='40')
-							input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='align-middle')
-						.form-group.col-md-2
-							input.form-control.mt-3(name='ingredientProperties[0]', type='text', placeholder='Name = Tuna')
-						.form-group.col-md-1
-							input.form-control.mt-3(name='ingredientProperties[1]', type='text', placeholder='Total = 2')
-						.form-group.col-md-1
-							.dropdown-inline
-							select.form-control.mt-3(name='ingredientProperties[2]', required)
-								option(value='') Measurement
-								option(value='tsp.') Teaspoon
-								option(value='tbsp.') Tablespoon
-								option(value='fl oz') Fluid Ounce
-								option(value='cup') Cup
-								option(value='quart') Quart
-								option(value='ml') Millilitre
-								option(value='lb') Pound
-								option(value='oz') Dry Ounce
-						.form-group.col-md-2
-							input.form-control.mt-3(name='ingredientProperties[3]', type='date')
-						.form-group.col-md-1
-							.dropdown-inline
-							select.form-control.mt-3(name='ingredientProperties[4]', required)
-								option(value='') Priority Item?
-								option(value='High') Yes
-								option(value='Non') No
-						input.btn.btn-primary.col-md-1.mt-3(type='submit', value='Add', class='form-group')
-		br
+		#accordion
+			.card
+				#headingTwo.card-header
+					h5.mb-0
+					button.btn.dp-btn-primary.collapsed(data-toggle='collapse', data-target='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
+						| Add ingredient
+				#collapseTwo.collapse(aria-labelledby='headingTwo', data-parent='#accordion')
+					.card-body
+						form(method= 'POST', action= '/ingredients/add', class= 'form', enctype="multipart/form-data")
+							.form-row(class='rounded')
+								.col-sm-1.mt-3
+									img#output(width='40', height='40')
+								.form-group.col-md-2.mt-3
+									label.btn.dp-btn-secondary.btn-file Choose image
+										input(name='image', accept='image/*' ,type='file', style='display: none;', onchange='loadFile(event)')
+
+								//- .form-group.col-md-4
+								//- 	img#output.mr-2.ml-2.mt-2(width='40', height='40')
+								//- 	input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='align-middle')
+								.form-group.col-md-2
+									input.form-control.mt-3(name='ingredientProperties[0]', type='text', placeholder='Name = Tuna')
+								.form-group.col-md-1
+									input.form-control.mt-3(name='ingredientProperties[1]', type='text', placeholder='Total = 2')
+								.form-group.col-md-1
+									.dropdown-inline
+									select.form-control.mt-3(name='ingredientProperties[2]', required)
+										option(value='') Measurement
+										option(value='tsp.') Teaspoon
+										option(value='tbsp.') Tablespoon
+										option(value='fl oz') Fluid Ounce
+										option(value='cup') Cup
+										option(value='quart') Quart
+										option(value='ml') Millilitre
+										option(value='lb') Pound
+										option(value='oz') Dry Ounce
+								.form-group.col-md-2
+									input.form-control.mt-3(name='ingredientProperties[3]', type='date')
+								.form-group.col-md-1
+									.dropdown-inline
+									select.form-control.mt-3(name='ingredientProperties[4]', required)
+										option(value='') Priority Item?
+										option(value='High') Yes
+										option(value='Low') No
+								.col-md-1
+									input.btn.dp-btn-primary.mt-3(type='submit', value='Add', class='form-group')
 		.form-row
 			//-for each ingredient in data
 			//for ingredient,i in data
@@ -62,7 +78,7 @@ block content
 				//-get recipe image
 				- ingredient_image= item.ingredient_image_path
 				.form-group.col-md-3
-					div(id=item.ingredient_id, class='card', class='h-100')
+					div.card-content(id=item.ingredient_id, class='card', class='h-100')
 						img.image(class='card-img-top', src=ingredient_image, alt='image')
 						div(class='card-body')
 							h5(class='card-title') #{item.ingredient_name}
@@ -71,3 +87,13 @@ block content
 
 						div(class='card-foot')
 							button.btn_card.btn.btn-outline-danger.delete-ingredient(href='#',data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount)  DELETE
+
+	script.
+			var loadFile = function(event) {
+				var output = document.getElementById('output');
+				output.src = URL.createObjectURL(event.target.files[0]);
+				output.classList.add("img-thumbnail");
+				document.getElementById("output").style.display = 'block';
+				document.getElementById("output").style.width = '40px';
+				document.getElementById("output").style.height = '40px';
+				}

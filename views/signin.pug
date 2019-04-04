@@ -10,28 +10,22 @@ block content
 	br
 	br
 	br
-	div.mt-5(class='container-fluid', class='rounded', style='width: 80%')
-		//- This div will show the user if they have been registered or display an error
-		.col-md-8.offset-md-4
+	div.mt-5(class='container-fluid', class='rounded', style='width: 90%')
 		//- Below will print whatever you have sent from app.js
-		div.bg-secondary(class='rounded', class='col-12')
-			h6.text-secondary .
-			h1.text-center.text-white.mb-3 #{title}
-			div.bg-dark.card-container(class='container-fluid', class='rounded', style='width: 100%')
-				div(class='row')
-				h6.text-dark .
-					div.mx-auto(class='col-8')
-						form(method='POST', action='/users/login', class= 'form')
-							#form-group
-								label.text-white Email:
-								input.form-control(name='username', type='text', class='form-group', id='username-signin')
+		div.dp-container(class='rounded', class='col-12')
+			h1(style='color: #570573').text-center.mb-3 #{title}
+			hr
+			div(class='row')
+				div.mx-auto(class='col-8')
+					form(method='POST', action='/users/login', class= 'form')
+						#form-group
+							label Email:
+							input.form-control(name='username', type='text', class='form-group', id='username-signin')
+						br
+						#form-group
+							label Password:
+							input.form-control(name='password', type='password', class='form-group', id='password-signin')
 							br
-							#form-group
-								label.text-white Password:
-								input.form-control(name='password', type='password', class='form-group', id='password-signin')
-								br
-								input.btn.btn-primary(type='submit', value='Sign In', class='form-group', id='submit-signin')
-								a(href='/users/register') Don't have an account?
-								a(href='/users/forgotpass')  Forgot Password?
-				h4.text-dark .
-			h4.text-secondary .
+							input.btn.dp-btn-orange-white-text(type='submit', value='Sign In', class='form-group', id='submit-signin')
+							a(href='/users/register') Don't have an account?
+							a(href='/users/forgotpass')  Forgot Password?

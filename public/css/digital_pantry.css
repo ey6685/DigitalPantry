@@ -1,34 +1,97 @@
 /*Navbar background color*/
 .navbar-green {
-  background-color: #058d3f;
+  background-color: #058d3f !important;
 }
 
 /*Container background color*/
 .container-green {
-  background-color: #66c08d;
+  background-color: #66c08d !important;
 }
 
 /*Table colors*/
 .table-green {
-  background-color: #134309;
+  background-color: #134309 !important;
   /* background-color: #195a0c; */
-  color: white;
+  color: white !important;
 }
 
 .footer-green {
   /* background-image: linear-gradient(rgb(25, 90, 12), rgba(236, 252, 233)); */
-  background-color: #195a0c;
+  background-color: #195a0c !important;
 }
 
 .text-green {
-  color: #134309;
+  color: #134309 !important;
 }
 
 .body-green {
-  background-color: #b7e1c9;
+  background-color: #b7e1c9 !important;
 }
 
 .row-dark {
-  background-color: #212529;
-  color: white;
+  background-color: #212529 !important;
+  color: white !important;
+}
+.dp-table {
+  background-color: #faf8eb !important;
+  color: #570573 !important;
+  border: #570573 !important;
+}
+.dp-background {
+  background-color: #faf8eb !important;
+}
+.dp-container {
+  background-color: #570573 !important;
+}
+.dp-title-text {
+  color: #570573 !important;
+}
+.dp-btn-primary {
+  background-color: #91c02e !important;
+  border-color: #91c02e !important;
+  color:white !important;
+}
+.dp-btn-secondary {
+  background-color: #eeaf2c !important;
+  border-color: #eeaf2c !important;
+  color:white !important;
+}
+.dp-button-putple{
+  background-color: #570573 !important;
+  color:white !important;
+}
+.dp-btn-danger {
+  background-color: #d93711 !important;
+  border-color: #d93711 !important;
+}
+.dp-container {
+  background-color: #faf8eb !important;
+  color: #eeaf2c !important;
+}
+.dp-btn-orange-white-text {
+  background-color: #eeaf2c !important;
+  color: white !important;
+}
+.dp-btn-edit {
+  background-color: #570573 !important;
+  border-color: #eeaf2c !important;
+  color: white !important;
+}
+.dp-nav-text {
+  color: #eeaf2c !important;
+}
+.dp-btn-group {
+  background-color: #eeaf2c !important;
+  border-color: white !important;
+}
+.dp-secondary-text {
+  color: #eeaf2c !important;
+}
+.dp-secondary-header {
+  background-color: #eeaf2c !important;
+  color: white !important;
+}
+.dp-highlight-green {
+  background-color: #ebf5d6 !important;
+  color: white !important;
 }
