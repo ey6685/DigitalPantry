@@ -259,10 +259,10 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
   // var key = req.body
     // When Ingredient key_name is found
     // For every ingredient in recipe defined by user in the form do the following
-    console.log(req.body)
+    console.log(req.body.ingredientProperties.length)
    
       for(var i =1; i < req.body.ingredientProperties.length; i++)
-      {
+      {//               req.body.ingredientProperties.lenght         ingredientProperties
         //Retrieve all values from request body
         var ingredient_data_from_page =  req.body.ingredientProperties[i];
         console.log("//////////////////////////////////////////\n" +JSON.stringify(ingredient_data_from_page) +"\n////////////////////////////////////\n");
