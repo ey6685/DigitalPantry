@@ -196,6 +196,22 @@ BODY_PARAMS:
 */
 // calls upload function for images
 router.post('/add', upload.single('image'), async function addRecipe(req, res) {
+  var name_is_open = await recipe_t.findAll({
+    where: {
+      recipe_name: req.body.recipeName
+    }
+  })
+  //check if it is already in the database.
+  console.log("++++++++++")
+  console.log(JSON.stringify(name_is_open))
+  console.log("++++++++++")
+  if(name_is_open.length> 0)
+  {
+    req.flash('error',"Recipe " + req.body.recipeName + " already exist. please rename your new recipe")
+    res.render('add_recipe', {
+      title: 'Add New Recipe'
+    })
+  }
   const userId = req.session.passport['user']
   // Get pantry ID which user belongs to
   const pantryId = await User.findOne({
