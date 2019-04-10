@@ -49,16 +49,21 @@
 .dp-btn-primary {
   background-color: #91c02e !important;
   border-color: #91c02e !important;
-  color:white !important;
+  color: white !important;
 }
 .dp-btn-secondary {
   background-color: #eeaf2c !important;
   border-color: #eeaf2c !important;
-  color:white !important;
+  color: white !important;
 }
-.dp-button-putple{
+.dp-button-purple {
   background-color: #570573 !important;
-  color:white !important;
+  color: white !important;
+}
+.dp-btn-yellow {
+  background-color: #f2d43b !important;
+  border-color: #f2d43b !important;
+  color: white !important;
 }
 .dp-btn-danger {
   background-color: #d93711 !important;
