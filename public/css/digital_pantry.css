@@ -100,3 +100,10 @@
   background-color: #ebf5d6 !important;
   color: white !important;
 }
+.dp-form-fields {
+  background-color: #faf8eb !important;
+  color: #570573 !important;
+}
+::placeholder {
+  color: #570573 !important;
+}
