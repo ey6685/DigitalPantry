@@ -208,15 +208,16 @@ router.get('/cook/:id', async function(req, res) {
   console.log(
     '\n==================\ncook it router to with ' + recipe + ' id\n========================\n'
   )
-  ////////////////////////////////////
-  // how do we get panty_id and scale?//
-  // the function will work but wont //
-  // scale higher than one and wont //
-  // report the metrics with out it//
-  //////////////////////////////////
-  /////////<<TO DO>>////////////////
-  ///////////////////////////////////
-  var info = await cook_it.cook_it2(recipe, 1, 1)
+    var currentPantryID = await User.findOne({
+      attributes: ['pantry_id'],
+      where: {
+        user_id : req.session.passport["user"]
+      }
+    })
+    var people = await Pantry.findOne({
+      attributes: ['people_cooking_for']
+    })
+  var info = await cook_it.cook_it2(recipe,currentPantryID.pantry_id, people.people_cooking_for)
   console.log('REFRESH!')
   res.redirect(req.get('referer'))
 })

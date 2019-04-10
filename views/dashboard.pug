@@ -84,37 +84,40 @@ block content
 		br
 		!= messages('message', locals)
 		- var test;
-		for i in data
-			div.dp-background.card-container(class='container-fluid', class='rounded')
-				h3.dp-title-text
-					|  #{i.ingredient_amount} #{i.ingredient_unit_of_measurement} of #{i.ingredient_name} is expiring in #{(i.ingredient_expiration_date)} 
-				div(class='row')
-					for recipe in i.recipe_data
-						if recipe.num_of_ingredients_on_hand == recipe.num_of_ingredients
-							- test = "div class='col-3 haveAllIngredientsRecipe'";
-						else
-							- test = "div class='col-3 dontHaveAllIngredients' style='display: none;'";
-						#{test}
-							div.card.h-100(recipe-id=recipe.recipe_id , style='width: 100%')
-								img.image(class='card-img-top', src=recipe.recipe_image_path, alt="#{(recipe.recipe_name)}")
-								.card-body
-									h4(id='recipeName', lass='card-title') #{recipe.recipe_name}
-									br
-									p(class="card-text") Cooked #{recipe.num_of_times_cooked} times.
-									p(class='card-text') You have #{(recipe.num_of_ingredients_on_hand)} out of #{recipe.num_of_ingredients} ingredients
+		-if (data)
+			for i in data
+				div.dp-background.card-container(class='container-fluid', class='rounded')
+					h3.dp-title-text
+						|  #{i.ingredient_amount} #{i.ingredient_unit_of_measurement} of #{i.ingredient_name} is expiring in #{(i.ingredient_expiration_date)} 
+					div(class='row')
+						for recipe in i.recipe_data
+							if recipe.num_of_ingredients_on_hand == recipe.num_of_ingredients
+								- test = "div class='col-3 haveAllIngredientsRecipe'";
+							else
+								- test = "div class='col-3 dontHaveAllIngredients' style='display: none;'";
+							#{test}
+								div.card.h-100(recipe-id=recipe.recipe_id , style='width: 100%')
+									img.image(class='card-img-top', src=recipe.recipe_image_path, alt="#{(recipe.recipe_name)}")
+									.card-body
+										h4(id='recipeName', lass='card-title') #{recipe.recipe_name}
+										br
+										p(class="card-text") Cooked #{recipe.num_of_times_cooked} times.
+										p(class='card-text') You have #{(recipe.num_of_ingredients_on_hand)} out of #{recipe.num_of_ingredients} ingredients
 
-									//- For each steps inside of the array of steps
-									for step in recipe.recipe_directions
-										p(style='display:none').card-text.recipeStep= step
-									//- btn_card is a custom class used for CSS for buttons
-								.card-footer
-									.container
-										.row
-											.col
-												.text-center
-													button.btn.btn-primary.dp-btn-secondary.mr-3(class='test', id='showRecipeDetails', type='button', data-toggle='modal', data-target='#viewRecipeDetails') Details
-													button.btn.btn-primary.dp-btn-primary(recipe-id=recipe.recipe_id, id='card-one', type='button') Cook It!
-			br
+										//- For each steps inside of the array of steps
+										for step in recipe.recipe_directions
+											p(style='display:none').card-text.recipeStep= step
+										//- btn_card is a custom class used for CSS for buttons
+									.card-footer
+										.container
+											.row
+												.col
+													.text-center
+														button.btn.btn-primary.dp-btn-secondary.mr-3(class='test', id='showRecipeDetails', type='button', data-toggle='modal', data-target='#viewRecipeDetails') Details
+														button.btn.btn-primary.dp-btn-primary(recipe-id=recipe.recipe_id, id='card-one', type='button') Cook It!
+				br
+		-else
+			p please work?	
 
 
 	script(src='/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js')
