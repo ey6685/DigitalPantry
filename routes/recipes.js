@@ -337,6 +337,34 @@ router.post('/share', async function(req, res){
     res.send("success");
 })
 
+router.get('/recipeDetails/:id', async function showDetails(req, res){
+  recipeId = req.params.id
+  recipeData = await recipe_t.findOne({
+    where:{recipe_id:recipeId}
+  })
+  recipe_steps = await steps.parse_recipe_directions_by_string(recipeData.recipe_directions);
+  recipe_steps = recipe_steps.split('${<br>}');
+  console.log(recipe_steps)
+
+  query=`select ingredients.ingredient_name, ingredients.ingredient_image_path,ingredients_in_a_recipe.pantry_id,ingredients_in_a_recipe.amount_of_ingredient_needed,ingredients_in_a_recipe.ingredient_unit_of_measurement 
+  FROM ingredients
+  INNER JOIN ingredients_in_a_recipe
+  WHERE ingredients.ingredient_id = ingredients_in_a_recipe.ingredient_id and ingredients_in_a_recipe.recipe_id =${recipeId};`
+  db.query(query, function getResults(err, ingredientsInRecipe){
+    if(err){
+      throw err
+    }
+    res.render('cooked_recipe_details', {
+      recipeName: recipeData.recipe_name,
+      recipeImage: recipeData.recipe_image_path,
+      recipeSteps: recipe_steps,
+      servingSize: recipeData.num_people_it_feeds,
+      cookedCount: recipeData.recipe_num_times_cooked,
+      recipeIngredients: ingredientsInRecipe
+    });
+  })
+})
+
 
 router.post('/edit', async function editRecipe(req, res) {
   const data = req.body
