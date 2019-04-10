@@ -174,7 +174,9 @@ async function find_recipes_no_inv(ingredient_id, pantry_id,scale){
                 pantry_id: pantry_id
             }
         });
-        if(scale == null || typeof scale != 'number')
+        if(scale == null || typeof scale != 'number'){
+            scale = -1
+        }
 
         console.log("THE RECIPE IDS FOUND");
         console.log("====================");
@@ -276,8 +278,12 @@ async function find_recipes_no_inv(ingredient_id, pantry_id,scale){
             //scale the required ingredients
             for(var i = 0; i<ingredients_recipe.length;i++)
             {
-                ingredients_recipe[i].amount_of_ingredient_needed *= recipe_scale
+                ingredients_recipe[i].amount_of_ingredient_needed = ingredients_recipe[i].amount_of_ingredient_needed * recipe_scale
             }
+
+            console.log("ingredients wwe need with scale " + recipe_scale)
+            console.log("============================================")
+            console.log(JSON.stringify(ingredients_recipe))
             if(recipe_ids_arr.length>0)
             {
                 var direction_array = await direction_parser.parse_by_str_for_dashboard(recipe_table_data.recipe_directions)
@@ -339,5 +345,6 @@ async function find_recipes_no_inv(ingredient_id, pantry_id,scale){
         return -1;
     }
 }
-// find_recipes_no_inv(19,1,10);
+//TEDTING CODE
+ find_recipes_no_inv(19,1,10);
 module.exports.find_recipes_no_inv = find_recipes_no_inv;
