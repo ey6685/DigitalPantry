@@ -244,7 +244,7 @@ async function find_recipes_no_inv(ingredient_id, pantry_id,scale){
                 console.log("sum >= needed")
                 console.log("=============")
                 console.log(sum + ">=" + ingredients_recipe[o].amount_of_ingredient_needed * recipe_scale)
-                if(sum >= ingredients_recipe[o].amount_of_ingredient_needed|| name.ingredient_weight == 0){
+                if(sum >= ingredients_recipe[o].amount_of_ingredient_needed * recipe_scale|| name.ingredient_weight == 0){
                     console.log("mun ing we have icremented!");
                     num_ing_we_have++;
                 }
@@ -279,6 +279,7 @@ async function find_recipes_no_inv(ingredient_id, pantry_id,scale){
             for(var i = 0; i<ingredients_recipe.length;i++)
             {
                 ingredients_recipe[i].amount_of_ingredient_needed = ingredients_recipe[i].amount_of_ingredient_needed * recipe_scale
+                console.log("new ingredient amount: " + ingredients_recipe[i].amount_of_ingredient_needed)
             }
 
             console.log("ingredients wwe need with scale " + recipe_scale)

@@ -193,9 +193,6 @@ CREATE TABLE `recipes` (
 
 LOCK TABLES `recipes` WRITE;
 /*!40000 ALTER TABLE `recipes` DISABLE KEYS */;
-<<<<<<< HEAD
-INSERT INTO `recipes` VALUES (1,'Chicken Noodle Soup','/images/chicken_noodle_soup.jpg','Combine ingredients into pot#Boil and stir till cooked#Serve warm',0,1,1,0,6),(2,'Chip n Beans','/images/bean_salsa.jpg','Boil beans in pot.#Serve warm with chips.',0,1,1,1,2),(4,'Chicken Pot Pie','/images/chicken_pot_pie.jpg','Heat the oven to 400°F.  Stir the soup, 1/2 cup milk, vegetables and chicken in a 9-inch pie plate.#Stir the remaining 1/2 cup milk, egg and baking mix in a small bowl.  Spread the batter over the chicken mixture (the batter is thin but will bake up into a perfect crust).#Bake for 20 minutes or until the topping is golden brown.',0,1,5,0,10),(5,'Tuna Casserole','/images/placeholder.jpg','Bring a large pot of water to a boil.#Add noodles and frozen peas.#Cook until noodles are al dente, drain well.#Return noodles and peas to the pot.#Mix soup, tuna fish, onions, processed cheese and pepper into the pot.#Stir constantly until all of the ingredients are well mixed and the cheese has melted. Serve.',0,1,5,0,8),(6,'Tuna Melt','/images/placeholder.jpg','Preheat oven to 350 degrees F (175 degrees C).#In a mixing bowl, combine sweet onion, drained tuna, mozzarella, and mayonnaise. Mix thoroughly.#Spread tuna mixture on slices of French bread to form a sandwich. Place sandwiches on a cookie sheet.#Bake in a preheated oven for 10 minutes.',0,1,5,0,10),(7,'Black Bean Salsa','/images/bean_salsa.jpg','In a large bowl combine the black beans, corn, and salsa.#Let it sit for 30 minutes.# Serve',0,1,5,0,6),(8,'Black Bean Chili','/images/placeholder.jpg','Heat the oil in a large heavy pot over medium heat.#cook onion and garlic until onions are translucent.#Add turkey and cook, stirring, until meat is brown. Stir in beans, tomatoes, chili powder, oregano, basil and vinegar.#Reduce heat to low, cover and simmer 60 minutes or more, until flavors are well blended.',0,1,10,0,11);
-=======
 INSERT INTO `recipes` VALUES (1, 'Chicken Noodle Soup', '/images/chicken_noodle_soup.jpg', 'Combine ingredients into pot#Boil and stir till cooked#Serve warm', 0, 1, 1, 0, 6),
 (2, 'Chip n Beans', '/images/bean_salsa.jpg', 'Boil beans in pot.#Serve warm with chips.', 0, 1, 1, 1, 2),
 (4, 'Chicken Pot Pie', '/images/chicken_pot_pie.jpg', 'Heat the oven to 400°F.  Stir the soup, 1/2 cup milk, vegetables and chicken in a 9-inch pie plate.#Stir the remaining 1/2 cup milk, egg and baking mix in a small bowl.  Spread the batter over the chicken mixture (the batter is thin but will bake up into a perfect crust).#Bake for 20 minutes or until the topping is golden brown.', 0, 1, 5, 0, 10),
@@ -203,7 +200,6 @@ INSERT INTO `recipes` VALUES (1, 'Chicken Noodle Soup', '/images/chicken_noodle_
 (6, 'Tuna Melt', '/images/1554177393883.jpg', 'Preheat oven to 350 degrees F (175 degrees C).#In a mixing bowl, combine sweet onion, drained tuna, mozzarella, and mayonnaise. Mix thoroughly.#Spread tuna mixture on slices of French bread to form a sandwich. Place sandwiches on a cookie sheet.#Bake in a preheated oven for 10 minutes.', 0, 1, 5, 0, 10),
 (7, 'Black Bean Salsa', '/images/bean_salsa.jpg', 'In a large bowl combine the black beans, corn, and salsa.#Let it sit for 30 minutes.# Serve', 0, 1, 5, 0, 6),
 (8, 'Black Bean Chili', '/images/1554177341501.jpg', 'Heat the oil in a large heavy pot over medium heat.#cook onion and garlic until onions are translucent.#Add turkey and cook, stirring, until meat is brown. Stir in beans, tomatoes, chili powder, oregano, basil and vinegar.#Reduce heat to low, cover and simmer 60 minutes or more, until flavors are well blended.', 0, 1, 10, 0, 11);
->>>>>>> development
 /*!40000 ALTER TABLE `recipes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -247,7 +243,6 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2019-04-01 13:07:31
-=======
 -- MySQL dump 10.13  Distrib 8.0.14, for Win64 (x86_64)
 --
 -- Host: localhost    Database: digital_pantry
@@ -525,4 +520,3 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2019-04-01  1:30:06
->>>>>>> development:PANTRY_DB_FULL.sql
