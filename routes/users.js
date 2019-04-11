@@ -169,6 +169,7 @@ router.get('/dashboard', async function showDashboard(req, res) {
   console.log('DATA ON DASHBOARD ROUTE')
   console.log('=======================')
   console.log(JSON.stringify(data))
+  console.log(typeof data);
   res.render('dashboard', {
     title: 'Dashboard',
     data: data,
