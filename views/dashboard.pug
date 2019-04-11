@@ -139,7 +139,9 @@ block content
 					type: 'POST',
 					url: '/pantry/setExpirationTimeFrame',
 					data: { expirationTimeFrameValue: value },
-					success: function () {},
+					success: function () {
+						location.reload()
+					},
 					error: function (err) {
 						console.log(err)
 					}
