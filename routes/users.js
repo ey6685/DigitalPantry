@@ -115,6 +115,31 @@ router.get('/register', function showRegistrationPage(req, res) {
   })
 })
 
+// Get request to localhost:3000/users/register
+router.get('/privacy', function showPrivacyPage(req, res) {
+  // renders signin page with content 'Registration"
+  res.render('privacy', {
+    title: 'Privacy'
+  })
+})
+
+// Get request to localhost:3000/users/register
+router.get('/terms', function showPrivacyPage(req, res) {
+  // renders signin page with content 'Registration"
+  res.render('terms', {
+    title: 'Terms'
+  })
+})
+
+// Get request to localhost:3000/users/register
+router.get('/support', function showPrivacyPage(req, res) {
+  // renders signin page with content 'Registration"
+  res.render('support', {
+    title: 'Support'
+  })
+})
+
+
 router.get('/adminPanel', async function showAdminPanelPage(req, res) {
   const currentUserId = req.session.passport['user']
   // Find which pantry user is from

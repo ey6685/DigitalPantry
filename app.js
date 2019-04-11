@@ -106,6 +106,8 @@ app.get('/', function (req, res) {
   })
 })
 
+
+
 app.get('/test', function (req, res) {
   res.render('user_view_template')
 })
