@@ -46,4 +46,9 @@ block content
     br
     .row
       p.mr-3 Finished Cooking?
-      button.btn.btn-primary.dp-btn-primary(type='button') Yes
+      button.btn.btn-primary.dp-btn-primary(id='finishCooking', recipe-id=recipeId, type='button') Yes
+  script(src="/js/viewRecipeDetailsDashboard.js")
+  script.
+    localStorage.clear();
+    var recipeData = '!{wholeRecipe}'
+    localStorage.setItem('recipe', recipeData);

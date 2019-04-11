@@ -28,6 +28,8 @@ block content
 	br
 	div(class='container-fluid', class='rounded', style='width: 90%')
 		//- Overlay form start. In other words view recipe form
+		a#undoCooking(href='' style='display:none')
+			i.fas.fa-2x.fa-undo
 		#viewRecipeDetails.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
 			.modal-dialog.modal-dialog-centered.modal-lg(role='document')
 				.modal-content
@@ -168,4 +170,12 @@ block content
 			document.getElementById('name').focus()
 			document.getElementById('edit-btn').classList.add("disabled");
 			document.getElementById('save-pantryName-btn').classList.remove("disabled");
+		}
+	script(type='text/javascript').
+		//Check if user has cooked a recipe. This is used for the undo button
+		let cookedRecipeData = ""
+		if(localStorage.getItem("recipe") !== null){
+			console.log("SHOW!")
+			cookedRecipeData = localStorage.getItem('recipe')
+			$('#undoCooking').show()
 		}

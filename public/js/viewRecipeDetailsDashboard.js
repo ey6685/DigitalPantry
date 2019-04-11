@@ -142,3 +142,42 @@ $(document).on('focusout', '#ingredient_amount_available', function() {
     }
   })
 })
+
+$(document).on('click', '#finishCooking', function(e) {
+  console.log("WOOO")
+  $target = $(e.target)
+    // get data-id value from the button, which is recipe ID
+    const id = $target.attr('recipe-id')
+    console.log(id)
+    // Start AJAX
+    $.ajax({
+      type: 'GET',
+      url: '/users/cook/' + id,
+      success: function (response) {
+        // Reload the page to update cards
+        window.location.href = '/users/dashboard'
+      },
+      error: function (err) {
+        console.log('Could not delete: ' + id)
+      }
+    })
+})
+
+$(document).on('click', '#undoCooking', function(e) {
+  e.preventDefault()
+  cookedRecipeData = localStorage.getItem('recipe')
+  console.log(JSON.parse(cookedRecipeData))
+  .ajax({
+    type: 'POST',
+    data:cookedRecipeData,
+    url: '/recipes/undo/',
+    success: function (response) {
+      // Reload the page to update cards
+      // localStorage.clear()
+      location.reload()
+    },
+    error: function (err) {
+      console.log('Could not delete: ' + id)
+    }
+  })
+})

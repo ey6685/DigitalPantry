@@ -354,15 +354,25 @@ router.get('/recipeDetails/:id', async function showDetails(req, res){
     if(err){
       throw err
     }
+    var JSONObj = {"recipeId":recipeId, "recipeData":recipeData, "ingredientData":ingredientsInRecipe}
+
     res.render('cooked_recipe_details', {
+      wholeRecipe:JSON.stringify(JSONObj),
       recipeName: recipeData.recipe_name,
       recipeImage: recipeData.recipe_image_path,
       recipeSteps: recipe_steps,
+      recipeId:recipeId,
       servingSize: recipeData.num_people_it_feeds,
       cookedCount: recipeData.recipe_num_times_cooked,
       recipeIngredients: ingredientsInRecipe
     });
   })
+})
+
+
+router.post('/recipes/undo/', function undoCooking(req, res){
+  console.log(req.body.data)
+  res.send('success')
 })
 
 
