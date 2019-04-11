@@ -4,8 +4,8 @@ extends admin_template
 block content
 	//- Style used for removing different border color within a table
 	style.
-		.table-dark th, .table-dark td, .table-dark thead th{
-			border-color: inherit;
+		table,thead,tr{
+			border:1px double #570573 !important
 		}
 	br
 	!= messages('message', locals)
@@ -54,7 +54,7 @@ block content
 							//- #ingredient-rows is used for Jquery 
 							#ingredient-rows
 							#dynamic-ingredient-row
-							button.btn.btn-secondary.btn-success(type='button', onclick='addIngredient()', id='add-showall-rec') Add Ingredient
+							button.btn.dp-btn-yellow(type='button', onclick='addIngredient()', id='add-showall-rec') Add Ingredient
 							br
 							br
 							h5 Current recipe steps
@@ -67,8 +67,8 @@ block content
 							.form-group
 								textarea#textarea.form-control(name='recipeDirections', placeholder= 'Describe first step\nDescribe second step \nContinue with each step on new line', rows='8', class='form-group')
 							hr
-							button.btn.btn-secondary(type='button', data-dismiss='modal', id='close-showall-rec') Close
-							button.btn.btn-primary(type='submit', id='save-showall-rec') Save changes
+							button.btn.dp-btn-secondary(type='button', data-dismiss='modal', id='close-showall-rec') Close
+							button.btn.dp-btn-primary(type='submit', id='save-showall-rec') Save changes
 		//-Alert form end
 		//- Page content start
 		table.table.rounded.table-hover.dp-table
@@ -98,10 +98,10 @@ block content
 						td(align='right')= item.num_people_it_feeds
 						td(align='middle')
 							//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
-							a.btn.btn-outline-danger.delete-recipe.mr-2(href='#', data-id=item.recipe_id, id= 'delete-button') DELETE
-							a.btn.btn-primary.edit-recipe.dp-btn-edit(type='button', data-toggle='modal', data-target='#editRecipe', id= 'edit-button') EDIT
+							a.btn.btn-outline-danger.delete-recipe.mr-2(href='#', data-id=item.recipe_id, id= 'delete-button') REMOVE
+							a.btn.dp-btn-edit(type='button', data-toggle='modal', data-target='#editRecipe', id= 'edit-button') EDIT
 					//- Body of a drop-down row with ID linked to the parent row
-					tbody(id=row2).collapse.bg-secondary.text-white
+					tbody(id=row2).collapse.dp-recipe-accordion
 						tr
 							td(rowspan='15').align-middle.border-right.text-center
 								b
