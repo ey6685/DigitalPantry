@@ -158,7 +158,7 @@ $(document).on('click', '#finishCooking', function(e) {
         window.location.href = '/users/dashboard'
       },
       error: function (err) {
-        console.log('Could not delete: ' + id)
+        console.log('Could not cook recipe with id: ' + id)
       }
     })
 })
@@ -166,18 +166,21 @@ $(document).on('click', '#finishCooking', function(e) {
 $(document).on('click', '#undoCooking', function(e) {
   e.preventDefault()
   cookedRecipeData = localStorage.getItem('recipe')
-  console.log(JSON.parse(cookedRecipeData))
-  .ajax({
+  $(this).hide()
+  //Clear local storage after recipe ingredients are returned
+  localStorage.clear()
+  $.ajax({
     type: 'POST',
-    data:cookedRecipeData,
+    data:{"cookedRecipe" : cookedRecipeData},
     url: '/recipes/undo/',
     success: function (response) {
       // Reload the page to update cards
-      // localStorage.clear()
-      location.reload()
+      localStorage.clear()
+      window.location.href = '/users/dashboard'
+      // console.log(JSON.parse(response))
     },
     error: function (err) {
-      console.log('Could not delete: ' + id)
+      console.log('Something went wrong: ' + err)
     }
   })
 })

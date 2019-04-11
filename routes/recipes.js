@@ -344,9 +344,8 @@ router.get('/recipeDetails/:id', async function showDetails(req, res){
   })
   recipe_steps = await steps.parse_recipe_directions_by_string(recipeData.recipe_directions);
   recipe_steps = recipe_steps.split('${<br>}');
-  console.log(recipe_steps)
 
-  query=`select ingredients.ingredient_name, ingredients.ingredient_image_path,ingredients_in_a_recipe.pantry_id,ingredients_in_a_recipe.amount_of_ingredient_needed,ingredients_in_a_recipe.ingredient_unit_of_measurement 
+  query=`select ingredients.ingredient_id, ingredients.ingredient_name, ingredients.ingredient_image_path,ingredients_in_a_recipe.pantry_id,ingredients_in_a_recipe.amount_of_ingredient_needed,ingredients_in_a_recipe.ingredient_unit_of_measurement 
   FROM ingredients
   INNER JOIN ingredients_in_a_recipe
   WHERE ingredients.ingredient_id = ingredients_in_a_recipe.ingredient_id and ingredients_in_a_recipe.recipe_id =${recipeId};`
@@ -370,9 +369,28 @@ router.get('/recipeDetails/:id', async function showDetails(req, res){
 })
 
 
-router.post('/recipes/undo/', function undoCooking(req, res){
-  console.log(req.body.data)
-  res.send('success')
+router.post('/undo', function undoCooking(req, res){
+  cookedRecipeData = JSON.parse(req.body.cookedRecipe)
+  console.log(cookedRecipeData)
+  for (ingredient in cookedRecipeData.ingredientData){
+    //Get all info from ingredient (id, name, size, etc)
+    ingredientInfo = cookedRecipeData.ingredientData[ingredient]
+    //Get ingredients ID
+    ingrdientId = ingredientInfo.ingredient_id
+    //Get ingredients expiration date
+    ingredientExpirationDate = ingredientInfo.ingredient_expiration_date
+    // Get ingredients amount needed for the recipe
+    amountNeeded = ingredientInfo.amount_of_ingredient_needed
+    //Add amount of used ingredient back into tables since user decided to undo cooked recipe.
+    query=`UPDATE ingredients_in_pantry SET ingredient_amount = ingredient_amount + ${amountNeeded}, WHERE ingredient_id=${ingrdientId};`
+    db.query(query,function dbResponse(err){
+      console.log("Adding ingredients back into pantry")
+      console.log(query)
+      if (err){
+        throw err
+      }
+    })
+  }
 })
 
 
