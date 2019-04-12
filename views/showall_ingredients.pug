@@ -10,18 +10,17 @@ block content
 	div(class='container-fluid', class='rounded', style='width: 90%')
 		h1.dp-title-text #{title}
 		br
-		a.btn.btn-default(href='/ingredients/cards')
-			i.dp-title-text.fa.fa-th-large.fa-2x
-		a.btn.btn-default(href='/ingredients/showall')
-			i.dp-title-text.fa.fa-list.fa-2x
-		a.btn.btn-primary.dp-btn-secondary(href='/ingredients/add', class='h-75')
+		a.btn.dp-change-view(href='/ingredients/cards')
+			i.dp-change-view.fa.fa-th-large.fa-lg.mr-1
+			| Card View
+		a.btn.btn-primary.dp-btn-secondary.ml-2(href='/ingredients/add', class='h-75')
 			| Add Multiple Ingredients
 		p
 		#accordion
 			.card
 				#headingTwo.card-header
 					h5.mb-0
-					button.btn.btn-primary.dp-btn-primary.collapsed(data-toggle='collapse', data-target='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
+					button.btn.btn-primary.dp-btn-primary.collapsed.ml-2(data-toggle='collapse', data-target='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
 						| Add Ingredient
 				#collapseTwo.collapse(aria-labelledby='headingTwo', data-parent='#accordion')
 					.card-body
