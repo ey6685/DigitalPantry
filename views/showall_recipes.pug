@@ -28,27 +28,27 @@ block content
 				.modal-content
 					.modal-body
 						form(method= 'POST', action='/recipes/edit', class='form')
-							h4
+							h4.dp-secondary-text
 							hr
 							br
 							//- Edit recipe information fields
 							.form-row
 								.form-group.col-md-6
-									label(for='recipe-name') Recipe name
-									input.form-control(name="recipeName", type='text', placeholder="Recipe name", class='form-group', id='recipe-name')
+									label.dp-primary-text(for='recipe-name') Recipe name
+									input.form-control.dp-form-fields(name="recipeName", type='text', placeholder="Recipe name", class='form-group', id='recipe-name')
 								.form-group.col-md-6
-									label(for='serving-size') Serving size
-									input.form-control(name="recipeSize", type='text', placeholder="Serving Size", class='form-group', id='recipe-size')
-							h5 Ingredients
+									label.dp-primary-text(for='serving-size') Serving size
+									input.form-control.dp-form-fields(name="recipeSize", type='text', placeholder="Serving Size", class='form-group', id='recipe-size')
+							h5.dp-secondary-text Ingredients
 							hr
 							br
 							//- Edit ingredient information fields
 							.form-row
-								.form-group.col-md-4
+								.form-group.col-md-4.dp-primary-text
 									| Name
-								.form-group.col-md-3
+								.form-group.col-md-3.dp-primary-text
 									| Qty
-								.form-group.col-md-3
+								.form-group.col-md-3.dp-primary-text
 									| Measurement
 							//- Although it might seem like ingredient row does nothing
 							//- #ingredient-rows is used for Jquery 
@@ -57,17 +57,18 @@ block content
 							button.btn.dp-btn-yellow(type='button', onclick='addIngredient()', id='add-showall-rec') Add Ingredient
 							br
 							br
-							h5 Current recipe steps
+							h5.dp-secondary-text Current recipe steps
 							hr
 							br
-							#currentRecipeSteps
-							h5 Recipe steps
+							#currentRecipeSteps.dp-primary-text
+							h5.dp-secondary-text Recipe steps
 							hr
 							br
 							.form-group
-								textarea#textarea.form-control(name='recipeDirections', placeholder= 'Describe first step\nDescribe second step \nContinue with each step on new line', rows='8', class='form-group')
+								textarea#textarea.form-control.dp-form-fields(name='recipeDirections', placeholder= 'Describe first step\nDescribe second step \nContinue with each step on new line', rows='8', class='form-group')
 							hr
-							button.btn.dp-btn-secondary(type='button', data-dismiss='modal', id='close-showall-rec') Close
+							br
+							button.btn.dp-btn-secondary.mr-2(type='button', data-dismiss='modal', id='close-showall-rec') Close
 							button.btn.dp-btn-primary(type='submit', id='save-showall-rec') Save changes
 		//-Alert form end
 		//- Page content start

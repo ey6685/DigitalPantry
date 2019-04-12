@@ -37,15 +37,15 @@ block content
 						button.btn.btn-primary(type='button', data-dismiss='modal', id='close-community') Close
 		.form-row
 			.form-group.col-md-2
-				input.form-control.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
+				input.form-control.mr-sm-2.dp-form-fields(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
 			.form-group.col-md-2
 				.dropdown
-					select.form-control(id='sortBar', name='SortBar', onchange='sortList()', class='selection-drop')
+					select.form-control.dp-form-fields(id='sortBar', name='SortBar', onchange='sortList()', class='selection-drop')
 						option(value='0') Sort By
 						option(value='1') Sort A-Z
 						option(value='2') Sort Z-A
 			.form-group.col-md-2
-				input.btn.dp-btn-primary(data-toggle='modal', type='button', value='Share Your Recipe', data-target='#shareForm', id='share-community')
+				input.btn.dp-btn-secondary(data-toggle='modal', type='button', value='Share Your Recipe', data-target='#shareForm', id='share-community')
 		br
 		.form-row
 			//-for each recipe in data

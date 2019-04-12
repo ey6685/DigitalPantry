@@ -25,10 +25,10 @@ block content
 			a.btn.btn-default(href='/ingredients/expiredAdmin')
 				i(style='color:black').fa.fa-list.fa-2x
 			.form-group.col-md-2
-				input.form-control.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search')
+				input.form-control.dp-form-fields.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search')
 			.form-group.col-md-2
 				.dropdown
-					select.form-control(id='sortBar', name='SortBar', onchange='sortList()')
+					select.form-control.dp-form-fields(id='sortBar', name='SortBar', onchange='sortList()')
 						option(value='0') Sort By
 						option(value='1') Sort A-Z
 						option(value='2') Sort Z-A

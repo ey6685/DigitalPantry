@@ -50,10 +50,10 @@ block content
 			a.btn.btn-default(href='/recipes/showall', class='link')
 				i(style='color:black').fa.fa-list.fa-2x
 			.form-group.col-md-2
-				input.form-control.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
+				input.form-control.dp-form-fields.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
 			.form-group.col-md-2
 				.dropdown
-					select.form-control(id='sortBar', name='SortBar', onchange='sortList()', class='selection-drop')
+					select.form-control.dp-form-fields(id='sortBar', name='SortBar', onchange='sortList()', class='selection-drop')
 						option(value='0') Sort By
 						option(value='1') Sort A-Z
 						option(value='2') Sort Z-A
@@ -75,7 +75,7 @@ block content
 							for step,x in recipe_steps[i]
 								p(id='recipeStep'+x class='recipeStep' class='card-text')= step
 						div(class='card-foot', padding='.75rem')
-							button.btn_card.btn.btn-outline-danger(class='delete-recipe', data-id= recipe.recipe_id, type='button', id='delete-showrec') Delete Recipe
+							button.btn_card.btn.btn-outline-danger(class='delete-recipe', data-id= recipe.recipe_id, type='button', id='delete-showrec') Remove From Pantry
 
 	script.
 		$(window).on('load', function() {
