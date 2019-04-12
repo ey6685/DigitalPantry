@@ -46,7 +46,7 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
     try{
         console.log("/n=====================\nstarted cook it.\n=======================\n");
         //check data
-        var scale=0.0;
+        var scale
         console.log("data recived:\nrecipe id: " + recipe_id +"\npantry_id: " + pantry_id +"\npeople to fed: " + people_to_fed +'\n');
         if(recipe_id == null)
         {
@@ -81,10 +81,11 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
                 }
             });
             
-            scale = parseInt(people_to_fed / recipe_scale.recipe_people_it_feeds);
-            if(people_to_fed < recipe_scale.recipe_people_it_feeds)
+            scale = parseInt((people_to_fed / recipe_scale.num_people_it_feeds));
+            console.log("scale before convertered: " + scale)
+            if(people_to_fed < recipe_scale.num_people_it_feeds)
                 {scale = 1;}
-            else if(people_to_fed % recipe_scale.recipe_people_it_feeds >0)
+            else if(people_to_fed % recipe_scale.num_people_it_feeds >0)
                 {scale++;}
             if(scale == NaN)
                 scale = 1;
@@ -130,6 +131,7 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
             for(var i=0; i<ingredients_in_the_recipe.length; i++)
             {   
                 var amount_need = ingredients_in_the_recipe[i].amount_of_ingredient_needed * scale;
+                console.log("amount= " + ingredients_in_the_recipe[i].amount_of_ingredient_needed +' * '  + scale)
                 var current_ingredient = await in_pantry_t.findAll({
                     where: {
                         ingredient_id: ingredients_in_the_recipe[i].ingredient_id
@@ -146,7 +148,7 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
                     {
                         amount = await unit_converter.converter_raw(amount, current_ingredient[o].ingredient_unit_of_measurement,ingredients_in_the_recipe[i].ingredient_unit_of_measurement);
                     }
-
+                    console.log(amount + " >= " + amount_need)
                     if(amount >= amount_need)
                     {
                         query_str = query_str+  "UPDATE ingredients_in_pantry SET ingredient_amount = " + (current_ingredient[o].ingredient_amount - amount_need) + " WHERE ingredient_id = " + current_ingredient[o].ingredient_id + " AND ingredient_expiration_date = '" + current_ingredient[o].ingredient_expiration_date +"'; ";
@@ -157,14 +159,25 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
                         amount_need -= current_ingredient[o].ingredient_amount;
                         query_str = query_str+ "UPDATE ingredients_in_pantry SET ingredient_amount = 0, ingredient_expiration_date = null  WHERE ingredient_id = " + current_ingredient[o].ingredient_id + " AND ingredient_expiration_date = '" + current_ingredient[o].ingredient_expiration_date + "'; ";
                     }
-
                 }
+
 
             
             }
             //});//end of for each
         }//end of checking if the flag has been fliped
+        
+        console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
+        console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
+        console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
+        console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
+        console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
         console.log("the string:\n" +query_str);
+        console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
+        console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
+        console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
+        console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
+        
         db.query(query_str,(err,res)=>{
             if(err) throw err;
             console.log(JSON.stringify(res));
