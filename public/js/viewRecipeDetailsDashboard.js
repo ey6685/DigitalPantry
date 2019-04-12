@@ -100,6 +100,7 @@ $(document).on('click', '#add-missing-ingredient-btn', function() {
   $ingredientAmountAvailable.focus()
 })
 
+//Once user changes the number of ingredient available trigger this
 $(document).on('focusout', '#ingredient_amount_available', function() {
   ingredientId = $(this)
     .closest('tr')
