@@ -10,68 +10,71 @@ block content
 		.col-md-3
 			img.img-thumbnail.img-fluid.rounded-circle(id='pantry-image', src='/images/PantryImage9001.jpg', alt='Pantry Image', class='image-card')
 		.col-md-9
-			h1 #{title}
+			h1.dp-title-text #{title}
 			hr
 			br
 			.row
 				.col-md-6
-					h4#name(style='border-bottom:1px solid black', onfocusout='cancelEdit()') Pantry Name
-				.btn#edit-btn.btn-primary(role='button', aria-disabled='false', onclick='edit()') Edit
-				.btn#save-pantryName-btn.btn-success.disabled(role='button', aria-disabled='true') Save
+					h4.dp-primary-text#name(style='border-bottom:1px solid black', onfocusout='cancelEdit()') Pantry Name
+				.btn#edit-btn.dp-btn-purple.mr-2(role='button', aria-disabled='false', onclick='edit()') Edit
+				.btn#save-pantryName-btn.dp-btn-primary.disabled(role='button', aria-disabled='true') Save
 			br
 			.row
 				.col-md-6
 					form(method= 'POST', action= '/users/addImg', class= 'form', enctype="multipart/form-data")
-						input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='form-group')
-						input.btn.btn-primary(type='submit', value='Upload-Image', class='form-group', id='Upload-Image')
+						label.btn.btn-primary.dp-btn-secondary.btn.btn-file Choose Image
+							input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='form-group', style='display: none;')
 	br
 	//-reset password overlay
 	#resetForm.modal.fade(tabindex='-1', role='dialog', aria-hidden='true', class= 'form-modal')
 		.modal-dialog.modal-dialog-centered.modal(role='document')
 			.modal-content
 				.modal-header.modal-title 
-					h5 Reset password
+					h5.dp-title-text Reset Password
 				form(method='POST', action='/user/resetPassword', class='form')
 					.modal-body
 						.container
 							.row.justify-content-md-center
 								.form-group
-									label Enter new password:
-									input#new-password.form-control(name='password', type='password', placeholder="Password", class='form-group')
+									label.dp-secondary-text Enter New Password:
+									input#new-password.form-control.dp-form-fields(name='password', type='password', placeholder="Password", class='form-group')
 							.row.justify-content-md-center
 								.form-group
-									label Confirm password:
-									input#confirm-password.form-control(name='confirmPassword',type='password', placeholder="Password", class='form-group')
+									label.dp-secondary-text Confirm Password:
+									input#confirm-password.form-control.dp-form-fields(name='confirmPassword',type='password', placeholder="Password", class='form-group')
 					.modal-footer
-						button.btn.btn-primary(type='button', data-dismiss='modal', id='cancle-admin') Cancel
-						input.btn.btn-primary(type='submit', value='Submit', id='submit-admin')
+						button.btn.btn-outline-danger(type='button', data-dismiss='modal', id='cancle-admin') Cancel
+						input.btn.dp-btn-primary(type='submit', value='Submit', id='submit-admin')
 	//-Change privilege overlay
 	#changePrivilege.modal.fade(tabindex='-1', role='dialog',aria-hidden='true', class= 'form-modal')
 		.modal-dialog.modal-dialog-centered.modal(role='document')
 			.modal-content
 				.modal-header.modal-title 
-					h5 Change privilege
+					h5.dp-title-text Change Privilege
 				form(method='POST', action='/users/changePrivilege', class='form')
 					.modal-body
-						label Set new privilege
 						.container
 							.row.justify-content-md-center
-								select.form-control(name='userType', required)
-									option(value='administrator') Administrator
-									option(value='volunteer') Volunteer
+								.form-group.col-md-7
+									label.dp-secondary-text Set New Privilege:
+							.row.justify-content-md-center
+								.form-group.col-md-7
+									select.form-control.dp-form-fields(name='userType', required)
+										option(value='volunteer') Volunteer
+										option(value='administrator') Administrator				
 					.modal-footer
-						button.btn.btn-primary(type='button', data-dismiss='modal', id='cancle2-admin') Cancel
-						input.btn.btn-primary(type='submit', value='Change', class='form-group')
+						button.btn.btn-outline-danger(type='button', data-dismiss='modal', id='cancle-admin') Cancel
+						input.btn.dp-btn-primary(type='submit', value='Submit', id='submit-admin')
 	br
-	h4 Active Users
+	h4.dp-secondary-text Active Users
 	hr
 	br
 	.form-row
 		.form-group.col-md-2
-			input.form-control.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
+			input.form-control.dp-form-fields.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
 		.form-group.col-md-2
 			.dropdown
-				select.form-control(id='sortBar', name='SortBar', onchange='sortList()', class='selection-drop')
+				select.form-control.dp-form-fields(id='sortBar', name='SortBar', onchange='sortList()', class='selection-drop')
 					option(value='0') Sort By
 					option(value='1') Sort A-Z
 					option(value='2') Sort Z-A
@@ -92,25 +95,26 @@ block content
 					td
 						a.btn.btn-outline-danger(data-toggle='modal', data-target='#changePrivilege', id= 'change-admin') Change Privilege
 					td
-						a.btn.btn-outline-danger(data-toggle='modal', data-target='#resetForm', id= 'reset-admin') Reset
+						a.btn.btn-outline-danger(data-toggle='modal', data-target='#resetForm', id= 'reset-admin') Reset Password
 					td
-						a.btn.btn-outline-danger(class="delete-user", data-id=item.user_id, id= 'delete-admin') DELETE
-	h4 Add New User
+						a.btn.btn-outline-danger(class="delete-user", data-id=item.user_id, id= 'delete-admin') Remove User
+	br
+	h4.dp-secondary-text Add New User
 	hr
 	br
 	form(method= 'POST', action= '/users/add', class= 'form')
 		.form-row
 			.col-md-3
-				input.form-control(name='userName', type='emial', placeholder='Email', class= 'input-form')
+				input.form-control.dp-form-fields(name='userName', type='emial', placeholder='Email', class= 'input-form')
 			.col-md-3
-				input.form-control(name="confirmUserName", type='email', placeholder="Confirm Email", class='input-form')
+				input.form-control.dp-form-fields(name="confirmUserName", type='email', placeholder="Confirm Email", class='input-form')
 			.col-md-3
 				.dropdown-inline
-				select.form-control(name='userType', required)
-					option(value='administrator') Administrator
+				select.form-control.dp-form-fields(name='userType', required)
 					option(value='volunteer') Volunteer
+					option(value='administrator') Administrator
 			.col-md-2
-				button.btn.btn-primary(type='submit', id='add-admin') Add New User
+				button.btn.dp-btn-primary(type='submit', id='add-admin') Add New User
 
 	script.
 		function edit(){

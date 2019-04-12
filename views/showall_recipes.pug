@@ -4,8 +4,8 @@ extends admin_template
 block content
 	//- Style used for removing different border color within a table
 	style.
-		.table-dark th, .table-dark td, .table-dark thead th{
-			border-color: inherit;
+		table,thead,tr{
+			border:1px double #570573 !important
 		}
 	br
 	!= messages('message', locals)
@@ -15,11 +15,10 @@ block content
 		br
 		h1.dp-title-text #{title}
 		br
-		a.btn.btn-default(href='/recipes/showRecipes', class='link')
-			i(style='color:black').fa.fa-th-large.fa-2x
-		a.btn.btn-default(href='/recipes/showall', class='link')
-			i(style='color:black').fa.fa-list.fa-2x
-		a.btn.btn-primary.dp-btn-secondary(href='/recipes/add', class='h-75')
+		a.btn.dp-change-view(href='/recipes/showRecipes')
+			i.dp-change-view.fa.fa-th-large.fa-lg.mr-1
+			| Card View
+		a.btn.btn-primary.dp-btn-secondary.ml-2(href='/recipes/add', class='h-75')
 			| Add Recipe
 		p
 		//- Overlay form start. In other words edit recipe form
@@ -28,47 +27,48 @@ block content
 				.modal-content
 					.modal-body
 						form(method= 'POST', action='/recipes/edit', class='form')
-							h4
+							h4.dp-secondary-text
 							hr
 							br
 							//- Edit recipe information fields
 							.form-row
 								.form-group.col-md-6
-									label(for='recipe-name') Recipe name
-									input.form-control(name="recipeName", type='text', placeholder="Recipe name", class='form-group', id='recipe-name')
+									label.dp-primary-text(for='recipe-name') Recipe name
+									input.form-control.dp-form-fields(name="recipeName", type='text', placeholder="Recipe name", class='form-group', id='recipe-name')
 								.form-group.col-md-6
-									label(for='serving-size') Serving size
-									input.form-control(name="recipeSize", type='text', placeholder="Serving Size", class='form-group', id='recipe-size')
-							h5 Ingredients
+									label.dp-primary-text(for='serving-size') Serving size
+									input.form-control.dp-form-fields(name="recipeSize", type='text', placeholder="Serving Size", class='form-group', id='recipe-size')
+							h5.dp-secondary-text Ingredients
 							hr
 							br
 							//- Edit ingredient information fields
 							.form-row
-								.form-group.col-md-4
+								.form-group.col-md-4.dp-primary-text
 									| Name
-								.form-group.col-md-3
+								.form-group.col-md-3.dp-primary-text
 									| Qty
-								.form-group.col-md-3
+								.form-group.col-md-3.dp-primary-text
 									| Measurement
 							//- Although it might seem like ingredient row does nothing
 							//- #ingredient-rows is used for Jquery 
 							#ingredient-rows
 							#dynamic-ingredient-row
-							button.btn.btn-secondary.btn-success(type='button', onclick='addIngredient()', id='add-showall-rec') Add Ingredient
+							button.btn.dp-btn-yellow(type='button', onclick='addIngredient()', id='add-showall-rec') Add Ingredient
 							br
 							br
-							h5 Current recipe steps
+							h5.dp-secondary-text Current recipe steps
 							hr
 							br
-							#currentRecipeSteps
-							h5 Recipe steps
+							#currentRecipeSteps.dp-primary-text
+							h5.dp-secondary-text Recipe steps
 							hr
 							br
 							.form-group
-								textarea#textarea.form-control(name='recipeDirections', placeholder= 'Describe first step\nDescribe second step \nContinue with each step on new line', rows='8', class='form-group')
+								textarea#textarea.form-control.dp-form-fields(name='recipeDirections', placeholder= 'Describe first step\nDescribe second step \nContinue with each step on new line', rows='8', class='form-group')
 							hr
-							button.btn.btn-secondary(type='button', data-dismiss='modal', id='close-showall-rec') Close
-							button.btn.btn-primary(type='submit', id='save-showall-rec') Save changes
+							br
+							button.btn.dp-btn-secondary.mr-2(type='button', data-dismiss='modal', id='close-showall-rec') Close
+							button.btn.dp-btn-primary(type='submit', id='save-showall-rec') Save changes
 		//-Alert form end
 		//- Page content start
 		table.table.rounded.table-hover.dp-table
@@ -98,10 +98,10 @@ block content
 						td(align='right')= item.num_people_it_feeds
 						td(align='middle')
 							//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
-							a.btn.btn-outline-danger.delete-recipe.mr-2(href='#', data-id=item.recipe_id, id= 'delete-button') DELETE
-							a.btn.btn-primary.edit-recipe.dp-btn-edit(type='button', data-toggle='modal', data-target='#editRecipe', id= 'edit-button') EDIT
+							a.btn.btn-outline-danger.delete-recipe.mr-2(href='#', data-id=item.recipe_id, id= 'delete-button') REMOVE
+							a.btn.dp-btn-edit(type='button', data-toggle='modal', data-target='#editRecipe', id= 'edit-button') EDIT
 					//- Body of a drop-down row with ID linked to the parent row
-					tbody(id=row2).collapse.bg-secondary.text-white
+					tbody(id=row2).collapse.dp-recipe-accordion
 						tr
 							td(rowspan='15').align-middle.border-right.text-center
 								b
@@ -126,13 +126,13 @@ block content
 			let template = `
 			<div class="form-row">
 				<div class="form-group col-md-4">
-					<input class="form-control" name="ingredientName" type="text" placeholder="Ingredient = Chicken">
+					<input class="form-control dp-form-fields" name="ingredientName" type="text" placeholder="Ingredient = Chicken">
 				</div>
 				<div class="form-group col-md-3">
-					<input class="form-control" name="ingredientQty" type="text" placeholder="Quantity = 2">
+					<input class="form-control dp-form-fields" name="ingredientQty" type="text" placeholder="Quantity = 2">
 				</div>
 				<div class="dropdown-inline col-md-4">
-					<select class="form-control" name="ingredientMeasurement">
+					<select class="form-control dp-form-fields" name="ingredientMeasurement">
 						<option value="">Measurement</option>
 						<option value="fl oz">fluid ounce</option>
 						<option value="ml">Mililliter</option>
