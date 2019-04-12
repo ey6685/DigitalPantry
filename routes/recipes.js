@@ -448,8 +448,9 @@ router.get('/recipeDetails/:id', async function showDetails(req, res){
 
 router.post('/undo', async function undoCooking(req, res){
   cookedRecipeData = JSON.parse(req.body.cookedRecipe)
-  console.log(cookedRecipeData)
+  counter = 0
   for (ingredient in cookedRecipeData.ingredientData){
+    counter = counter + 1
     //Get all info from ingredient (id, name, size, etc)
     ingredientInfo = cookedRecipeData.ingredientData[ingredient]
     //Get ingredients ID
@@ -457,21 +458,19 @@ router.post('/undo', async function undoCooking(req, res){
     //Get ingredients expiration date
     ingredientExpirationDate = ingredientInfo.ingredient_expiration_date
     ingredientExpirationDate = moment(ingredientExpirationDate).format('YYYYMMDD')
-    console.log("MOMENT")
-    console.log(ingredientExpirationDate)
     // Get ingredients amount needed for the recipe
     amountNeeded = ingredientInfo.amount_of_ingredient_needed
     //Add amount of used ingredient back into tables since user decided to undo cooked recipe.
     query=`UPDATE ingredients_in_pantry SET ingredient_amount = ingredient_amount + ${amountNeeded}, ingredient_expiration_date = '${ingredientExpirationDate}' WHERE ingredient_id=${ingrdientId};`
     await db.query(query,function dbResponse(err){
-      console.log("Adding ingredients back into pantry")
-      console.log(query)
       if (err){
         throw err
       }
     })
   }
-  res.send('success')
+  if(counter == cookedRecipeData.ingredientData.length){
+    res.send('success')
+  }
 })
 
 

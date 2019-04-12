@@ -37,7 +37,6 @@ $(document).on('click', '#undoCooking', function (e) {
       // Reload the page to update cards
       localStorage.clear()
       location.reload()
-    // console.log(JSON.parse(response))
     },
     error: function (err) {
       console.log('Something went wrong: ' + err)
