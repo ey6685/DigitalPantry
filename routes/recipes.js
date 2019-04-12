@@ -32,111 +32,116 @@ URL ENDPOINT: localhost:3000/recipes/showall
 DESCRIPTION: This will display all available recipes that are pulled from database
 */
 router.get('/showall', async function(req, res){
-    try{
-        var recipe_res = await recipe_t.findAll();
-        console.log("the recipes: \n" + JSON.stringify(recipe_res));
-        console.log("length: " + recipe_res.length); 
-        // var IiR_res = await IiR_t.findAll({});
-        // console.log("Iir_res: \n" + JSON.stringify(IiR_res));
-        //make string array that we will be storeing the ingredient  sting
-        var ingredient_list = new Array(recipe_res.length).fill('');
-        console.log("starting ingreditents list: \n" + ingredient_list);
-        
-    
-
-    // grabs the ingredient names for the ingredients tables for each recipe id
-    // and stores them in to ingredients list in a formated str where
-    // each ingredient is seperated by a #
-
-
-    //grabs the ingredient names for the ingredients tables for each recipe id
-    //and stores them in to ingredients list in a formated str where
-    //each ingredient is seperated by a #
-    
-        console.log('starting for loop');
-        for(var i=0; i<recipe_res.length;i++)
-        {
-            var IiR_res = await IiR_t.findAll({
-                where:{
-                    recipe_id: recipe_res[i].recipe_id
-                }
-            });
-            console.log("\ningredients for recipe " + recipe_res[i].recipe_id +'\n' + JSON.stringify(IiR_res));
-            for(var o=0; o<IiR_res.length;o++)
-            {
-                var new_ingredient = await ingredient_t.findOne({
-                    attributes: ['ingredient_name'],
-                    where:{
-                        ingredient_id: IiR_res[o].ingredient_id
-                    }
-                })
-                if(ingredient_list[i] != '')
-                    ingredient_list[i] = ingredient_list[i] + "#";
-                ingredient_list[i] = ingredient_list[i]   + new_ingredient.ingredient_name + ", " + IiR_res[o].amount_of_ingredient_needed + " " + IiR_res[o].ingredient_unit_of_measurement; 
-            }
-        }
-         for(var i =0; i<ingredient_list.length; i++)
-        {
-            ingredient_list[i] = ingredient_list[i].split("#");
-        }
-        var data = await ingredient_t.findAll({})
-        res.render('showall_recipes', {
-            title: 'Your Recipes',
-            results: recipe_res,
-            ingredients: ingredient_list,
-            data: JSON.stringify(data)
-          });
-    }
-    catch(err)
+  userPantryId =req.user.pantry_id
+  try{
+    var recipe_res = await recipe_t.findAll({
+      where:{pantry_id:userPantryId}
+    });
+    console.log("the recipes: \n" + JSON.stringify(recipe_res));
+    console.log("length: " + recipe_res.length); 
+    if(recipe_res.length > 0)
     {
-        console.log(err);
+      // var IiR_res = await IiR_t.findAll({});
+      // console.log("Iir_res: \n" + JSON.stringify(IiR_res));
+      //make string array that we will be storeing the ingredient  sting
+      var ingredient_list = new Array(recipe_res.length).fill('');
+      console.log("starting ingreditents list: \n" + ingredient_list);
+      
+      // grabs the ingredient names for the ingredients tables for each recipe id
+      // and stores them in to ingredients list in a formated str where
+      // each ingredient is seperated by a #
+
+      //grabs the ingredient names for the ingredients tables for each recipe id
+      //and stores them in to ingredients list in a formated str where
+      //each ingredient is seperated by a #
+  
+      console.log('starting for loop');
+      for(var i=0; i<recipe_res.length;i++)
+      {
+          var IiR_res = await IiR_t.findAll({
+              where:{
+                  recipe_id: recipe_res[i].recipe_id
+              }
+          });
+          console.log("\ningredients for recipe " + recipe_res[i].recipe_id +'\n' + JSON.stringify(IiR_res));
+          for(var o=0; o<IiR_res.length;o++)
+          {
+              var new_ingredient = await ingredient_t.findOne({
+                  attributes: ['ingredient_name'],
+                  where:{
+                      ingredient_id: IiR_res[o].ingredient_id
+                  }
+              })
+              if(ingredient_list[i] != '')
+                  ingredient_list[i] = ingredient_list[i] + "#";
+              ingredient_list[i] = ingredient_list[i]   + new_ingredient.ingredient_name + ", " + IiR_res[o].amount_of_ingredient_needed + " " + IiR_res[o].ingredient_unit_of_measurement; 
+          }
+      }
+      for(var i =0; i<ingredient_list.length; i++)
+      {
+          ingredient_list[i] = ingredient_list[i].split("#");
+      }
+      var data = await ingredient_t.findAll({})
     }
+      res.render('showall_recipes', {
+          title: 'Your Recipes',
+          results: recipe_res,
+          ingredients: ingredient_list,
+          data: JSON.stringify(data)
+        });
+  }
+  catch(err)
+  {
+      console.log(err);
+  }
 })
 
 
 router.get('/showRecipes', async function showRecipes(req, res) {
+  userPantryId =req.user.pantry_id
   // Get all available recipes
-  const results = await recipe_t.findAll()
+  const results = await recipe_t.findAll({where:{pantry_id:userPantryId}})
   const recipeStepsArray = []
-  for (every_recipe_directions in results){
-    const recipe_steps = await steps.parse_recipe_directions_by_string(results[every_recipe_directions].recipe_directions);
-    recipeStepsArray.push(recipe_steps.split('${<br>}'));
-  }
-  //code to copy to get the edit menu to work.
-  var ingredient_list = new Array(results.length).fill('');
-        console.log("starting ingreditents list: \n" + ingredient_list);
-  for (var i  = 0;i<results.length;i++)
-  {
-    //grabs the ingredient names for the ingredients tables for each recipe id
-    //and stores them in to ingredients list in a formated str where
-    //each ingredient is seperated by a #
-    var IiR_res = await IiR_t.findAll({
-      where:{
+  if(results.length > 0){
+    for (every_recipe_directions in results){
+      const recipe_steps = await steps.parse_recipe_directions_by_string(results[every_recipe_directions].recipe_directions);
+      recipeStepsArray.push(recipe_steps.split('${<br>}'));
+    }
+    //code to copy to get the edit menu to work.
+    var ingredient_list = new Array(results.length).fill('');
+          console.log("starting ingreditents list: \n" + ingredient_list);
+    for (var i  = 0;i<results.length;i++)
+    {
+      //grabs the ingredient names for the ingredients tables for each recipe id
+      //and stores them in to ingredients list in a formated str where
+      //each ingredient is seperated by a #
+      var IiR_res = await IiR_t.findAll({
+        where:{
           recipe_id: results[i].recipe_id
-      }
-  });
-  console.log("\ningredients for recipe " + results[i].recipe_id +'\n' + JSON.stringify(IiR_res));
-  for(var o=0; o<IiR_res.length;o++)
-  {
-      var new_ingredient = await ingredient_t.findOne({
+        }
+      });
+      console.log("\ningredients for recipe " + results[i].recipe_id +'\n' + JSON.stringify(IiR_res));
+      for(var o=0; o<IiR_res.length;o++)
+      {
+        var new_ingredient = await ingredient_t.findOne({
           attributes: ['ingredient_name'],
           where:{
               ingredient_id: IiR_res[o].ingredient_id
           }
-      })
-      if(ingredient_list[i] != '')
-          ingredient_list[i] = ingredient_list[i] + "#";
-      ingredient_list[i] = ingredient_list[i]   + new_ingredient.ingredient_name + ", " + IiR_res[o].amount_of_ingredient_needed + " " + IiR_res[o].ingredient_unit_of_measurement; 
+        })
+        if(ingredient_list[i] != '')
+            ingredient_list[i] = ingredient_list[i] + "#";
+        ingredient_list[i] = ingredient_list[i]   + new_ingredient.ingredient_name + ", " + IiR_res[o].amount_of_ingredient_needed + " " + IiR_res[o].ingredient_unit_of_measurement; 
+      }
+    }
+    for(var i =0; i<ingredient_list.length; i++)
+    {
+      ingredient_list[i] = ingredient_list[i].split("#");
+    }
+    
+    var ings = await ingredient_t.findAll({})
+    console.log(JSON.stringify(ingredient_list))
   }
-}
-for(var i =0; i<ingredient_list.length; i++)
-{
-  ingredient_list[i] = ingredient_list[i].split("#");
-}
-  
-  var ings = await ingredient_t.findAll({})
-  console.log(JSON.stringify(ingredient_list))
- 
   res.render('showRecipes', {
     title: 'Your Recipes',
     results: results,

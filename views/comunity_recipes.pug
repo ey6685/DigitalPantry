@@ -45,7 +45,8 @@ block content
 						option(value='1') Sort A-Z
 						option(value='2') Sort Z-A
 			.form-group.col-md-2
-				input.btn.dp-btn-secondary(data-toggle='modal', type='button', value='Share Your Recipe', data-target='#shareForm', id='share-community')
+				if user.user_type == "Administrator"
+					input.btn.dp-btn-secondary(data-toggle='modal', type='button', value='Share Your Recipe', data-target='#shareForm', id='share-community')
 		br
 		.form-row
 			//-for each recipe in data
@@ -61,7 +62,8 @@ block content
 							for step in recipe_steps[i]
 								p(class='card-text')= step
 						div(class='card-foot', padding='.75rem')
-							button.btn_card.btn.dp-btn-primary(class='saveRecipe', id='card'+i, type='button') Copy recipe
+							if user.user_type == "Administrator"
+								button.btn_card.btn.dp-btn-primary(class='saveRecipe', id='card'+i, type='button') Copy recipe
 
 	script.
 		// This will trigger once user stars to type text into a search bar
