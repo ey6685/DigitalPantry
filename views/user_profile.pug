@@ -6,19 +6,19 @@ block content
 		br
 		br
 		br
-		h1 #{title}
+		h1.dp-title-text #{title}
 		br
 		br
 		form(method= 'POST', action= '/users/changeUsername', class= 'form')
-			h4 Change Username
+			h4.dp-secondary-text Change Username
 			hr
 			br
 			!= messages('message', locals)
-			p(id='userEmail') #{data.user_email} 
-				a(href='', id='editEmailButton') change
+			p.dp-title-text(id='userEmail') #{data.user_email} 
+				a.dp-primary-text(href='', id='editEmailButton') change
 		br
 		form(method= 'POST', action= '/users/changePassword', class= 'form')
-			h4 Change Password
+			h4.dp-secondary-text Change Password
 			hr
 			br
 			!= messages('message', locals)
@@ -27,14 +27,14 @@ block content
 					div(class='alert alert-danger') #{error.msg}
 			.form-row
 				.form-group.col-md-4
-					label Current password
-					input.form-control(name='currentPassword', type='password', placeholder="Current Password", required)
+					label.dp-primary-text Current password
+					input.form-control.dp-form-fields(name='currentPassword', type='password', placeholder="Current Password", required)
 			.form-row
 				.form-group.col-md-4
-					label New password
-					input.form-control(name='newPassword', type='password', placeholder="New Password", required)
+					label.dp-primary-text New password
+					input.form-control.dp-form-fields(name='newPassword', type='password', placeholder="New Password", required)
 			.form-row
 				.form-group.col-md-4
-					label Confirm password
-					input.form-control(name='confirmNewPassword', type='password', placeholder="Confirm New Password", required)
-			button.btn.btn-primary(type='submit', id='savePasswordButton') Update
+					label.dp-primary-text Confirm password
+					input.form-control.dp-form-fields(name='confirmNewPassword', type='password', placeholder="Confirm New Password", required)
+			button.btn.dp-btn-primary(type='submit', id='savePasswordButton') Update

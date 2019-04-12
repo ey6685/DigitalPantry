@@ -35,7 +35,7 @@
 .dp-table {
   background-color: #faf8eb !important;
   color: #570573 !important;
-  border: #570573 !important;
+  border: 1px double #570573 !important;
 }
 .dp-background {
   background-color: #faf8eb !important;
@@ -46,19 +46,30 @@
 .dp-title-text {
   color: #570573 !important;
 }
+.dp-primary-text {
+  color: #91c02e !important;
+}
+.dp-secondary-text {
+  color: #eeaf2c !important;
+}
 .dp-btn-primary {
   background-color: #91c02e !important;
   border-color: #91c02e !important;
-  color:white !important;
+  color: white !important;
 }
 .dp-btn-secondary {
   background-color: #eeaf2c !important;
   border-color: #eeaf2c !important;
-  color:white !important;
+  color: white !important;
 }
-.dp-button-putple{
+.dp-btn-purple {
   background-color: #570573 !important;
-  color:white !important;
+  color: white !important;
+}
+.dp-btn-yellow {
+  background-color: #f2d43b !important;
+  border-color: #f2d43b !important;
+  color: white !important;
 }
 .dp-btn-danger {
   background-color: #d93711 !important;
@@ -74,8 +85,8 @@
 }
 .dp-btn-edit {
   background-color: #570573 !important;
-  border-color: #eeaf2c !important;
   color: white !important;
+  border-radius: 5px !important;
 }
 .dp-nav-text {
   color: #eeaf2c !important;
@@ -95,3 +106,35 @@
   background-color: #ebf5d6 !important;
   color: white !important;
 }
+.dp-form-fields {
+  background-color: #faf8eb !important;
+  color: #570573 !important;
+}
+::placeholder {
+  color: #570573 !important;
+}
+.dp-recipe-accordion {
+  background-color: #c4e184 !important;
+  color: #570573 !important;
+}
+/* These classes are for purple Edit button
+Appearance is similar to Remove buttons
+Needs more work since border doesn't render
+.dp-btn-edit {
+  color: #570573;
+  border: 2px solid #570573 !important;
+  background-color: #faf8eb;
+  border-radius: 5px !important;
+}
+
+.dp-btn-edit:hover {
+  color: #faf8eb !important;
+  background-color: #570573;
+  border-radius: 5px;
+  border-color: 2px #570573 !important;
+}
+
+.dp-btn-edit:focus,
+.btn-edit.focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+} */

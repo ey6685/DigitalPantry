@@ -23,7 +23,9 @@ $(document).on('click', '#showRecipeDetails', async function() {
 
   $('h5').text($recipeName)
   for (step in recipeStepsArray) {
-    $('#recipeStepsOverlay').append(`<p>${recipeStepsArray[step].innerText}<p>`)
+    $('#recipeStepsOverlay').append(
+      `<p style="color:#570573">${recipeStepsArray[step].innerText}</p>`
+    )
   }
   // Get ingredients required for recipe and current available amount
   var ingredientsRequired = await findRecipeIngredients(recipeId)
@@ -31,18 +33,18 @@ $(document).on('click', '#showRecipeDetails', async function() {
   // Build table body
   $.each(ingredientsRequired, function(index, item) {
     // by default all ingredient rows are green
-    var ingredientStatus = '<tr style="background-color:#d5f5ee";>'
+    var ingredientStatus = '<tr style="background-color:#91c02e";>'
     // if available amount of ingredient is less than required amount of ingredient
     if (item.ingredient_amount_required > item.ingredient_sum) {
       // make entire row red
-      ingredientStatus = `<tr data-id=${item.ingredient_id} style="background-color:#91c02e">`
+      ingredientStatus = `<tr data-id=${item.ingredient_id} style="background-color:#f2d43b">`
     }
     var $tr = $(ingredientStatus).append(
-      $('<td id="ingredient_name" style="color:black;">').text(item.ingredient_name),
-      $('<td id="ingredient_amount_required" style="color:black;">').text(
+      $('<td id="ingredient_name" style="color:white;">').text(item.ingredient_name),
+      $('<td id="ingredient_amount_required" style="color:white;">').text(
         item.ingredient_amount_required + ' ' + item.ingredient_unit_of_measurement
       ),
-      $('<td id="ingredient_amount_available" style="color:black;">').text(
+      $('<td id="ingredient_amount_available" style="color:white;">').text(
         item.ingredient_sum + ' ' + item.ingredient_unit_of_measurement
       )
     )
@@ -51,8 +53,8 @@ $(document).on('click', '#showRecipeDetails', async function() {
       $tr.append(
         $('<td style="background-color:white; border:none;">').append(
           $(
-            '<button style=background:none; class="btn bg-success" id="add-missing-ingredient-btn" type="button">'
-          ).text('Add')
+            '<button style=background:none; class="btn dp-btn-primary" id="add-missing-ingredient-btn" type="button">'
+          ).text('Add Missing Ingredient')
         )
       )
     } else {
@@ -121,11 +123,16 @@ $(document).on('focusout', '#ingredient_amount_available', function() {
   var ingredientAmountAvailableDigit = ingredientAmountAvailableString.match(/\d+/)
   // Extract digit from ingredient amount required
   ingredientAmountRequiredDigit = ingredientAmountRequiredString.match(/\d+/)
-  if(parseInt(ingredientAmountAvailableDigit) >= parseInt(ingredientAmountRequiredDigit)){
-    console.log("AVAILABLE:"+ingredientAmountAvailableDigit)
-    console.log("REQUIRED:"+ingredientAmountRequiredDigit)
-    $(this).closest('tr').css('background-color', '#d5f5ee')
-    $(this).closest('tr').find('button').remove()
+  if (parseInt(ingredientAmountAvailableDigit) >= parseInt(ingredientAmountRequiredDigit)) {
+    console.log('AVAILABLE:' + ingredientAmountAvailableDigit)
+    console.log('REQUIRED:' + ingredientAmountRequiredDigit)
+    $(this)
+      .closest('tr')
+      .css('background-color', '#d5f5ee')
+    $(this)
+      .closest('tr')
+      .find('button')
+      .remove()
   }
   // // Update ingredient amount in database using ajax
   $.ajax({
@@ -135,9 +142,8 @@ $(document).on('focusout', '#ingredient_amount_available', function() {
       ingredient_amount: parseInt(ingredientAmountAvailableDigit, 10),
       ingredient_id: ingredientId
     },
-    success: function () {
-    },
-    error: function (err) {
+    success: function() {},
+    error: function(err) {
       console.log(err)
     }
   })

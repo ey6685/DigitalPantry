@@ -25,10 +25,10 @@ block content
 			a.btn.btn-default(href='/ingredients/expiredAdmin')
 				i(style='color:black').fa.fa-list.fa-2x
 			.form-group.col-md-2
-				input.form-control.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search')
+				input.form-control.dp-form-fields.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search')
 			.form-group.col-md-2
 				.dropdown
-					select.form-control(id='sortBar', name='SortBar', onchange='sortList()')
+					select.form-control.dp-form-fields(id='sortBar', name='SortBar', onchange='sortList()')
 						option(value='0') Sort By
 						option(value='1') Sort A-Z
 						option(value='2') Sort Z-A
@@ -44,7 +44,7 @@ block content
 						img.image(class='card-img-top', src=ingredient_image, alt='image')
 						div(class='card-body')
 							h4(class='card-title') #{item.ingredient_name}
-							p(class='card-text') #{item.ingredient_amount} #{item.ingredient_unit_of_measurement} exipred on #{item.ingredient_expiration_date} 
+							p(class='card-text') #{item.ingredient_amount} #{item.ingredient_unit_of_measurement} expired on #{item.ingredient_expiration_date} 
 
 						div(class='card-foot')
 							button.btn_card.btn.btn-outline-danger.delete-ingredient(href='#', data-id=item.ingredient_name) Remove From Pantry
