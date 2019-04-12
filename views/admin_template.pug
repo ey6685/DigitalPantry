@@ -34,6 +34,7 @@ html
 				overflow: auto;
 				box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
 				display: block !important;
+				border-right: 1px solid purple;
 			}
 			.nav a{
 				display: block;
@@ -64,13 +65,13 @@ html
 			.nav-item{
 				padding-right:8px;
 				padding-left:8px;
-				border-bottom:1px solid black;
+				border-bottom:1px solid purple;
 				width: 100%;
 			}
 			.header{
 				text-align:center;
 				font-size:25px;
-
+				border-bottom: 1px solid purple;
 			}
 			.btn-outline-danger {
 				color: #d93711 !important;
@@ -127,9 +128,7 @@ html
 				ul.flex-column
 				li.header
 					div(style='display: table-row')
-						img.mt-3.ml-3.mb-2.mr-3(src='/images/milk.jpg', alt='image', width='50', height='50', padding-right='30px')
-						|Digital Pantry
-				hr
+						img.ml-2(src='/images/dp_logo.png', alt='image', width='240px', class='border-dark')
 				li.nav-item
 					a.nav-link(href='/users/dashboard')
 						i.fas.fa-home
