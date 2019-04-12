@@ -86,7 +86,6 @@ block content
 		br
 		!= messages('message', locals)
 		- var test;
-		- console.log("data lenght: " + data.length)
 		//-chech to see if we have any ingredients in the window.
 		//-if we do
 		if (data.length > 0) 
@@ -119,34 +118,24 @@ block content
 												.row
 													.col
 														.text-center
-															button.btn.btn-primary.dp-btn-secondary.mr-3(class='test', id='showRecipeDetails', type='button', data-toggle='modal', data-target='#viewRecipeDetails') Details
-															button.btn.btn-primary.dp-btn-primary(recipe-id=recipe.recipe_id, id='card-one', type='button') Cook It!
+															form(action='/recipes/recipeDetails/'+recipe.recipe_id)
+																button.btn.btn-primary.dp-btn-secondary.mr-3(class='test', id='showRecipeDetails', type='button', data-toggle='modal', data-target='#viewRecipeDetails') Details
+																button.btn.dp-btn-primary(type='submit') Cook It!
+
 						else
 							div.dp-background.card-container(class='container-fluid', class='rounded')
 								a.navbar-brand(href="/recipes/add" ) No recipes for #{i.ingredient_name}, try adding some!
 					br
 		else
 			div.dp-background.card-container(class='container-fluid', class='rounded')
-				h3.dp-title-text No Ingredients are exipring within #{expirationTimeFrame} days. 
-
-									//- For each steps inside of the array of steps
-									for step in recipe.recipe_directions
-										p(style='display:none').card-text.recipeStep= step
-									//- btn_card is a custom class used for CSS for buttons
-								.card-footer
-									.container
-										.row
-											.col
-												.text-center
-													button.btn.btn-primary.dp-btn-secondary.mr-3(class='test', id='showRecipeDetails', type='button', data-toggle='modal', data-target='#viewRecipeDetails') Details
-													button.btn.btn-primary.dp-btn-primary(recipe-id=recipe.recipe_id, id='card-one', type='button') Cook It!
-													a(recipe-id=recipe.recipe_id, href='/recipes/recipeDetails/'+recipe.recipe_id) Link
-			br
+				h3.dp-title-text No Ingredients are expiring within #{expirationTimeFrame} days.
+				p Hint: Try changing your expiration window
 
 
 
 	script(src='/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js')
 	script(src="/js/viewRecipeDetailsDashboard.js")
+	script(src="/js/cookingRecipe.js")
 	script(type='text/javascript').
 		var allData = '!{storedData}'
 		var people_feeding = '#{people_cooking_for}'
@@ -189,7 +178,7 @@ block content
 					$(this).addClass('dp-btn-primary')
 					$('.dontHaveAllIngredients').hide()
 				}
-				
+
 			})
 		})
 		function edit(){

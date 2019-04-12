@@ -98,6 +98,7 @@ $(document).on('click', '#add-missing-ingredient-btn', function() {
   $ingredientAmountAvailable.focus()
 })
 
+//Once user changes the number of ingredient available trigger this
 $(document).on('focusout', '#ingredient_amount_available', function() {
   ingredientId = $(this)
     .closest('tr')
@@ -122,8 +123,6 @@ $(document).on('focusout', '#ingredient_amount_available', function() {
   // Extract digit from ingredient amount required
   ingredientAmountRequiredDigit = ingredientAmountRequiredString.match(/\d+/)
   if(parseInt(ingredientAmountAvailableDigit) >= parseInt(ingredientAmountRequiredDigit)){
-    console.log("AVAILABLE:"+ingredientAmountAvailableDigit)
-    console.log("REQUIRED:"+ingredientAmountRequiredDigit)
     $(this).closest('tr').css('background-color', '#d5f5ee')
     $(this).closest('tr').find('button').remove()
   }
@@ -139,48 +138,6 @@ $(document).on('focusout', '#ingredient_amount_available', function() {
     },
     error: function (err) {
       console.log(err)
-    }
-  })
-})
-
-$(document).on('click', '#finishCooking', function(e) {
-  console.log("WOOO")
-  $target = $(e.target)
-    // get data-id value from the button, which is recipe ID
-    const id = $target.attr('recipe-id')
-    console.log(id)
-    // Start AJAX
-    $.ajax({
-      type: 'GET',
-      url: '/users/cook/' + id,
-      success: function (response) {
-        // Reload the page to update cards
-        window.location.href = '/users/dashboard'
-      },
-      error: function (err) {
-        console.log('Could not cook recipe with id: ' + id)
-      }
-    })
-})
-
-$(document).on('click', '#undoCooking', function(e) {
-  e.preventDefault()
-  cookedRecipeData = localStorage.getItem('recipe')
-  $(this).hide()
-  //Clear local storage after recipe ingredients are returned
-  localStorage.clear()
-  $.ajax({
-    type: 'POST',
-    data:{"cookedRecipe" : cookedRecipeData},
-    url: '/recipes/undo/',
-    success: function (response) {
-      // Reload the page to update cards
-      localStorage.clear()
-      window.location.href = '/users/dashboard'
-      // console.log(JSON.parse(response))
-    },
-    error: function (err) {
-      console.log('Something went wrong: ' + err)
     }
   })
 })
