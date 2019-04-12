@@ -352,28 +352,6 @@ $(document).ready(function() {
   })
 })
 
-//COOK IT DUPLICATE, THIS IS DONE ON PURPOSE FOR NOW
-$(document).ready(function () {
-  $('#finishCooking').on('click', function (e) {
-    // get button object clicked
-    $target = $(e.target)
-    // get data-id value from the button, which is recipe ID
-    const id = $target.attr('recipe-id')
-    console.log(id)
-    // Start AJAX
-    $.ajax({
-      type: 'GET',
-      url: '/users/cook/' + id,
-      success: function (response) {
-        // Reload the page to update cards
-        window.location.href = '/users/dashboard'
-      },
-      error: function (err) {
-        console.log('Could not delete: ' + id)
-      }
-    })
-  })
-})
 
 // Save community recipe
 $(document).on('click', '.saveRecipe', function() {
