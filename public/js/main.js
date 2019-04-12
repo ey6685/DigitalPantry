@@ -539,7 +539,7 @@ $('#sortByTimeFrameBtn').click(function sortByTimeFrame() {
   })
 })
 
-$('#cookForNumberOfPeople').focusout(function updateCookForNumberOfPeople() {
+$(document).on('change', '#cookForNumberOfPeople', function updateCookForNumberOfPeople() {
   numberOfPeopleToCookFor = $(this).val()
   $.ajax({
     type: 'POST',
