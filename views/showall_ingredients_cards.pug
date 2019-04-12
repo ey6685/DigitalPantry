@@ -19,18 +19,17 @@ block content
 		br
 		h1.dp-title-text #{title}
 		br
-		a.btn.btn-default(href='/ingredients/cards')
-			i(style='color:black').fa.fa-th-large.fa-2x
-		a.btn.btn-default(href='/ingredients/showall')
-			i(style='color:black').fa.fa-list.fa-2x
-		a.btn.dp-btn-secondary(href='/ingredients/add', class='h-75')
+		a.btn.dp-change-view(href='/ingredients/showall')
+			i.dp-change-view.fa.fa-list.fa-lg.mr-1
+			| Table View
+		a.btn.btn-primary.dp-btn-secondary.ml-2(href='/ingredients/add', class='h-75')
 			| Add Multiple Ingredients
 		p
 		#accordion
 			.card
 				#headingTwo.card-header
 					h5.mb-0
-					button.btn.dp-btn-primary.collapsed(data-toggle='collapse', data-target='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
+					button.btn.dp-btn-primary.collapsed.ml-2(data-toggle='collapse', data-target='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
 						| Add ingredient
 				#collapseTwo.collapse(aria-labelledby='headingTwo', data-parent='#accordion')
 					.card-body

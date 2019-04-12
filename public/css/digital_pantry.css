@@ -75,6 +75,11 @@
   background-color: #d93711 !important;
   border-color: #d93711 !important;
 }
+.dp-change-view {
+  background-color: #570573 !important;
+  color: white !important;
+  text-align: center !important;
+}
 .dp-container {
   background-color: #faf8eb !important;
   color: #eeaf2c !important;
