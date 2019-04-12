@@ -125,8 +125,6 @@ $(document).on('focusout', '#ingredient_amount_available', function() {
   // Extract digit from ingredient amount required
   ingredientAmountRequiredDigit = ingredientAmountRequiredString.match(/\d+/)
   if (parseInt(ingredientAmountAvailableDigit) >= parseInt(ingredientAmountRequiredDigit)) {
-    console.log('AVAILABLE:' + ingredientAmountAvailableDigit)
-    console.log('REQUIRED:' + ingredientAmountRequiredDigit)
     $(this)
       .closest('tr')
       .css('background-color', '#d5f5ee')
