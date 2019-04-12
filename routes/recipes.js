@@ -3,8 +3,10 @@ const router = express.Router();
 const recipe_t = require('../DB_models/Recipes');
 const ingredient_t = require('../DB_models/Ingredients')
 const User = require('../DB_models/Users')
+const Pantry = require('../DB_models/Pantry')
 const IiR_t = require('../DB_models/ingredients_in_a_recipe');
 const op = require('sequelize').Op;
+const moment = require('moment')
 const multer = require('multer');
 const steps = require('../recipe_direction_parser');
 const users_route = require('./users');
@@ -389,6 +391,87 @@ router.post('/share', async function(req, res){
     //     })
     // })
     res.send("success");
+})
+
+router.get('/recipeDetails/:id', async function showDetails(req, res){
+  // Get current user from session auth
+  const userId = req.session.passport['user']
+  // Get pantry ID which user belongs to
+  const pantryId = await User.findOne({
+    attributes: ['pantry_id'],
+    where: {
+      user_id: userId
+    }
+  })
+
+  peopleToCookFor = await Pantry.findOne({
+    attributes: ['people_cooking_for'],
+    where:{
+      pantry_id:pantryId.pantry_id
+    }
+  })
+  //Get recipe id of the recipe being cooked
+  recipeId = req.params.id
+  //Get recipe information from the database such as steps and serving size
+  recipeData = await recipe_t.findOne({
+    where:{recipe_id:recipeId}
+  })
+
+  recipe_steps = await steps.parse_recipe_directions_by_string(recipeData.recipe_directions);
+  recipe_steps = recipe_steps.split('${<br>}');
+
+  query=`select ingredients_in_pantry.ingredient_expiration_date, ingredients_in_pantry.ingredient_id, ingredients.ingredient_name, ingredients.ingredient_image_path,ingredients_in_a_recipe.pantry_id,ingredients_in_a_recipe.amount_of_ingredient_needed,ingredients_in_a_recipe.ingredient_unit_of_measurement 
+  FROM ingredients
+  INNER JOIN ingredients_in_a_recipe
+  INNER JOIN ingredients_in_pantry
+  WHERE ingredients_in_pantry.ingredient_id = ingredients.ingredient_id AND ingredients.ingredient_id = ingredients_in_a_recipe.ingredient_id AND ingredients_in_a_recipe.recipe_id =${recipeId};`
+  db.query(query, function getResults(err, ingredientsInRecipe){
+    if(err){
+      throw err
+    }
+    var JSONObj = {"recipeId":recipeId, "recipeData":recipeData, "ingredientData":ingredientsInRecipe}
+
+    res.render('cooked_recipe_details', {
+      wholeRecipe:JSON.stringify(JSONObj),
+      peopleToCookeFor:peopleToCookFor.people_cooking_for,
+      recipeName: recipeData.recipe_name,
+      recipeImage: recipeData.recipe_image_path,
+      recipeSteps: recipe_steps,
+      recipeId:recipeId,
+      servingSize: recipeData.num_people_it_feeds,
+      cookedCount: recipeData.recipe_num_times_cooked,
+      recipeIngredients: ingredientsInRecipe
+    });
+  })
+})
+
+
+router.post('/undo', async function undoCooking(req, res){
+  cookedRecipeData = JSON.parse(req.body.cookedRecipe)
+  console.log(cookedRecipeData)
+  for (ingredient in cookedRecipeData.ingredientData){
+    //Get all info from ingredient (id, name, size, etc)
+    ingredientInfo = cookedRecipeData.ingredientData[ingredient]
+    //Get ingredients ID
+    ingrdientId = ingredientInfo.ingredient_id
+    //Get ingredients expiration date
+    ingredientExpirationDate = ingredientInfo.ingredient_expiration_date
+    ingredientExpirationDate = moment(ingredientExpirationDate).format('YYYYMMDD')
+    console.log("MOMENT")
+    console.log(ingredientExpirationDate)
+    // Get ingredients amount needed for the recipe
+    amountNeeded = ingredientInfo.amount_of_ingredient_needed
+    //Add amount of used ingredient back into tables since user decided to undo cooked recipe.
+    query=`UPDATE ingredients_in_pantry SET ingredient_amount = ingredient_amount + ${amountNeeded}, ingredient_expiration_date = '${ingredientExpirationDate}' WHERE ingredient_id=${ingrdientId};`
+    await db.query(query,function dbResponse(err){
+      console.log("Adding ingredients back into pantry")
+      console.log(query)
+      if (err){
+        throw err
+      }
+    })
+  }
+  res.send('success')
 })
 
 

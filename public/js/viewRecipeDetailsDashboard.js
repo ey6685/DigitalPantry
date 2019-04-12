@@ -98,6 +98,7 @@ $(document).on('click', '#add-missing-ingredient-btn', function() {
   $ingredientAmountAvailable.focus()
 })
 
+//Once user changes the number of ingredient available trigger this
 $(document).on('focusout', '#ingredient_amount_available', function() {
   ingredientId = $(this)
     .closest('tr')
@@ -122,8 +123,6 @@ $(document).on('focusout', '#ingredient_amount_available', function() {
   // Extract digit from ingredient amount required
   ingredientAmountRequiredDigit = ingredientAmountRequiredString.match(/\d+/)
   if(parseInt(ingredientAmountAvailableDigit) >= parseInt(ingredientAmountRequiredDigit)){
-    console.log("AVAILABLE:"+ingredientAmountAvailableDigit)
-    console.log("REQUIRED:"+ingredientAmountRequiredDigit)
     $(this).closest('tr').css('background-color', '#d5f5ee')
     $(this).closest('tr').find('button').remove()
   }
