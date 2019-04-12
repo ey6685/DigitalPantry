@@ -30,17 +30,17 @@ block content
 		.modal-dialog.modal-dialog-centered.modal(role='document')
 			.modal-content
 				.modal-header.modal-title 
-					h5.dp-title-text Reset password
+					h5.dp-title-text Reset Password
 				form(method='POST', action='/user/resetPassword', class='form')
 					.modal-body
 						.container
 							.row.justify-content-md-center
 								.form-group
-									label.dp-secondary-text Enter new password:
+									label.dp-secondary-text Enter New Password:
 									input#new-password.form-control.dp-form-fields(name='password', type='password', placeholder="Password", class='form-group')
 							.row.justify-content-md-center
 								.form-group
-									label.dp-secondary-text Confirm password:
+									label.dp-secondary-text Confirm Password:
 									input#confirm-password.form-control.dp-form-fields(name='confirmPassword',type='password', placeholder="Password", class='form-group')
 					.modal-footer
 						button.btn.btn-outline-danger(type='button', data-dismiss='modal', id='cancle-admin') Cancel
@@ -50,18 +50,21 @@ block content
 		.modal-dialog.modal-dialog-centered.modal(role='document')
 			.modal-content
 				.modal-header.modal-title 
-					h5.dp-title-text Change privilege
+					h5.dp-title-text Change Privilege
 				form(method='POST', action='/users/changePrivilege', class='form')
 					.modal-body
-						label.dp-secondary-text Set new privilege
 						.container
 							.row.justify-content-md-center
-								select.form-control.dp-form-fields(name='userType', required)
-									option(value='administrator') Administrator
-									option(value='volunteer') Volunteer
+								.form-group.col-md-7
+									label.dp-secondary-text Set New Privilege:
+							.row.justify-content-md-center
+								.form-group.col-md-7
+									select.form-control.dp-form-fields(name='userType', required)
+										option(value='volunteer') Volunteer
+										option(value='administrator') Administrator				
 					.modal-footer
-						button.btn.btn-outline-danger.mr-2(type='button', data-dismiss='modal', id='cancle2-admin') Cancel
-						input.btn.dp-btn-primary.mr-3(type='submit', value='Change', class='form-group')
+						button.btn.btn-outline-danger(type='button', data-dismiss='modal', id='cancle-admin') Cancel
+						input.btn.dp-btn-primary(type='submit', value='Submit', id='submit-admin')
 	br
 	h4.dp-secondary-text Active Users
 	hr
@@ -108,8 +111,8 @@ block content
 			.col-md-3
 				.dropdown-inline
 				select.form-control.dp-form-fields(name='userType', required)
-					option(value='administrator') Administrator
 					option(value='volunteer') Volunteer
+					option(value='administrator') Administrator
 			.col-md-2
 				button.btn.dp-btn-primary(type='submit', id='add-admin') Add New User
 
