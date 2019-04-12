@@ -115,6 +115,31 @@ router.get('/register', function showRegistrationPage(req, res) {
   })
 })
 
+// Get request to localhost:3000/users/register
+router.get('/privacy', function showPrivacyPage(req, res) {
+  // renders signin page with content 'Registration"
+  res.render('privacy', {
+    title: 'Privacy'
+  })
+})
+
+// Get request to localhost:3000/users/register
+router.get('/terms', function showPrivacyPage(req, res) {
+  // renders signin page with content 'Registration"
+  res.render('terms', {
+    title: 'Terms'
+  })
+})
+
+// Get request to localhost:3000/users/register
+router.get('/support', function showPrivacyPage(req, res) {
+  // renders signin page with content 'Registration"
+  res.render('support', {
+    title: 'Support'
+  })
+})
+
+
 router.get('/adminPanel', async function showAdminPanelPage(req, res) {
   const currentUserId = req.session.passport['user']
   // Find which pantry user is from
@@ -163,12 +188,15 @@ router.get('/dashboard', async function showDashboard(req, res) {
       pantry_id: currentPantryID.pantry_id
     }
   })
-
+  // console.log("pantry data for main:")
+  // console.log("=====================")
+  // console.log(JSON.stringify())
   //grabing data for the page
-  var data = await algorithm.main2(window.expire_window, currentPantryID.pantry_id)
+  var data = await algorithm.main2(window.expire_window, currentPantryID.pantry_id,window.people_cooking_for)
   console.log('DATA ON DASHBOARD ROUTE')
   console.log('=======================')
   console.log(JSON.stringify(data))
+  console.log(typeof data);
   res.render('dashboard', {
     title: 'Dashboard',
     data: data,
@@ -208,15 +236,21 @@ router.get('/cook/:id', async function(req, res) {
   console.log(
     '\n==================\ncook it router to with ' + recipe + ' id\n========================\n'
   )
-  ////////////////////////////////////
-  // how do we get panty_id and scale?//
-  // the function will work but wont //
-  // scale higher than one and wont //
-  // report the metrics with out it//
-  //////////////////////////////////
-  /////////<<TO DO>>////////////////
-  ///////////////////////////////////
-  var info = await cook_it.cook_it2(recipe, 1, 1)
+    var currentPantryID = await User.findOne({
+      attributes: ['pantry_id'],
+      where: {
+        user_id : req.session.passport["user"]
+      }
+    })
+    var people = await Pantry.findOne({
+      attributes: ['people_cooking_for']
+    })
+    console.log("data being sent into algor:")
+    console.log("===========================")
+    console.log("recipe: " + recipe)
+    console.log("currentPantryID.pantry_id: " + currentPantryID.pantry_id)
+    console.log("people.people_cooking_for:" + people.people_cooking_for)
+  var info = await cook_it.cook_it2(recipe,currentPantryID.pantry_id, people.people_cooking_for)
   console.log('REFRESH!')
   res.redirect(req.get('referer'))
 })
@@ -237,41 +271,54 @@ router.post('/register', async function registerUser(req, res) {
 
   // Get all errors is any based on above validators
   const errors = req.validationErrors()
+  
+  var user_exists = await User.findAll({
+    where: {
+      user_email: req.body.email
+    }
+  })
 
-  // if errors exist
-  if (errors) {
-    // render register page and pass in errors defined above, which will be rendered as well
-    res.render('register', {
-      title: 'Registration',
-      errors: errors
-    })
+  if(user_exists.length > 0)
+  {
+    req.flash("error", "Email " + req.body.email + " already exists!")
+    res.redirect("/users/register")
   }
+  else{
+    // if errors exist
+    if (errors) {
+      // render register page and pass in errors defined above, which will be rendered as well
+      res.render('register', {
+        title: 'Registration',
+        errors: errors
+      })
+    }
 
-  // ENCRYPTED AUTHENTICATION
-  // Creates a user and hashes their password into database
-  else {
-    // Get user's email
-    const email = req.body.email
-    // Get user's password
-    const password = req.body.password
-    // Create new pantry entry in the table, so the new pantry ID can be assigned to the new user
-    db.query('INSERT INTO pantry (pantry_name) VALUES ("");', function getResults(err, results) {
-      if (err) throw err
-      const recipe_id_inserted = results.insertId
-      const newUser = new User({
-        user_type: 'Administrator',
-        username: 'admin',
-        user_email: email,
-        user_password: password,
-        pantry_id: recipe_id_inserted
+    // ENCRYPTED AUTHENTICATION
+    // Creates a user and hashes their password into database
+    else {
+      // Get user's email
+      const email = req.body.email
+      // Get user's password
+      const password = req.body.password
+      // Create new pantry entry in the table, so the new pantry ID can be assigned to the new user
+      db.query('INSERT INTO pantry (pantry_name) VALUES ("");', function getResults(err, results) {
+        if (err) throw err
+        const recipe_id_inserted = results.insertId
+        const newUser = new User({
+          user_type: 'Administrator',
+          username: 'admin',
+          user_email: email,
+          user_password: password,
+          pantry_id: recipe_id_inserted
+        })
+        mail.signup(email)
+        // Call create function from DB_models/Users.js
+        User.createUser(newUser, function createNewUser() {
+          // Upon sucessful creating take user to the dashboard
+          res.redirect('/users/login')
+        })
       })
-      mail.signup(email)
-      // Call create function from DB_models/Users.js
-      User.createUser(newUser, function createNewUser() {
-        // Upon sucessful creating take user to the dashboard
-        res.redirect('/users/login')
-      })
-    })
+    }
   }
 })
 
@@ -345,53 +392,64 @@ router.post('/add', async function addNewUser(req, res) {
     res.redirect('/users/adminPanel')
   }
   else{
-  let userType = req.body.userType
-  switch (userType) {
-    case 'volunteer':
-      userType = 'Volunteer'
-      break
-    case 'administrator':
-      userType = 'Administrator'
-      break
-    default:
-      userType = 'N/A'
-  }
-  var userPassword = await str_generater.generate({
-    length: 8,
-    charset: "alphanumeric"
-  })
-  console.log("new pass")
-  console.log("========")
-  console.log(userPassword)
-  //send out the email
-  
-  //salt the password please
-  const salt = bcrypt.genSaltSync(10)
-  const hash = bcrypt.hashSync(userPassword, salt)
-  const currentUserId = req.session.passport['user']
-  // Find which pantry user is from
-  const query = `SELECT (pantry_id) FROM users WHERE user_id=${currentUserId};`
-  db.query(query, function getPantryID(err, results) {
-    if (err) throw err
-    const currentPantryID = results[0].pantry_id
-    mail.add_user(userName,userPassword)
-    // Instantiate new user model defined in DB_models/Users.js
-    const newUser = new User({
-      user_email: userName,
-      username: userName,
-      user_password: userPassword,
-      user_type: userType,
-      // TODO figure out how to assign pantry IDs
-      pantry_id: currentPantryID
+    var does_user_exitst = await User.findAll({
+      where: {
+        user_email: userName
+      }
     })
+    if(does_user_exitst.length > 0){
+      req.flash("error","User has an account already!")
+    res.redirect('/users/adminPanel')
+    }
+        else{
+      let userType = req.body.userType
+      switch (userType) {
+        case 'volunteer':
+          userType = 'Volunteer'
+          break
+        case 'administrator':
+          userType = 'Administrator'
+          break
+        default:
+          userType = 'N/A'
+      }
+      var userPassword = await str_generater.generate({
+        length: 8,
+        charset: "alphanumeric"
+      })
+      console.log("new pass")
+      console.log("========")
+      console.log(userPassword)
+      //send out the email
+      
+      //salt the password please
+      const salt = bcrypt.genSaltSync(10)
+      const hash = bcrypt.hashSync(userPassword, salt)
+      const currentUserId = req.session.passport['user']
+      // Find which pantry user is from
+      const query = `SELECT (pantry_id) FROM users WHERE user_id=${currentUserId};`
+      db.query(query, function getPantryID(err, results) {
+        if (err) throw err
+        const currentPantryID = results[0].pantry_id
+        mail.add_user(userName,userPassword)
+        // Instantiate new user model defined in DB_models/Users.js
+        const newUser = new User({
+          user_email: userName,
+          username: userName,
+          user_password: userPassword,
+          user_type: userType,
+          // TODO figure out how to assign pantry IDs
+          pantry_id: currentPantryID
+        })
 
-    // Call create function from DB_models/Users.js
-    User.createUser(newUser, function create() {
-      req.flash('success', 'User added!')
-      res.redirect('/users/adminPanel')
-    })
-  })
-}
+        // Call create function from DB_models/Users.js
+        User.createUser(newUser, function create() {
+          req.flash('success', 'User added!')
+          res.redirect('/users/adminPanel')
+        })
+      })
+    }
+  }
 })
 
 // Delete user from admin panel

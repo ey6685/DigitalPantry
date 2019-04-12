@@ -25,13 +25,13 @@ block content
 						.form-group.col-md-2.mt-3.mr-0.ml-0
 							label.btn.dp-btn-secondary.btn-file Choose image
 								input(name='image', accept='image/*' ,type='file', style='display: none;', onchange='loadFile(event)')
-						.form-group.col-md-2.ml-0
+						.form-group.col-md-2
 							input.form-control.mt-3.dp-form-fields(name='ingredientProperties[0]', type='text', placeholder='Name = Tuna')
 						.form-group.col-md-1
-							input.form-control.mt-3.dp-form-fields(name='ingredientProperties[1]', type='text', placeholder='Total = 2')
+							input.form-control.mt-3.dp-form-fields(name='ingredientProperties[0]', type='text', placeholder='Total = 2')
 						.form-group.col-md-2
 							.dropdown-inline
-							select.form-control.mt-3.dp-form-fields(name='ingredientProperties[2]', required)
+							select.form-control.mt-3.dp-form-fields(name='ingredientProperties[0]', required)
 								option(value='') Measurement
 								option(value='tsp.') Teaspoon
 								option(value='tbsp.') Tablespoon
@@ -42,10 +42,10 @@ block content
 								option(value='lb') Pound
 								option(value='oz') Dry Ounce
 						.form-group.col-md-2
-							input.form-control.mt-3.dp-form-fields(name='ingredientProperties[3]', type='date')
+							input.form-control.mt-3.dp-form-fields(name='ingredientProperties[0]', type='date')
 						.form-group.col-md-1
 							.dropdown-inline
-							select.form-control.mt-3.dp-form-fields(name='ingredientProperties[4]', required)
+							select.form-control.mt-3.dp-form-fields(name='ingredientProperties[0]', required)
 								option(value='') Priority Item?
 								option(value='High') Yes
 								option(value='Low') No

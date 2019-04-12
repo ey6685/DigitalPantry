@@ -3,7 +3,7 @@ html
 	head
 		//-Style for the sticky footer
 		style.
-			footer {
+			.footer {
 				left: 0;
 				bottom: 0;
 				width: 100%;
@@ -11,7 +11,6 @@ html
 				box-shadow: 0 50vh 0 50vh #570573;
 				background-color: #570573 !important;
 				color: white !important;
-				position: fixed;
 			}
 			.btn{
 				/*Adds button separation so they are not glued to each other
@@ -40,11 +39,10 @@ html
 				span.navbar-toggler-icon
 			#navbarCollapse.collapse.navbar-collapse
 				if !user
-					a.nav-link(href='/users/register')
-						| Register
-				else
-					a.nav-link(href='/users/logout')
-						| Logout
+					ul.navbar-nav.mr-auto
+						li.nnav-item.active
+							a.nav-link(href='/users/Login')
+								| Sign in
 		.container
 			br
 			//- block content will get replaced with another .pug file
@@ -53,7 +51,7 @@ html
 			br
 			br
 			br
-			footer
+			footer.footer
 				p.mb-1 © 2019 Digital Pantry
 				ul.list-inline
 					//- TODO link these to proper files

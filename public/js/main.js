@@ -130,10 +130,12 @@ $(document).on('click', '.delete-current-ingredient', function() {
 $('#editRecipe').on('show.bs.modal', async function(event) {
   // Button that triggered the display card
   var button = $(event.relatedTarget)
+  console.log(JSON.stringify(button))
   // Get the recipe row based on the button clicked and its closest tr element
   $recipeRow = button.closest('tr').children()
   // Based on the button click it will get data-target id of the row and find the drop down this ide points to
   $recipeRowDataTarget = $(button.closest('tr').attr('data-target')).children()
+  console.log("Row target: " +$recipeRowDataTarget)
   var ingredientList = []
   // for each ingredient that the recipe contains
   for (element in $recipeRowDataTarget) {
@@ -248,6 +250,81 @@ $('#editRecipe').on('show.bs.modal', async function(event) {
       console.log('Could not get directions for recipe ' + values[0])
     }
   })
+})
+//////////////////////
+//this will trigger ediding recipes on the card view
+$('#editRecipeCard').on('show.bs.modal', function (event) {
+  console.log("it worked");
+  // Button that triggered the display card
+  var button = $(event.relatedTarget)
+  console.log("button: " + JSON.stringify(button))
+  // Get the recipe row based on the button clicked and its closest tr element
+  $recipe_id  = button.closest('.card').attr('id')
+  $recipe_img = button.closest('.card').attr('image_p')
+  $recipe_name = button.closest('.card').attr('r_name')
+  $directions = button.closest('.card').attr('r_directions')
+  $people =  button.closest('.card').attr('r_serv')
+  $ingredient_list = button.closest('.card').attr('ing');
+  $ingredient_list = JSON.parse($ingredient_list)
+
+  console.log("recipe id: "+ $recipe_id)
+  console.log("Img: " + $recipe_img)
+  console.log("recipe_name: " + $recipe_name)
+  console.log("Idirectionsmg: " + $directions)
+  console.log("people: " + $people)
+  console.log("ingredient_list: " + $ingredient_list)
+  //pop up menu time
+  $('h4').text('Editing Recipe - ' + $recipe_name)
+  $('h4').addClass('data-id')
+  $('#recipe-name').attr('placeholder', $recipe_name)
+  $('#recipe-size').attr('placeholder', $people)
+  $('#ingredient-rows').html('')
+  $('#dynamic-ingredient-row').html('')
+
+  for (ingredient in $ingredient_list) {
+    let ingredientCounter = 'ingredient' + ingredient
+    console.log($ingredient_list[ingredient])
+    // split Ingredient name and QtyMeasurement
+    var ingredientsSplit = $ingredient_list[ingredient].split(',')
+    // get ingredientName
+    let ingredientName = ingredientsSplit[0]
+    // split measurement and qty into 2 separate fields
+    var ingredientQtyAndMeasurement = ingredientsSplit[1].split(' ')
+    // get Qty
+    let ingredientQty = ingredientQtyAndMeasurement[1]
+    // get measurement
+    let ingredientMeasurement = ingredientQtyAndMeasurement[2].toLowerCase()
+    // Create a row for an ingredient
+    $ingredientRow = `
+        <div class="form-row">
+            <div class="form-group col-4">
+                <input class="form-control" name="${ingredientName}" id="ingredient-name" type="text" placeholder="${ingredientName}" />
+            </div>
+            <div class="form-group col-3">
+                <input class="form-control" name="${ingredientName}" id="ingredient-qty" type="text" placeholder="${ingredientQty}" />
+            </div>
+            <div class="form-group col-4">
+                <select name="${ingredientName}" class="form-control id="measurement">
+                    <option value="">Measurement</option>
+                    <option value="fl oz">fluid ounce</option>
+                    <option value="ml">Mililliter</option>
+                    <option value="quart">Quart</option>
+                    <option value="lb">Pound</option>
+                    <option value="oz">Ounce</option>
+                    <option value="cup">Cup</option>
+                    <option value="tbsp.">Tablespoon</option>
+                    <option value="tsp.">Teaspoon</option>
+                </select>
+            </div>
+            <div class="form-group col-1">
+                <button type="button" data-id="${$recipe_id}" class="btn btn-danger delete-current-ingredient">X</button>
+            </div>
+        </div>`
+    $ingredientRow = $ingredientRow.replace('value="' + ingredientMeasurement + '"', `value ="${ingredientMeasurement}" selected`)
+    $('#ingredient-rows').append($ingredientRow)
+  }
+  var $input = $('<input>').attr('type', 'hidden').attr('name', 'recipeId').val($recipe_id)
+  $('#ingredient-rows').append($input)
 })
 
 // Cook it button logic
