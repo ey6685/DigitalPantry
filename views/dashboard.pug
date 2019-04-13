@@ -28,8 +28,6 @@ block content
 	br
 	div(class='container-fluid', class='rounded', style='width: 90%')
 		//- Overlay form start. In other words view recipe form
-		a#undoCooking(href='' style='display:none')
-			i.fas.fa-2x.fa-undo
 		#viewRecipeDetails.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
 			.modal-dialog.modal-dialog-centered.modal-lg(role='document')
 				.modal-content
@@ -52,36 +50,36 @@ block content
 						br
 						#recipeStepsOverlay
 					.modal-footer
-		//-Overlay form end
-		//- #accordionExample.accordion
-		//- 	.card
-		//- 		#headingTwo.card-header
-		//- 			h5.mb-0
-		//- 				button.btn.btn-link.collapsed(type='button', data-toggle='collapse', data-target='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
-		//- 					| Show settings
-		//- 		#collapseTwo.collapse(aria-labelledby='headingTwo', data-parent='#accordionExample')
-		//- 			.card-body
 		.row
-			.col-sm-8.dp-title-text Show me recipes for ingredients expiring in 
-				btn-toolbar(role='toolbar', aria-label='Toolbar with button groups')
-					.btn-group.btn-group-sm.mr-2(role='group', aria-label='First group')
-						button.btn.dp-btn-group(class='combo-box' type='button') 1
-						button.btn.dp-btn-group(class='combo-box' type='button') 5
-						button.btn.dp-btn-group(class='combo-box' type='button') 10
-						button.btn.dp-btn-group(class='combo-box' type='button') 15
-					| days
-		.row.mt-2
-			.col-sm-8.dp-title-text
-				| Show me recipes where i am missing a few ingredients. 
-				button.btn.btn-sm.btn-success.dp-btn-primary#ingredientFilterBtn(type='button') Yes
-		.row.mt-2
-			.col-sm-8
-				.form-inline.dp-title-text
-					| I am cooking for
-					.col-sm-2
-						.input-group.input-group-sm
+			.col-sm-3
+				.card(style='height:150px').text-center
+					.card-body
+						p.card-text Show me recipes for ingredients expiring in 
+							btn-toolbar(role='toolbar', aria-label='Toolbar with button groups')
+								.btn-group.btn-group-sm.mr-2(role='group', aria-label='First group')
+									button.btn.dp-btn-group(class='combo-box' type='button') 1
+									button.btn.dp-btn-group(class='combo-box' type='button') 5
+									button.btn.dp-btn-group(class='combo-box' type='button') 10
+									button.btn.dp-btn-group(class='combo-box' type='button') 15
+							p.card-text days
+			.col-sm-3
+				.card(style='height:150px').text-center
+					.card-body
+						p.card-text Show me recipes where i am missing a few ingredients. 
+						button.btn.btn-sm.btn-success.dp-btn-primary#ingredientFilterBtn(type='button') Yes
+			.col-sm-3
+				.card(style='height:150px').text-center
+					.card-body.text-center
+						p.card-text I am cooking for
+						.col.align-self-center
 							input.form-control(id='cookForNumberOfPeople' style="text-align:center;valign:middle;" type='text') 
-					| people
+						p.card-text people
+			.col-sm-3#undoCooking(style='display:none')
+				.card(style='height:150px').text-center
+					.card-body.text-center
+						p.card-text Undo cooked recipe
+						a(href='')
+							i.fas.fa-2x.fa-undo
 
 		br
 		!= messages('message', locals)
@@ -191,7 +189,6 @@ block content
 		//Check if user has cooked a recipe. This is used for the undo button
 		let cookedRecipeData = ""
 		if(localStorage.getItem("recipe") !== null){
-			console.log("SHOW!")
 			cookedRecipeData = localStorage.getItem('recipe')
 			$('#undoCooking').show()
 		}

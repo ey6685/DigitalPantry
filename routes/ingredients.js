@@ -393,6 +393,27 @@ router.post('/editIngredientAmount', async function editIngredientAmount(req, re
   res.send('success')
 })
 
+router.post('/edit', async function editIngredientInfo(req, res){
+  ingredientId = PraseInt(ingredientId)
+  ingredientName = req.body.ingredientName
+  ingredientTotal = req.body.ingredientTotal
+  ingredientMeasurement = req.body.ingredientMeasurement
+  ingredientDate = req.body.ingredientDate
+  ingredientPriority = req.body.ingredientPriority
+
+  if(ingredientName != ""){
+    await ingredient_t.update({ingredient_name:ingredientName},
+    {
+      where:{
+        ingredient_id:ingredientId
+      }
+    })
+  }
+
+
+  res.send(req.body)
+})
+
 // remove ingredient by id
 router.delete('/remove/', async function remove(req, res) {
   const ingredient = req.body.id
