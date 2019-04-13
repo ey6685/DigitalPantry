@@ -6,6 +6,7 @@ block content
 			/*Defines CSS for butons on the dashboard*/
 			width: 93%;
 			margin: 0px 10px 10px 10px;
+			
 		}
 		.card{
 			color:#570573;
@@ -47,7 +48,8 @@ block content
 							p(class='card-text') #{item.ingredient_amount} #{item.ingredient_unit_of_measurement} expired on #{item.ingredient_expiration_date} 
 
 						div(class='card-foot')
-							button.btn_card.btn.btn-outline-danger.delete-ingredient(href='#', data-id=item.ingredient_name) Remove From Pantry
+							center
+								a.btn.btn-outline-danger.delete-ingredient(data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount) Remove From Pantry
 
 
 		script.
