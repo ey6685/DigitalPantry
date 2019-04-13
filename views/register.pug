@@ -10,24 +10,26 @@ block content
 	br
 	br
 	div.mt-5(class='container-fluid', class='rounded', style='width: 90%')
-		div.dp-container(class='rounded', class='col-12')
+		div.dp-table(class='rounded', class='col-12')
 			//- This will print whatever you have sent from app.js
+			br
 			h1.text-center.mb-3.dp-title-text #{title}
+			hr
 			div(class='row')
 				div.mx-auto(class='col-8')
 					form.form(method='POST', action='/users/register')
 						#form-group
-							label Email:
-							input.form-control.form-control(name='email', type='text', id='email-register')
+							label.dp-secondary-text Email:
+							input.form-control.form-control.dp-title-text(name='email', type='text', id='email-register')
 						br
 						#form-group
-							label Password:
-							input.form-control(name='password', type='password', id='password-register')
+							label.dp-secondary-text Password:
+							input.form-control.dp-title-text(name='password', type='password', id='password-register')
 						br
 						#form-group
-							label Confirm Password:
-							input.form-control(name='confirm_password', type='password', id='password2-register')
+							label.dp-secondary-text Confirm Password:
+							input.form-control.dp-title-text(name='confirm_password', type='password', id='password2-register')
 							br
-							input.btn.dp-btn-orange-white-text(type='submit', value='Register', id='submit-register')
+							input.btn.dp-btn-primary(type='submit', value='Register', id='submit-register')
 							a(href='/users/Login') Already have an account?
 						br

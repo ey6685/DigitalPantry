@@ -1,22 +1,19 @@
-/*Navbar background color*/
-.navbar-green {
+/* Navbar background color .navbar-green {
   background-color: #058d3f !important;
 }
 
-/*Container background color*/
-.container-green {
+Container background color .container-green {
   background-color: #66c08d !important;
 }
 
-/*Table colors*/
-.table-green {
+table colors .table-green {
   background-color: #134309 !important;
-  /* background-color: #195a0c; */
+  background-color: #195a0c;
   color: white !important;
 }
 
 .footer-green {
-  /* background-image: linear-gradient(rgb(25, 90, 12), rgba(236, 252, 233)); */
+  background-image: linear-gradient(rgb(25, 90, 12), rgba(236, 252, 233));
   background-color: #195a0c !important;
 }
 
@@ -31,7 +28,7 @@
 .row-dark {
   background-color: #212529 !important;
   color: white !important;
-}
+} */
 .dp-table {
   background-color: #faf8eb !important;
   color: #570573 !important;
@@ -51,6 +48,9 @@
 }
 .dp-secondary-text {
   color: #eeaf2c !important;
+}
+.dp-caution-text {
+  color: #f2d43b !important;
 }
 .dp-btn-primary {
   background-color: #91c02e !important;
