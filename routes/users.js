@@ -232,7 +232,7 @@ router.get('/dashboard', async function showDashboard(req, res) {
 router.get('/cook/:id', async function(req, res) {
   const recipe = req.params.id
   console.log(
-    '\n==================\ncook it router to with ' + recipe + ' id\n========================\n'
+    '\n==================\ncook it route to with ' + recipe + ' id\n========================\n'
   )
     var currentPantryID = await User.findOne({
       attributes: ['pantry_id'],
@@ -249,6 +249,8 @@ router.get('/cook/:id', async function(req, res) {
     console.log("currentPantryID.pantry_id: " + currentPantryID.pantry_id)
     console.log("people.people_cooking_for:" + people.people_cooking_for)
   var info = await cook_it.cook_it2(recipe,currentPantryID.pantry_id, people.people_cooking_for)
+
+
   console.log('REFRESH!')
   res.redirect(req.get('referer'))
 })

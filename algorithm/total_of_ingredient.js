@@ -28,7 +28,7 @@ async function total_ingredients(ing_id, pantry_id,unit)
     try 
     {    
         var today = new Date();
-        console.log("\n\nstarting to total ingredient with id: " + ing_id + '\n\n');
+        console.log("\n\nstarting to total ingredient with id: " + ing_id +" in unit: " + unit + '\n\n');
         //get all the ingredients in the the pantry stock 
         var the_stock = await ingredient_t.findAll({ 
             attributes: ["ingredient_amount", "ingredient_unit_of_measurement"], 
@@ -40,21 +40,23 @@ async function total_ingredients(ing_id, pantry_id,unit)
                 }
             } 
         }); 
- 
+        console.log("the_stock")
+        console.log("===========")
         console.log(JSON.stringify(the_stock)); 
         //time to total 
         var sum = 0.0; 
-        the_stock.forEach(async function(current) { 
-            if(unit == current.ingredient_unit_of_measurement) 
+        for(var i = 0; i< the_stock.length;i++)
+        { 
+            if(unit == the_stock[i].ingredient_unit_of_measurement) 
             { 
-                sum += current.ingredient_amount; 
+                sum += the_stock[i].ingredient_amount; 
             } 
             else 
             { 
-                var new_num = await parseFloat(unit_convert.converter_raw(current.ingredient_amount, current.ingredient_unit_of_measurement, unit)); 
+                var new_num = await parseFloat(unit_convert.converter_raw(the_stock[i].ingredient_amount, the_stock[i].ingredient_unit_of_measurement, unit)); 
                 sum += new_num; 
             } 
-        }); 
+        } 
  
         console.log("\nsum: " +sum + '\n'); 
         return sum; 

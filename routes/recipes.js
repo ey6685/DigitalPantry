@@ -288,6 +288,8 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
       {//               req.body.ingredientProperties.lenght         ingredientProperties
         //Retrieve all values from request body
         var ingredient_data_from_page =  req.body.ingredientProperties[i];
+        if(ingredient_data_from_page != null)
+        {
         console.log("//////////////////////////////////////////\n" +JSON.stringify(ingredient_data_from_page) +"\n////////////////////////////////////\n");
         // const ingredientName = req.body[key][0];
         // const ingredientQuantity = req.body[key][1];
@@ -331,6 +333,7 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
         });
         console.log("created ingredient slot: \n" + JSON.stringify(new_ingredient_slot));
         }
+      }
       //Repeat until all recipes have been parsed
     
   
