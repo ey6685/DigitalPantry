@@ -21,17 +21,21 @@ block content
 		div(class='row')
 			div.mx-auto(class='col-8')
 				form(method='POST', action='/users/login', class= 'form')
-					#form-group
-						label.dp-secondary-text Email:
-						input.form-control.dp-title-text(name='username', type='text', class='form-group', id='username-signin')
+					br
 					br
 					#form-group
-						label.dp-secondary-text Password:
-						input.form-control.dp-title-text(name='password', type='password', class='form-group', id='password-signin')
+						input.form-control.dp-title-text(name='username', type='text', class='form-group', id='username-signin', placeholder='Name')
+					br
+					#form-group
+						input.form-control.dp-title-text(name='password', type='password', class='form-group', id='password-signin', placeholder='Password')
 						br
-						a.dp-primary-text.mr-2(href='/users/register') Don't Have an Account?
-						a.dp-primary-text(href='/users/forgotpass')  Forgot Password?
 						div(class='text-center')
-							input.btn.dp-btn-orange-white-text(type='submit', value='Sign In', class='form-group text-center', id='submit-signin')
+							a.dp-primary-text(href='/users/register') Don't Have an Account?
+							br
+							br
+							a.dp-primary-text.mt-3(href='/users/forgotpass')  Forgot Password?
+							br
+							br
+							input.btn.col-md-5.dp-btn-orange-white-text.mt-3(type='submit', value='Log In', class='form-group text-center', id='submit-signin')
 	script.
 		localStorage.clear()

@@ -65,8 +65,9 @@ html
 		//- Navigation section
 		//- TODO when window is small navigation should display a dropdown
 		//- Have to include some javascript files from bootstrap folder and i dont know which ones
-		nav.nav.navbar.navbar-expand-md
-			a.navbar-brand(href='/') Food Pantry
+		nav.nav.navbar.navbar-expand-md.pt-0
+			a.navbar-brand(href='/')
+				img.ml-2(src='/images/dp_logo.png', alt='image', width='90px')
 			button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
 				span.navbar-toggler-icon
 			#navbarCollapse.collapse.navbar-collapse
