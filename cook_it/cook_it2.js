@@ -131,7 +131,7 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
             for(var i=0; i<ingredients_in_the_recipe.length; i++)
             {   
                 var amount_need = ingredients_in_the_recipe[i].amount_of_ingredient_needed * scale;
-                console.log("amount= " + ingredients_in_the_recipe[i].amount_of_ingredient_needed +' * '  + scale)
+                console.log("amount_needed= " + ingredients_in_the_recipe[i].amount_of_ingredient_needed +' * '  + scale)
                 var current_ingredient = await in_pantry_t.findAll({
                     where: {
                         ingredient_id: ingredients_in_the_recipe[i].ingredient_id
@@ -139,7 +139,7 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
                     order: ['ingredient_expiration_date']
                 });
 
-                
+                amount = 0;
                 for(var o =0; o<current_ingredient.length; o++)
                 {
                     amount = current_ingredient[o].ingredient_amount;
@@ -151,6 +151,7 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
                     console.log(amount + " >= " + amount_need)
                     if(amount >= amount_need)
                     {
+                        console.log('current_ingredient - amount needed: ' + current_ingredient[o].ingredient_amount + ' - ' + amount_need)
                         query_str = query_str+  "UPDATE ingredients_in_pantry SET ingredient_amount = " + (current_ingredient[o].ingredient_amount - amount_need) + " WHERE ingredient_id = " + current_ingredient[o].ingredient_id + " AND ingredient_expiration_date = '" + current_ingredient[o].ingredient_expiration_date +"'; ";
                         break;
                     }
@@ -165,7 +166,7 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
             
             }
             //});//end of for each
-        }//end of checking if the flag has been fliped
+        //end of checking if the flag has been fliped
         
         console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
         console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
@@ -182,8 +183,8 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
             if(err) throw err;
             console.log(JSON.stringify(res));
         });
-
-    }
+     }//if we have all
+    }//try
     catch(err)
     {
         console.log(err);

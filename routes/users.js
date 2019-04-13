@@ -15,6 +15,7 @@ const Pantry = require('../DB_models/Pantry')
 const cook_it = require('../cook_it/cook_it2')
 const next_ing = require('../algorithm/find_next_ing')
 const found_recipes = require('../algorithm/find_recipes')
+const ingredients_in_a_recipe = require('../DB_models/ingredients_in_a_recipe')
 const recipe_t = require('../DB_models/Recipes')
 const ing_table = require('../DB_models/Ingredients')
 const ing_in_pan_table = require('../DB_models/ingredients_in_pantry')
@@ -232,7 +233,7 @@ router.get('/dashboard', async function showDashboard(req, res) {
 router.get('/cook/:id', async function(req, res) {
   const recipe = req.params.id
   console.log(
-    '\n==================\ncook it router to with ' + recipe + ' id\n========================\n'
+    '\n==================\ncook it route to with ' + recipe + ' id\n========================\n'
   )
     var currentPantryID = await User.findOne({
       attributes: ['pantry_id'],
@@ -249,6 +250,8 @@ router.get('/cook/:id', async function(req, res) {
     console.log("currentPantryID.pantry_id: " + currentPantryID.pantry_id)
     console.log("people.people_cooking_for:" + people.people_cooking_for)
   var info = await cook_it.cook_it2(recipe,currentPantryID.pantry_id, people.people_cooking_for)
+
+
   console.log('REFRESH!')
   res.redirect(req.get('referer'))
 })
@@ -327,57 +330,65 @@ router.get('/logout', function logout(req, res) {
   res.redirect('/users/login')
 })
 
-/*
-/////////////////////////////////////////////////////////////////////////////////
-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>,>,><><><><><><><><
-HEY DO WE NEED THIS ANYMORE. THE COMMUNITY RECIPES ARE IN THE RECIPES TABLE.....
-*/
+
 router.post('/saveCommunityRecipe', async function(req, res) {
+  //get the panrty id of the logged in user
+  userPantryId =req.user.pantry_id
   //get recipe id that user is trying to copy into their pantry
   var recipe_id_to_be_copied = req.body['community_recipe_id']
-  // get current user id, so we know which pantry to add recipe to
-  var current_user_id = req.session.passport['user']
-  // Query for pantry ID that user belongs to
-  await db.query('SELECT * FROM users WHERE user_id=' + current_user_id, function(err, results) {
-    if (err) throw err
-    // Asssign the pantry that the user belons to
-    users_pantry_id = results[0]['pantry_id']
-    // Get single recipe information from community recipe database
-    query =
-      'SELECT c_recipe_name,c_recipe_serving_size,c_recipe_directions,c_recipe_image_path FROM community_recipes WHERE c_recipe_id=' +
-      recipe_id_to_be_copied +
-      ';'
-    db.query(query, async function(err, results) {
-      if (err) throw err
-      // assign all the information needed from the recipe
-      var recipe_name = results[0]['c_recipe_name']
-      var recipe_serving_size = results[0]['c_recipe_serving_size']
-      var recipe_directions = results[0]['c_recipe_directions']
-      var recipe_image = results[0]['c_recipe_image_path']
-      combined_values =
-        "('" +
-        recipe_name +
-        "'," +
-        recipe_serving_size +
-        ",'" +
-        recipe_directions +
-        "','" +
-        recipe_image +
-        "'," +
-        users_pantry_id +
-        ');'
-      // Insert copied recipe into pantry's recipes
-      query =
-        'INSERT INTO recipes  (recipe_name, recipe_serving_size, recipe_directions, recipe_image_path,recipe_pantry_id) VALUES ' +
-        combined_values
-      db.query(query, function(err) {
-        if (err) throw err
-        // respond to AJAX POST request
-        res.send('Success')
-      })
-    })
+  console.log(recipe_id_to_be_copied)
+  try{
+
+  
+  //grab data we need
+  var recipe_data = await recipe_t.findOne({
+    where :{
+      recipe_id: recipe_id_to_be_copied
+    }
   })
+  var ingredin_needed_data = await ingredients_in_a_recipe.findAll({
+    where: {
+      recipe_id: recipe_id_to_be_copied
+    }
+  })
+  
+  console.log("the recipe data to copy")
+  console.log("=======================")
+  console.log(JSON.stringify(recipe_data));
+  console.log(JSON.stringify(ingredin_needed_data))
+  var new_recipe_id
+  // var query =`INSERT INTO recipes (recipe_name,recipe_image_path,recipe_directions,pantry_id,num_people_it_feeds) VALUES ("${recipe_data.recipe_name}","${recipe_data.recipe_image_path}", "${recipe_data.recipe_directions}",${userPantryId},${recipe_data.num_people_it_feeds})`
+  // console.log(query)
+  var recipe_id = await recipe_t.create({
+    recipe_name: recipe_data.recipe_name,
+    recipe_image_path: recipe_data.recipe_image_path,
+    recipe_directions: recipe_data.recipe_directions,
+    pantry_id: userPantryId,
+    num_people_it_feeds: recipe_data.num_people_it_feeds
+  })
+
+  new_recipe_id = recipe_id['null']
+  // new_recipe_id = await db.query(query)
+  console.log("new recipe")
+  console.log("==========")
+  
+  for(var i = 0;i<ingredin_needed_data.length;i++){
+    await ingredients_in_a_recipe.create({
+      recipe_id : new_recipe_id,
+      pantry_id: userPantryId,
+      ingredient_id: ingredin_needed_data[i].ingredient_id,
+      amount_of_ingredient_needed: ingredin_needed_data[i].amount_of_ingredient_needed,
+      ingredient_unit_of_measurement: ingredin_needed_data[i].ingredient_unit_of_measurement
+    })
+  };
+
+        res.send('Success')
+  
+  }
+  catch(e)
+  {
+    console.log(e)
+  }
 })
 
 // Add new user from admin panel

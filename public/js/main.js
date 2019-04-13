@@ -352,35 +352,12 @@ $(document).ready(function() {
   })
 })
 
-//COOK IT DUPLICATE, THIS IS DONE ON PURPOSE FOR NOW
-$(document).ready(function () {
-  $('#finishCooking').on('click', function (e) {
-    // get button object clicked
-    $target = $(e.target)
-    // get data-id value from the button, which is recipe ID
-    const id = $target.attr('recipe-id')
-    console.log(id)
-    // Start AJAX
-    $.ajax({
-      type: 'GET',
-      url: '/users/cook/' + id,
-      success: function (response) {
-        // Reload the page to update cards
-        window.location.href = '/users/dashboard'
-      },
-      error: function (err) {
-        console.log('Could not delete: ' + id)
-      }
-    })
-  })
-})
 
 // Save community recipe
 $(document).on('click', '.saveRecipe', function() {
   // Get id of the community recipe clicked
-  $card_id = $(this)
-    .closest('.card')
-    .attr('id')
+  $card_id = $(this).closest('.card').attr('id')
+    console.log($card_id)
 
   // Send ajax request with recipe ID that is being copied
   $.ajax({
@@ -552,4 +529,53 @@ $(document).on('change', '#cookForNumberOfPeople', function updateCookForNumberO
       console.log(err)
     }
   })
+})
+
+//When user wants to edit ingredient on tables view this is called
+$('#editIngredient').on('show.bs.modal', async function(event) {
+  //Button trigger
+  var button = $(event.relatedTarget)
+  var ingredientId = $(button).attr('data-id')
+
+  $tableRowCells = button.closest('tr').children()
+  //JSON object for ingredient data
+  var ingredientData = new Object();
+  for (child in $tableRowCells) {
+    // for each cell get its index
+    var cellIndex = $tableRowCells[child].cellIndex
+    // Get image src
+    if (cellIndex == 0) {
+      console.log($tableRowCells[child].children[0].getAttribute('src'))
+      ingredientData.image = $tableRowCells[child].children[0].getAttribute('src')
+    }
+    // Get ingredient name
+    else if(cellIndex == 1){
+      ingredientData.name = $tableRowCells[child].innerText
+    }
+    // Get ingredientTotal
+    else if(cellIndex == 2){
+      ingredientData.total = $tableRowCells[child].innerText
+    }
+    // Get ingredient measurement
+    else if(cellIndex == 3){
+      ingredientData.measurement = $tableRowCells[child].innerText
+    }
+    // Get ingredient expirationDate
+    else if(cellIndex == 4){
+      ingredientData.expirationDate = $tableRowCells[child].innerText
+    }
+    // Get ingredient item priority
+    else if(cellIndex == 5){
+      ingredientData.itemPriority = $tableRowCells[child].innerText
+    }
+  }
+  $('#title-field').text("Editing - " + ingredientData.name)
+  $('#image-field').attr('src', ingredientData.image)
+  $('#ingredientNameField').attr('placeholder', ingredientData.name)
+  $('#ingredientTotalField').attr('placeholder', ingredientData.total)
+  $(`.measurementDiv option[value='${ingredientData.measurement}']`).attr('selected', true)
+  $(`.priorityDiv option[value='${ingredientData.itemPriority}']`).attr('selected', true)
+  $('#ingredientIdField').attr('value', ingredientId)
+  $('#ingredientCurrentExpirationDate').attr('value', new Date(ingredientData.expirationDate))
+  document.getElementById("dateSelector").valueAsDate = new Date(ingredientData.expirationDate)
 })

@@ -103,7 +103,7 @@ router.post('/showall', async function(req, res) {
   })
 
   //if it is alread there then just add to that entry
-  if(in_inv.lenght >0){
+  if(in_inv.length >0){
     var final_amount
     final_amount = in_inv.ingredient_amount + await UC.converter_raw(ingredient_amount,ingredient_unit,in_inv.ingredient_unit_of_measurement);
     final_amount = await parseFloat(parseFloat(final_amount).toFixed(2))
@@ -201,7 +201,7 @@ router.get('/expiredAdmin', function expiredTable(req, res) {
 
 // POST request to localhost:3000/ingredients/add
 // This will add a new ingredient to available ingredients and update database
-router.post('/add', upload.single('image'), async function addIngredient(req, res) {
+router.post('/add', upload.array('image'), async function addIngredient(req, res) {
   console.log("++++++++++++++++++++++++++++++++")
   console.log("adding ingredients");
 
@@ -213,35 +213,67 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
     }
   })
   var currentPantryId = PantryId.pantry_id
-  if (req.file) {
-    console.log('File Uploaded Successfully')
-    var currentDate = Date.now()
-    var imagePath = currentDate + '.jpg'
-    gm(req.file.path) // uses graphicsmagic and takes in image path
-      .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
-      .write(req.file.path, err => {
-        fs.rename(req.file.path, './public/images/' + currentDate + '.jpg', function(err) {
-          if (err) throw err
-          console.log('File Renamed.')
-        })
+  var imagePath = new Array()
+  console.log(req.body.ingredientProperties)
+  console.log(req.body.ingredientProperties.length)
+  ///needs testing
+  ///patrick gets a windows error
+  try{
+    for (var i =1; i < req.body.ingredientProperties.length;i++) {
+    if (req.files) {
+      console.log("the file data")
+      console.log("==============")
+      console.log(req.files[i-1])
+      console.log(req.files.length)
+      console.log('File Uploaded Successfully')
+      var e 
+        try{
+        var currentDate = Date.now()
+        imagePath[i-1] = currentDate  + '.jpg'
+        do{
+          e = false
+          console.log(i + " " )
+          console.log("pic magic " + req.files[i-1].path)
+        await gm(req.files[i-1].path) // uses graphicsmagic and takes in image path
+          .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
+          .write(req.files[i-1].path, err => {
+            fs.rename(req.files[i-1].path, './public/images/' + currentDate + '.jpg', function(err) {
+              if (err) e = err
+              console.log('File Renamed.')
+            })
 
-        if (err) {
-          console.log(err)
+            if (err) {
+              console.log(err)
+              imagePath[i-1] = 'placeholder.jpg'
+            }
+          })
+        }while(e)
+      }
+        catch(e){
+          imagePath[i-1] = 'placeholder.jpg'
         }
-      })
-  } else {
-    var imagePath = 'placeholder.jpg'
-    console.log('File Upload Failed')
-  }
-    for (var i =0; i < req.body.ingredientProperties.length;i++) {
+      
+      }
+      else {
+        
+          imagePath[i-1] = 'placeholder.jpg'
+          console.log('File Upload Failed')
+        }
+      //////////////////////////////////////
+      
+      
+    console.log(req.body.ingredientProperties[i])
+    
       var block_oF_data = req.body.ingredientProperties[i];
-      //if(typeof block_oF_data != "undefined"){
+      if(block_oF_data != null){
         console.log(block_oF_data)
+        console.log("i is " + i)
         console.log('0 is ' + block_oF_data[0])
         console.log('1 is ' + block_oF_data[1])
         console.log('2 is ' + block_oF_data[2])
         console.log('3 is ' + block_oF_data[3])
         console.log('4 is ' + block_oF_data[4])
+        console.log("path: " + imagePath[i-1])
         //seperate the data
         var ingredient_name = block_oF_data[0]
         var ingredient_amount = block_oF_data[1]
@@ -263,7 +295,7 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
           var new_ingredient = await ingredient_t.create({
             ingredient_name: ingredient_name,
             ingredient_weight: new_weight,
-            ingredient_image_path: '/images/' + imagePath,
+            ingredient_image_path: '/images/' + imagePath[i-1],
             priority: priority
           })
           final_id = new_ingredient.ingredient_id
@@ -301,10 +333,19 @@ router.post('/add', upload.single('image'), async function addIngredient(req, re
             ingredient_expiration_date: ingredient_date,
             priority: priority
           })
-          console.log('ingredient add: \n' + JSON.stringify(new_inv))
+          console.log('ingredient add:')
+          console.log("===============")
+          console.log(JSON.stringify(new_inv))
+        }
+        
+          }
         }
       }
+      catch(e){
+        console.log(e)
+      }
     // }
+    
   console.log("++++++++++++++++++++++++++++++++")
   res.redirect('/ingredients/showall')
 })
@@ -334,6 +375,21 @@ router.get('/cards', function showCards(req, res) {
   })
 })
 
+//This gets ingredients with same name, because users can add same ingredients with different measurements
+router.get('/ingredientsWithSameName/:id', function showCards(req, res) {
+  ingredientId = req.params.id
+  query = `SELECT ingredients.ingredient_name, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date 
+  FROM ingredients_in_pantry 
+  INNER JOIN ingredients ON ingredients_in_pantry.ingredient_id = ${ingredientId} AND ingredients.ingredient_id = ${ingredientId};`
+  db.query(query, function(err, results){
+    if (err){
+      console.log(err)
+      throw err
+    }
+    res.json(results)
+  })
+})
+
 // This route gets called from dashboard when users change ingredient amount on-hand
 router.post('/editIngredientAmount', async function editIngredientAmount(req, res) {
   const currentUserId = req.session.passport['user']
@@ -350,6 +406,53 @@ router.post('/editIngredientAmount', async function editIngredientAmount(req, re
   )
   console.log("DONE!")
   res.send('success')
+})
+
+router.post('/edit', async function editIngredientInfo(req, res){
+  ingredientData = new Object()
+  ingredientData.ingredientNewExpirationDate = req.body.ingredientDate
+  ingredientData.ingredientCurrentExpirationDate = await moment(new Date(req.body.ingredientCurrentExpirationDate)).format('YYYY-MM-DD')
+  ingredientData.ingredientId = parseInt(req.body.ingredientId)
+  ingredientData.ingredientName = req.body.ingredientName
+  ingredientData.ingredientTotal = req.body.ingredientTotal
+  ingredientData.ingredientMeasurement = req.body.ingredientMeasurement
+  ingredientData.ingredientDate = req.body.ingredientDate
+  ingredientData.ingredientPriority = req.body.ingredientPriority
+
+  //If name was updated update ingredients table since this table has all ingredients names
+  if(ingredientData.ingredientName != ""){
+    await ingredient_t.update({
+      ingredient_name:ingredientData.ingredientName,
+      priority:ingredientData.ingredientPriority
+    },
+    {
+      where:{
+        ingredient_id:ingredientData.ingredientId
+      }
+    })
+  }
+  //query start
+  query = "UPDATE ingredients_in_pantry SET "
+  //If ingredient total has been updated append to query
+  if(ingredientData.ingredientTotal != ""){
+    console.log("Ingredient TOTAL is not empty")
+    query = query + `ingredient_amount=${ingredientData.ingredientTotal},`
+  }
+  //If new expiration date does not match the old expiration date append to query
+  if(ingredientData.ingredientNewExpirationDate !== ingredientData.ingredientCurrentExpirationDate){
+    console.log("Ingredient EXPIRATION DATE do not match")
+    query = query + `ingredient_expiration_date='${ingredientData.ingredientNewExpirationDate}',`
+  }
+  //Add last cell to update
+  query = query + `ingredient_unit_of_measurement='${ingredientData.ingredientMeasurement}' `
+  //End the query building
+  query = query + `WHERE ingredient_id=${ingredientData.ingredientId} AND ingredient_expiration_date='${ingredientData.ingredientCurrentExpirationDate}';`
+  db.query(query,function(err, results){
+    if(err){
+      throw err
+    }
+    res.redirect("/ingredients/showall")
+  })
 })
 
 // remove ingredient by id
