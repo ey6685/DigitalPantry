@@ -356,9 +356,8 @@ $(document).ready(function() {
 // Save community recipe
 $(document).on('click', '.saveRecipe', function() {
   // Get id of the community recipe clicked
-  $card_id = $(this)
-    .closest('.card')
-    .attr('id')
+  $card_id = $(this).closest('.card').attr('id')
+    console.log($card_id)
 
   // Send ajax request with recipe ID that is being copied
   $.ajax({

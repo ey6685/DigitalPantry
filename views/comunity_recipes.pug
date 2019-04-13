@@ -54,7 +54,7 @@ block content
 				//-get recipe image
 				- recipe_image= recipe.recipe_image_path
 				.form-group.col-md-3
-					div(id=recipe.c_recipe_id, class='card', class='h-100', class='form-group')
+					div(id=recipe.recipe_id, class='card', class='h-100', class='form-group')
 						img.image(class='card-img-top', src=recipe_image, alt='image')
 						div(class='card-body')
 							h4(class='card-title') #{recipe.recipe_name}
@@ -63,7 +63,7 @@ block content
 								p(class='card-text')= step
 						div(class='card-foot', padding='.75rem')
 							if user.user_type == "Administrator"
-								button.btn_card.btn.dp-btn-primary(class='saveRecipe', id='card'+i, type='button') Copy recipe
+								button.btn_card.btn.dp-btn-primary(class='saveRecipe', id='#{recipe.recipe_id}', type='button') Copy recipe
 
 	script.
 		// This will trigger once user stars to type text into a search bar
