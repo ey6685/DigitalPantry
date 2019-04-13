@@ -9,27 +9,35 @@ block content
 	br
 	br
 	br
-	div.mt-5(class='container-fluid', class='rounded', style='width: 90%')
-		div.dp-table(class='rounded', class='col-12')
-			//- This will print whatever you have sent from app.js
-			br
-			h1.text-center.mb-3.dp-title-text #{title}
-			hr
-			div(class='row')
-				div.mx-auto(class='col-8')
-					form.form(method='POST', action='/users/register')
-						#form-group
-							label.dp-secondary-text Email:
-							input.form-control.form-control.dp-title-text(name='email', type='text', id='email-register')
+	br
+	div.dp-split-left(class='container-fluid')
+		br
+		br
+		br
+		br
+		br
+		img.img-fluid.dp-table(src='/images/RegisterImage.png', alt='image', class='rounded mx-auto d-block' style='max-width: 80%')
+	div.dp-split-right(class='container-fluid')
+		h1(style='color: #570573').text-center.mb-3 #{title}
+		br
+		hr
+		br
+		div(class='row')
+			div.mx-auto(class='col-8')
+				form(method='POST', action='/users/login', class= 'form')
+					#form-group
+						input.form-control.dp-title-text.mb-3.mt-3(name='email', type='text', id='email-register', placeholder='Email')
+					br
+					#form-group
+						input.form-control.dp-title-text.mb-3(name='password', type='password', id='password-register', placeholder='Password')
+					br
+					#form-group
+						input.form-control.dp-title-text.mb-3(name='confirm_password', type='password', id='password2-register', placeholder='Confirm Password')
 						br
-						#form-group
-							label.dp-secondary-text Password:
-							input.form-control.dp-title-text(name='password', type='password', id='password-register')
-						br
-						#form-group
-							label.dp-secondary-text Confirm Password:
-							input.form-control.dp-title-text(name='confirm_password', type='password', id='password2-register')
+						div(class='text-center')
+							a.dp-primary-text.mt-3(href='/users/Login') Already Have an Acccount?
 							br
-							input.btn.dp-btn-primary(type='submit', value='Register', id='submit-register')
-							a(href='/users/Login') Already have an account?
-						br
+							br
+							input.btn.col-md-5.dp-btn-orange-white-text.mt-3(type='submit', value='Register', id='submit-register')
+	script.
+		localStorage.clear()
