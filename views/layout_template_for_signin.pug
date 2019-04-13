@@ -3,15 +3,28 @@ html
 	head
 		//-Style for the sticky footer
 		style.
-			footer {
+			.footer {
+				position: fixed;
 				left: 0;
+				height: 60px;
 				bottom: 0;
 				width: 100%;
 				text-align: center;
 				box-shadow: 0 50vh 0 50vh #570573;
 				background-color: #570573 !important;
 				color: white !important;
-				position: fixed;
+				flex-shrink: 0;
+			}
+			.body{
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+			}
+			.container{
+				flex: 1 0 auto;
+			}
+			main{
+				margin-bottom:100px;
 			}
 			.btn{
 				/*Adds button separation so they are not glued to each other
@@ -21,8 +34,26 @@ html
 			a{
 				color:#eeaf2c !important
 			}
-			nav{
+			.nav{
 				background-color: #570573 !important;
+			}
+			@media screen and (max-width: 992px){
+				.nav{
+					width: 100%;
+					height: auto;
+					position: relative;
+				}
+				.nav a {float: left;}
+				div.content {
+					margin-left: 0;
+					padding-left: 16px;
+				}
+				.filler{
+					display: collapse;
+				}
+				.nav-item{
+					width: 100px;
+				}
 			}
 		title Digital Pantry
 		link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
@@ -30,11 +61,11 @@ html
 		script(defer='', src='https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js', integrity='sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY', crossorigin='anonymous')
 		link(rel='stylesheet' type='text/css' href='/css/digital_pantry.css')
 
-	body
+	body.body
 		//- Navigation section
 		//- TODO when window is small navigation should display a dropdown
 		//- Have to include some javascript files from bootstrap folder and i dont know which ones
-		nav.navbar.navbar-expand-md
+		nav.nav.navbar.navbar-expand-md
 			a.navbar-brand(href='/') Food Pantry
 			button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
 				span.navbar-toggler-icon
@@ -46,15 +77,10 @@ html
 					a.nav-link(href='/users/logout')
 						| Logout
 		.container
-			br
-			//- block content will get replaced with another .pug file
-			block content
-			br
-			br
-			br
-			br
-			footer
-				p.mb-1 © 2019 Digital Pantry
+			main.ml-sm-auto.col-lg-10.px-4(role='main')
+				block content
+			footer.footer
+				p.mb-1.mt-1 © 2019 Digital Pantry
 				ul.list-inline
 					//- TODO link these to proper files
 					li.list-inline-item
@@ -62,7 +88,7 @@ html
 					li.list-inline-item
 						a(href='/users/terms') Terms
 					li.list-inline-item
-					a(href='/users/support') Support
+						a(href='/users/support') Support
 		script(src='/bower_components/jquery/dist/jquery.min.js')
 		script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
 		script(src="/js/main.js")
