@@ -33,7 +33,18 @@ DESCRIPTION: This will display all available recipes that are pulled from databa
 */
 router.get('/showall', async function(req, res){
     try{
-        var recipe_res = await recipe_t.findAll();
+      var userID = req.session.passport["user"]
+      var currentpantryID = await User.findOne({
+        attributes: ['pantry_id'],
+        where:{
+          user_id: userID
+        }
+      })
+      const recipe_res = await recipe_t.findAll({
+        where: {
+            pantry_id: currentpantryID.pantry_id
+        }
+      })
         console.log("the recipes: \n" + JSON.stringify(recipe_res));
         console.log("length: " + recipe_res.length); 
         // var IiR_res = await IiR_t.findAll({});
@@ -96,7 +107,18 @@ router.get('/showall', async function(req, res){
 
 router.get('/showRecipes', async function showRecipes(req, res) {
   // Get all available recipes
-  const results = await recipe_t.findAll()
+  var userID = req.session.passport["user"]
+  var currentpantryID = await User.findOne({
+    attributes: ['pantry_id'],
+    where:{
+      user_id: userID
+    }
+  })
+  const results = await recipe_t.findAll({
+    where: {
+        pantry_id: currentpantryID.pantry_id
+    }
+  })
   const recipeStepsArray = []
   for (every_recipe_directions in results){
     const recipe_steps = await steps.parse_recipe_directions_by_string(results[every_recipe_directions].recipe_directions);
@@ -283,6 +305,8 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
       {//               req.body.ingredientProperties.lenght         ingredientProperties
         //Retrieve all values from request body
         var ingredient_data_from_page =  req.body.ingredientProperties[i];
+        if(ingredient_data_from_page != null)
+        {
         console.log("//////////////////////////////////////////\n" +JSON.stringify(ingredient_data_from_page) +"\n////////////////////////////////////\n");
         // const ingredientName = req.body[key][0];
         // const ingredientQuantity = req.body[key][1];
@@ -326,6 +350,7 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
         });
         console.log("created ingredient slot: \n" + JSON.stringify(new_ingredient_slot));
         }
+      }
       //Repeat until all recipes have been parsed
     
   

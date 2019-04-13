@@ -202,6 +202,8 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
   var imagePath = new Array()
   console.log(req.body.ingredientProperties)
   console.log(req.body.ingredientProperties.length)
+  ///needs testing
+  ///patrick gets a windows error
   try{
     for (var i =1; i < req.body.ingredientProperties.length;i++) {
     if (req.files) {
@@ -243,13 +245,13 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
           imagePath[i-1] = 'placeholder.jpg'
           console.log('File Upload Failed')
         }
-      
+      //////////////////////////////////////
       
       
     console.log(req.body.ingredientProperties[i])
     
       var block_oF_data = req.body.ingredientProperties[i];
-      //if(typeof block_oF_data != "undefined"){
+      if(block_oF_data != null){
         console.log(block_oF_data)
         console.log("i is " + i)
         console.log('0 is ' + block_oF_data[0])
@@ -322,8 +324,9 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
           console.log(JSON.stringify(new_inv))
         }
         
+          }
+        }
       }
-    }
       catch(e){
         console.log(e)
       }
