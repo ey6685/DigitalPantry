@@ -537,7 +537,7 @@ $('#editIngredient').on('show.bs.modal', async function(event) {
   //Button trigger
   var button = $(event.relatedTarget)
   var ingredientId = $(button).attr('data-id')
-  console.log(ingredientId)
+
   $tableRowCells = button.closest('tr').children()
   //JSON object for ingredient data
   var ingredientData = new Object();
@@ -577,5 +577,6 @@ $('#editIngredient').on('show.bs.modal', async function(event) {
   $(`.measurementDiv option[value='${ingredientData.measurement}']`).attr('selected', true)
   $(`.priorityDiv option[value='${ingredientData.itemPriority}']`).attr('selected', true)
   $('#ingredientIdField').attr('value', ingredientId)
+  $('#ingredientCurrentExpirationDate').attr('value', new Date(ingredientData.expirationDate))
   document.getElementById("dateSelector").valueAsDate = new Date(ingredientData.expirationDate)
 })

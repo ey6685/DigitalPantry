@@ -375,6 +375,21 @@ router.get('/cards', function showCards(req, res) {
   })
 })
 
+//This gets ingredients with same name, because users can add same ingredients with different measurements
+router.get('/ingredientsWithSameName/:id', function showCards(req, res) {
+  ingredientId = req.params.id
+  query = `SELECT ingredients.ingredient_name, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date 
+  FROM ingredients_in_pantry 
+  INNER JOIN ingredients ON ingredients_in_pantry.ingredient_id = ${ingredientId} AND ingredients.ingredient_id = ${ingredientId};`
+  db.query(query, function(err, results){
+    if (err){
+      console.log(err)
+      throw err
+    }
+    res.json(results)
+  })
+})
+
 // This route gets called from dashboard when users change ingredient amount on-hand
 router.post('/editIngredientAmount', async function editIngredientAmount(req, res) {
   const currentUserId = req.session.passport['user']
@@ -394,24 +409,50 @@ router.post('/editIngredientAmount', async function editIngredientAmount(req, re
 })
 
 router.post('/edit', async function editIngredientInfo(req, res){
-  ingredientId = PraseInt(ingredientId)
-  ingredientName = req.body.ingredientName
-  ingredientTotal = req.body.ingredientTotal
-  ingredientMeasurement = req.body.ingredientMeasurement
-  ingredientDate = req.body.ingredientDate
-  ingredientPriority = req.body.ingredientPriority
+  ingredientData = new Object()
+  ingredientData.ingredientNewExpirationDate = req.body.ingredientDate
+  ingredientData.ingredientCurrentExpirationDate = await moment(new Date(req.body.ingredientCurrentExpirationDate)).format('YYYY-MM-DD')
+  ingredientData.ingredientId = parseInt(req.body.ingredientId)
+  ingredientData.ingredientName = req.body.ingredientName
+  ingredientData.ingredientTotal = req.body.ingredientTotal
+  ingredientData.ingredientMeasurement = req.body.ingredientMeasurement
+  ingredientData.ingredientDate = req.body.ingredientDate
+  ingredientData.ingredientPriority = req.body.ingredientPriority
 
-  if(ingredientName != ""){
-    await ingredient_t.update({ingredient_name:ingredientName},
+  //If name was updated update ingredients table since this table has all ingredients names
+  if(ingredientData.ingredientName != ""){
+    await ingredient_t.update({
+      ingredient_name:ingredientData.ingredientName,
+      priority:ingredientData.ingredientPriority
+    },
     {
       where:{
-        ingredient_id:ingredientId
+        ingredient_id:ingredientData.ingredientId
       }
     })
   }
-
-
-  res.send(req.body)
+  //query start
+  query = "UPDATE ingredients_in_pantry SET "
+  //If ingredient total has been updated append to query
+  if(ingredientData.ingredientTotal != ""){
+    console.log("Ingredient TOTAL is not empty")
+    query = query + `ingredient_amount=${ingredientData.ingredientTotal},`
+  }
+  //If new expiration date does not match the old expiration date append to query
+  if(ingredientData.ingredientNewExpirationDate !== ingredientData.ingredientCurrentExpirationDate){
+    console.log("Ingredient EXPIRATION DATE do not match")
+    query = query + `ingredient_expiration_date='${ingredientData.ingredientNewExpirationDate}',`
+  }
+  //Add last cell to update
+  query = query + `ingredient_unit_of_measurement='${ingredientData.ingredientMeasurement}' `
+  //End the query building
+  query = query + `WHERE ingredient_id=${ingredientData.ingredientId} AND ingredient_expiration_date='${ingredientData.ingredientCurrentExpirationDate}';`
+  db.query(query,function(err, results){
+    if(err){
+      throw err
+    }
+    res.redirect("/ingredients/showall")
+  })
 })
 
 // remove ingredient by id
