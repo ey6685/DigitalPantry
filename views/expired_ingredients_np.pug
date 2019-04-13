@@ -36,21 +36,24 @@ block content
 		br
 		.form-row
 			//-for each ingredient in data
-			//for ingredient,i in data
-			for item in results
-				//-get recipe image
-				- ingredient_image= item.ingredient_image_path
-				.form-group.col-md-3
-					div(id=item.ingredient_id, class='card', class='h-100')
-						img.image(class='card-img-top', src=ingredient_image, alt='image')
-						div(class='card-body')
-							h4(class='card-title') #{item.ingredient_name}
-							p(class='card-text') #{item.ingredient_amount} #{item.ingredient_unit_of_measurement} expired on #{item.ingredient_expiration_date} 
+			//-for ingredient,i in data
+			if (results.length > 0)
+				for item in results
+					//-get recipe image
+					- ingredient_image= item.ingredient_image_path
+					.form-group.col-md-3
+						div(id=item.ingredient_id, class='card', class='h-100')
+							img.image(class='card-img-top', src=ingredient_image, alt='image')
+							div(class='card-body')
+								h4(class='card-title') #{item.ingredient_name}
+								p(class='card-text') #{item.ingredient_amount} #{item.ingredient_unit_of_measurement} expired on #{item.ingredient_expiration_date} 
 
-						div(class='card-foot')
-							center
-								a.btn.btn-outline-danger.delete-ingredient(data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount) Remove From Pantry
-
+							div(class='card-foot')
+								center
+									a.btn.btn-outline-danger.delete-ingredient(data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount) Remove From Pantry
+			else
+				div.dp-background.card-container(class='container-fluid', class='rounded')
+					p.navbar-brand No Expired Ingredients
 
 		script.
 			//This will trigger once user stars to type text into a search bar
