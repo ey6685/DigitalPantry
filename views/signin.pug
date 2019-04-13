@@ -1,4 +1,4 @@
-extends layout_template
+extends layout_template_for_signin
 
 block content
 	!= messages('message', locals)
@@ -10,24 +10,36 @@ block content
 	br
 	br
 	br
-	div.mt-5(class='container-fluid', class='rounded', style='width: 90%')
-		//- Below will print whatever you have sent from app.js
-		div.dp-container(class='rounded', class='col-12')
-			h1(style='color: #570573').text-center.mb-3 #{title}
-			hr
-			div(class='row')
-				div.mx-auto(class='col-8')
-					form(method='POST', action='/users/login', class= 'form')
-						#form-group
-							label Email:
-							input.form-control(name='username', type='text', class='form-group', id='username-signin')
+	div.dp-split-left(class='container-fluid')
+		br
+		br
+		br
+		br
+		br
+		img.img-fluid.dp-table(src='/images/SigninImage.png', alt='image', class='rounded mx-auto d-block' style='max-width: 80%')
+	div.dp-split-right(class='container-fluid')
+		h1(style='color: #570573').text-center.mb-3 #{title}
+		br
+		hr
+		br
+		div(class='row')
+			div.mx-auto(class='col-8')
+				form(method='POST', action='/users/login', class= 'form')
+					br
+					br
+					#form-group
+						input.form-control.dp-title-text(name='username', type='text', class='form-group', id='username-signin', placeholder='Name')
+					br
+					#form-group
+						input.form-control.dp-title-text(name='password', type='password', class='form-group', id='password-signin', placeholder='Password')
 						br
-						#form-group
-							label Password:
-							input.form-control(name='password', type='password', class='form-group', id='password-signin')
+						div(class='text-center')
+							a.dp-primary-text(href='/users/register') Don't Have an Account?
 							br
-							input.btn.dp-btn-orange-white-text(type='submit', value='Sign In', class='form-group', id='submit-signin')
-							a(href='/users/register') Don't have an account?
-							a(href='/users/forgotpass')  Forgot Password?
+							br
+							a.dp-primary-text.mt-3(href='/users/forgotpass')  Forgot Password?
+							br
+							br
+							input.btn.col-md-5.dp-btn-orange-white-text.mt-3(type='submit', value='Log In', class='form-group text-center', id='submit-signin')
 	script.
 		localStorage.clear()
