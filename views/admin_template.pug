@@ -157,10 +157,11 @@ html
 					a.nav-link(href='/recipes/showCommunityRecipes')
 						i.fas.fa-hands-helping
 						| Community Recipes
-				li.nav-item
-					a.nav-link(href='/users/adminPanel')
-						i.fas.fa-user-cog
-						| Admin Panel
+				if user.user_type == "Administrator"
+					li.nav-item
+						a.nav-link(href='/users/adminPanel')
+							i.fas.fa-user-cog
+							| Admin Panel
 				li.nav-item
 					a.nav-link(href='/users/logout')
 						i.fas.fa-sign-out-alt

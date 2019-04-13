@@ -137,9 +137,16 @@ router.post('/showall', async function(req, res) {
 // Render page with data from database
 // GET request to localhost:3000/users/login
 router.get('/expired', function(req, res) {
+  userPantryId =req.user.pantry_id
   // renders showall_recipes with all the available ingredients
+  const query = `
+  SELECT ingredients.ingredient_image_path, ingredients.ingredient_id, ingredients.ingredient_name, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date 
+  FROM ingredients_in_pantry 
+  INNER JOIN ingredients 
+  ON ingredients_in_pantry.ingredient_id = ingredients.ingredient_id AND ingredients_in_pantry.ingredient_expiration_date IS NOT NULL AND ingredient_expiration_date < CURDATE()
+  WHERE pantry_id=${userPantryId};`
   db.query(
-    'select ingredients.ingredient_image_path, ingredients.ingredient_id, ingredients.ingredient_name, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date from ingredients_in_pantry inner join ingredients on ingredients_in_pantry.ingredient_id = ingredients.ingredient_id and ingredients_in_pantry.ingredient_expiration_date is not null AND ingredient_expiration_date < CURDATE();',
+    query,
     function(err, results) {
       for (key in results) {
         results[key]['ingredient_expiration_date'] = moment(
@@ -166,10 +173,17 @@ router.get('/add', function(req, res) {
 // Render page with data from database
 // GET request to localhost:3000/users/login
 router.get('/expiredAdmin', function expiredTable(req, res) {
+  userPantryId =req.user.pantry_id
   // renders showall_recipes with all the available ingredients
+  const query = `
+  SELECT ingredients.ingredient_image_path, ingredients.ingredient_id, ingredients.ingredient_name, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date 
+  FROM ingredients_in_pantry 
+  INNER JOIN ingredients 
+  ON ingredients_in_pantry.ingredient_id = ingredients.ingredient_id AND ingredients_in_pantry.ingredient_expiration_date IS NOT NULL AND ingredient_expiration_date < CURDATE()
+  WHERE pantry_id=${userPantryId};`
 
   db.query(
-    'select ingredients.ingredient_image_path, ingredients.ingredient_id, ingredients.ingredient_name, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date from ingredients_in_pantry inner join ingredients on ingredients_in_pantry.ingredient_id = ingredients.ingredient_id and ingredients_in_pantry.ingredient_expiration_date is not null AND ingredient_expiration_date < CURDATE();',
+    query,
     function(err, results) {
       for (key in results) {
         results[key]['ingredient_expiration_date'] = moment(
@@ -339,8 +353,13 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
 // Render page with data from database
 // GET request to localhost:3000/ingredients/cards
 router.get('/cards', function showCards(req, res) {
+  userPantryId =req.user.pantry_id
   const query =
-    'select ingredients.ingredient_image_path, ingredients.priority, ingredients.ingredient_id, ingredients.ingredient_name, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date from ingredients_in_pantry inner join ingredients on ingredients_in_pantry.ingredient_id = ingredients.ingredient_id and ingredients_in_pantry.ingredient_expiration_date is not null AND ingredient_expiration_date >= CURDATE();'
+    `SELECT ingredients.ingredient_image_path, ingredients.priority, ingredients.ingredient_id, ingredients.ingredient_name, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date 
+    FROM ingredients_in_pantry 
+    INNER JOIN ingredients 
+    ON ingredients_in_pantry.ingredient_id = ingredients.ingredient_id AND ingredients_in_pantry.ingredient_expiration_date IS NOT NULL AND ingredient_expiration_date >= CURDATE() 
+    WHERE pantry_id=${userPantryId};`
   db.query(query, function getResults(err, results) {
     for (key in results) {
       results[key]['ingredient_expiration_date'] = moment(
