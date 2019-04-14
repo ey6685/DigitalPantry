@@ -168,3 +168,11 @@ Needs more work since border doesn't render
   background-color: #faf8eb !important;
   border-left: 2px solid purple;
 }
+.dp-alert-fixed {
+  position: fixed;
+  margin-top: 100px;
+  left: 0px;
+  width: 100%;
+  z-index: 4 !important;
+  border-radius: 0px;
+}
