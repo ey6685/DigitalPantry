@@ -161,17 +161,20 @@ router.get('/adminPanel', async function showAdminPanelPage(req, res) {
   }).then(function returnResults(results) {
     return results
   })
-  var pantry_name = await Pantry.findOne({
-    attributes: ["pantry_name"],
+  var pantry_data = await Pantry.findOne({
+    attributes: ["pantry_name",'pantry_image_path'],
     where :{
       pantry_id: pantryId
     }
   })
+  console.log(JSON.stringify(pantry_data))
+  console.log("image path: "+pantry_data["pantry_image_path"])
   // render page with all found users that are related to the pantry
   res.render('admin_panel', {
     title: 'Admin Panel',
     userData: users,
-    pantry_name: pantry_name.pantry_name
+    pantry_data: pantry_data
+
   })
 })
 
