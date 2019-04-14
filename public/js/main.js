@@ -570,7 +570,7 @@ $('#editIngredient').on('show.bs.modal', async function(event) {
     }
   }
   $('#title-field').text("Editing - " + ingredientData.name)
-  $('#image-field').attr('src', ingredientData.image)
+  $('#newImage').attr('src', ingredientData.image)
   $('#ingredientNameField').attr('placeholder', ingredientData.name)
   $('#ingredientTotalField').attr('placeholder', ingredientData.total)
   $(`.measurementDiv option[value='${ingredientData.measurement}']`).attr('selected', true)

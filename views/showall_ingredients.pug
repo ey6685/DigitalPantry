@@ -21,17 +21,18 @@ block content
 			.modal-dialog.modal-dialog-centered.modal-lg(role='document')
 				.modal-content
 					.modal-body
-						form(method= 'POST', action='/ingredients/edit', class='form')
+						form(method= 'POST', action='/ingredients/edit', class='form', enctype="multipart/form-data")
 							h4#title-field.dp-secondary-text
 							hr
 							br
 							.row.align-items-center
 								.form-group.col-md-4
 									.form-group.col-md-12
-										img#image-field.img-thumbnail(src='', alt='Ingredient Image')
+										img#newImage.img-thumbnail(src='', alt='Ingredient Image')
 									.form-row
 										.col-md-12.text-center
-											button.btn.dp-btn-primary.btn-sm(type='submit', id='changeImageButton') Change Image
+											label.btn.btn-primary.dp-btn-secondary.btn.btn-file Change Image
+												input(name='image', accept='image/*' ,type='file', style='display: none;', onchange='changeImage(event)')
 								.form-group.col-md-8
 									.row
 										.form-group.col-md-12
@@ -149,15 +150,9 @@ block content
 				document.getElementById("output").style.width = '40px';
 				document.getElementById("output").style.height = '40px';
 				}
-			//- $(document).on('change', ':file', function() {
-			//- 	var input = $(this),
-			//- 		numFiles = input.get(0).files ? input.get(0).files.length : 1,
-			//- 		label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-			//- 	input.trigger('fileselect', [numFiles, label]);
-			//- });
-			//- $(document).ready( function() {
-			//- 	$(':file').on('fileselect', function(event, numFiles, label) {
-			//- 		console.log(numFiles);
-			//- 		console.log(label);
-			//- 	});
-			//- });
+			var changeImage = function(event) {
+				var output = document.getElementById('newImage');
+				output.src = URL.createObjectURL(event.target.files[0]);
+				output.classList.add("img-thumbnail");
+				}
+			
