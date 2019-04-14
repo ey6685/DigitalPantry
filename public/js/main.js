@@ -478,10 +478,10 @@ $('#editEmailButton').click(function showEditField(e) {
   $(this).hide()
   // show input field for a user to enter a new password
   $(
-    "<div id='newUsername' class='form-row'><div class='form-group col-md-3'><input name='newUsername' class='form-control' placeholder='New username' required='' ></div></div>"
+    "<div id='newUsername' class='form-row'><div class='form-group col-md-3'><input name='newUsername' class='form-control' placeholder='New Email' required='' ></div></div>"
   ).insertAfter($('#userEmail'))
   // show save button
-  $("<button class='btn btn-primary' type='submit' id='saveEmailButton'>Save</button>").insertAfter(
+  $("<button class='btn btn-primary' type='submit' id='saveEmailButton'> Save </button>").insertAfter(
     $('#newUsername')
   )
   // show cancel button
@@ -579,3 +579,17 @@ $('#editIngredient').on('show.bs.modal', async function(event) {
   $('#ingredientCurrentExpirationDate').attr('value', new Date(ingredientData.expirationDate))
   document.getElementById("dateSelector").valueAsDate = new Date(ingredientData.expirationDate)
 })
+
+
+// //this is the call for editing the pantry id
+
+// $('#save-pantryName-btn').on('click', function(e) {
+//   // get button object clicked
+//   $target = $(e.target)
+
+//   console.log("target of button click:" + $target)
+//   // Start AJAX
+//   $newName = $target.closest('.new_name').val()
+//   console.log("name in text box: " + $newName)
+
+// })

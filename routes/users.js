@@ -161,10 +161,17 @@ router.get('/adminPanel', async function showAdminPanelPage(req, res) {
   }).then(function returnResults(results) {
     return results
   })
+  var pantry_name = await Pantry.findOne({
+    attributes: ["pantry_name"],
+    where :{
+      pantry_id: pantryId
+    }
+  })
   // render page with all found users that are related to the pantry
   res.render('admin_panel', {
     title: 'Admin Panel',
-    userData: users
+    userData: users,
+    pantry_name: pantry_name.pantry_name
   })
 })
 
@@ -532,18 +539,39 @@ router.get('/settings', function showSettings(req, res) {
   })
 })
 
-router.post('/changeUsername', function changeUsername(req, res) {
+router.post('/changeUsername', async function changeUsername(req, res) {
   // get currently logged in user
   const currentUserId = req.session.passport['user']
   // get passed in username
   const newUsername = req.body.newUsername
-  // create sql query
-  const query = `UPDATE users SET user_email='${newUsername}' WHERE user_id=${currentUserId}`
-  db.query(query, function updateUser(err) {
-    if (err) throw err
-    req.flash('success', 'Username Changed!')
-    res.redirect('/users/settings')
-  })
+  //check if there is anything in the textbox
+  if(newUsername.length > 0)
+  {
+    //check to make sure the email is not in the db already
+    var is_email_taken = await User.findAll({
+      where:{
+        user_email: newUsername
+      }
+    })
+    // create sql query\
+    if (is_email_taken == 0)
+    {
+      const query = `UPDATE users SET user_email='${newUsername}' WHERE user_id=${currentUserId}`
+      db.query(query, function updateUser(err) {
+        if (err) throw err
+        req.flash('success', 'Username Changed!')
+        res.redirect('/users/settings')
+      })
+    }
+    else{
+      req.flash('error','Email is Taken!')
+      res.redirect("/users/settings")
+    }
+  }
+  else{
+    req.flash('error','Please enter a new Username')
+    res.redirect("/users/settings")
+  }
 })
 
 router.post('/changePassword', async function changePassword(req, res) {
