@@ -38,10 +38,6 @@ block content
 		div.dataTables_wrapper div.dataTables_info{
 			color:#570573 !important;
 		}
-	script(src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js')
-	link(rel='stylesheet', type='text/css', href='//cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css')
-	script(src='https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js')
-	script(src='https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js')
 	br
 	!= messages('message', locals)
 	div(class='container-fluid', class='rounded', style='width: 90%')
@@ -145,18 +141,27 @@ block content
 							//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
 							a.btn.btn-outline-danger.delete-recipe.mr-2(href='#', data-id=item.recipe_id, id= 'delete-button') REMOVE
 							a.btn.dp-btn-edit(type='button', data-toggle='modal', data-target='#editRecipe', id= 'edit-button') EDIT
-					//- Body of a drop-down row with ID linked to the parent row
-					//- tbody(id=row2).collapse.dp-recipe-accordion
-					//- 	tr
-					//- 		td(rowspan='15').align-middle.border-right.text-center
-					//- 			b
-					//- 				| Ingredients
-					//- 	//-ingrediets are recieved from the middleware API
-					//- 	for ingredient in ingredients[i]
-					//- 		tr
-					//- 			td(colspan='5') #{ingredient}
-		//- Page content end
 	script(type='text/javascript').
+	script(src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js')
+	link(rel='stylesheet', type='text/css', href='//cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css')
+	script(src='https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js')
+	script(src='https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js')
+	script.
+		$('#example').dataTable( {
+			"dom": '<lf<t>ip>',
+			"order":[1, 'asc'],
+			"columns": [
+				{ "orderable": false },
+				null,
+				null,
+				null,
+				{ "orderable": false },
+			]
+		} );
+		oTable = $('#example').DataTable();   //pay attention to capital D, which is mandatory to retrieve "api" datatables' object, as @Lionel said
+		$('#myInputTextField').keyup(function(){
+			oTable.search($(this).val()).draw() ;
+		})
 		var textAreas = document.getElementsByTagName('textarea');
 			Array.prototype.forEach.call(textAreas, function(elem) {
 				elem.placeholder = elem.placeholder.replace(/\\n/g, '\n');
@@ -202,19 +207,3 @@ block content
 		function getIngredients(){
 			console.log("Click")
 		}
-		//Initialize the table framework
-		$('#example').dataTable( {
-			"dom": '<lf<t>ip>',
-			"order":[1, 'asc'],
-			"columns": [
-				{ "orderable": false },
-				null,
-				null,
-				null,
-				{ "orderable": false },
-			]
-		} );
-		oTable = $('#example').DataTable();   //pay attention to capital D, which is mandatory to retrieve "api" datatables' object, as @Lionel said
-		$('#myInputTextField').keyup(function(){
-			oTable.search($(this).val()).draw() ;
-		})
