@@ -466,9 +466,16 @@ router.post('/add', async function addNewUser(req, res) {
 router.delete('/delete/:id', async function deleteUser(req, res) {
   const userID = req.params.id
   const query = `DELETE FROM users WHERE user_id=${userID};`
-  await db.query(query)
-  req.flash('success', 'User Removed!')
-  res.send('success')
+  await db.query(query,err=>{
+    if(err){
+      req.flash("error", "OPPS! Something went wrong")
+      
+      res.send('success')
+    }
+    req.flash('success', 'User Removed!')
+    res.send('success')
+  })
+  
 })
 
 // Change user privilege from admin panel
