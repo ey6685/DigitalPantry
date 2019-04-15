@@ -626,26 +626,40 @@ router.post('/changePassword', async function changePassword(req, res) {
 })
 
 router.post('/addImg', upload.single('image'), async function addImg(req, res) {
+  console.log("addoing image to pantry")
+  console.log("++__+_+_+_+_+_+_+_+_+_+_+_+_+_+_")
   if (req.file) {
-    var imagePath = req.file.filename
+    console.log(req.file)
+    var imagePath = req.file.path
+    var pantry = req.user.pantry_id
     console.log('File Uploaded Successfully')
+    var currentDate =  Date.now()
+    const new_path = "./public/images/" + currentDate + ".jpg"
+    const no_dot = "/images/" + currentDate + ".jpg"
     gm(req.file.path) // uses graphicsmagic and takes in image path
       .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
-      .write(req.file.path, err => {
+      .write(req.file.path, async function (err) {
         if (err) {
           console.log(err)
-        }
-      })
-    fs.rename(req.file.path, './public/images/PantryImage9001.jpg', function(err) {
-      if (err) throw err
+        }  
+      
+      fs.renameSync(imagePath, new_path)
+      
       console.log('File Renamed.')
+      query = `update pantry set pantry_image_path = "${no_dot}" where pantry_id = ${pantry};`
+      await db.query(query,(results,err) =>{
+        res.redirect('/users/adminPanel')
+
+      })
     })
   } else {
     var imagePath = 'placeholder.jpg'
     console.log('File Upload Failed')
+    req.flash("error", "Please choose a new image!")
+    res.redirect('/users/adminPanel')
   }
-
-  res.redirect('/users/adminPanel')
+  
+  // res.redirect('/users/adminPanel')
 })
 
 router.get('/forgotpass', function(req, res) {

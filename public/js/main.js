@@ -626,3 +626,4 @@ $('#editIngredient').on('show.bs.modal', async function(event) {
 //   console.log("name in text box: " + $newName)
 
 // })
+
