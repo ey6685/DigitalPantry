@@ -144,7 +144,8 @@ block content
 						td(align='middle')
 							//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
 							a.btn.btn-outline-danger.delete-recipe.mr-2(href='#', data-id=item.recipe_id, id= 'delete-button') REMOVE
-							a.btn.dp-btn-edit(type='button', data-toggle='modal', data-target='#editRecipe', id= 'edit-button') EDIT
+							if user.user_type == "Administrator"
+								a.btn.dp-btn-edit(type='button', data-toggle='modal', data-target='#editRecipe', id= 'edit-button') EDIT
 					//- Body of a drop-down row with ID linked to the parent row
 					//- tbody(id=row2).collapse.dp-recipe-accordion
 					//- 	tr

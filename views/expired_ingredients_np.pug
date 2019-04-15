@@ -12,7 +12,6 @@ block content
 			color:#570573;
 			background-color:#faf8eb;
 		}
-
 	div(class='container-fluid', class='rounded', style='width: 90%')
 		br
 		br
@@ -46,7 +45,7 @@ block content
 							img.image(class='card-img-top', src=ingredient_image, alt='image')
 							div(class='card-body')
 								h4(class='card-title') #{item.ingredient_name}
-								p(class='card-text') #{item.ingredient_amount} #{item.ingredient_unit_of_measurement} expired on #{item.ingredient_expiration_date} 
+									p(class='card-text') #{item.ingredient_amount} #{item.ingredient_unit_of_measurement} expired on #{item.ingredient_expiration_date} 
 							div(class='dp-card-footer')
 								button.btn_card.btn.btn-outline-danger.delete-ingredient(href='#',data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount)  Remove From Pantry
 			else
