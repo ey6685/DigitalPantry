@@ -174,6 +174,15 @@ Needs more work since border doesn't render
   border: 1px double #570573 !important;
   text-align: left;
 }
+.dp-alert-fixed {
+  /* position: fixed; */
+  /* margin-top: 100px; */
+  /* left: 0px; */
+  /* width: 100%; */
+  z-index: 1 !important;
+  /* border-radius: 0px; */
+}
+
 .dp-card-footer {
   padding: 0.75rem 1.25rem;
   background-color: #faf8eb !important;

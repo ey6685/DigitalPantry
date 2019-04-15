@@ -71,11 +71,9 @@ html
 			button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
 				span.navbar-toggler-icon
 			#navbarCollapse.collapse.navbar-collapse
-						if !user
-							ul.navbar-nav.mr-auto
-								li.nnav-item.active
-									a.nav-link(href='/users/Login')
-										| Sign In
+				if !user
+					a.nav-link(href='/users/Login')
+						| Sign In
 		.container
 			main.ml-sm-auto.col-lg-10.px-4(role='main')
 				block content

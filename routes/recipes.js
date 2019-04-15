@@ -355,7 +355,8 @@ router.get('/getPantryRecipes', async function getPantryRecipes(req, res) {
   // query all recipes which are available to current user
   const result = await recipe_t.findAll({
     where: {
-      pantry_id: pantryId.pantry_id
+      pantry_id: pantryId.pantry_id,
+      sharable:0
     }
   })
   // return JSON data
