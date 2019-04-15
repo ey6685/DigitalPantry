@@ -1,6 +1,12 @@
 extends layout_template_for_register
 
 block content
+	style.
+		.alert{
+			z-index: 1 !important;
+			width: 50%;
+			left: 780px;
+		}
 	!= messages('message', locals)
 	if errors
 		for error in errors
@@ -24,7 +30,7 @@ block content
 		br
 		div(class='row')
 			div.mx-auto(class='col-8')
-				form(method='POST', action='/users/login', class= 'form')
+				form(method='POST', action='/users/Register', class= 'form')
 					#form-group
 						input.form-control.dp-title-text.mb-3.mt-3(name='email', type='text', id='email-register', placeholder='Email')
 					br
