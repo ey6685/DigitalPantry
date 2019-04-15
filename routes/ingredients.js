@@ -224,24 +224,34 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
     
   }
   try{
-    for (var i =0; i < imagePathSys.length;i++) {
-
-      console.log("system image path: "+ imagePathSys[i])
-      //rename
-      const currentDate = Date().now
-      console.log(currentDate)
-      imagePath.push(currentDate + "jpg")
-     var writing= await gm(imagePathSys[i]).resize(1024,575,'!').write(imagePathSys[i],err =>{
-       if(err){
-         imagePath[i] = imagePath[i-1] = 'placeholder.jpg'
-        }
-        fs.renameSync(imagePathSys[i], "./public/images/" + currentDate + "jpg")
-       
-     }) 
+    for (var i =1; i < req.body.ingredientProperties.length;i++) {
+      if(imagePathSys[i-1])
+      {
+        console.log("system image path: "+ imagePathSys[i-1])
+        const old_path = imagePathSys[i-1];
+        //rename
+        var currentDate =  Date.now()
+        const new_path = "./public/images/" + currentDate + ".jpg"
+        var no_dot = "/images/" + currentDate + ".jpg"
+        
+        console.log("new_path: " + new_path )
+        imagePath.push(no_dot)
+      var writing= await gm(old_path).resize(1024,575,'!').write(old_path,err =>{
+        if(err){
+          imagePath[i] = 'placeholder.jpg'
+          }
+          console.log("in function sys path: " + old_path)
+          console.log("in function new path:" +new_path)
+          fs.renameSync(old_path, new_path)
+          imagePath.push(new_path)
+        
+      }) 
+      
+      console.log("imagepath:")
+      console.log("----------")
+      console.log(imagePath)  
     
-     console.log("imagepath:")
-     console.log("----------")
-     console.log(imagePath)    // if (req.files) {
+      }  // if (req.files) {
     //   console.log("the file data")
     //   console.log("==============")
     //   console.log(req.files[i-1])
@@ -318,7 +328,7 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
           var new_ingredient = await ingredient_t.create({
             ingredient_name: ingredient_name,
             ingredient_weight: new_weight,
-            ingredient_image_path: '/images/' + imagePath[i-1],
+            ingredient_image_path: imagePath[i-1],
             priority: priority
           })
           final_id = new_ingredient.ingredient_id
