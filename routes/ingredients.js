@@ -206,6 +206,7 @@ router.get('/expiredAdmin', function expiredTable(req, res) {
 router.post('/add', upload.array('image'), async function addIngredient(req, res) {
   console.log("++++++++++++++++++++++++++++++++")
   console.log("adding ingredients");
+  console.log(req.originalUrl)
 
   var currentUserId = req.session.passport['user']
   var PantryId = await User.findOne({
@@ -382,7 +383,7 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
     // }
     
   console.log("++++++++++++++++++++++++++++++++")
-  res.redirect('/ingredients/showall')
+  res.redirect(req.get('referer'))
 })
 
 // Render page with data from database
