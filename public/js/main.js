@@ -132,12 +132,10 @@ $(document).on('click', '.delete-current-ingredient', function() {
 $('#editRecipe').on('show.bs.modal', async function(event) {
   // Button that triggered the display card
   var button = $(event.relatedTarget)
-  console.log(JSON.stringify(button))
   // Get the recipe row based on the button clicked and its closest tr element
   $recipeRow = button.closest('tr').children()
   // Based on the button click it will get data-target id of the row and find the drop down this ide points to
   $recipeRowDataTarget = $(button.closest('tr').attr('data-target')).children()
-  console.log("Row target: " +$recipeRowDataTarget)
   var ingredientList = []
   // for each ingredient that the recipe contains
   for (element in $recipeRowDataTarget) {
@@ -156,11 +154,10 @@ $('#editRecipe').on('show.bs.modal', async function(event) {
     // for each cell get its index
     var cellIndex = $recipeRow[child].cellIndex
     // Only get RecipeName and ServingSize and RecipeID values based on the cell index of the table
-    if (cellIndex == 1 || cellIndex == 3 || cellIndex == 4) {
+    if (cellIndex == 1 || cellIndex == 2 || cellIndex == 3) {
       values.push($recipeRow[child].innerText)
     }
   }
-  console.log(values[0])
   // At this point we have
   // Recipe name and serving size
   // Recipe ingredients
