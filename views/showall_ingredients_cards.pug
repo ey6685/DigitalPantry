@@ -24,9 +24,6 @@ block content
 				a.btn.dp-change-view(href='/ingredients/showall')
 					i.dp-change-view.fa.fa-list.fa-lg.mr-1
 					| Table View
-			.form-group.col-md-auto
-				a.btn.btn-primary.dp-btn-secondary.ml-2(href='/ingredients/add', class='h-75')
-					| Add Multiple Ingredients
 			.form-group.col-md-2
 					input.form-control.dp-form-fields.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
 			.form-group.col-md-2
@@ -35,6 +32,9 @@ block content
 						option(value='0') Sort By
 						option(value='1') Sort A-Z
 						option(value='2') Sort Z-A
+			.form-group.col-md-2
+				a.btn.dp-btn-secondary(href='/ingredients/add', class='h-70')
+					| Add Multiple Ingredients
 		#accordion
 			.card
 				#headingTwo.card-header
