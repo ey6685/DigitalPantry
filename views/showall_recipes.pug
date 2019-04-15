@@ -7,6 +7,38 @@ block content
 		table,thead,tr{
 			border:1px double #570573 !important
 		}
+		#example_length{
+			display:none
+		}
+		#example_paginate{
+
+		}
+		.page-item.active .page-link{
+			background-color: #eeaf2c !important;
+			border-color:#eeaf2c !important;
+			z-index:0
+		}
+		th{
+			border-top: 1px double #570573 !important;
+			border-bottom:1px double #570573 !important;
+		}
+		td{
+			border-bottom:1px double #570573 !important;
+			border-top: none !important;
+		}
+		.page-link{
+			color:#570573 !important;
+		}
+		.dataTables_filter {
+			display: none;
+		}
+		.table.dataTable{
+			margin-top: 0px !important;
+		}
+	script(src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js')
+	link(rel='stylesheet', type='text/css', href='//cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css')
+	script(src='https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js')
+	script(src='https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js')
 	br
 	!= messages('message', locals)
 	div(class='container-fluid', class='rounded', style='width: 90%')
@@ -20,9 +52,21 @@ block content
 			| Card View
 		a.btn.btn-primary.dp-btn-secondary.ml-2(href='/recipes/add', class='h-75')
 			| Add Recipe
-		p
+		input.btn#myInputTextField.dp-search.pull-right(,type='text', placeholder='Search')
+		br
+		br
+		#recipeInformation.modal.fade(tabindex='-1', role='dialog', aria-hidden='true', class= 'form-modal')
+			.modal-dialog.modal-dialog-centered.modal-lg(role='document')
+				.modal-content
+					.modal-header.modal-title 
+						h4.dp-secondary-text Required Ingredients
+					.modal-body
+						.container-fluid
+							#recipe-ingredients
+					.modal-footer
+						button.btn.dp-btn-secondary(type='button', data-dismiss='modal', id='close-community') Close
 		//- Overlay form start. In other words edit recipe form
-		#editRecipe.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
+		#editRecipe.modal.fade(tabindex='-1', role='dialog', aria-hidden='true', class= 'form-modal')
 			.modal-dialog.modal-dialog-centered.modal-lg(role='document')
 				.modal-content
 					.modal-body
@@ -71,12 +115,11 @@ block content
 							button.btn.dp-btn-primary(type='submit', id='save-showall-rec') Save changes
 		//-Alert form end
 		//- Page content start
-		table.table.rounded.table-hover.dp-table
+		table.table.table-hover.dp-table.mt-0#example
 			thead
 				tr
-					th(scope='col') 
+					th(scope='col')
 					th(scope='col') Recipe ID
-					th(scope='col') Pantry ID
 					th(scope='col') Recipe name
 					th(scope='col') Serves
 					th(class="text-center") Action
@@ -88,28 +131,27 @@ block content
 					//- variable below is used for linking the clickable table row with the drop-down row
 					//- Used for figuring out which recipe dropdown to show
 					- row2= 'group-of-rows-' + i
-					tr.clickable(data-toggle='collapse', data-target=row)
-						td
+					tr
+						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()')
 							//- i.fa.fa-plus
 							img.ml-3(src=item.recipe_image_path, alt='image', width='50', height='50')
-						td(align='right')= item.recipe_id
-						td(align='right')= item.pantry_id
-						td(align='left')= item.recipe_name
-						td(align='right')= item.num_people_it_feeds
+						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()', align='middle')= item.recipe_id
+						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()', align='middle')= item.recipe_name
+						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()', align='middle')= item.num_people_it_feeds
 						td(align='middle')
 							//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
 							a.btn.btn-outline-danger.delete-recipe.mr-2(href='#', data-id=item.recipe_id, id= 'delete-button') REMOVE
 							a.btn.dp-btn-edit(type='button', data-toggle='modal', data-target='#editRecipe', id= 'edit-button') EDIT
 					//- Body of a drop-down row with ID linked to the parent row
-					tbody(id=row2).collapse.dp-recipe-accordion
-						tr
-							td(rowspan='15').align-middle.border-right.text-center
-								b
-									| Ingredients
-						//-ingrediets are recieved from the middleware API
-						for ingredient in ingredients[i]
-							tr
-								td(colspan='5') #{ingredient}
+					//- tbody(id=row2).collapse.dp-recipe-accordion
+					//- 	tr
+					//- 		td(rowspan='15').align-middle.border-right.text-center
+					//- 			b
+					//- 				| Ingredients
+					//- 	//-ingrediets are recieved from the middleware API
+					//- 	for ingredient in ingredients[i]
+					//- 		tr
+					//- 			td(colspan='5') #{ingredient}
 		//- Page content end
 	script(type='text/javascript').
 		var textAreas = document.getElementsByTagName('textarea');
@@ -153,4 +195,23 @@ block content
 			element.innerHTML = template;
 			container.appendChild(element);
 			i++
-			}
+		}
+		function getIngredients(){
+			console.log("Click")
+		}
+		//Initialize the table framework
+		$('#example').dataTable( {
+			"dom": '<lf<t>ip>',
+			"order":[1, 'asc'],
+			"columns": [
+				{ "orderable": false },
+				null,
+				null,
+				null,
+				{ "orderable": false },
+			]
+		} );
+		oTable = $('#example').DataTable();   //pay attention to capital D, which is mandatory to retrieve "api" datatables' object, as @Lionel said
+		$('#myInputTextField').keyup(function(){
+			oTable.search($(this).val()).draw() ;
+		})
