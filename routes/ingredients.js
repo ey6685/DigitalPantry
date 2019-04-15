@@ -214,51 +214,74 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
   })
   var currentPantryId = PantryId.pantry_id
   var imagePath = new Array()
+  var imagePathSys = new Array()
   console.log(req.body.ingredientProperties)
   console.log(req.body.ingredientProperties.length)
   ///needs testing
   ///patrick gets a windows error
+  for(var i = 0 ; i<req.files.length; i++){
+    imagePathSys.push(req.files[i].path)
+    
+  }
   try{
-    for (var i =1; i < req.body.ingredientProperties.length;i++) {
-    if (req.files) {
-      console.log("the file data")
-      console.log("==============")
-      console.log(req.files[i-1])
-      console.log(req.files.length)
-      console.log('File Uploaded Successfully')
-      var e 
-        try{
-        var currentDate = Date.now()
-        imagePath[i-1] = currentDate  + '.jpg'
-        do{
-          e = false
-          console.log(i + " " )
-          console.log("pic magic " + req.files[i-1].path)
-        await gm(req.files[i-1].path) // uses graphicsmagic and takes in image path
-          .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
-          .write(req.files[i-1].path, err => {
-            fs.rename(req.files[i-1].path, './public/images/' + currentDate + '.jpg', function(err) {
-              if (err) e = err
-              console.log('File Renamed.')
-            })
+    for (var i =0; i < imagePathSys.length;i++) {
 
-            if (err) {
-              console.log(err)
-              imagePath[i-1] = 'placeholder.jpg'
-            }
-          })
-        }while(e)
-      }
-        catch(e){
-          imagePath[i-1] = 'placeholder.jpg'
+      console.log("system image path: "+ imagePathSys[i])
+      //rename
+      const currentDate = Date().now
+      console.log(currentDate)
+      imagePath.push(currentDate + "jpg")
+     var writing= await gm(imagePathSys[i]).resize(1024,575,'!').write(imagePathSys[i],err =>{
+       if(err){
+         imagePath[i] = imagePath[i-1] = 'placeholder.jpg'
         }
-      
-      }
-      else {
+        fs.renameSync(imagePathSys[i], "./public/images/" + currentDate + "jpg")
+       
+     }) 
+    
+     console.log("imagepath:")
+     console.log("----------")
+     console.log(imagePath)    // if (req.files) {
+    //   console.log("the file data")
+    //   console.log("==============")
+    //   console.log(req.files[i-1])
+    //   console.log(req.files.length)
+    //   console.log('File Uploaded Successfully')
+    //   var e 
+    //     try{
+    //     var currentDate = Date.now()
+    //     imagePath[i-1] = currentDate  + '.jpg'
         
-          imagePath[i-1] = 'placeholder.jpg'
-          console.log('File Upload Failed')
-        }
+    //       e = false
+    //       console.log(i + " " )
+    //       console.log("pic magic " + req.files[i-1].path)
+    //       console.log("===========================")
+    //     await gm(req.files[i-1].path) // uses graphicsmagic and takes in image path
+    //       .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
+    //       .write(req.files[i-1].path, err => {
+    //         fs.rename(req.files[i-1].path, './public/images/' + currentDate + '.jpg', function(err) {
+    //           if (err) throw err
+    //           console.log('File Renamed.')
+    //           fs.close(req.files[i-1].path)
+    //         })
+
+    //         if (err) {
+    //           console.log(err)
+    //           imagePath[i-1] = 'placeholder.jpg'
+    //         }
+    //       })
+        
+    //   }
+    //     catch(e){
+    //       imagePath[i-1] = 'placeholder.jpg'
+    //     }
+      
+    //   }
+    //   else {
+        
+    //       imagePath[i-1] = 'placeholder.jpg'
+    //       console.log('File Upload Failed')
+    //     }
       //////////////////////////////////////
       
       
