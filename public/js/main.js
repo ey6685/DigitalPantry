@@ -421,7 +421,7 @@ $('#shareForm').on('show.bs.modal', function(event) {
       $.each(response, function(index, value) {
         console.log(response)
         recipe_format =
-          '<div class="individual-recipe"><div class="media"><img style="width: 30%" class="mr-3" src="$1" alt="Generic placeholder image"><div class="media-body"><h5 class="mt-0">$2</h5>$3</div></div></div><br>'
+          '<div class="individual-recipe"><div class="media"><img style="width: 30%" class="mr-3" src="$1" alt="Generic placeholder image"><div class="media-body"><h5 class="mt-0 dp-primary-text">$2</h5><p class="dp-title-text">$3</p></div></div></div><br>'
         // if an image for the recipe does not exist
         if (value.recipe_image_path == null) {
           recipe_format = recipe_format.replace('$1', '/images/placeholder.jpg')
