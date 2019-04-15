@@ -41,7 +41,7 @@ const upload = multer({ storage: storage })
 router.get('/login', function renderLoginPage(req, res) {
   // renders signin page with content 'Sign In"
   res.render('signin', {
-    title: 'Log In'
+    title: 'Sign In'
   })
 })
 
@@ -138,7 +138,6 @@ router.get('/support', function showPrivacyPage(req, res) {
   })
 })
 
-
 router.get('/adminPanel', async function showAdminPanelPage(req, res) {
   const currentUserId = req.session.passport['user']
   // Find which pantry user is from
@@ -192,7 +191,7 @@ router.get('/dashboard', async function showDashboard(req, res) {
   })
   //need window
   const window = await Pantry.findOne({
-    attributes: ['expire_window','people_cooking_for'],
+    attributes: ['expire_window', 'people_cooking_for'],
     where: {
       pantry_id: currentPantryID.pantry_id
     }
@@ -201,11 +200,15 @@ router.get('/dashboard', async function showDashboard(req, res) {
   // console.log("=====================")
   // console.log(JSON.stringify())
   //grabing data for the page
-  var data = await algorithm.main2(window.expire_window, currentPantryID.pantry_id,window.people_cooking_for)
+  var data = await algorithm.main2(
+    window.expire_window,
+    currentPantryID.pantry_id,
+    window.people_cooking_for
+  )
   console.log('DATA ON DASHBOARD ROUTE')
   console.log('=======================')
   console.log(JSON.stringify(data))
-  console.log(typeof data);
+  console.log(typeof data)
   res.render('dashboard', {
     title: 'Dashboard',
     data: data,
@@ -245,22 +248,21 @@ router.get('/cook/:id', async function(req, res) {
   console.log(
     '\n==================\ncook it route to with ' + recipe + ' id\n========================\n'
   )
-    var currentPantryID = await User.findOne({
-      attributes: ['pantry_id'],
-      where: {
-        user_id : req.session.passport["user"]
-      }
-    })
-    var people = await Pantry.findOne({
-      attributes: ['people_cooking_for']
-    })
-    console.log("data being sent into algor:")
-    console.log("===========================")
-    console.log("recipe: " + recipe)
-    console.log("currentPantryID.pantry_id: " + currentPantryID.pantry_id)
-    console.log("people.people_cooking_for:" + people.people_cooking_for)
-  var info = await cook_it.cook_it2(recipe,currentPantryID.pantry_id, people.people_cooking_for)
-
+  var currentPantryID = await User.findOne({
+    attributes: ['pantry_id'],
+    where: {
+      user_id: req.session.passport['user']
+    }
+  })
+  var people = await Pantry.findOne({
+    attributes: ['people_cooking_for']
+  })
+  console.log('data being sent into algor:')
+  console.log('===========================')
+  console.log('recipe: ' + recipe)
+  console.log('currentPantryID.pantry_id: ' + currentPantryID.pantry_id)
+  console.log('people.people_cooking_for:' + people.people_cooking_for)
+  var info = await cook_it.cook_it2(recipe, currentPantryID.pantry_id, people.people_cooking_for)
 
   console.log('REFRESH!')
   res.redirect(req.get('referer'))
@@ -282,19 +284,17 @@ router.post('/register', async function registerUser(req, res) {
 
   // Get all errors is any based on above validators
   const errors = req.validationErrors()
-  
+
   var user_exists = await User.findAll({
     where: {
       user_email: req.body.email
     }
   })
 
-  if(user_exists.length > 0)
-  {
-    req.flash("error", "Email " + req.body.email + " already exists!")
-    res.redirect("/users/register")
-  }
-  else{
+  if (user_exists.length > 0) {
+    req.flash('error', 'Email ' + req.body.email + ' Already Exists!')
+    res.redirect('/users/register')
+  } else {
     // if errors exist
     if (errors) {
       // render register page and pass in errors defined above, which will be rendered as well
@@ -335,68 +335,62 @@ router.post('/register', async function registerUser(req, res) {
 
 router.get('/logout', function logout(req, res) {
   req.logOut()
-  req.flash('success', 'You are logged out')
+  req.flash('success', 'Log Out Successful!')
   res.locals.user = null
   res.redirect('/users/login')
 })
 
-
 router.post('/saveCommunityRecipe', async function(req, res) {
   //get the panrty id of the logged in user
-  userPantryId =req.user.pantry_id
+  userPantryId = req.user.pantry_id
   //get recipe id that user is trying to copy into their pantry
   var recipe_id_to_be_copied = req.body['community_recipe_id']
   console.log(recipe_id_to_be_copied)
-  try{
-
-  
-  //grab data we need
-  var recipe_data = await recipe_t.findOne({
-    where :{
-      recipe_id: recipe_id_to_be_copied
-    }
-  })
-  var ingredin_needed_data = await ingredients_in_a_recipe.findAll({
-    where: {
-      recipe_id: recipe_id_to_be_copied
-    }
-  })
-  
-  console.log("the recipe data to copy")
-  console.log("=======================")
-  console.log(JSON.stringify(recipe_data));
-  console.log(JSON.stringify(ingredin_needed_data))
-  var new_recipe_id
-  // var query =`INSERT INTO recipes (recipe_name,recipe_image_path,recipe_directions,pantry_id,num_people_it_feeds) VALUES ("${recipe_data.recipe_name}","${recipe_data.recipe_image_path}", "${recipe_data.recipe_directions}",${userPantryId},${recipe_data.num_people_it_feeds})`
-  // console.log(query)
-  var recipe_id = await recipe_t.create({
-    recipe_name: recipe_data.recipe_name,
-    recipe_image_path: recipe_data.recipe_image_path,
-    recipe_directions: recipe_data.recipe_directions,
-    pantry_id: userPantryId,
-    num_people_it_feeds: recipe_data.num_people_it_feeds
-  })
-
-  new_recipe_id = recipe_id['null']
-  // new_recipe_id = await db.query(query)
-  console.log("new recipe")
-  console.log("==========")
-  
-  for(var i = 0;i<ingredin_needed_data.length;i++){
-    await ingredients_in_a_recipe.create({
-      recipe_id : new_recipe_id,
-      pantry_id: userPantryId,
-      ingredient_id: ingredin_needed_data[i].ingredient_id,
-      amount_of_ingredient_needed: ingredin_needed_data[i].amount_of_ingredient_needed,
-      ingredient_unit_of_measurement: ingredin_needed_data[i].ingredient_unit_of_measurement
+  try {
+    //grab data we need
+    var recipe_data = await recipe_t.findOne({
+      where: {
+        recipe_id: recipe_id_to_be_copied
+      }
     })
-  };
+    var ingredin_needed_data = await ingredients_in_a_recipe.findAll({
+      where: {
+        recipe_id: recipe_id_to_be_copied
+      }
+    })
 
-        res.send('Success')
-  
-  }
-  catch(e)
-  {
+    console.log('the recipe data to copy')
+    console.log('=======================')
+    console.log(JSON.stringify(recipe_data))
+    console.log(JSON.stringify(ingredin_needed_data))
+    var new_recipe_id
+    // var query =`INSERT INTO recipes (recipe_name,recipe_image_path,recipe_directions,pantry_id,num_people_it_feeds) VALUES ("${recipe_data.recipe_name}","${recipe_data.recipe_image_path}", "${recipe_data.recipe_directions}",${userPantryId},${recipe_data.num_people_it_feeds})`
+    // console.log(query)
+    var recipe_id = await recipe_t.create({
+      recipe_name: recipe_data.recipe_name,
+      recipe_image_path: recipe_data.recipe_image_path,
+      recipe_directions: recipe_data.recipe_directions,
+      pantry_id: userPantryId,
+      num_people_it_feeds: recipe_data.num_people_it_feeds
+    })
+
+    new_recipe_id = recipe_id['null']
+    // new_recipe_id = await db.query(query)
+    console.log('new recipe')
+    console.log('==========')
+
+    for (var i = 0; i < ingredin_needed_data.length; i++) {
+      await ingredients_in_a_recipe.create({
+        recipe_id: new_recipe_id,
+        pantry_id: userPantryId,
+        ingredient_id: ingredin_needed_data[i].ingredient_id,
+        amount_of_ingredient_needed: ingredin_needed_data[i].amount_of_ingredient_needed,
+        ingredient_unit_of_measurement: ingredin_needed_data[i].ingredient_unit_of_measurement
+      })
+    }
+
+    res.send('Success')
+  } catch (e) {
     console.log(e)
   }
 })
@@ -405,22 +399,19 @@ router.post('/saveCommunityRecipe', async function(req, res) {
 router.post('/add', async function addNewUser(req, res) {
   const userName = req.body.userName
   const confirmUserName = req.body.confirmUserName
-  if(confirmUserName != userName)
-  {
-    req.flash("error","Emails do not match!")
+  if (confirmUserName != userName) {
+    req.flash('error', 'Emails Do Not Match!')
     res.redirect('/users/adminPanel')
-  }
-  else{
+  } else {
     var does_user_exitst = await User.findAll({
       where: {
         user_email: userName
       }
     })
-    if(does_user_exitst.length > 0){
-      req.flash("error","User has an account already!")
-    res.redirect('/users/adminPanel')
-    }
-        else{
+    if (does_user_exitst.length > 0) {
+      req.flash('error', 'User has an account already!')
+      res.redirect('/users/adminPanel')
+    } else {
       let userType = req.body.userType
       switch (userType) {
         case 'volunteer':
@@ -434,13 +425,13 @@ router.post('/add', async function addNewUser(req, res) {
       }
       var userPassword = await str_generater.generate({
         length: 8,
-        charset: "alphanumeric"
+        charset: 'alphanumeric'
       })
-      console.log("new pass")
-      console.log("========")
+      console.log('new pass')
+      console.log('========')
       console.log(userPassword)
       //send out the email
-      
+
       //salt the password please
       const salt = bcrypt.genSaltSync(10)
       const hash = bcrypt.hashSync(userPassword, salt)
@@ -450,7 +441,7 @@ router.post('/add', async function addNewUser(req, res) {
       db.query(query, function getPantryID(err, results) {
         if (err) throw err
         const currentPantryID = results[0].pantry_id
-        mail.add_user(userName,userPassword)
+        mail.add_user(userName, userPassword)
         // Instantiate new user model defined in DB_models/Users.js
         const newUser = new User({
           user_email: userName,
@@ -463,7 +454,7 @@ router.post('/add', async function addNewUser(req, res) {
 
         // Call create function from DB_models/Users.js
         User.createUser(newUser, function create() {
-          req.flash('success', 'User added!')
+          req.flash('success', 'User Added!')
           res.redirect('/users/adminPanel')
         })
       })
@@ -476,7 +467,7 @@ router.delete('/delete/:id', async function deleteUser(req, res) {
   const userID = req.params.id
   const query = `DELETE FROM users WHERE user_id=${userID};`
   await db.query(query)
-  req.flash('success', 'User deleted!')
+  req.flash('success', 'User Removed!')
   res.send('success')
 })
 
@@ -499,7 +490,7 @@ router.post('/changePrivilege/:id', function changePrivillege(req, res) {
   db.query(query, function showResults(err) {
     if (err) throw err
     // Show message to user
-    req.flash('success', 'Privilege change successful!')
+    req.flash('success', 'Privilege Change Successful!')
     res.redirect('/users/adminPanel')
   })
 })
@@ -526,7 +517,7 @@ router.post('/resetPassword/:id', async function resetPassword(req, res) {
   // console.log("emailing " + email_address.user_email + " new password " + userPassword);
   mail.password_reset(email_address.user_email, userPassword)
   // Show message to user
-  req.flash('success', 'Password reset successful!')
+  req.flash('success', 'Password Reset Successful!')
   res.redirect('/users/adminPanel')
 })
 

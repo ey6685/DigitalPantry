@@ -10,8 +10,7 @@ block content
 			padding:3px;
 		}
 		.individual-recipe:hover{
-			background-color: #ebf5d6;
-			color:black;
+			background-color: #fcf4cf;
 		}
 		.card{
 			color:#570573;
@@ -29,12 +28,12 @@ block content
 			.modal-dialog.modal-dialog-centered.modal-lg(role='document')
 				.modal-content
 					.modal-header.modal-title 
-						h5 Select a recipe to share
+						h5.dp-secondary-text Select a Recipe to Share
 					.modal-body
 						.container-fluid
 							#recipe-content
 					.modal-footer
-						button.btn.btn-primary(type='button', data-dismiss='modal', id='close-community') Close
+						button.btn.dp-btn-secondary(type='button', data-dismiss='modal', id='close-community') Close
 		.form-row
 			.form-group.col-md-2
 				input.form-control.mr-sm-2.dp-form-fields(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
