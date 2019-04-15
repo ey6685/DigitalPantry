@@ -9,8 +9,7 @@ block content
 		}
 	!= messages('message', locals)
 	if errors
-		for error in errors
-			div.alert #{error.msg}
+		div.alert #{error.msg}
 	br
 	br
 	br
