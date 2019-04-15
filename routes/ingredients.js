@@ -8,9 +8,11 @@ const pantry_table = require('../DB_models/Pantry')
 const aw = require('../algorithm/auto_weight')
 const User = require('../DB_models/Users')
 const op = require('sequelize').Op
-const gm = require('gm')
+// const gm = require('gm')
+var fs = require('fs')
+  , gm = require('gm').subClass({imageMagick: true});
 const multer = require('multer')
-const fs = require('fs')
+// const fs = require('fs')
 const UC = require('../algorithm/Convert_unts');
 //defines where to store image
 const storage = multer.diskStorage({
@@ -441,7 +443,44 @@ router.post('/editIngredientAmount', async function editIngredientAmount(req, re
   res.send('success')
 })
 
-router.post('/edit', async function editIngredientInfo(req, res){
+router.post('/edit',upload.single('image'),async function editIngredientInfo(req, res){
+  //Upload image
+  var imagePath
+  // If image file exists
+  if (req.file) {
+    console.log('File Uploaded Successfully')
+    var currentDate= Date.now()
+    var imagePath = ""
+    var databaseImagePath = ""
+    try{
+      databaseImagePath = `/images/${currentDate}.jpg`
+      imagePath = `./public` + databaseImagePath
+      gm(req.file.path) // uses graphicsmagic and takes in image path
+      .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
+      .write(req.file.path, err => {
+        fs.rename(req.file.path, imagePath, function (err) {
+          if (err) throw err;
+          console.log('File Renamed.');
+        })
+        if (err) {
+          console.log(err)
+        }
+      })
+    }
+    catch(err){
+      console.log("Could not resize")
+      console.log(err)
+    }
+    await ingredient_t.update({
+      ingredient_image_path:databaseImagePath
+    },
+    {
+      where:{
+        ingredient_id:req.body.ingredientId
+      }
+    })
+  }
+
   ingredientData = new Object()
   ingredientData.ingredientNewExpirationDate = req.body.ingredientDate
   ingredientData.ingredientCurrentExpirationDate = await moment(new Date(req.body.ingredientCurrentExpirationDate)).format('YYYY-MM-DD')
