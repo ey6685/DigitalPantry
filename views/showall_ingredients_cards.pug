@@ -11,7 +11,9 @@ block content
 			color:#570573;
 			background-color:#faf8eb;
 		}
-
+		.selected{
+			background-color:orange;
+		}
 	div(class='container-fluid', class='rounded', style='width: 90%')
 		br
 		br
@@ -177,3 +179,5 @@ block content
 				}
 			}
 		}
+	script.
+		$(`a[class='nav-link'][href='/ingredients/showall']`).parent().addClass("selected");
