@@ -39,9 +39,11 @@ $(document).ready(function() {
 
 // DELETE recipe request
 // On document ready start
-$(document).ready(function() {
+$(document).ready(function(e) {
   // Once DELETE button is clicked on showall_ingredients.pug trigger
   $('.delete-recipe').on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
     // get button object clicked
     $target = $(e.target)
     // get data-id from the button
@@ -130,12 +132,10 @@ $(document).on('click', '.delete-current-ingredient', function() {
 $('#editRecipe').on('show.bs.modal', async function(event) {
   // Button that triggered the display card
   var button = $(event.relatedTarget)
-  console.log(JSON.stringify(button))
   // Get the recipe row based on the button clicked and its closest tr element
   $recipeRow = button.closest('tr').children()
   // Based on the button click it will get data-target id of the row and find the drop down this ide points to
   $recipeRowDataTarget = $(button.closest('tr').attr('data-target')).children()
-  console.log("Row target: " +$recipeRowDataTarget)
   var ingredientList = []
   // for each ingredient that the recipe contains
   for (element in $recipeRowDataTarget) {
@@ -154,11 +154,10 @@ $('#editRecipe').on('show.bs.modal', async function(event) {
     // for each cell get its index
     var cellIndex = $recipeRow[child].cellIndex
     // Only get RecipeName and ServingSize and RecipeID values based on the cell index of the table
-    if (cellIndex == 1 || cellIndex == 3 || cellIndex == 4) {
+    if (cellIndex == 1 || cellIndex == 2 || cellIndex == 3) {
       values.push($recipeRow[child].innerText)
     }
   }
-  console.log(values[0])
   // At this point we have
   // Recipe name and serving size
   // Recipe ingredients
@@ -370,6 +369,40 @@ $(document).on('click', '.saveRecipe', function() {
     },
     error: function(err) {
       console.log('Could not copy recipe')
+    }
+  })
+})
+
+$('#recipeInformation').on('show.bs.modal', function(event) {
+  $('#recipe-ingredients').html('')
+  $button = $(event.relatedTarget)
+  $recipeId = $button.closest('tr').find('td')[1].innerText
+  ingredients = ""
+  $.ajax({
+    type: 'GET',
+    url: '/ingredients/ingredientsForRecipe/'+$recipeId,
+    success: function(response) {
+      // Reload the page to update cards
+      ingredients = response
+      console.log(response)
+      html = `
+      <table class='table dp-table'>
+        <tr>
+          <th>Name</th>
+          <th>Needed</th> 
+        </tr>`
+      for (recipe in ingredients){
+        html = html + `
+        <tr>
+          <td>${ingredients[recipe].ingredient_name}</td>
+          <td>${ingredients[recipe].amount_of_ingredient_needed} ${ingredients[recipe].ingredient_unit_of_measurement}</td>
+        </tr>`
+      }
+      html = html + `</table>`
+      $('#recipe-ingredients').append(html)
+    },
+    error: function(err) {
+      console.log('Could not retrieve ingredients')
     }
   })
 })

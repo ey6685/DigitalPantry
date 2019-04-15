@@ -549,6 +549,25 @@ router.delete('/remove/', async function remove(req, res) {
   res.send('success')
 })
 
+router.get('/ingredientsForRecipe/:id', async function(req, res){
+  recipeId = req.params.id
+  query = `SELECT ingredients.ingredient_name, ingredients.ingredient_image_path, ingredients_in_a_recipe.amount_of_ingredient_needed, ingredients_in_a_recipe.ingredient_unit_of_measurement
+  FROM ingredients_in_a_recipe
+  INNER JOIN ingredients
+  ON ingredients_in_a_recipe.recipe_id=${recipeId} AND ingredients.ingredient_id=ingredients_in_a_recipe.ingredient_id;`
+  await db.query(query, function(err, results){
+    if (err){
+      throw err
+    }
+    res.json(results)
+  })
+  // ingredients = await ingredientInRecipe.findAll({
+  //   where:{
+  //     recipe_id:recipeId
+  //   }
+  // })
+})
+
 // remove ingredient by name
 router.delete('/remove/recipe_ingredient/:name', async function deleteIngredientByName(req, res) {
   const ingredientName = req.params.name
