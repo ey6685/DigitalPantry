@@ -69,7 +69,7 @@ block content
 					div(id=recipe.recipe_id, class='card', class='h-100',image_p=recipe.recipe_image_path,r_name=recipe.recipe_name,r_directions = recipe.recipe_directions, r_serv= recipe.num_people_it_feeds, ing=ingredients[i])
 						img.image(class='card-img-top', src=recipe_image, alt='image', )
 						div(class='card-body')
-							h5(class='card-title') #{recipe.recipe_name}
+							h4(class='card-title') #{recipe.recipe_name}
 							p#servingSize Serves #{(recipe.num_people_it_feeds)} people
 							//- For each steps inside of the array of steps
 							for step,x in recipe_steps[i]
@@ -120,12 +120,10 @@ block content
 			$('.card-body').each(function(index) {
 				var totalCharacterLength = 0
 				var previousCharacterLength= 0
-				var $recipeName = $(this).find('h5').text()
+				var $recipeName = $(this).find('h4').text()
 				var $recipeIngredients = $(this).find('#servingSize').text()
-				console.log($recipeIngredients)
 				var $steps = $(this).find('.recipeStep')
-				html = `<h5 class='card-title'>${$recipeName}</h5><p id='currentAmountOfIngredients'>${$recipeIngredients}</p><h5 class='card-title'>Recipe steps</h6>`
-				console.log($steps)
+				html = `<h4 class='card-title'>${$recipeName}</h4><p id='currentAmountOfIngredients'>${$recipeIngredients}</p><h5 class='card-title'>Recipe steps</h6>`
 				currentStepLength = ""
 				foundHidePoint = false
 				//For each recipe step
@@ -178,7 +176,7 @@ block content
 			//Set all letters to upper case
 			filter = input.value.toUpperCase();
 			//get all card names
-			card_names = document.getElementsByTagName('h4');
+			card_names = document.getElementsByTagName('h5');
 			//get all cards
 			div = document.getElementsByClassName('col-md-3');
 
@@ -205,38 +203,40 @@ block content
 			var optionValue = e.options[e.selectedIndex].value;
 			/* Make a loop that will continue until
 			no switching has been done: */
-			while (switching && optionValue != 0) {
-				// Start by saying: no switching is done:
-				switching = false;
-				b = document.getElementsByTagName('h4');
-				// Loop through all list items:
-				for (i = 0; i < (b.length - 1); i++) {
-					//Initial condition (no switches)
-					shouldSwitch = false;
-					/* Check if the next item should
-					switch place with the current item: */
-					//If sort by A-Z is selected
-					if(optionValue == 1){
-						if (b[i].innerHTML.toLowerCase() > b[i + 1].innerHTML.toLowerCase()) {
-							/* If next item is alphabetically lower than current item,
-							mark as a switch and break the loop: */
-							shouldSwitch = true;
-							break;
+			if(optionValue != 0){
+				while (switching) {
+					// Start by saying: no switching is done:
+					switching = false;
+					b = document.getElementsByTagName('h4');
+					// Loop through all list items:
+					for (i = 0; i < (b.length - 1); i++) {
+						//Initial condition (no switches)
+						shouldSwitch = false;
+						/* Check if the next item should
+						switch place with the current item: */
+						//If sort by A-Z is selected
+						if(optionValue == 1){
+							if (b[i].innerHTML.toLowerCase() > b[i + 1].innerHTML.toLowerCase()) {
+								/* If next item is alphabetically lower than current item,
+								mark as a switch and break the loop: */
+								shouldSwitch = true;
+								break;
+							}
+						}
+						//If sort by Z-A is selected
+						else if(optionValue == 2){
+							if (b[i].innerHTML.toLowerCase() < b[i + 1].innerHTML.toLowerCase()) {
+								/* If next item is alphabetically higher than current item,
+								mark as a switch and break the loop: */
+								shouldSwitch = true;
+								break;
+							}
 						}
 					}
-					//If sort by Z-A is selected
-					else if(optionValue == 2){
-						if (b[i].innerHTML.toLowerCase() < b[i + 1].innerHTML.toLowerCase()) {
-							/* If next item is alphabetically higher than current item,
-							mark as a switch and break the loop: */
-							shouldSwitch = true;
-							break;
+						if (shouldSwitch) {
+							list[i].parentNode.insertBefore(list[i + 1], list[i]);
+							switching = true;
 						}
-					}
 				}
-					if (shouldSwitch) {
-						list[i].parentNode.insertBefore(list[i + 1], list[i]);
-						switching = true;
-					}
 			}
 		}

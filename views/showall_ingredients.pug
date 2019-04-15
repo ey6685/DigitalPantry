@@ -3,7 +3,39 @@ extends main_layout_template
 //- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
 
 block content
+	style.
+		#example_length{
+			display:none
+		}
+		#example_paginate{
+
+		}
+		.page-item.active .page-link{
+			background-color: #eeaf2c !important;
+			border-color:#eeaf2c !important;
+			z-index:0
+		}
+		th{
+			border-top: 1px double #570573 !important;
+			border-bottom:1px double #570573 !important;
+		}
+		td{
+			border-bottom:1px double #570573 !important;
+			border-top: none !important;
+		}
+		.page-link{
+			color:#570573 !important;
+		}
+		.dataTables_filter {
+			display: none;
+		}
+		.table.dataTable{
+			margin-top: 0px !important;
+		}
 	script(src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js')
+	link(rel='stylesheet', type='text/css', href='//cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css')
+	script(src='https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js')
+	script(src='https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js')
 	br
 	br
 	br
@@ -16,6 +48,7 @@ block content
 			| Card View
 		a.btn.btn-primary.dp-btn-secondary.ml-2(href='/ingredients/add', class='h-75')
 			| Add Multiple Ingredients
+		input.btn#myInputTextField.dp-search.pull-right(,type='text', placeholder='Search')
 		p
 		#editIngredient.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
 			.modal-dialog.modal-dialog-centered.modal-lg(role='document')
@@ -116,7 +149,7 @@ block content
 										option(value='Low') No
 								.col-md-1
 									input.btn.btn-primary.dp-btn-primary.mt-3(type='submit', value='Add', class='form-group')
-		table.table.table-hover.dp-table(class='rounded')
+		table.table.dp-table.mt-0#example
 			//-caption Available Ingredients
 			thead
 				tr
@@ -155,4 +188,20 @@ block content
 				output.src = URL.createObjectURL(event.target.files[0]);
 				output.classList.add("img-thumbnail");
 				}
-			
+			$('#example').dataTable( {
+				"dom": '<lf<t>ip>',
+				"order":[1, 'asc'],
+				"columns": [
+					{ "orderable": false },
+					null,
+					null,
+					null,
+					null,
+					null,
+					{ "orderable": false },
+				]
+			} );
+			oTable = $('#example').DataTable();   //pay attention to capital D, which is mandatory to retrieve "api" datatables' object, as @Lionel said
+			$('#myInputTextField').keyup(function(){
+				oTable.search($(this).val()).draw() ;
+			})
