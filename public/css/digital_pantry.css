@@ -174,3 +174,10 @@ Needs more work since border doesn't render
   border: 1px double #570573 !important;
   text-align: left;
 }
+.dp-card-footer {
+  padding: 0.75rem 1.25rem;
+  background-color: #faf8eb !important;
+}
+.card-footer:last-child {
+  border-radius: 0 0 calc(0.25rem - 1px) calc(0.25rem - 1px);
+}

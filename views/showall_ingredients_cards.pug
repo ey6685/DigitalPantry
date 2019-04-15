@@ -89,11 +89,10 @@ block content
 					div.card-content(id=item.ingredient_id, class='card', class='h-100')
 						img.image(class='card-img-top', src=ingredient_image, alt='image')
 						div(class='card-body')
-							h5(class='card-title') #{item.ingredient_name}
+							h4(class='card-title') #{item.ingredient_name}
 							p(class='card-text') #{item.ingredient_amount} #{item.ingredient_unit_of_measurement} expires on #{item.ingredient_expiration_date}
 							p(class='card-text') This is a #{item.priority} priority item.
-
-						div(class='card-foot')
+						div(class='dp-card-footer')
 							button.btn_card.btn.btn-outline-danger.delete-ingredient(href='#',data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount)  Remove From Pantry
 
 	script.
