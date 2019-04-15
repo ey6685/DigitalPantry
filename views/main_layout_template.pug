@@ -128,27 +128,43 @@ html
 				ul.flex-column
 				li.header
 					div(style='display: table-row')
-						img.ml-2(src='/images/dp_logo.png', alt='image', width='240px', class='border-dark')
+						a.p-0(href='/')
+							img.ml-2(src='/images/dp_logo.png', alt='image', width='240px', class='border-dark')
 				li.nav-item
 					a.nav-link(href='/users/dashboard')
 						i.fas.fa-home
 						| Home
 				li.nav-item
-					a.nav-link(href='/ingredients/showall')
-						i.fas.fa-pepper-hot
-						| Your Ingredients
+					if user.user_type == "Administrator"
+						a.nav-link(href='/ingredients/showall')
+							i.fas.fa-pepper-hot
+							| Your Ingredients
+					else
+						a.nav-link(href='/ingredients/cards')
+							i.fas.fa-pepper-hot
+							| Your Ingredients
 				li.nav-item
-					a.nav-link(href='/ingredients/expiredAdmin')
-						i.fas.fa-calendar-times
-						| Your Expired Ingredients
+					if user.user_type == "Administrator"
+						a.nav-link(href='/ingredients/expiredAdmin')
+							i.fas.fa-calendar-times
+							| Your Expired Ingredients
+					else
+						a.nav-link(href='/ingredients/expired')
+							i.fas.fa-calendar-times
+							| Your Expired Ingredients
 				li.nav-item
 					a.nav-link(href='/ingredients/add')
 						i.fas.fa-plus
 						| Add Ingredients
 				li.nav-item
-					a.nav-link(href='/recipes/showall')
-						i.fa.fa-hamburger
-						| Your Recipes
+					if user.user_type == "Administrator"
+						a.nav-link(href='/recipes/showall')
+							i.fa.fa-hamburger
+							| Your Recipes
+					else
+						a.nav-link(href='/recipes/showRecipes')
+							i.fa.fa-hamburger
+							| Your Recipes
 				li.nav-item
 					a.nav-link(href='/recipes/add')
 						i.fas.fa-utensils

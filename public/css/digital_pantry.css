@@ -114,6 +114,7 @@ table colors .table-green {
 .dp-form-fields {
   background-color: #faf8eb !important;
   color: #570573 !important;
+  border-color: 1px double #570573 !important;
 }
 ::placeholder {
   color: #570573 !important;
@@ -181,4 +182,15 @@ Needs more work since border doesn't render
   /* width: 100%; */
   z-index: 1 !important;
   /* border-radius: 0px; */
+}
+.dp-card-footer {
+  padding: 0.75rem 1.25rem;
+  background-color: #faf8eb !important;
+}
+.card-footer:last-child {
+  border-radius: 0 0 calc(0.25rem - 1px) calc(0.25rem - 1px);
+}
+.dp-card-row {
+  background-color: white !important;
+  color: #91c02e !important;
 }
