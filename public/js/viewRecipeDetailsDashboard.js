@@ -127,7 +127,7 @@ $(document).on('focusout', '#ingredient_amount_available', function() {
   if (parseInt(ingredientAmountAvailableDigit) >= parseInt(ingredientAmountRequiredDigit)) {
     $(this)
       .closest('tr')
-      .css('background-color', '#d5f5ee')
+      .css('background-color', '#91c02e')
     $(this)
       .closest('tr')
       .find('button')

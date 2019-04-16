@@ -97,8 +97,9 @@ table colors .table-green {
   color: #eeaf2c !important;
 }
 .dp-btn-group {
-  background-color: #eeaf2c !important;
-  border-color: white !important;
+  background-color: white !important;
+  border-color: #eeaf2c !important;
+  color:#eeaf2c;
 }
 .dp-secondary-text {
   color: #eeaf2c !important;
@@ -193,4 +194,48 @@ Needs more work since border doesn't render
 .dp-card-row {
   background-color: white !important;
   color: #91c02e !important;
+}
+.dp-card-background{
+  background-color: #91c02e !important;
+  color: white !important;
+}
+.dp-card-background-purple{
+  background-color: purple !important;
+  color: white !important;
+}
+.dp-card-background-orange{
+  background-color: #eeaf2c !important;
+  color: white !important;
+}
+.dp-option-card-green{
+  background-color: #91c02e !important;
+  color:#faf8eb;
+}
+.dp-card-yellow{
+  background-color:#f2d43b;
+  color:white; 
+}
+.dp-option-card-red{
+  background-color:#d93711;
+  color:#faf8eb;
+}
+.dp-btn-white-green{
+  background-color: white;
+  color:#91c02e;
+}
+.dp-btn-white-red{
+  background-color: white;
+  color:#d93711;
+}
+.dp-btn-white-purple{
+  background-color: white;
+  color:purple;
+}
+.dp-btn-white-orange{
+  background-color: white;
+  color:#eeaf2c;
+}
+.active{
+  background-color:#91c02e !important;
+  color:white;
 }
