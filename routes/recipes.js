@@ -260,9 +260,10 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
     console.log('File Upload Failed')
   }
   // recipe_name and recipe_size are unique form fields, so they do not require any recursion to grab all of them
-  const recipeName = req.body.recipeName
-  const recipeServingSize = req.body.recipeServingSize
-  const recipeDirections = req.body.recipeDirections
+  //const recipeName = input_cleaner.string_cleaning(req.body.recipeName)
+  const recipeServingSize = (req.body.recipeServingSize)
+  const recipeDirections = (req.body.recipeDirections)
+  const recipeShareable = req.body.recipeShareable
   let replaceNewLine = '#'
   for (char in recipeDirections) {
     replaceNewLine = replaceNewLine.concat(
@@ -272,7 +273,7 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
   // INSERT new recipe information into table
   const result = await recipe_t
     .create({
-      recipe_name: recipeName,
+      recipe_name: recipe_name,
       recipe_image_path: '/images/' + imagePath, //saves image path in the db in a way that can be pulled from to display later
       num_people_it_feeds: recipeServingSize,
       sharable: parseInt(recipeShareable),
@@ -290,24 +291,20 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
   // var key = req.body
   // When Ingredient key_name is found
   // For every ingredient in recipe defined by user in the form do the following
-  console.log(req.body.ingredientProperties)
+  for(var i =1; i < req.body.ingredientProperties.length; i++)
+  {
+        console.log(req.body.ingredientProperties)
+        var ingredient_data_from_page = req.body.ingredientProperties[i]
 
-        const ingredientName = ingredient_data_from_page[0];
-        const ingredientQuantity = ingredient_data_from_page[1];
-        const ingredientMeasurement = ingredient_data_from_page[2];
+        const ingredientName = await input_cleaner.string_cleaning(ingredient_data_from_page[0])
+        const ingredientQuantity =ingredient_data_from_page[1]
+        const ingredientMeasurement = ingredient_data_from_page[2]
         console.log("adding ingredient to recipe: \n")// + ingredientQuantity+ " " +ingredientMeasurement+" of " + ingredientName);
         console.log("ingredientName: " + ingredientName);
         console.log("ingredientQTY: " + ingredientQuantity);
         console.log("ingredientMeasurement: " + ingredientMeasurement);
 
-      const ingredientName = ingredient_data_from_page[0]
-      const ingredientQuantity = ingredient_data_from_page[1]
-      const ingredientMeasurement = ingredient_data_from_page[2]
-      console.log('adding ingredient to recipe: \n') // + ingredientQuantity+ " " +ingredientMeasurement+" of " + ingredientName);
-      console.log('ingredientName: ' + ingredientName)
-      console.log('ingredientQTY: ' + ingredientQuantity)
-      console.log('ingredientMeasurement: ' + ingredientMeasurement)
-
+   
       //find if the ingredient is in db
       var final_ingredi_id
       var checking_ingr_t = await ingredient_t.findAll({
@@ -329,12 +326,13 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
         ingredient_id: final_ingredi_id,
         recipe_id: recipe_id_inserted,
         ingredient_unit_of_measurement: ingredientMeasurement,
-        pantry_id: 1, //change this to be from the session
+        pantry_id: pantryId.pantry_id, //change this to be from the session
         amount_of_ingredient_needed: ingredientQuantity
       })
       console.log('created ingredient slot: \n' + JSON.stringify(new_ingredient_slot))
+    
+  
     }
-  }
   //Repeat until all recipes have been parsed
 
   res.redirect('showall')
