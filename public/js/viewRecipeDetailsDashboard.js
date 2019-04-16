@@ -20,7 +20,7 @@ $(document).on('click', '#showRecipeDetails', async function() {
   var recipeId = $(this)
     .closest('.card')
     .attr('recipe-id')
-
+  $('#modalFooter').attr('action','/recipes/recipeDetails/'+recipeId)
   $('h5').text($recipeName)
   for (step in recipeStepsArray) {
     $('#recipeStepsOverlay').append(
