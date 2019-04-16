@@ -206,6 +206,7 @@ router.get('/expiredAdmin', function expiredTable(req, res) {
 router.post('/add', upload.array('image'), async function addIngredient(req, res) {
   console.log("++++++++++++++++++++++++++++++++")
   console.log("adding ingredients");
+  console.log(req.originalUrl)
 
   var currentUserId = req.session.passport['user']
   var PantryId = await User.findOne({
@@ -216,51 +217,84 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
   })
   var currentPantryId = PantryId.pantry_id
   var imagePath = new Array()
+  var imagePathSys = new Array()
   console.log(req.body.ingredientProperties)
   console.log(req.body.ingredientProperties.length)
   ///needs testing
   ///patrick gets a windows error
+  for(var i = 0 ; i<req.files.length; i++){
+    imagePathSys.push(req.files[i].path)
+    
+  }
   try{
     for (var i =1; i < req.body.ingredientProperties.length;i++) {
-    if (req.files) {
-      console.log("the file data")
-      console.log("==============")
-      console.log(req.files[i-1])
-      console.log(req.files.length)
-      console.log('File Uploaded Successfully')
-      var e 
-        try{
-        var currentDate = Date.now()
-        imagePath[i-1] = currentDate  + '.jpg'
-        do{
-          e = false
-          console.log(i + " " )
-          console.log("pic magic " + req.files[i-1].path)
-        await gm(req.files[i-1].path) // uses graphicsmagic and takes in image path
-          .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
-          .write(req.files[i-1].path, err => {
-            fs.rename(req.files[i-1].path, './public/images/' + currentDate + '.jpg', function(err) {
-              if (err) e = err
-              console.log('File Renamed.')
-            })
-
-            if (err) {
-              console.log(err)
-              imagePath[i-1] = 'placeholder.jpg'
-            }
-          })
-        }while(e)
-      }
-        catch(e){
-          imagePath[i-1] = 'placeholder.jpg'
-        }
-      
-      }
-      else {
+      if(imagePathSys[i-1])
+      {
+        console.log("system image path: "+ imagePathSys[i-1])
+        const old_path = imagePathSys[i-1];
+        //rename
+        var currentDate =  Date.now()
+        const new_path = "./public/images/" + currentDate + ".jpg"
+        var no_dot = "/images/" + currentDate + ".jpg"
         
-          imagePath[i-1] = 'placeholder.jpg'
-          console.log('File Upload Failed')
-        }
+        console.log("new_path: " + new_path )
+        imagePath.push(no_dot)
+      var writing= await gm(old_path).resize(1024,575,'!').write(old_path,err =>{
+        if(err){
+          imagePath[i] = 'placeholder.jpg'
+          }
+          console.log("in function sys path: " + old_path)
+          console.log("in function new path:" +new_path)
+          fs.renameSync(old_path, new_path)
+          imagePath.push(new_path)
+        
+      }) 
+      
+      console.log("imagepath:")
+      console.log("----------")
+      console.log(imagePath)  
+    
+      }  // if (req.files) {
+    //   console.log("the file data")
+    //   console.log("==============")
+    //   console.log(req.files[i-1])
+    //   console.log(req.files.length)
+    //   console.log('File Uploaded Successfully')
+    //   var e 
+    //     try{
+    //     var currentDate = Date.now()
+    //     imagePath[i-1] = currentDate  + '.jpg'
+        
+    //       e = false
+    //       console.log(i + " " )
+    //       console.log("pic magic " + req.files[i-1].path)
+    //       console.log("===========================")
+    //     await gm(req.files[i-1].path) // uses graphicsmagic and takes in image path
+    //       .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
+    //       .write(req.files[i-1].path, err => {
+    //         fs.rename(req.files[i-1].path, './public/images/' + currentDate + '.jpg', function(err) {
+    //           if (err) throw err
+    //           console.log('File Renamed.')
+    //           fs.close(req.files[i-1].path)
+    //         })
+
+    //         if (err) {
+    //           console.log(err)
+    //           imagePath[i-1] = 'placeholder.jpg'
+    //         }
+    //       })
+        
+    //   }
+    //     catch(e){
+    //       imagePath[i-1] = 'placeholder.jpg'
+    //     }
+      
+    //   }
+    //   else {
+        
+    //       imagePath[i-1] = 'placeholder.jpg'
+    //       console.log('File Upload Failed')
+    //     }
       //////////////////////////////////////
       
       
@@ -297,7 +331,7 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
           var new_ingredient = await ingredient_t.create({
             ingredient_name: ingredient_name,
             ingredient_weight: new_weight,
-            ingredient_image_path: '/images/' + imagePath[i-1],
+            ingredient_image_path: imagePath[i-1],
             priority: priority
           })
           final_id = new_ingredient.ingredient_id
@@ -349,7 +383,7 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
     // }
     
   console.log("++++++++++++++++++++++++++++++++")
-  res.redirect('/ingredients/showall')
+  res.redirect(req.get('referer'))
 })
 
 // Render page with data from database

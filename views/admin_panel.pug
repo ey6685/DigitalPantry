@@ -1,6 +1,7 @@
 extends main_layout_template
 
 block content
+	-	console.log(pantry_data)
 	br
 	!= messages('message', locals)
 	if errors
@@ -8,23 +9,23 @@ block content
 			div(class='alert alert-danger') #{error.msg}
 	.row
 		.col-md-3
-			img.img-thumbnail.img-fluid.rounded-circle(id='pantry-image', src='/images/PantryImage9001.jpg', alt='Pantry Image', class='image-card')
+			img.img-thumbnail.img-fluid.rounded-circle(id='pantry-image', src=pantry_data.pantry_image_path, alt='Pantry Image', class='image-card')
 		.col-md-9
 			h1.dp-title-text #{title}
 			hr
 			br
 			.row
 				.col-md-6
-					h4.dp-primary-text#name(style='border-bottom:1px solid black', onfocusout='cancelEdit()') Pantry Name
+					h4.dp-primary-text#name(style='border-bottom:1px solid black', onfocusout='cancelEdit()') #{pantry_data.pantry_name}
 				.btn#edit-btn.dp-btn-purple.mr-2(role='button', aria-disabled='false', onclick='edit()') Edit
-				.btn#save-pantryName-btn.dp-btn-primary.disabled(role='button', aria-disabled='true') Save
+				.btn#save-pantryName-btn.dp-btn-primary.disabled(role='button', aria-disabled='true' class) Save
 			br
 			.row
 				.col-md-6
 					form(method= 'POST', action= '/users/addImg', class= 'form', enctype="multipart/form-data")
 						label.btn.btn-primary.dp-btn-secondary.btn.btn-file Choose Image
 							input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='form-group', style='display: none;')
-	br
+						input.btn.dp-btn-primary.col-md-2(type='submit', value='Update', class='form-group') 
 	//-reset password overlay
 	#resetForm.modal.fade(tabindex='-1', role='dialog', aria-hidden='true', class= 'form-modal')
 		.modal-dialog.modal-dialog-centered.modal(role='document')

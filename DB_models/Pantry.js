@@ -29,6 +29,9 @@ const Pantry = db.define(
     },
     people_cooking_for:{
       type: Sequelize.INTEGER
+    },
+    pantry_image_path: {
+      type: Sequelize.STRING
     }
   },
   {
