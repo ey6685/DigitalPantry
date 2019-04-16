@@ -76,7 +76,6 @@ block content
 	script(src='https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js')
 	script(src='https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js')
 	script.
-		localStorate.clear()
 		$('#example').dataTable( {
 			"dom": '<lf<t>ip>',
 			"order":[1, 'asc'],
@@ -93,3 +92,4 @@ block content
 		$('#myInputTextField').keyup(function(){
 			oTable.search($(this).val()).draw() ;
 		})
+		localStorate.clear()
