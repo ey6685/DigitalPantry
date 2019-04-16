@@ -14,6 +14,8 @@ const aw = require("../algorithm/auto_weight");
 const base_recipe_w = require('../algorithm/recipe_weight_functions');
 const gm = require('gm');
 const fs = require('fs')
+const input_cleaner = require('../functions/Input_cleaner')
+const val = require("validator")
 //defines where to store image
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -203,9 +205,10 @@ BODY_PARAMS:
 */
 // calls upload function for images
 router.post('/add', upload.single('image'), async function addRecipe(req, res) {
+  var recipe_name = await input_cleaner.string_cleaning(req.body.recipeName)
   var name_is_open = await recipe_t.findAll({
     where: {
-      recipe_name: req.body.recipeName
+      recipe_name:await recipe_name
     }
   })
   //check if it is already in the database.
@@ -214,7 +217,7 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
   console.log("++++++++++")
   if(name_is_open.length> 0)
   {
-    req.flash('error',"Recipe " + req.body.recipeName + " already exist. please rename your new recipe")
+    req.flash('error',"Recipe " + recipe_name + " already exist. please rename your new recipe")
     res.render('add_recipe', {
       title: 'Add New Recipe'
     })
@@ -253,9 +256,9 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
       console.log('File Upload Failed')
   }
   // recipe_name and recipe_size are unique form fields, so they do not require any recursion to grab all of them
-  const recipeName = req.body.recipeName
-  const recipeServingSize = req.body.recipeServingSize
-  const recipeDirections = req.body.recipeDirections
+  
+  const recipeServingSize = await parseInt(input_cleaner.string_cleaning(req.body.recipeServingSize))
+  const recipeDirections = await input_cleaner.string_cleaning(req.body.recipeDirections)
   let replaceNewLine = '#'
   for (char in recipeDirections) {
     replaceNewLine = replaceNewLine.concat(
@@ -295,9 +298,9 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
         // const ingredientQuantity = req.body[key][1];
         // const ingredientMeasurement = req.body[key][2];
 
-        const ingredientName = ingredient_data_from_page[0];
-        const ingredientQuantity = ingredient_data_from_page[1];
-        const ingredientMeasurement = ingredient_data_from_page[2];
+        const ingredientName = await input_cleaner.string_cleaning(ingredient_data_from_page[0])
+        const ingredientQuantity = await input_cleaner.string_cleaning(ingredient_data_from_page[1])
+        const ingredientMeasurement = await ingredient_data_from_page[2]
         console.log("adding ingredient to recipe: \n")// + ingredientQuantity+ " " +ingredientMeasurement+" of " + ingredientName);
         console.log("ingredientName: " + ingredientName);
         console.log("ingredientQTY: " + ingredientQuantity);
@@ -377,7 +380,8 @@ router.get('/getRecipeDirections/:id', async function getDirections(req, res){
 
 //Share a recipe into community
 router.post('/share', async function(req, res){
-    share_query=`UPDATE recipes SET sharable=1 WHERE recipe_name='${req.body.recipe_name}';`
+    var name = await input_cleaner.string_cleaning(req.body.recipe_name)
+    share_query=`UPDATE recipes SET sharable=1 WHERE recipe_name='${name}';`
     await db.query(share_query, function(err, results){
         if (err) throw err;
         console.log(results);
@@ -485,13 +489,13 @@ router.post('/undo', async function undoCooking(req, res){
 
 router.post('/edit', async function editRecipe(req, res) {
   const data = req.body
-  const recipeName = req.body.recipeName
-  const recipeSize = req.body.recipeSize
-  const recipeId = req.body.recipeId
-  const newIngredientNames = req.body.ingredientName
-  const newIngredientQtys = req.body.ingredientQty
-  const newIngredientMeasurements = req.body.ingredientMeasurement
-  const recipeDirections = req.body.recipeDirections
+  const recipeName = await input_cleaner.string_cleaning(req.body.recipeName)
+  const recipeSize = await input_cleaner.string_cleaning(req.body.recipeSize)
+  const recipeId = await input_cleaner.string_cleaning(req.body.recipeId)
+  const newIngredientNames =await input_cleaner.string_cleaning(req.body.ingredientName)
+  const newIngredientQtys = await input_cleaner.string_cleaning(req.body.ingredientQty)
+  const newIngredientMeasurements = await input_cleaner.string_cleaning(req.body.ingredientMeasurement)
+  const recipeDirections = await input_cleaner.string_cleaning(req.body.recipeDirections)
 
   if(recipeDirections != ""){
     let replaceNewLine = ''
@@ -677,7 +681,7 @@ router.delete('/remove/:id', async function(req, res){
     catch(err)
     {
         console.log(err);
-        res.send("no?")// i dont know ajax calls............
+        res.send("error")// i dont know ajax calls............
     }
         //Since AJAX under /js/main.js made a request we have to respond back
         

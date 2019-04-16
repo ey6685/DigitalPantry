@@ -24,6 +24,8 @@ const algorithm = require('../algorithm/main')
 const mail = require('../functions/mailer')
 const fs = require('fs')
 const str_generater = require('randomstring')
+const val = require('validator')
+const input_cleaner = require('../functions/Input_cleaner')
 
 //defines where to store image
 const storage = multer.diskStorage({
@@ -166,6 +168,7 @@ router.get('/adminPanel', async function showAdminPanelPage(req, res) {
       pantry_id: pantryId
     }
   })
+  pantry_data.pantry_name = await val.unescape(pantry_data.pantry_name)
   console.log(JSON.stringify(pantry_data))
   console.log("image path: "+pantry_data["pantry_image_path"])
   // render page with all found users that are related to the pantry
@@ -281,18 +284,18 @@ router.post('/register', async function registerUser(req, res) {
   req.checkBody('password', "Passwords don't match").matches(req.body.confirm_password)
   // Checks confirm password is not empty
   req.checkBody('confirm_password', 'Confirm password field required').notEmpty()
-
+  var email = await input_cleaner.email_cleaning(req.body.email)
   // Get all errors is any based on above validators
   const errors = req.validationErrors()
-
+  
   var user_exists = await User.findAll({
     where: {
-      user_email: req.body.email
+      user_email: email
     }
   })
 
   if (user_exists.length > 0) {
-    req.flash('error', 'Email ' + req.body.email + ' Already Exists!')
+    req.flash('error', 'Email ' + email+ ' Already Exists!')
     res.redirect('/users/register')
   } else {
     // if errors exist
@@ -308,9 +311,9 @@ router.post('/register', async function registerUser(req, res) {
     // Creates a user and hashes their password into database
     else {
       // Get user's email
-      const email = req.body.email
+      
       // Get user's password
-      const password = req.body.password
+      const password = await input_cleaner.password_cleaning(req.body.password)///find me for update password regex
       // Create new pantry entry in the table, so the new pantry ID can be assigned to the new user
       db.query('INSERT INTO pantry (pantry_name) VALUES ("");', function getResults(err, results) {
         if (err) throw err
@@ -397,12 +400,13 @@ router.post('/saveCommunityRecipe', async function(req, res) {
 
 // Add new user from admin panel
 router.post('/add', async function addNewUser(req, res) {
-  const userName = req.body.userName
-  const confirmUserName = req.body.confirmUserName
-  if (confirmUserName != userName) {
+  if(val.isEmail(userName) && val.isEmail(confirmUserName)){
+  const userName = await input_cleaner.email_cleaning(req.body.userName)
+  const confirmUserName = await input_cleaner.email_cleaning(req.body.confirmUserName)
+  }else{
     req.flash('error', 'Emails Do Not Match!')
     res.redirect('/users/adminPanel')
-  } else {
+  } 
     var does_user_exitst = await User.findAll({
       where: {
         user_email: userName
@@ -412,7 +416,7 @@ router.post('/add', async function addNewUser(req, res) {
       req.flash('error', 'User has an account already!')
       res.redirect('/users/adminPanel')
     } else {
-      let userType = req.body.userType
+      let userType = await input_cleaner.string_cleaning(req.body.userType)
       switch (userType) {
         case 'volunteer':
           userType = 'Volunteer'
@@ -459,7 +463,7 @@ router.post('/add', async function addNewUser(req, res) {
         })
       })
     }
-  }
+  
 })
 
 // Delete user from admin panel
@@ -479,8 +483,8 @@ router.delete('/delete/:id', async function deleteUser(req, res) {
 })
 
 // Change user privilege from admin panel
-router.post('/changePrivilege/:id', function changePrivillege(req, res) {
-  let userType = req.body.userType
+router.post('/changePrivilege/:id', async function changePrivillege(req, res) {
+  let userType = await input_cleaner.string_cleaning(req.body.userType)
   // Change Volunteer or Administrator to N/NP for database insert
   switch (userType) {
     case 'volunteer':
@@ -505,7 +509,7 @@ router.post('/changePrivilege/:id', function changePrivillege(req, res) {
 // Reset users password and set a new password
 router.post('/resetPassword/:id', async function resetPassword(req, res) {
   const userId = req.params.id
-  const userPassword = req.body.password
+  const userPassword = await input_cleaner.password_cleaning(req.body.password)
 
   var email_address = await User.findOne({
     attributes: ['user_email'],
@@ -544,9 +548,11 @@ router.post('/changeUsername', async function changeUsername(req, res) {
   // get currently logged in user
   const currentUserId = req.session.passport['user']
   // get passed in username
-  const newUsername = req.body.newUsername
+  
+  const newUsername = await input_cleaner.email_cleaning(req.body.newUsername)
+  
   //check if there is anything in the textbox
-  if(newUsername.length > 0)
+  if(newUsername.length > 0 && val.isEmail(req.body.newUsername))
   {
     //check to make sure the email is not in the db already
     var is_email_taken = await User.findAll({
@@ -574,23 +580,24 @@ router.post('/changeUsername', async function changeUsername(req, res) {
     res.redirect("/users/settings")
   }
 })
-
+//need password regen find me
 router.post('/changePassword', async function changePassword(req, res) {
   // get currently logged in user
   const currentUserId = req.session.passport['user']
   // get passed in current password
-  const currentPassword = req.body.currentPassword
+  const currentPassword = input_cleaner(req.body.currentPassword)
   // TODO check current password. Make sure that the user is the TRUE user
   // get passed in new password
-  const newPassword = req.body.newPassword
+  const newPassword =  input_cleaner(req.body.newPassword)
   // get passed in new password confirm
-  const confirmNewPassword = req.body.confirmNewPassword
+  const confirmNewPassword =  input_cleaner(req.body.confirmNewPassword)
   req.checkBody('newPassword', "Passwords don't match").matches(confirmNewPassword)
   // Get all errors is any based on above validators
   const errors = req.validationErrors()
 
   // if errors exist
   if (errors) {
+    //oskars
     const query = `SELECT * FROM users WHERE user_id=${currentUserId};`
     db.query(query, function getUser(err, results) {
       if (err) throw err
@@ -667,7 +674,7 @@ router.get('/forgotpass', function(req, res) {
 })
 router.post('/forgotpass', async function(req, res) {
   //pull email from the page
-  const email = req.body.email
+  const email = await input_cleaner.email_cleaning(req.body.email)
   //check to see if email in db
   console.log('email:')
   console.log('======')
