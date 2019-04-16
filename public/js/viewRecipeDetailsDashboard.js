@@ -20,7 +20,7 @@ $(document).on('click', '#showRecipeDetails', async function() {
   var recipeId = $(this)
     .closest('.card')
     .attr('recipe-id')
-
+  $('#modalFooter').attr('action','/recipes/recipeDetails/'+recipeId)
   $('h5').text($recipeName)
   for (step in recipeStepsArray) {
     $('#recipeStepsOverlay').append(
@@ -127,7 +127,7 @@ $(document).on('focusout', '#ingredient_amount_available', function() {
   if (parseInt(ingredientAmountAvailableDigit) >= parseInt(ingredientAmountRequiredDigit)) {
     $(this)
       .closest('tr')
-      .css('background-color', '#d5f5ee')
+      .css('background-color', '#91c02e')
     $(this)
       .closest('tr')
       .find('button')

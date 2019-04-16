@@ -97,8 +97,9 @@ table colors .table-green {
   color: #eeaf2c !important;
 }
 .dp-btn-group {
-  background-color: #eeaf2c !important;
-  border-color: white !important;
+  background-color: white !important;
+  border-color: #eeaf2c !important;
+  color:#eeaf2c;
 }
 .dp-secondary-text {
   color: #eeaf2c !important;
@@ -197,4 +198,52 @@ Needs more work since border doesn't render
 .dp-add-recipe-ingredient-rows {
   background-color: #fdf3b4 !important;
   color: #570573 !important;
+}
+
+.dp-card-background{
+  background-color: #91c02e !important;
+  color: white !important;
+}
+.dp-card-background-purple{
+  background-color: purple !important;
+  color: white !important;
+}
+.dp-card-background-orange{
+  background-color: #eeaf2c !important;
+  color: white !important;
+}
+.dp-option-card-green{
+  background-color: #91c02e !important;
+  color:#faf8eb;
+}
+.dp-card-yellow{
+  background-color:#f2d43b;
+  color:white; 
+}
+.dp-option-card-red{
+  background-color:#d93711;
+  color:#faf8eb;
+}
+.dp-btn-white-green{
+  background-color: white;
+  color:#91c02e;
+}
+.dp-btn-white-red{
+  background-color: white;
+  color:#d93711;
+}
+.dp-btn-white-purple{
+  background-color: white;
+  color:purple;
+}
+.dp-btn-white-orange{
+  background-color: white;
+  color:#eeaf2c;
+}
+.active{
+  background-color:#91c02e !important;
+  color:white;
+}
+table.dataTable thead .sorting:before, table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:before, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:before, table.dataTable thead .sorting_desc_disabled:after {
+  display: none !important;
 }

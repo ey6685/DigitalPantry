@@ -62,3 +62,6 @@ block content
     localStorage.clear();
     var recipeData = '!{wholeRecipe}'
     localStorage.setItem('recipe', recipeData);
+    window.addEventListener('popstate', (event) => {
+      localStorage.clear();
+    };

@@ -12,9 +12,6 @@ block content
 			/*Defines CSS for butons on the dashboard*/
 			margin: 0px 10px 10px 10px;
 		}
-		#ex1Slider .slider-selection {
-			background: #BABABA;
-		}
 		.card{
 			color:#570573
 		}
@@ -50,9 +47,12 @@ block content
 						br
 						#recipeStepsOverlay
 					.modal-footer
+						form#modalFooter(action='')
+							button.btn.dp-btn-primary(type='submit') Cook It!
+
 		.row
 			.col-sm-3
-				.card(style='height:150px').text-center
+				.card(style='height:150px').text-center.dp-card-background-orange
 					.card-body
 						p.card-text Show me recipes for ingredients expiring in 
 							btn-toolbar(role='toolbar', aria-label='Toolbar with button groups')
@@ -63,10 +63,10 @@ block content
 									button.btn.dp-btn-group(class='combo-box' type='button') 15
 							p.card-text days
 			.col-sm-3
-				.card(style='height:150px').text-center
+				.card(style='height:150px').text-center.dp-option-card-green
 					.card-body
 						p.card-text Show me recipes where i am missing a few ingredients. 
-						button.btn.btn-sm.btn-success.dp-btn-primary#ingredientFilterBtn(type='button') Yes
+						button.btn.btn-sm.dp-btn-white-green#ingredientFilterBtn(type='button') Yes
 			.col-sm-3
 				.card(style='height:150px').text-center
 					.card-body.text-center
@@ -75,11 +75,11 @@ block content
 							input.form-control(id='cookForNumberOfPeople' style="text-align:center;valign:middle;" type='text') 
 						p.card-text people
 			.col-sm-3#undoCooking(style='display:none')
-				.card(style='height:150px').text-center
+				.card.dp-card-yellow(style='height:150px').text-center
 					.card-body.text-center
 						p.card-text Undo cooked recipe
 						a(href='')
-							i.fas.fa-2x.fa-undo
+							i(style='color:white !important;').fas.fa-2x.fa-undo
 
 		br
 		!= messages('message', locals)
@@ -97,6 +97,11 @@ block content
 								if recipe.num_of_ingredients_on_hand == recipe.num_of_ingredients
 									- test = "div class='col-3 haveAllIngredientsRecipe'";
 								else
+									.col-3.placeholderCard
+										.card.h-100(recipe-id=recipe.recipe_id , style='width: 100%').dp-card-background
+											.card-body
+												p Not enough ingredients to cook this recipe
+												p To see this recipe enable "Show recipes with misssing"
 									- test = "div class='col-3 dontHaveAllIngredients' style='display: none;'";
 								#{test}
 									div.card.h-100(recipe-id=recipe.recipe_id , style='width: 100%')
@@ -119,15 +124,21 @@ block content
 															form(action='/recipes/recipeDetails/'+recipe.recipe_id)
 																button.btn.btn-primary.dp-btn-secondary.mr-3(class='test', id='showRecipeDetails', type='button', data-toggle='modal', data-target='#viewRecipeDetails') Details
 																button.btn.dp-btn-primary(type='submit') Cook It!
-
 						else
-							div.dp-background.card-container(class='container-fluid', class='rounded')
-								a.navbar-brand(href="/recipes/add" ) No recipes for #{i.ingredient_name}, try adding some!
+							.col-3.placeholderCardn
+								.card.h-100(style='width: 100%').dp-card-background-purple
+									.card-body
+										p No recipes for #{i.ingredient_name}, add some!
+										button.btn.dp-btn-white-purple(type='button') Add
+											a(href="/recipes/add" )
 					br
 		else
 			div.dp-background.card-container(class='container-fluid', class='rounded')
-				h3.dp-title-text No Ingredients are expiring within #{expirationTimeFrame} days.
-				p Hint: Try changing your expiration window
+				.col-3.placeholderCardn
+					.card.h-100(style='width: 100%').dp-card-background-orange
+						.card-body
+							p No Ingredients are expiring within #{expirationTimeFrame} days.
+							p Hint: Try changing your expiration window
 
 
 
@@ -167,13 +178,19 @@ block content
 				buttonText = $(this).text()
 				if (buttonText == 'Yes'){
 					$(this).text('No')
-					$(this).removeClass('dp-btn-primary')
-					$(this).addClass('dp-btn-danger')
+					$(this).closest('.card').removeClass('dp-option-card-green')
+					$(this).removeClass('dp-btn-white-green')
+					$('.placeholderCard').hide()
+					$(this).addClass('dp-btn-white-red')
+					$(this).closest('.card').addClass('dp-option-card-red')
 					$('.dontHaveAllIngredients').show()
 				}else{
 					$(this).text('Yes')
-					$(this).removeClass('dp-btn-danger')
-					$(this).addClass('dp-btn-primary')
+					$(this).removeClass('dp-btn-white-red')
+					$(this).closest('.card').removeClass('dp-option-card-red')
+					$('.placeholderCard').show()
+					$(this).addClass('dp-btn-white-green')
+					$(this).closest('.card').addClass('dp-option-card-green')
 					$('.dontHaveAllIngredients').hide()
 				}
 
