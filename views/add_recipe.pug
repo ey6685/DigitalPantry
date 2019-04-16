@@ -18,14 +18,20 @@ block content
 					input.form-control.dp-form-fields(name='recipeName', type='text', placeholder='Recipe = Chicken Soup', class= 'input-form')
 				.form-group.col-md-4
 					input.form-control.dp-form-fields(name='recipeServingSize', type='text', placeholder='Serving Size = 2', class= 'input-form')
+				.form-group.col-md-3
+					dropdown-inline
+					select.form-control.dp-form-fields(name='recipeShareable', class='selection-drop')
+						option(value='1') Share My Recipe
+						option(value='0') Don't Share My Recipe
+					//- input.form-control.dp-form-fields(name='Shareable', type='text', placeholder='Serving Size = 2', class= 'input-form')
 			.form-row
 				.form-group.col-md-4
-					input.form-control.dp-form-fields(name='ingredientProperties[1]', type='text', placeholder='Ingredient = Chicken', class= 'input-form')
+					input.form-control.dp-add-recipe-ingredient-rows(name='ingredientProperties[1]', type='text', placeholder='Ingredient = Chicken', class= 'input-form')
 				.form-group.col-md-4
-					input.form-control.dp-form-fields(name='ingredientProperties[1]', type='text', placeholder='Quantity = 2', class= 'input-form')
+					input.form-control.dp-add-recipe-ingredient-rows(name='ingredientProperties[1]', type='text', placeholder='Quantity = 2', class= 'input-form')
 				.form-group.col-md-3
 					.dropdown-inline
-					select.form-control.dp-form-fields(name='ingredientProperties[1]', required, class= 'selection-drop')
+					select.form-control.dp-add-recipe-ingredient-rows(name='ingredientProperties[1]', required, class= 'selection-drop')
 						option(value='') Measurement
 						option(value='cup') Cup
 						option(value='fl oz') Fl oz
@@ -79,13 +85,13 @@ block content
 				let template = `
 				<div class="form-row">
 					<div class="form-group col-md-4">
-						<input class="form-control  dp-form-fields" name="ingredientProperties[${i}]" type="text" placeholder="Ingredient = Chicken">
+						<input class="form-control  dp-add-recipe-ingredient-rows" name="ingredientProperties[${i}]" type="text" placeholder="Ingredient = Chicken">
 					</div>
 					<div class="form-group col-md-4">
-						<input class="form-control dp-form-fields" name="ingredientProperties[${i}]" type="text" placeholder="Quantity = 2">
+						<input class="form-control dp-add-recipe-ingredient-rows" name="ingredientProperties[${i}]" type="text" placeholder="Quantity = 2">
 					</div>
 					<div class="dropdown-inline col-md-3">
-						<select class="form-control dp-form-fields" name="ingredientProperties[${i}]" required="required">
+						<select class="form-control dp-add-recipe-ingredient-rows" name="ingredientProperties[${i}]" required="required">
 							<option value="">Measurement</option>
 							<option value="cup">Cup</option>
 							<option value="fl oz">Fl oz				

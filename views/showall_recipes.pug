@@ -65,7 +65,7 @@ block content
 			| Card View
 		a.btn.btn-primary.dp-btn-secondary.ml-2(href='/recipes/add', class='h-75')
 			| Add Recipe
-		input.btn#myInputTextField.dp-search.pull-right(,type='text', placeholder='Search')
+		input.btn#myInputTextField.dp-search.pull-right(type='text', placeholder='Search')
 		br
 		br
 		#recipeInformation.modal.fade(tabindex='-1', role='dialog', aria-hidden='true', class= 'form-modal')
@@ -89,12 +89,18 @@ block content
 							br
 							//- Edit recipe information fields
 							.form-row
-								.form-group.col-md-6
+								.form-group.col-md-4
 									label.dp-primary-text(for='recipe-name') Recipe name
 									input.form-control.dp-form-fields(name="recipeName", type='text', placeholder="Recipe name", class='form-group', id='recipe-name')
-								.form-group.col-md-6
+								.form-group.col-md-4
 									label.dp-primary-text(for='serving-size') Serving size
 									input.form-control.dp-form-fields(name="recipeSize", type='text', placeholder="Serving Size", class='form-group', id='recipe-size')
+								.form-group.col-md-4
+									label.dp-primary-text(for='sharable') Shared?
+									dropdown-inline
+									select.form-control.dp-form-fields(name='recipeShareable', class='selection-drop')
+										option(value='1') Share My Recipe
+										option(value='0') Don't Share My Recipe							
 							h5.dp-secondary-text Ingredients
 							hr
 							br
@@ -135,6 +141,7 @@ block content
 					th(scope='col') Recipe ID
 					th(scope='col') Recipe name
 					th(scope='col') Serves
+					th(scope='col') Shared?
 					th(class="text-center") Action
 			tbody
 				for item,i in results
@@ -148,9 +155,10 @@ block content
 						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()')
 							//- i.fa.fa-plus
 							img.ml-3(src=item.recipe_image_path, alt='image', width='50', height='50')
-						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()', align='middle')= item.recipe_id
-						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()', align='middle')= item.recipe_name
-						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()', align='middle')= item.num_people_it_feeds
+						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()')= item.recipe_id
+						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()')= item.recipe_name
+						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()')= item.num_people_it_feeds
+						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()')= item.sharable
 						td(align='middle')
 							//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
 							a.btn.btn-outline-danger.delete-recipe.mr-2(href='#', data-id=item.recipe_id, id= 'delete-button') REMOVE

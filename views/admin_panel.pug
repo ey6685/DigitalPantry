@@ -25,7 +25,7 @@ block content
 					form(method= 'POST', action= '/users/addImg', class= 'form', enctype="multipart/form-data")
 						label.btn.btn-primary.dp-btn-secondary.btn.btn-file Choose Image
 							input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='form-group', style='display: none;')
-						input.btn.dp-btn-primary.col-md-2(type='submit', value='Update', class='form-group') 
+						input.btn.dp-btn-primary.col-md-3.ml-2.mt-2(type='submit', value='Update Image', class='form-group') 
 	//-reset password overlay
 	#resetForm.modal.fade(tabindex='-1', role='dialog', aria-hidden='true', class= 'form-modal')
 		.modal-dialog.modal-dialog-centered.modal(role='document')
