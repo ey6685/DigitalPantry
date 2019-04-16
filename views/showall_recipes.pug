@@ -75,12 +75,18 @@ block content
 							br
 							//- Edit recipe information fields
 							.form-row
-								.form-group.col-md-6
+								.form-group.col-md-4
 									label.dp-primary-text(for='recipe-name') Recipe name
 									input.form-control.dp-form-fields(name="recipeName", type='text', placeholder="Recipe name", class='form-group', id='recipe-name')
-								.form-group.col-md-6
+								.form-group.col-md-4
 									label.dp-primary-text(for='serving-size') Serving size
 									input.form-control.dp-form-fields(name="recipeSize", type='text', placeholder="Serving Size", class='form-group', id='recipe-size')
+								.form-group.col-md-4
+									label.dp-primary-text(for='sharable') Shared?
+									dropdown-inline
+									select.form-control.dp-form-fields(name='recipeShareable', class='selection-drop')
+										option(value='1') Share My Recipe
+										option(value='0') Don't Share My Recipe							
 							h5.dp-secondary-text Ingredients
 							hr
 							br
@@ -121,6 +127,7 @@ block content
 					th(scope='col') Recipe ID
 					th(scope='col') Recipe name
 					th(scope='col') Serves
+					th(scope='col') Shared?
 					th(class="text-center") Action
 			tbody
 				for item,i in results
@@ -137,6 +144,7 @@ block content
 						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()')= item.recipe_id
 						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()')= item.recipe_name
 						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()')= item.num_people_it_feeds
+						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()')= item.sharable
 						td(align='middle')
 							//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
 							a.btn.btn-outline-danger.delete-recipe.mr-2(href='#', data-id=item.recipe_id, id= 'delete-button') REMOVE

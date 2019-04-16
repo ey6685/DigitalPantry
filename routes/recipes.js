@@ -275,7 +275,7 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
       recipe_name: recipeName,
       recipe_image_path: '/images/' + imagePath, //saves image path in the db in a way that can be pulled from to display later
       num_people_it_feeds: recipeServingSize,
-      sharable: recipeShareable,
+      sharable: parseInt(recipeShareable),
       recipe_directions: replaceNewLine,
       pantry_id: pantryId.pantry_id
     })
