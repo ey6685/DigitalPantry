@@ -56,7 +56,7 @@ block content
 						input.btn.dp-btn-primary.col-md-2(type='submit', value='Add to Pantry', class='form-group')
 
 		script.
-			localStorate.clear()
+			localStorage.clear()
 			$(document).on('change', '#uploadButton', function(event) {
 				$some = $(this).closest('.form-row')
 				$imageBox = $some.find('#output')
