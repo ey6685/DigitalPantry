@@ -115,7 +115,7 @@ block content
 			//Set all letters to upper case
 			filter = input.value.toUpperCase();
 			//get all card names
-			card_names = document.getElementsByTagName('h5');
+			card_names = document.getElementsByTagName('h4');
 			//get all cards
 			div = document.getElementsByClassName('col-md-3');
 
@@ -146,7 +146,7 @@ block content
 				while (switching) {
 					// Start by saying: no switching is done:
 					switching = false;
-					b = document.getElementsByTagName('h5');
+					b = document.getElementsByTagName('h4');
 					// Loop through all list items:
 					for (i = 0; i < (b.length - 1); i++) {
 						//Initial condition (no switches)
@@ -180,4 +180,5 @@ block content
 			}
 		}
 	script.
+		localStorage.clear()
 		$(`a[class='nav-link'][href='/ingredients/showall']`).parent().addClass("selected");
