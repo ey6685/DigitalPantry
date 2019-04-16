@@ -194,3 +194,7 @@ Needs more work since border doesn't render
   background-color: white !important;
   color: #91c02e !important;
 }
+.dp-add-recipe-ingredient-rows {
+  background-color: #fdf3b4 !important;
+  color: #570573 !important;
+}
