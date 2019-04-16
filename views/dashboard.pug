@@ -15,9 +15,6 @@ block content
 		.card{
 			color:#570573
 		}
-		i{
-			color:white !important;
-		}
 	link(rel='stylesheet' href='/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css')
 	link(rel='stylesheet' type='text/css' href='/css/digital_pantry.css')
 	//- Stores a variable passed in, which defines an image path
@@ -79,7 +76,7 @@ block content
 					.card-body.text-center
 						p.card-text Undo cooked recipe
 						a(href='')
-							i.fas.fa-2x.fa-undo
+							i(style='color:white !important;').fas.fa-2x.fa-undo
 
 		br
 		!= messages('message', locals)
