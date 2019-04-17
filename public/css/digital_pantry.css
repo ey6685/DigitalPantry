@@ -1,34 +1,12 @@
-/* Navbar background color .navbar-green {
-  background-color: #058d3f !important;
-}
-
-Container background color .container-green {
-  background-color: #66c08d !important;
-}
-
-table colors .table-green {
-  background-color: #134309 !important;
-  background-color: #195a0c;
-  color: white !important;
-}
-
-.footer-green {
-  background-image: linear-gradient(rgb(25, 90, 12), rgba(236, 252, 233));
-  background-color: #195a0c !important;
-}
-
-.text-green {
-  color: #134309 !important;
-}
-
-.body-green {
-  background-color: #b7e1c9 !important;
-}
-
-.row-dark {
-  background-color: #212529 !important;
-  color: white !important;
-} */
+/* Custom CSS Classes for Digital Pantry
+Application. All custom classes are defined
+here in this file.
+Created by: Jon
+Date: 04/02/19
+Last modified by: Jon
+Date: 04/16/19
+Added new class for Missing Ingredients 
+Card on Dashboard*/
 .dp-table {
   background-color: #faf8eb !important;
   color: #570573 !important;
@@ -124,27 +102,6 @@ table colors .table-green {
   background-color: #c4e184 !important;
   color: #570573 !important;
 }
-/* These classes are for purple Edit button
-Appearance is similar to Remove buttons
-Needs more work since border doesn't render
-.dp-btn-edit {
-  color: #570573;
-  border: 2px solid #570573 !important;
-  background-color: #faf8eb;
-  border-radius: 5px !important;
-}
-
-.dp-btn-edit:hover {
-  color: #faf8eb !important;
-  background-color: #570573;
-  border-radius: 5px;
-  border-color: 2px #570573 !important;
-}
-
-.dp-btn-edit:focus,
-.btn-edit.focus {
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
-} */
 .dp-split-left {
   height: 100%;
   flex: 1;
@@ -177,12 +134,7 @@ Needs more work since border doesn't render
   text-align: left;
 }
 .dp-alert-fixed {
-  /* position: fixed; */
-  /* margin-top: 100px; */
-  /* left: 0px; */
-  /* width: 100%; */
   z-index: 1 !important;
-  /* border-radius: 0px; */
 }
 .dp-card-footer {
   padding: 0.75rem 1.25rem;
