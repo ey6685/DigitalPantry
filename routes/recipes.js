@@ -262,7 +262,7 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
   // recipe_name and recipe_size are unique form fields, so they do not require any recursion to grab all of them
   //const recipeName = input_cleaner.string_cleaning(req.body.recipeName)
   const recipeServingSize = (req.body.recipeServingSize)
-  const recipeDirections = (req.body.recipeDirections)
+  var recipeDirections = (req.body.recipeDirections)
   const recipeShareable = req.body.recipeShareable
   let replaceNewLine = '#'
   for (char in recipeDirections) {
@@ -270,6 +270,8 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
       recipeDirections[char].replace('\r', '').replace('\n', '#')
     )
   }
+  //gets rid oof the first #
+  replaceNewLine = replaceNewLine.substring(1);
   // INSERT new recipe information into table
   const result = await recipe_t
     .create({
@@ -297,7 +299,7 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
         var ingredient_data_from_page = req.body.ingredientProperties[i]
 
         const ingredientName = await input_cleaner.string_cleaning(ingredient_data_from_page[0])
-        const ingredientQuantity =ingredient_data_from_page[1]
+        const ingredientQuantity = await input_cleaner.num(ingredient_data_from_page[1])
         const ingredientMeasurement = ingredient_data_from_page[2]
         console.log("adding ingredient to recipe: \n")// + ingredientQuantity+ " " +ingredientMeasurement+" of " + ingredientName);
         console.log("ingredientName: " + ingredientName);
@@ -488,7 +490,7 @@ router.post('/edit', async function editRecipe(req, res) {
   const recipeName = await input_cleaner.string_cleaning(req.body.recipeName)
   const recipeSize = await input_cleaner.string_cleaning(req.body.recipeSize)
   const recipeId = await input_cleaner.string_cleaning(req.body.recipeId)
-  const newIngredientNames =await input_cleaner.string_cleaning(req.body.ingredientName)
+  const newIngredientNames = (req.body.ingredientName)
   const newIngredientQtys = await input_cleaner.string_cleaning(req.body.ingredientQty)
   const newIngredientMeasurements = await input_cleaner.string_cleaning(req.body.ingredientMeasurement)
   const recipeDirections = await input_cleaner.string_cleaning(req.body.recipeDirections)
@@ -532,7 +534,7 @@ router.post('/edit', async function editRecipe(req, res) {
       // Create new ingredient
       await ingredient_t
         .create({
-          ingredient_name: newIngredientNames[i],
+          ingredient_name: await input_cleaner.string_cleaning(newIngredientNames[i]),
           ingredient_weight: 1,
           ingredient_image_path: '../images/placeholder.jpg'
         })

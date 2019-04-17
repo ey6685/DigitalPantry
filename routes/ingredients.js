@@ -146,8 +146,7 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
   var imagePathSys = new Array()
   console.log(req.body.ingredientProperties)
   console.log(req.body.ingredientProperties.length)
-  ///needs testing
-  ///patrick gets a windows error
+
   for(var i = 0 ; i<req.files.length; i++){
     imagePathSys.push(req.files[i].path)
     
@@ -167,12 +166,13 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
         imagePath.push(no_dot)
       var writing= await gm(old_path).resize(1024,575,'!').write(old_path,err =>{
         if(err){
-          imagePath[i] = 'placeholder.jpg'
+          console.log(err)
+          imagePath[i] = '/images/placeholder.jpg'
           }
           console.log("in function sys path: " + old_path)
           console.log("in function new path:" +new_path)
           fs.renameSync(old_path, new_path)
-          imagePath.push(new_path)
+          
         
       }) 
       

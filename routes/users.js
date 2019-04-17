@@ -301,6 +301,8 @@ router.post('/register', async function registerUser(req, res) {
     // if errors exist
     if (errors) {
       // render register page and pass in errors defined above, which will be rendered as well
+      
+       
       res.render('register', {
         title: 'Registration',
         errors: errors
@@ -329,6 +331,7 @@ router.post('/register', async function registerUser(req, res) {
         // Call create function from DB_models/Users.js
         User.createUser(newUser, function createNewUser() {
           // Upon sucessful creating take user to the dashboard
+          req.flash("success","Account for " +email+ " created!")
           res.redirect('/users/login')
         })
       })
@@ -400,10 +403,9 @@ router.post('/saveCommunityRecipe', async function(req, res) {
 
 // Add new user from admin panel
 router.post('/add', async function addNewUser(req, res) {
-  if(val.isEmail(userName) && val.isEmail(confirmUserName)){
   const userName = await input_cleaner.email_cleaning(req.body.userName)
   const confirmUserName = await input_cleaner.email_cleaning(req.body.confirmUserName)
-  }else{
+  if(!(val.isEmail(userName)) && !(val.isEmail(confirmUserName))){
     req.flash('error', 'Emails Do Not Match!')
     res.redirect('/users/adminPanel')
   } 
@@ -576,21 +578,21 @@ router.post('/changeUsername', async function changeUsername(req, res) {
     }
   }
   else{
-    req.flash('error','Please enter a new Username')
+    req.flash('error','Please enter a new Email.')
     res.redirect("/users/settings")
   }
 })
-//need password regen find me
+
 router.post('/changePassword', async function changePassword(req, res) {
   // get currently logged in user
-  const currentUserId = req.session.passport['user']
+  const currentUserId = await req.session.passport['user']
   // get passed in current password
-  const currentPassword = input_cleaner(req.body.currentPassword)
+  const currentPassword =await input_cleaner.password_cleaning(req.body.currentPassword)
   // TODO check current password. Make sure that the user is the TRUE user
   // get passed in new password
-  const newPassword =  input_cleaner(req.body.newPassword)
+  const newPassword = await input_cleaner.password_cleaning(req.body.newPassword)
   // get passed in new password confirm
-  const confirmNewPassword =  input_cleaner(req.body.confirmNewPassword)
+  const confirmNewPassword = await input_cleaner.password_cleaning(req.body.confirmNewPassword)
   req.checkBody('newPassword', "Passwords don't match").matches(confirmNewPassword)
   // Get all errors is any based on above validators
   const errors = req.validationErrors()
