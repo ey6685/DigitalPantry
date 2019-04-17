@@ -48,21 +48,23 @@ block content
 		h1.dp-title-text #{title}
 		br
 		.form-row
-			.form-group.col-md-auto
-				a.btn.dp-change-view(href='/recipes/showall')
-					i.dp-change-view.fa.fa-list.fa-lg.mr-1
-					| Table View
-			.form-group.col-md-2
-				input.form-control.dp-form-fields.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
-			.form-group.col-md-2
-				.dropdown
-					select.form-control.dp-form-fields(id='sortBar', name='SortBar', onchange='sortList()', class='selection-drop')
-						option(value='0') Sort By
-						option(value='1') Sort A-Z
-						option(value='2') Sort Z-A
-			.form-group.col-md-2
-				form(method='GET', action='/recipes/add')
-					input.btn.dp-btn-secondary(type='submit', value='Add Recipe', class='form-group', id='submit-showrec', class='h-75')
+			.form-row.col-md-6
+				.form-group.col-md-auto
+					a.btn.dp-change-view(href='/recipes/showall')
+						i.dp-change-view.fa.fa-list.fa-lg.mr-1
+						| Table View
+				.form-group.col-md-2
+					form(method='GET', action='/recipes/add')
+						input.btn.dp-btn-secondary(type='submit', value='Add Recipe', class='form-group', id='submit-showrec', class='h-75')
+			.form-row.col-md-6.flex-row-reverse
+				.form-group.col-md-auto
+					input.form-control.dp-form-fields.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
+				.form-group
+					.dropdown
+						select.form-control.dp-form-fields(id='sortBar', name='SortBar', onchange='sortList()', class='selection-drop')
+							option(value='0') Sort By
+							option(value='1') Sort A-Z
+							option(value='2') Sort Z-A
 		.form-row
 			//-for each recipe in data
 			for recipe,i in results
@@ -179,7 +181,7 @@ block content
 			//Set all letters to upper case
 			filter = input.value.toUpperCase();
 			//get all card names
-			card_names = document.getElementsByTagName('h5');
+			card_names = document.getElementsByTagName('h4');
 			//get all cards
 			div = document.getElementsByClassName('col-md-3');
 
