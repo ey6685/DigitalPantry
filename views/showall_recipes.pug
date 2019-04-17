@@ -145,12 +145,6 @@ block content
 					th(class="text-center") Action
 			tbody
 				for item,i in results
-					//- variable below is used to define clickable table row
-					//- Used for figuring out which recipe dropdown to show
-					- row= '#group-of-rows-' + i
-					//- variable below is used for linking the clickable table row with the drop-down row
-					//- Used for figuring out which recipe dropdown to show
-					- row2= 'group-of-rows-' + i
 					tr
 						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()')
 							//- i.fa.fa-plus
@@ -164,10 +158,9 @@ block content
 							a.btn.btn-outline-danger.delete-recipe.mr-2(href='#', data-id=item.recipe_id, id= 'delete-button') REMOVE
 							if user.user_type == "Administrator"
 								a.btn.dp-btn-edit(type='button', data-toggle='modal', data-target='#editRecipe', id= 'edit-button') EDIT
-	script(type='text/javascript').
 	script(src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js')
-	link(rel='stylesheet', type='text/css', href='//cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css')
 	script(src='https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js')
+	link(rel='stylesheet', type='text/css', href='//cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css')
 	script(src='https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js')
 	script.
 		$('#example').dataTable( {
@@ -175,6 +168,7 @@ block content
 			"order":[1, 'asc'],
 			"columns": [
 				{ "orderable": false },
+				null,
 				null,
 				null,
 				null,
@@ -202,13 +196,13 @@ block content
 			let template = `
 			<div class="form-row">
 				<div class="form-group col-md-4">
-					<input class="form-control dp-form-fields" name="ingredientName" type="text" placeholder="Ingredient = Chicken">
+					<input class="form-control dp-form-fields" name="newIngredientName" type="text" placeholder="Ingredient = Chicken" required>
 				</div>
 				<div class="form-group col-md-3">
-					<input class="form-control dp-form-fields" name="ingredientQty" type="text" placeholder="Quantity = 2">
+					<input class="form-control dp-form-fields" name="newIngredientQty" type="text" placeholder="Quantity = 2" required>
 				</div>
 				<div class="dropdown-inline col-md-4">
-					<select class="form-control dp-form-fields" name="ingredientMeasurement">
+					<select class="form-control dp-form-fields" name="newIngredientMeasurement" required>
 						<option value="">Measurement</option>
 						<option value="fl oz">fluid ounce</option>
 						<option value="ml">Mililliter</option>

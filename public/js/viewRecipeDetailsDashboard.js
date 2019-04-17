@@ -29,6 +29,7 @@ $(document).on('click', '#showRecipeDetails', async function() {
   }
   // Get ingredients required for recipe and current available amount
   var ingredientsRequired = await findRecipeIngredients(recipeId)
+  console.log(ingredientsRequired)
 
   // Build table body
   $.each(ingredientsRequired, function(index, item) {
