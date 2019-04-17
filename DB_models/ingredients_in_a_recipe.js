@@ -34,7 +34,7 @@ const recipe_ingredient = db.define('ingredients_in_a_recipe', {
         type: Sequelize.FLOAT
     },
     ingredient_unit_of_measurement: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
     },
 },
 {

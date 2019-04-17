@@ -482,7 +482,7 @@ router.delete('/remove/', async function remove(req, res) {
 
 router.get('/ingredientsForRecipe/:id', async function(req, res){
   recipeId = req.params.id
-  query = `SELECT ingredients.ingredient_name, ingredients.ingredient_image_path, ingredients_in_a_recipe.amount_of_ingredient_needed, ingredients_in_a_recipe.ingredient_unit_of_measurement
+  query = `SELECT ingredients.ingredient_id, ingredients.ingredient_name, ingredients.ingredient_image_path, ingredients_in_a_recipe.amount_of_ingredient_needed, ingredients_in_a_recipe.ingredient_unit_of_measurement
   FROM ingredients_in_a_recipe
   INNER JOIN ingredients
   ON ingredients_in_a_recipe.recipe_id=${recipeId} AND ingredients.ingredient_id=ingredients_in_a_recipe.ingredient_id;`
@@ -492,16 +492,11 @@ router.get('/ingredientsForRecipe/:id', async function(req, res){
     }
     res.json(results)
   })
-  // ingredients = await ingredientInRecipe.findAll({
-  //   where:{
-  //     recipe_id:recipeId
-  //   }
-  // })
 })
 
 // remove ingredient by name
 router.delete('/remove/recipe_ingredient/:name', async function deleteIngredientByName(req, res) {
-  const ingredientName = input_cleaner.string_cleaning(req.params.name)
+  const ingredientName = await input_cleaner.string_cleaning(req.params.name)
   const recipeId = req.body.recipe_id
   // Get ingredient ID which is beaing udpated
   const ingredientId = await ingredient_t.findOne({

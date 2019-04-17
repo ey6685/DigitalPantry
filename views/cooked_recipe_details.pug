@@ -1,67 +1,76 @@
+//-This page renders the details of the recipe user click 'Cook-It' on.
+//-Shows them details of ingredients they need and steps to cook the recipe.
+//-Button to go back to Home Page, or when finished to 'Remove Ingredients'.
+//-Created by: Oskars
+//-Date: 04/10/19
+//-Last modified by: Jon
+//-Date Modified: 04/16/19
+//-Updated page to use Digital Pantry CSS.
+
 extends main_layout_template
 
 
 block content
-  style.
-    hr{
-      margin-top:0
-    }
-    #ingredientRequired{
-      font-size:12px
-    }
-    
+	style.
+		hr{
+			margin-top:0
+		}
+		#ingredientRequired{
+			font-size:12px
+		}
 
-  link(rel='stylesheet' href='/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css')
-  link(rel='stylesheet' type='text/css' href='/css/digital_pantry.css')
-  br
-  div(class='container-fluid', class='rounded', style='width: 90%')
-    a.btn.dp-btn-primary(id='backButton', href='/users/dashboard', role='button') Back to dashboard
-    br
-    br
-    .media
-      img.mr-3(src=recipeImage, alt='Some text', style="width:30%; height:30%")
-      .media-body
-        h3.mt-0 #{recipeName}
-        p Number of times cooked: #{cookedCount}
-        p Serving size: #{servingSize}
-        p
-          .form-inline.dp-title-text I am cooking for
-            .col-sm-2
-              .input-group.input-group-sm
-                input.form-control(id='servingSizeField' style="text-align:center;valign:middle;" type='text' value=peopleToCookeFor) 
-            | people
-    br
-    h2 Ingredients required
-    hr
-    br
-    .form-row
-      - var previousCardImage = ""
-      for ingredient in recipeIngredients
-        - var currentCardImage = ingredient.ingredient_image_path
-        if currentCardImage != previousCardImage
-          .form-group.col-md-2
-            div.card.h-100
-              img.image(class='card-img-top', src=ingredient.ingredient_image_path)
-              .card-body
-                h6(class='card-title') #{ingredient.ingredient_name}
-              .card-footer
-                p#ingredientRequired Amount needed: #{ingredient.amount_of_ingredient_needed*peopleToCookeFor} #{ingredient.ingredient_unit_of_measurement}
-        - previousCardImage = ingredient.ingredient_image_path
-    br
-    h2 Directions
-    hr
-    br
-    for step in recipeSteps
-      p #{step}
-    br
-    .row
-      p.mr-3 Finished Cooking?
-      button.btn.btn-primary.dp-btn-primary(id='finishCooking', recipe-id=recipeId, type='button') Yes
-  script(src="/js/cookingRecipe.js")
-  script.
-    localStorage.clear();
-    var recipeData = '!{wholeRecipe}'
-    localStorage.setItem('recipe', recipeData);
-    window.addEventListener('popstate', (event) => {
-      localStorage.clear();
-    };
+
+	link(rel='stylesheet' href='/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css')
+	link(rel='stylesheet' type='text/css' href='/css/digital_pantry.css')
+	br
+	div(class='container-fluid', class='rounded', style='width: 90%')
+		a.btn.dp-btn-yellow(id='backButton', href='/users/dashboard', role='button') Back to Dashboard
+		br
+		br
+		.media
+			img.mr-3(src=recipeImage, alt='Some text', style="width:30%; height:30%")
+			.media-body
+				h3.dp-title-text.mt-0 #{recipeName}
+				p.dp-primary-text Number of Times Cooked: #{cookedCount}
+				p.dp-primary-text Serving size: #{servingSize}
+				p
+					.form-inline.dp-primary-text I am cooking for
+						.col-sm-2
+							.input-group.input-group-sm
+								input.form-control(id='servingSizeField' style="text-align:center;valign:middle;" type='text' value=peopleToCookeFor) 
+						| people
+		br
+		h2.dp-secondary-text Ingredients Required
+		hr
+		br
+		.form-row
+			- var previousCardImage = ""
+			for ingredient in recipeIngredients
+				- var currentCardImage = ingredient.ingredient_image_path
+				if currentCardImage != previousCardImage
+					.form-group.col-md-2
+						div.card.h-100
+							img.image(class='card-img-top', src=ingredient.ingredient_image_path)
+							.card-body.dp-form-fields
+								h6(class='card-title') #{ingredient.ingredient_name}
+							.card-footer
+								p#ingredientRequired Amount needed: #{ingredient.amount_of_ingredient_needed*peopleToCookeFor} #{ingredient.ingredient_unit_of_measurement}
+				- previousCardImage = ingredient.ingredient_image_path
+		br
+		h2.dp-secondary-text Directions
+		hr
+		br
+		for step in recipeSteps
+			p.dp-primary-text #{step}
+		br
+		.row
+			h3.dp-secondary-text.ml-3.mr-3.mt-3 Finished Cooking?
+			button.btn.btn-primary.dp-btn-primary(id='finishCooking', recipe-id=recipeId, type='button') Remove These Ingredients from My Pantry
+	script(src="/js/cookingRecipe.js")
+	script.
+		localStorage.clear();
+		var recipeData = '!{wholeRecipe}'
+		localStorage.setItem('recipe', recipeData);
+		window.addEventListener('popstate', (event) => {
+			localStorage.clear();
+		};

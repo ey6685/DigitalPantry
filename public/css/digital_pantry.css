@@ -1,34 +1,12 @@
-/* Navbar background color .navbar-green {
-  background-color: #058d3f !important;
-}
-
-Container background color .container-green {
-  background-color: #66c08d !important;
-}
-
-table colors .table-green {
-  background-color: #134309 !important;
-  background-color: #195a0c;
-  color: white !important;
-}
-
-.footer-green {
-  background-image: linear-gradient(rgb(25, 90, 12), rgba(236, 252, 233));
-  background-color: #195a0c !important;
-}
-
-.text-green {
-  color: #134309 !important;
-}
-
-.body-green {
-  background-color: #b7e1c9 !important;
-}
-
-.row-dark {
-  background-color: #212529 !important;
-  color: white !important;
-} */
+/* Custom CSS Classes for Digital Pantry
+Application. All custom classes are defined
+here in this file.
+Created by: Jon
+Date: 04/02/19
+Last modified by: Jon
+Date: 04/16/19
+Added new class for Missing Ingredients 
+Card on Dashboard*/
 .dp-table {
   background-color: #faf8eb !important;
   color: #570573 !important;
@@ -99,7 +77,7 @@ table colors .table-green {
 .dp-btn-group {
   background-color: white !important;
   border-color: #eeaf2c !important;
-  color:#eeaf2c;
+  color: #eeaf2c;
 }
 .dp-secondary-text {
   color: #eeaf2c !important;
@@ -124,27 +102,6 @@ table colors .table-green {
   background-color: #c4e184 !important;
   color: #570573 !important;
 }
-/* These classes are for purple Edit button
-Appearance is similar to Remove buttons
-Needs more work since border doesn't render
-.dp-btn-edit {
-  color: #570573;
-  border: 2px solid #570573 !important;
-  background-color: #faf8eb;
-  border-radius: 5px !important;
-}
-
-.dp-btn-edit:hover {
-  color: #faf8eb !important;
-  background-color: #570573;
-  border-radius: 5px;
-  border-color: 2px #570573 !important;
-}
-
-.dp-btn-edit:focus,
-.btn-edit.focus {
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
-} */
 .dp-split-left {
   height: 100%;
   flex: 1;
@@ -177,12 +134,7 @@ Needs more work since border doesn't render
   text-align: left;
 }
 .dp-alert-fixed {
-  /* position: fixed; */
-  /* margin-top: 100px; */
-  /* left: 0px; */
-  /* width: 100%; */
   z-index: 1 !important;
-  /* border-radius: 0px; */
 }
 .dp-card-footer {
   padding: 0.75rem 1.25rem;
@@ -200,50 +152,81 @@ Needs more work since border doesn't render
   color: #570573 !important;
 }
 
-.dp-card-background{
+.dp-card-background {
   background-color: #91c02e !important;
   color: white !important;
 }
-.dp-card-background-purple{
+.dp-card-background-purple {
   background-color: purple !important;
   color: white !important;
 }
-.dp-card-background-orange{
+.dp-card-background-orange {
   background-color: #eeaf2c !important;
   color: white !important;
 }
-.dp-option-card-green{
+.dp-card-background-purple {
+  background-color: #570573 !important;
+  color: white !important;
+}
+.dp-option-card-green {
   background-color: #91c02e !important;
-  color:#faf8eb;
+  color: #faf8eb;
 }
-.dp-card-yellow{
-  background-color:#f2d43b;
-  color:white; 
+.dp-card-yellow {
+  background-color: #f2d43b;
+  color: white;
 }
-.dp-option-card-red{
-  background-color:#d93711;
-  color:#faf8eb;
+.dp-option-card-red {
+  background-color: #d93711;
+  color: #faf8eb;
 }
-.dp-btn-white-green{
+.dp-btn-white-green {
   background-color: white;
-  color:#91c02e;
+  color: #91c02e;
 }
-.dp-btn-white-red{
+.dp-btn-white-red {
   background-color: white;
-  color:#d93711;
+  color: #d93711;
 }
-.dp-btn-white-purple{
+.dp-btn-white-purple {
   background-color: white;
-  color:purple;
+  color: purple;
 }
-.dp-btn-white-orange{
+.dp-btn-white-orange {
   background-color: white;
-  color:#eeaf2c;
+  color: #eeaf2c;
 }
-.active{
-  background-color:#91c02e !important;
-  color:white;
+.active {
+  background-color: #91c02e !important;
+  color: white;
 }
-table.dataTable thead .sorting:before, table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:before, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:before, table.dataTable thead .sorting_desc_disabled:after {
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before,
+table.dataTable thead .sorting_desc_disabled:after {
   display: none !important;
+}
+.dp-invert-primary-card {
+  background-color: white !important;
+  color: #91c02e !important;
+  border: 2px solid #91c02e !important;
+}
+.dp-invert-secondary-card {
+  background-color: white !important;
+  color: #eeaf2c !important;
+  border: 2px solid #eeaf2c !important;
+}
+.dp-expiration-window-card {
+  background-color: #eeaf2c !important;
+  color: white !important;
+}
+.dp-show-missing-card {
+  background-color: #badc6f !important;
+  color: white !important;
 }

@@ -1,3 +1,13 @@
+//-Add Recipe Page.
+//-Created by: Jon
+//-Date: 01/27/19
+//-Last modified by: Jon
+//-Date modified: 04/14/19
+//-Added 'Shareable' field for adding new recipe.
+//-Value is 'Share my Recipe' by default. If this
+//-value is kept it will automatically be shared
+//-to the Community Recipes page.
+
 extends main_layout_template
 
 //- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
@@ -13,6 +23,7 @@ block content
 		hr
 		br
 		form(method= 'POST', action= '/recipes/add', class= 'form', enctype="multipart/form-data")
+			//-First row in the form
 			.form-row
 				.form-group.col-md-4
 					input.form-control.dp-form-fields(name='recipeName', type='text', placeholder='Recipe = Chicken Soup', class= 'input-form')
@@ -23,7 +34,7 @@ block content
 					select.form-control.dp-form-fields(name='recipeShareable', class='selection-drop')
 						option(value='1') Share My Recipe
 						option(value='0') Don't Share My Recipe
-					//- input.form-control.dp-form-fields(name='Shareable', type='text', placeholder='Serving Size = 2', class= 'input-form')
+			//-Add Ingredient row. First row is static, additional rows are dynamically added.
 			.form-row
 				.form-group.col-md-4
 					input.form-control.dp-add-recipe-ingredient-rows(name='ingredientProperties[1]', type='text', placeholder='Ingredient = Chicken', class= 'input-form')
@@ -41,6 +52,7 @@ block content
 						option(value='quart') Quart
 						option(value='tbsp.') Tablespoon
 						option(value='tsp.') Teaspoon
+			//-Dynamically add additional ingredients to the Recipe.
 			#recipe-container
 			button.btn.dp-btn-secondary(type='button' onclick='addIngredient()', id='add-ingredient-recipe') <b>+</b>
 			.form-row

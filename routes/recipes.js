@@ -262,7 +262,7 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
   // recipe_name and recipe_size are unique form fields, so they do not require any recursion to grab all of them
   //const recipeName = input_cleaner.string_cleaning(req.body.recipeName)
   const recipeServingSize = (req.body.recipeServingSize)
-  var recipeDirections = (req.body.recipeDirections)
+  const recipeDirections = (req.body.recipeDirections)
   const recipeShareable = req.body.recipeShareable
   let replaceNewLine = '#'
   for (char in recipeDirections) {
@@ -270,8 +270,6 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
       recipeDirections[char].replace('\r', '').replace('\n', '#')
     )
   }
-  //gets rid oof the first #
-  replaceNewLine = replaceNewLine.substring(1);
   // INSERT new recipe information into table
   const result = await recipe_t
     .create({
@@ -299,7 +297,7 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
         var ingredient_data_from_page = req.body.ingredientProperties[i]
 
         const ingredientName = await input_cleaner.string_cleaning(ingredient_data_from_page[0])
-        const ingredientQuantity = await input_cleaner.num(ingredient_data_from_page[1])
+        const ingredientQuantity =ingredient_data_from_page[1]
         const ingredientMeasurement = ingredient_data_from_page[2]
         console.log("adding ingredient to recipe: \n")// + ingredientQuantity+ " " +ingredientMeasurement+" of " + ingredientName);
         console.log("ingredientName: " + ingredientName);
@@ -486,55 +484,85 @@ router.post('/undo', async function undoCooking(req, res) {
 })
 
 router.post('/edit', async function editRecipe(req, res) {
-  const data = req.body
+  //UPDATE
   const recipeName = await input_cleaner.string_cleaning(req.body.recipeName)
   const recipeSize = await input_cleaner.string_cleaning(req.body.recipeSize)
   const recipeId = await input_cleaner.string_cleaning(req.body.recipeId)
-  const newIngredientNames = (req.body.ingredientName)
-  const newIngredientQtys = await input_cleaner.string_cleaning(req.body.ingredientQty)
-  const newIngredientMeasurements = await input_cleaner.string_cleaning(req.body.ingredientMeasurement)
   const recipeDirections = await input_cleaner.string_cleaning(req.body.recipeDirections)
+  const ingredientNamesArray = req.body.ingredientName
+  const ingredientQtyArray = req.body.IngredientQty
+  const ingredientMeasurementArray = req.body.IngredientMeasurement
+  const recipeSharable = req.body.recipeShareable
+  const ingredientIds = req.body.ingredientId
+  const newIngredientNameArray = req.body.newIngredientName
+  const newIngredientQtyArray = req.body.newIngredientQty
+  const newIngredientMeasurementArray = req.body.newIngredientMeasurement
+  const pantryId = req.user.pantry_id
 
+  //Update recipe directions if provided
   if (recipeDirections != '') {
     let replaceNewLine = ''
     for (char in recipeDirections) {
       replaceNewLine = replaceNewLine.concat(
         recipeDirections[char].replace('\r', '').replace('\n', '#')
       )
-      console.log(recipeDirections)
     }
 
-    recipe_t
-      .update(
-        {
-          recipe_directions: replaceNewLine
-        },
-        { where: { recipe_id: recipeId } }
-      )
-      .catch(function(err) {
-        console.log(err)
-      })
+    recipe_t.update({
+        recipe_directions: replaceNewLine
+      },
+      { where: 
+        { recipe_id: recipeId,
+          pantry_id:pantryId 
+        }
+    }).catch(function(err) {
+      console.log(err)
+    })
   }
 
-  // Get current user from session auth
-  const userId = req.session.passport['user']
-  // Get pantry ID which user belongs to
-  const pantryId = await User.findOne({
-    attributes: ['pantry_id'],
-    where: {
-      user_id: userId
+  //Update recipe name and serving size
+  await recipe_t.update({
+      recipe_name: recipeName,
+      num_people_it_feeds: recipeSize,
+      sharable: recipeSharable
+    },
+    {
+      where: { 
+        recipe_id: recipeId,
+        pantry_id: pantryId  
+      }
     }
-  })
+  )
 
-  // Check if user has added new ingredients
-  if (newIngredientNames != undefined && newIngredientNames != '') {
-    // Loop through all parameters of a single ingredient (name, qty, measurement)
-    for (i = 0; i < newIngredientNames.length; i++) {
-      // TODO Check if ingredient exists
-      // Create new ingredient
-      await ingredient_t
-        .create({
-          ingredient_name: await input_cleaner.string_cleaning(newIngredientNames[i]),
+  //Update all ingredients that have already been assigned to the recipe being edited
+  for (ingredient in ingredientIds){
+    //Update amount and unit of measurement in ingredients_in_a_recipe table
+    IiR_t.update({
+      amount_of_ingredient_needed: ingredientQtyArray[ingredient],
+      ingredient_unit_of_measurement:ingredientMeasurementArray[ingredient]
+    },
+    {
+      where:{
+        ingredient_id:ingredientIds[ingredient]
+      }
+    })
+
+    //Update ingredient names in ingredients table
+    ingredient_t.update({
+      ingredient_name:ingredientNamesArray[ingredient]
+    },
+    {
+    where:{
+      ingredient_id:ingredientIds[ingredient]
+    }
+    })
+  }
+  //Check if multiple ingredients ahve ben
+  if (newIngredientNameArray.constructor === Array){
+    //Add new ingredients which are added to the recipe which is being edited
+    for (newIngredient in newIngredientNameArray){
+      await ingredient_t.create({
+          ingredient_name: newIngredientNameArray[newIngredient],
           ingredient_weight: 1,
           ingredient_image_path: '../images/placeholder.jpg'
         })
@@ -545,9 +573,9 @@ router.post('/edit', async function editRecipe(req, res) {
           await IiR_t.create({
             recipe_id: recipeId,
             ingredient_id: createdIngredientsId,
-            pantry_id: pantryId.pantry_id,
-            amount_of_ingredient_needed: newIngredientQtys[i],
-            ingredient_unit_of_measurement: newIngredientMeasurements[i]
+            pantry_id: pantryId,
+            amount_of_ingredient_needed: newIngredientQtyArray[newIngredient],
+            ingredient_unit_of_measurement: newIngredientMeasurementArray[newIngredient]
           })
         })
         .catch(function(error) {
@@ -555,96 +583,30 @@ router.post('/edit', async function editRecipe(req, res) {
         })
     }
   }
-
-  let updatedIngredientsCount = 0
-  // Deal with updated ingredients info here
-  for (key in data) {
-    // Check if JSON key is an array
-    if (Object.prototype.toString.call(data[key]) === '[object Array]') {
-      // Check if all ingredient fields were filled out
-      console.log(data[key][0])
-      console.log(data[key][1])
-      console.log(data[key][2])
-      //TODO THIS IS GARBAGE AND NEEDS TO GET ADDRESSED, but for now it will do
-      // Check if all 3 inputs for name,qty,measurement of a single row have been updated
-      if (data[key][0] != '' && data[key][1] != '' && data[key][2] != '') {
-        // Get ingredient ID which is beaing udpated
-        const ingredientId = await ingredient_t
-          .findOne({
-            attributes: ['ingredient_id'],
-            where: {
-              ingredient_name: key
-            }
-          })
-          .catch(function(err) {
-            console.log(err)
-          })
-        // New ingredient Name
-        const ingredientNewName = data[key][0]
-        // Update ingredient name
-        await ingredient_t
-          .update(
-            {
-              ingredient_name: ingredientNewName
-            },
-            { where: { ingredient_id: ingredientId.ingredient_id } }
-          )
-          .catch(function(err) {
-            console.log(err)
-          })
-        // New ingredient QTY
-        const ingredientNewQty = data[key][1]
-        // New ingredient Measurement
-        const ingredientNewMeasurement = data[key][2]
-        // Update amount of ingredient needed and ingredient unit
-        await IiR_t.update(
-          {
-            amount_of_ingredient_needed: ingredientNewQty,
-            ingredient_unit_of_measurement: ingredientNewMeasurement
-          },
-          { where: { ingredient_id: ingredientId.ingredient_id } }
-        ).catch(function(err) {
-          console.log(err)
-        })
-        // Increment updated ingredients
-        updatedIngredientsCount = updatedIngredientsCount + 1
-      }
-      // If all inputs do not have a value
-      else {
-        let message = ''
-        if (data[key][0] == '') {
-          message = message + 'Missing value for name'
-        } else if (data[key][1] == '') {
-          message = message + 'Missing value for quantity'
-        }
-        // req.flash('error', "INGREDIENT NAME: " + key + "  ERROR: " + message)
-      }
-      // Show how many ingredients have been updated
-    }
-  }
-  if (updatedIngredientsCount > 0) {
-    req.flash('success', updatedIngredientsCount + ' ingredient(s) updated successfully')
-  }
-  // Check if recipeName and recipeSize values are present
-  if (recipeName != '' && recipeSize != '') {
-    // Update recipe name and number of people it feeds
-    await recipe_t
-      .update(
-        {
-          recipe_name: recipeName,
-          num_people_it_feeds: recipeSize
-        },
-        {
-          where: { recipe_id: recipeId }
-        }
-      )
-      .catch(function handleErrors(err) {
-        if (err) {
-          req.flash('error', 'Could not update Recipe Name or Recipe Size')
-          res.redirect('/recipes/showall')
-        }
+  //If only 1 ingredients has been added
+  else{
+    await ingredient_t.create({
+      ingredient_name: newIngredientNameArray,
+      ingredient_weight: 1,
+      ingredient_image_path: '../images/placeholder.jpg'
+    })
+    .then(async function(results) {
+      // Get id of newly created ingredient
+      createdIngredientsId = results.ingredient_id
+      // Link new ingredient to recipe that is being edited
+      await IiR_t.create({
+        recipe_id: recipeId,
+        ingredient_id: createdIngredientsId,
+        pantry_id: pantryId,
+        amount_of_ingredient_needed: newIngredientQtyArray,
+        ingredient_unit_of_measurement: newIngredientMeasurementArray
       })
+    })
+    .catch(function(error) {
+      console.log(error)
+    })
   }
+
   res.redirect('/recipes/showall')
 })
 

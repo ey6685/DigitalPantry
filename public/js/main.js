@@ -134,20 +134,7 @@ $('#editRecipe').on('show.bs.modal', async function(event) {
   var button = $(event.relatedTarget)
   // Get the recipe row based on the button clicked and its closest tr element
   $recipeRow = button.closest('tr').children()
-  // Based on the button click it will get data-target id of the row and find the drop down this ide points to
-  $recipeRowDataTarget = $(button.closest('tr').attr('data-target')).children()
-  var ingredientList = []
-  // for each ingredient that the recipe contains
-  for (element in $recipeRowDataTarget) {
-    // Do not get 'Ingredients' label
-    if (element != 0) {
-      // Do not get empty or undefined cells
-      if ($recipeRowDataTarget[element].innerText != undefined) {
-        // push results into an array
-        ingredientList.push($recipeRowDataTarget[element].innerText)
-      }
-    }
-  }
+
   var values = []
   // For each element in the recipe row array
   for (child in $recipeRow) {
@@ -158,6 +145,23 @@ $('#editRecipe').on('show.bs.modal', async function(event) {
       values.push($recipeRow[child].innerText)
     }
   }
+
+  //Get ingredients for the recipe
+  ingredientsInRecipe = {}
+  await $.ajax({
+    type: 'GET',
+    url: '/ingredients/ingredientsForRecipe/'+values[0],
+    success: function(response) {
+      // Reload the page to update cards
+      ingredientsInRecipe = response
+    },
+    error: function(err) {
+      console.log('Could not retrieve ingredients')
+    }
+  })
+  console.log("TEST")
+  console.log(ingredientsInRecipe)
+
   // At this point we have
   // Recipe name and serving size
   // Recipe ingredients
@@ -169,10 +173,10 @@ $('#editRecipe').on('show.bs.modal', async function(event) {
   $('#recipe-size').val('')
   // Set placeholders inside input box with a value of recipe name that it currently has
   $('#recipe-name').attr('placeholder', values[1])
-  // $('#recipe-name').attr('name', 'currentName:' + values[0])
+  $('#recipe-name').val(values[1])
   // Set placeholders inside input box with a value of recipe serving size that it currently has
   $('#recipe-size').attr('placeholder', values[2])
-  // $('#recipe-size').attr('name', 'currentServSize:' + values[2])
+  $('#recipe-size').val(values[2])
   // Set form html to nothing so it can be updated with new recipe selected
   // This is in case user closes the form overlay and opens it back up
   // Otherwise the form will keep adding rows non stop
@@ -180,29 +184,28 @@ $('#editRecipe').on('show.bs.modal', async function(event) {
   $('#dynamic-ingredient-row').html('')
   $('#currentRecipeSteps').html('')
   // Populate ingredient rows
-  for (ingredient in ingredientList) {
-    let ingredientCounter = 'ingredient' + ingredient
-    // split Ingredient name and QtyMeasurement
-    var ingredientsSplit = ingredientList[ingredient].split(',')
+  for (ingredient in ingredientsInRecipe) {
+    ingredientId = ingredientsInRecipe[ingredient].ingredient_id
+    qty = ingredientsInRecipe[ingredient].amount_of_ingredient_needed
+    name = ingredientsInRecipe[ingredient].ingredient_name
+    measurement = ingredientsInRecipe[ingredient].ingredient_unit_of_measurement
     // get ingredientName
-    let ingredientName = ingredientsSplit[0]
-    // split measurement and qty into 2 separate fields
-    var ingredientQtyAndMeasurement = ingredientsSplit[1].split(' ')
+    let ingredientName = name
     // get Qty
-    let ingredientQty = ingredientQtyAndMeasurement[1]
+    let ingredientQty = qty
     // get measurement
-    let ingredientMeasurement = ingredientQtyAndMeasurement[2].toLowerCase()
+    let ingredientMeasurement = measurement
     // Create a row for an ingredient
     $ingredientRow = `
         <div class="form-row">
             <div class="form-group col-4">
-                <input class="form-control dp-form-fields" name="${ingredientName}" id="ingredient-name" type="text" placeholder="${ingredientName}" />
+                <input class="form-control dp-form-fields" name="ingredientName" id="ingredient-name" type="text" placeholder="${ingredientName}" value="${ingredientName}" required/>
             </div>
             <div class="form-group col-3">
-                <input class="form-control dp-form-fields" name="${ingredientName}" id="ingredient-qty" type="text" placeholder="${ingredientQty}" />
+                <input class="form-control dp-form-fields" name="IngredientQty" id="ingredient-qty" type="text" placeholder="${ingredientQty}" value="${ingredientQty}" required/>
             </div>
             <div class="form-group col-4">
-                <select name="${ingredientName}" class="form-control dp-form-fields" id="measurement">
+                <select name="IngredientMeasurement" class="form-control dp-form-fields" id="measurement" required>
                     <option value="">Measurement</option>
                     <option value="fl oz">fluid ounce</option>
                     <option value="ml">Mililliter</option>
@@ -215,10 +218,9 @@ $('#editRecipe').on('show.bs.modal', async function(event) {
                 </select>
             </div>
             <div class="form-group col-1">
-                <button type="button" data-id="${
-                  values[0]
-                }" class="btn btn-outline-danger delete-current-ingredient">X</button>
+                <button type="button" data-id="${values[0]}" class="btn btn-outline-danger delete-current-ingredient">X</button>
             </div>
+            <input style="display:none" name="ingredientId" type="text" value="${ingredientId}" />
         </div>`
     // shows what measurement has already been selected for that specific ingredient
     $ingredientRow = $ingredientRow.replace(
@@ -452,11 +454,12 @@ $(document).on('click', '.individual-recipe', function() {
   // Send request to API for setting this recipe as sharable recipe
   $.ajax({
     type: 'POST',
+    async: false,
     url: '/recipes/share',
     data: { recipe_name: $recipe_name },
     success: function(response) {
       console.log('Recipe: ' + $recipe_name + ' was shared')
-      location.reload()
+      window.location.reload();
     },
     error: function(err) {
       console.log('Could not share recipe to the community')

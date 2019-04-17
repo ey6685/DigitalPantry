@@ -1,7 +1,15 @@
+//-Template handles which navigation template to render
+//-for Privacy, Terms, and Support Pages. If user is
+//-logged in then render with side nav-bar. If user
+//-is not logged in, render with top nav-bar template.
+//-Created by: Jon
+//-Date: 04/15/19
+
+
 doctype html
 html
 	head
 		if user
 			include main_layout_template.pug
 		else
-			include layout_template_for_signin.pug
+			include layout_template_privacy_terms_support.pug
