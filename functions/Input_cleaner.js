@@ -49,3 +49,22 @@ async function email_cleaning(str){
 }
 module.exports.email_cleaning = email_cleaning
 //email_cleaning("pat*#@Yah()().com")
+
+
+//same as above
+//retunrs a float that has be trimmed of all the non numbers 
+async function num(num_str)
+{
+  if(val.isDecimal(num_str))
+  {
+    return parseFloat(num_str)
+  }
+  else{
+    var clean = await val.whitelist(num_str, "0123456789.")
+    console.log("str cleaning: " + num_str + " -> " +clean)
+    return parseFloat(clean);
+
+  }
+}
+module.exports.num = num
+// num ("3!@.aw1*&)4")
