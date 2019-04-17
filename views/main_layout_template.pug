@@ -1,9 +1,11 @@
-//- Template for navigation side-bar css
-//- Created by: Jon
-//- Date: 03/30/19
-//- Last modified by: Jon
-//- Date: 03/30/19
-//- Created admin template for loading admin nav-bar
+//-Template for navigation side-bar css
+//-Created by: Jon
+//-Date: 03/30/19
+//-Last modified by: Jon
+//-Date: 04/12/19
+//-Added logic to load tables first if
+//-user is Admin, and cards first if 
+//-user is Volunteer.
 
 doctype html
 html
@@ -121,7 +123,8 @@ html
 		link(rel='stylesheet' type='text/css' href='/css/digital_pantry.css')
 		link(rel='stylesheet' href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous")
 		script(src='/bower_components/jquery/dist/jquery.js')
-		//- script(type='text/javascript', src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js')
+	//-Individual nav items have conditional statement. If Admin, load table view upon click.
+	//-If Volunteer, load card view upon click. If Volunteer, don't render 'Admin Panel' in nav-bar.	
 	body
 		.nav
 			.nav

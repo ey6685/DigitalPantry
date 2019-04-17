@@ -1,3 +1,12 @@
+//-Home Page. Shows user upcoming expiring ingredients and
+//-and recipe suggestions for each ingredient.
+//-Created by: Jon
+//-Date: 02/02/19
+//-Last modified by: Jon
+//-Date Modified: 04/16/19
+//-Created new classes for 'Missing Ingredients'
+//-and 'Time Expiry Window' Cards.
+
 extends main_layout_template
 
 //- NOTE: CSS FOR BUTTONS IS LOCATED UNDER THE layout_template
@@ -49,7 +58,7 @@ block content
 					.modal-footer
 						form#modalFooter(action='')
 							button.btn.dp-btn-primary(type='submit') Cook It!
-
+		//-Top card row. Shows 'Expiry Window', 'Undo Last Cooked Recipe' Cards
 		.row
 			.col-sm-3
 				.card(style='height:150px').text-center.dp-card-background-orange
@@ -80,7 +89,9 @@ block content
 						p.card-text Undo cooked recipe
 						a(href='')
 							i(style='color:white !important;').fas.fa-2x.fa-undo
-
+		//-Define cards to display under ingredients for different scenarios
+		//-If no recipes, display 'Add some recipes'
+		//-If no expiring ingredients, display 'Try adjusting the expiration window'
 		br
 		!= messages('message', locals)
 		- var test;
