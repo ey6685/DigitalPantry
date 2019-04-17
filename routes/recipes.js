@@ -229,7 +229,7 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
     res.render('add_recipe', {
       title: 'Add New Recipe'
     })
-  }
+  }else{
   const userId = req.session.passport['user']
   // Get pantry ID which user belongs to
   const pantryId = await User.findOne({
@@ -294,8 +294,9 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
   for(var i =1; i < req.body.ingredientProperties.length; i++)
   {
         console.log(req.body.ingredientProperties)
+        
         var ingredient_data_from_page = req.body.ingredientProperties[i]
-
+        if(ingredient_data_from_page != null){
         const ingredientName = await input_cleaner.string_cleaning(ingredient_data_from_page[0])
         const ingredientQuantity =ingredient_data_from_page[1]
         const ingredientMeasurement = ingredient_data_from_page[2]
@@ -330,12 +331,13 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
         amount_of_ingredient_needed: ingredientQuantity
       })
       console.log('created ingredient slot: \n' + JSON.stringify(new_ingredient_slot))
-    
+    }
   
     }
   //Repeat until all recipes have been parsed
 
   res.redirect('showall')
+  }
 })
 
 // Get all available recipes that a single pantry has
@@ -604,6 +606,7 @@ router.post('/edit', async function editRecipe(req, res) {
     })
     .catch(function(error) {
       console.log(error)
+      res.redirect('/recipes/showall')
     })
   }
 

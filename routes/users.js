@@ -406,66 +406,75 @@ router.post('/add', async function addNewUser(req, res) {
   const userName = await input_cleaner.email_cleaning(req.body.userName)
   const confirmUserName = await input_cleaner.email_cleaning(req.body.confirmUserName)
   if(!(val.isEmail(userName)) && !(val.isEmail(confirmUserName))){
-    req.flash('error', 'Emails Do Not Match!')
+    req.flash('error', 'Please enter an email!')
     res.redirect('/users/adminPanel')
-  } 
-    var does_user_exitst = await User.findAll({
-      where: {
-        user_email: userName
-      }
-    })
-    if (does_user_exitst.length > 0) {
-      req.flash('error', 'User has an account already!')
+  }
+  else{
+    if(userName != confirmUserName)
+    {
+      req.flash("error", "Emails do not match!")
       res.redirect('/users/adminPanel')
-    } else {
-      let userType = await input_cleaner.string_cleaning(req.body.userType)
-      switch (userType) {
-        case 'volunteer':
-          userType = 'Volunteer'
-          break
-        case 'administrator':
-          userType = 'Administrator'
-          break
-        default:
-          userType = 'N/A'
-      }
-      var userPassword = await str_generater.generate({
-        length: 8,
-        charset: 'alphanumeric'
-      })
-      console.log('new pass')
-      console.log('========')
-      console.log(userPassword)
-      //send out the email
-
-      //salt the password please
-      const salt = bcrypt.genSaltSync(10)
-      const hash = bcrypt.hashSync(userPassword, salt)
-      const currentUserId = req.session.passport['user']
-      // Find which pantry user is from
-      const query = `SELECT (pantry_id) FROM users WHERE user_id=${currentUserId};`
-      db.query(query, function getPantryID(err, results) {
-        if (err) throw err
-        const currentPantryID = results[0].pantry_id
-        mail.add_user(userName, userPassword)
-        // Instantiate new user model defined in DB_models/Users.js
-        const newUser = new User({
-          user_email: userName,
-          username: userName,
-          user_password: userPassword,
-          user_type: userType,
-          // TODO figure out how to assign pantry IDs
-          pantry_id: currentPantryID
-        })
-
-        // Call create function from DB_models/Users.js
-        User.createUser(newUser, function create() {
-          req.flash('success', 'User Added!')
-          res.redirect('/users/adminPanel')
-        })
-      })
     }
+    else{
   
+      var does_user_exitst = await User.findAll({
+        where: {
+          user_email: userName
+        }
+      })
+      if (does_user_exitst.length > 0) {
+        req.flash('error', 'User has an account already!')
+        res.redirect('/users/adminPanel')
+      } else {
+        let userType = await input_cleaner.string_cleaning(req.body.userType)
+        switch (userType) {
+          case 'volunteer':
+            userType = 'Volunteer'
+            break
+          case 'administrator':
+            userType = 'Administrator'
+            break
+          default:
+            userType = 'N/A'
+        }
+        var userPassword = await str_generater.generate({
+          length: 8,
+          charset: 'alphanumeric'
+        })
+        console.log('new pass')
+        console.log('========')
+        console.log(userPassword)
+        //send out the email
+
+        //salt the password please
+        const salt = bcrypt.genSaltSync(10)
+        const hash = bcrypt.hashSync(userPassword, salt)
+        const currentUserId = req.session.passport['user']
+        // Find which pantry user is from
+        const query = `SELECT (pantry_id) FROM users WHERE user_id=${currentUserId};`
+        db.query(query, function getPantryID(err, results) {
+          if (err) throw err
+          const currentPantryID = results[0].pantry_id
+          mail.add_user(userName, userPassword)
+          // Instantiate new user model defined in DB_models/Users.js
+          const newUser = new User({
+            user_email: userName,
+            username: userName,
+            user_password: userPassword,
+            user_type: userType,
+            // TODO figure out how to assign pantry IDs
+            pantry_id: currentPantryID
+          })
+
+          // Call create function from DB_models/Users.js
+          User.createUser(newUser, function create() {
+            req.flash('success', 'User Added!')
+            res.redirect('/users/adminPanel')
+          })
+        })
+      }
+    }
+  }
 })
 
 // Delete user from admin panel
