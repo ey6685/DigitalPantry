@@ -54,26 +54,26 @@ block content
 			.col-sm-3
 				.card(style='height:150px').text-center.dp-card-background-orange
 					.card-body
-						p.card-text Show me recipes for ingredients expiring in 
+						p.card-text.mb-2 Show me recipes for ingredients expiring in 
 							btn-toolbar(role='toolbar', aria-label='Toolbar with button groups')
 								.btn-group.btn-group-sm.mr-2(role='group', aria-label='First group')
 									button.btn.dp-btn-group(class='combo-box' type='button') 1
 									button.btn.dp-btn-group(class='combo-box' type='button') 5
 									button.btn.dp-btn-group(class='combo-box' type='button') 10
 									button.btn.dp-btn-group(class='combo-box' type='button') 15
-							p.card-text days
+							p.mt-1.card-text days
 			.col-sm-3
 				.card(style='height:150px').text-center.dp-option-card-green
 					.card-body
-						p.card-text Show me recipes where i am missing a few ingredients. 
+						p.mb-2.card-text Show me recipes where i am missing a few ingredients. 
 						button.btn.btn-sm.dp-btn-white-green#ingredientFilterBtn(type='button') Yes
 			.col-sm-3
-				.card(style='height:150px').text-center
+				.card(style='height:150px').text-center.dp-card-background-purple
 					.card-body.text-center
-						p.card-text I am cooking for
+						p.mb-3.card-text I am cooking for
 						.col.align-self-center
 							input.form-control(id='cookForNumberOfPeople' style="text-align:center;valign:middle;" type='text') 
-						p.card-text people
+						p.mt-2.card-text people
 			.col-sm-3#undoCooking(style='display:none')
 				.card.dp-card-yellow(style='height:150px').text-center
 					.card-body.text-center
@@ -98,10 +98,10 @@ block content
 									- test = "div class='col-3 haveAllIngredientsRecipe'";
 								else
 									.col-3.placeholderCard
-										.card.h-100(recipe-id=recipe.recipe_id , style='width: 100%').dp-card-background
+										.card.h-100(recipe-id=recipe.recipe_id , style='width: 100%').dp-invert-primary-card
 											.card-body
-												p Not enough ingredients to cook this recipe
-												p To see this recipe enable "Show recipes with misssing"
+												p Not enough ingredients to cook this recipe.
+												p To see this recipe enable "Show recipes with missing ingredients"
 									- test = "div class='col-3 dontHaveAllIngredients' style='display: none;'";
 								#{test}
 									div.card.h-100(recipe-id=recipe.recipe_id , style='width: 100%')
@@ -135,7 +135,7 @@ block content
 		else
 			div.dp-background.card-container(class='container-fluid', class='rounded')
 				.col-3.placeholderCardn
-					.card.h-100(style='width: 100%').dp-card-background-orange
+					.card.h-100(style='width: 100%').dp-invert-secondary-card
 						.card-body
 							p No Ingredients are expiring within #{expirationTimeFrame} days.
 							p Hint: Try changing your expiration window

@@ -15,23 +15,23 @@ block content
   link(rel='stylesheet' type='text/css' href='/css/digital_pantry.css')
   br
   div(class='container-fluid', class='rounded', style='width: 90%')
-    a.btn.dp-btn-primary(id='backButton', href='/users/dashboard', role='button') Back to dashboard
+    a.btn.dp-btn-yellow(id='backButton', href='/users/dashboard', role='button') Back to Dashboard
     br
     br
     .media
       img.mr-3(src=recipeImage, alt='Some text', style="width:30%; height:30%")
       .media-body
-        h3.mt-0 #{recipeName}
-        p Number of times cooked: #{cookedCount}
-        p Serving size: #{servingSize}
+        h3.dp-title-text.mt-0 #{recipeName}
+        p.dp-primary-text Number of Times Cooked: #{cookedCount}
+        p.dp-primary-text Serving size: #{servingSize}
         p
-          .form-inline.dp-title-text I am cooking for
+          .form-inline.dp-primary-text I am cooking for
             .col-sm-2
               .input-group.input-group-sm
                 input.form-control(id='servingSizeField' style="text-align:center;valign:middle;" type='text' value=peopleToCookeFor) 
             | people
     br
-    h2 Ingredients required
+    h2.dp-secondary-text Ingredients Required
     hr
     br
     .form-row
@@ -42,21 +42,21 @@ block content
           .form-group.col-md-2
             div.card.h-100
               img.image(class='card-img-top', src=ingredient.ingredient_image_path)
-              .card-body
+              .card-body.dp-form-fields
                 h6(class='card-title') #{ingredient.ingredient_name}
               .card-footer
                 p#ingredientRequired Amount needed: #{ingredient.amount_of_ingredient_needed*peopleToCookeFor} #{ingredient.ingredient_unit_of_measurement}
         - previousCardImage = ingredient.ingredient_image_path
     br
-    h2 Directions
+    h2.dp-secondary-text Directions
     hr
     br
     for step in recipeSteps
-      p #{step}
+      p.dp-primary-text #{step}
     br
     .row
-      p.mr-3 Finished Cooking?
-      button.btn.btn-primary.dp-btn-primary(id='finishCooking', recipe-id=recipeId, type='button') Yes
+      h3.dp-secondary-text.ml-3.mr-3.mt-3 Finished Cooking?
+      button.btn.btn-primary.dp-btn-primary(id='finishCooking', recipe-id=recipeId, type='button') Remove These Ingredients from My Pantry
   script(src="/js/cookingRecipe.js")
   script.
     localStorage.clear();
