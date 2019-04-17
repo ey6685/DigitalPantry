@@ -238,7 +238,7 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
         console.log("path: " + imagePath[i-1])
         //seperate the data
         var ingredient_name =  await input_cleaner.string_cleaning(block_oF_data[0])
-        var ingredient_amount = await input_cleaner.string_cleaning(block_oF_data[1])
+        var ingredient_amount = await input_cleaner.num(block_oF_data[1])
         var ingredient_unit = await block_oF_data[2]
         var ingredient_date = await input_cleaner.string_cleaning(block_oF_data[3])
         var priority = await input_cleaner.string_cleaning(block_oF_data[4])

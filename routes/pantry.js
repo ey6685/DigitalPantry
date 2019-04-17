@@ -37,23 +37,30 @@ router.post('/changeName', async function changePantryName (req, res) {
 })
 
 router.post('/setExpirationTimeFrame', async function setExpirationTimeFrame (req, res) {
-  const expirationTimeFrameInDays = req.body.expirationTimeFrameValue
+  const expirationTimeFrameInDays = await val.num(req.body.expirationTimeFrameValue)
+  if(expirationTimeFrameInDays >=0){
   const currentUserId = req.session.passport['user']
   const pantryId = await User.findOne({
     attributes: ['pantry_id'],
     where: { user_id: currentUserId }
   })
 
+
   Pantry.update(
     { expire_window: expirationTimeFrameInDays },
     { where: { pantry_id: pantryId.pantry_id } }
   )
 
+  
+  }
+  else{
+    req.flash("error","Invalid number of days.")
+  }
   res.redirect('/users/dashboard')
 })
 
 router.post('/setNumberOfPeopleToCookFor', async function setNumberOfPeopleToCookFor(req, res){
-  const numberOfPeople = req.body.numberOfPeople
+  const numberOfPeople = await val.num(req.body.numberOfPeople)
   const currentUserId = req.session.passport['user']
   const pantryId = await User.findOne({
     attributes: ['pantry_id'],
