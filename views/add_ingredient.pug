@@ -1,0 +1,156 @@
+//-
+	Template for navigation side-bar css
+	Created by: Jon
+	Date: 03/12/19
+	Last modified by: Jon
+	Date: 03/12/19
+	Overhaul to include multiple ingredient rows extends admin_template
+
+extends main_layout_template
+
+block content
+	br
+	br
+	br
+	br
+	div(class='container-fluid', class='rounded', style='width: 90%')
+		h1.dp-title-text #{title}
+		br
+		tbody
+			tr
+				//-Form for the first ingredient. This is static on the page.
+				form(method= 'POST', action= '/ingredients/add', class= 'form', enctype="multipart/form-data")
+					.form-row(class='rounded')
+						.col-sm-1.mt-3#pic_row
+							img#output(width='40', height='40')
+						.form-group.col-md-2.mt-3
+							label.btn.dp-btn-secondary.btn-file Browse image
+								input(id='uploadButton', name='image', accept='image/*' ,type='file', style='display: none;', onchange='loadFile(event)')
+						.form-group.col-md-2
+							input.form-control.mt-3.dp-form-fields(name='ingredientProperties[1]', type='text', placeholder='Name = Tuna')
+						.form-group.col-md-1
+							input.form-control.mt-3.dp-form-fields(name='ingredientProperties[1]', type='text', placeholder='Total = 2')
+						.form-group.col-md-2
+							.dropdown-inline
+							select.form-control.mt-3.dp-form-fields(name='ingredientProperties[1]', required)
+								option(value='') Measurement
+								option(value='tsp.') Teaspoon
+								option(value='tbsp.') Tablespoon
+								option(value='fl oz') Fluid Ounce
+								option(value='cup') Cup
+								option(value='quart') Quart
+								option(value='ml') Milliliter
+								option(value='lb') Pound
+								option(value='oz') Dry Ounce
+						.form-group.col-md-2
+							input.form-control.mt-3.dp-form-fields(name='ingredientProperties[1]', type='date')
+						.form-group.col-md-1
+							.dropdown-inline
+							select.form-control.mt-3.dp-form-fields(name='ingredientProperties[1]', required)
+								option(value='') Priority Item?
+								option(value='High') Yes
+								option(value='Low') No
+					#ingredient-container
+					.form-row
+						button.btn.dp-btn-purple.ml-1(type='button' onclick='addIngredient()', id='add-ingredient', class='form-group') +
+					.form-row
+						input.btn.dp-btn-primary.col-md-2(type='submit', value='Add to Pantry', class='form-group')
+		//-scripts for processing image upload for each ingredient
+		//-script for loading additional rows dynamically.
+		script.
+			localStorage.clear()
+			$(document).on('change', '#uploadButton', function(event) {
+				$some = $(this).closest('.form-row')
+				$imageBox = $some.find('#output')
+
+				//please help me console
+				console.log($some)
+				console.log($imageBox)
+				$imageBox.attr("src", URL.createObjectURL(event.target.files[0]))// = URL.createObjectURL(event.target.files[0]);
+				$imageBox.addClass("img-thumbnail");
+				$imageBox.css('display','block');
+				$imageBox.css('width', '40px');
+				$imageBox.css('height', '40px');
+			});
+			var loadFile = function(event) {
+				//- //var name = $(this).closest(classname).
+				//- //find closest form row(aak the class above button)
+				//- console.log($(this))
+				//- //name.find(#output)
+				//- var name = $(this).closest('#pic_row');
+				//- console.log(name);
+				//- //do i just do this
+				//- var pic_spot = name.find("#output")
+				//- console.log(pic_spot)
+				//- //var output = document.getElementById('output');
+				//- pic_spot.src = URL.createObjectURL(event.target.files[0]);
+				//- pic_spot.addClass("img-thumbnail");
+				//- pic_spot.css('display','block');
+				//- pic_spot.css('width', '40px');
+				//- pic_spot.css('height', '40px');
+				}
+			let i = 2;
+				function addIngredient(){
+					let template = `
+					<div class="form-row rounded">
+						<div class="col-sm-1">
+							<img id="output" width="40" height="40" />
+						</div>
+						<div class="form-group col-md-2">
+							<label class="btn dp-btn-secondary btn btn-file">Browse image
+								<input  id="uploadButton" type="file" name="image" style="display: none;" onchange="loadFile(event)" />
+							</label>
+						</div>
+						<div class="form-group col-md-2">
+							<input
+								class="form-control dp-form-fields"
+								name="ingredientProperties[${i}]"
+								type="text"
+								placeholder="Name = Tuna"
+								required="required"
+							/>
+						</div>
+						<div class="form-group col-md-1">
+							<input
+								class="form-control dp-form-fields"
+								name="ingredientProperties[${i}]"
+								type="text"
+								placeholder="Total = 2"
+								required="required"
+							/>
+						</div>
+						<div class="dropdown-inline col-md-2">
+							<select class="form-control dp-form-fields" name="ingredientProperties[${i}]" required="required">
+								<option value="">Measurement</option>
+								<option value="tsp.">Teaspoon</option>
+								<option value="tbsp.">Tablespoon</option>
+								<option value="fl oz">Fluid Ounce</option>
+								<option value="cup">Cup</option>
+								<option value="quart">Quart</option>
+								<option value="ml">Milliliter</option>
+								<option value="lb">Pound</option>
+								<option value="oz">Dry Ounce</option>
+							</select>
+						</div>
+						<div class="form-group col-md-2">
+							<input class="form-control dp-form-fields" name="ingredientProperties[${i}]" type="date" required="required" />
+						</div>
+						<div class="dropdown-inline col-md-1">
+							<select class="form-control dp-form-fields" name="ingredientProperties[${i}]" required="required">
+								<option value="">Priority Item?</option>
+								<option value="High">Yes</option>
+								<option value="Low">No</option>
+							</select>
+						</div>
+						<div class="form-group col-md-1">
+							<button type="button" class="btn btn-outline-danger mr-2 delete-row" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					</div>`;
+					let container = document.getElementById('ingredient-container');
+					let element = document.createElement('element');
+					element.innerHTML = template;
+					container.appendChild(element);
+					i++
+				}

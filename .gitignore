@@ -1,0 +1,12 @@
+notes.txt
+node_modules/
+
+\.DS_Store
+
+views/test\.pug
+
+\.eslintrc\.json
+
+log/
+
+*.log

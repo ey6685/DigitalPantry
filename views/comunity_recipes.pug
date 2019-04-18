@@ -1,0 +1,139 @@
+extends main_layout_template
+block content
+	style.
+		.btn_card{
+			/*Defines CSS for butons on the dashboard*/
+			width: 93%;
+			margin: 0px 10px 10px 10px;
+		}
+		.individual-recipe{
+			padding:3px;
+		}
+		.individual-recipe:hover{
+			background-color: #fcf4cf;
+		}
+		.card{
+			color:#570573;
+			background-color:#faf8eb;
+		}
+	div(class='container-fluid', class='rounded', style='width: 90%')
+		br
+		br
+		br
+		br
+		h1.dp-title-text #{title}
+		br
+		//- Overlay form start. In other words edit recipe form
+		#shareForm.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
+			.modal-dialog.modal-dialog-centered.modal-lg(role='document')
+				.modal-content
+					.modal-header.modal-title 
+						h5.dp-secondary-text Select a Recipe to Share
+					.modal-body
+						.container-fluid
+							#recipe-content
+					.modal-footer
+						button.btn.dp-btn-secondary(type='button', data-dismiss='modal', id='close-community') Close
+		.form-row
+			.form-group.col-md-2
+				input.form-control.mr-sm-2.dp-form-fields(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
+			.form-group.col-md-2
+				.dropdown
+					select.form-control.dp-form-fields(id='sortBar', name='SortBar', onchange='sortList()', class='selection-drop')
+						option(value='0') Sort By
+						option(value='1') Sort A-Z
+						option(value='2') Sort Z-A
+			.form-group.col-md-2
+				if user.user_type == "Administrator"
+					input.btn.dp-btn-secondary(data-toggle='modal', type='button', value='Share Your Recipe', data-target='#shareForm', id='share-community')
+		br
+		.form-row
+			//-for each recipe in data
+			for recipe,i in data
+				//-get recipe image
+				- recipe_image= recipe.recipe_image_path
+				.form-group.col-md-3
+					div(id=recipe.recipe_id, class='card', class='h-100', class='form-group')
+						img.image(class='card-img-top', src=recipe_image, alt='image')
+						div(class='card-body')
+							h4(class='card-title') #{recipe.recipe_name}
+							//- For each steps inside of the array of steps
+							for step in recipe_steps[i]
+								p(class='card-text')= step
+						div(class='card-foot', padding='.75rem')
+							if user.user_type == "Administrator"
+								button.btn_card.btn.dp-btn-primary(class='saveRecipe', id='#{recipe.recipe_id}', type='button') Copy recipe
+
+	script.
+		localStorage.clear()
+		// This will trigger once user stars to type text into a search bar
+		function search() {
+			// Declare variables
+			var input, filter, div, i, txtValue;
+			// get the search bar input
+			input = document.getElementById('filterInput');
+			// Set all letters to upper case
+			filter = input.value.toUpperCase();
+			// get all card names
+			card_names = document.getElementsByTagName('h4');
+			// get all cards
+			div = document.getElementsByClassName('col-md-3');
+
+			// Loop through all list items, and hide those who don't match the search query
+			for (i = 0; i < div.length; i++) {
+				txtValue = card_names[i].textContent || card_names[i].innerText;
+				if (txtValue.toUpperCase().indexOf(filter) > -1) {
+					// show
+					div[i].style.display = "";
+				} 
+				else {
+					// hide
+					div[i].style.display = "none";
+				}
+			}
+		}
+		// Function based on sort select dropdown box
+		function sortList() {
+			var list, i, switching, b, shouldSwitch;
+			// get all cards
+			list = document.getElementsByClassName("col-md-3");
+			switching = true;
+			var e = document.getElementById("sortBar");
+			var optionValue = e.options[e.selectedIndex].value;
+			/* Make a loop that will continue until
+			no switching has been done: */
+			while (switching && optionValue != 0) {
+				// Start by saying: no switching is done:
+				switching = false;
+				b = document.getElementsByTagName('h4');
+				// Loop through all list items:
+				for (i = 0; i < (b.length - 1); i++) {
+					//Initial condition (no switches)
+					shouldSwitch = false;
+					/* Check if the next item should
+					switch place with the current item: */
+					// If sort by A-Z is selected
+					if(optionValue == 1){
+						if (b[i].innerHTML.toLowerCase() > b[i + 1].innerHTML.toLowerCase()) {
+							/* If next item is alphabetically lower than current item,
+							mark as a switch and break the loop: */
+							shouldSwitch = true;
+							break;
+						}
+					}
+					// If sort by Z-A is selected
+					else if(optionValue == 2){
+						if (b[i].innerHTML.toLowerCase() < b[i + 1].innerHTML.toLowerCase()) {
+							/* If next item is alphabetically higher than current item,
+							mark as a switch and break the loop: */
+							shouldSwitch = true;
+							break;
+						}
+					}
+				}
+					if (shouldSwitch) {
+						list[i].parentNode.insertBefore(list[i + 1], list[i]);
+						switching = true;
+					}
+			}
+		}

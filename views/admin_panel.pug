@@ -1,0 +1,209 @@
+extends main_layout_template
+
+block content
+	-	console.log(pantry_data)
+	br
+	!= messages('message', locals)
+	if errors
+		for error in errors
+			div(class='alert alert-danger') #{error.msg}
+	.row
+		.col-md-3
+			img.img-thumbnail.img-fluid.rounded-circle(id='pantry-image', src=pantry_data.pantry_image_path, alt='Pantry Image', class='image-card')
+		.col-md-9
+			h1.dp-title-text #{title}
+			hr
+			br
+			.row
+				.col-md-6
+					h4.dp-primary-text#name(style='border-bottom:1px solid black', onfocusout='cancelEdit()', data-validation="alphanumeric") #{pantry_data.pantry_name}
+				.btn#edit-btn.dp-btn-purple.mr-2(role='button', aria-disabled='false', onclick='edit()') Edit
+				.btn#save-pantryName-btn.dp-btn-primary.disabled(role='button', aria-disabled='true' class) Save
+			br
+			.row
+				.col-md-6
+					form(method= 'POST', action= '/users/addImg', class= 'form', enctype="multipart/form-data")
+						label.btn.btn-primary.dp-btn-secondary.btn.btn-file Choose Image
+							input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='form-group', style='display: none;')
+						input.btn.dp-btn-primary.col-md-3.ml-2.mt-2(type='submit', value='Update Image', class='form-group') 
+	//-reset password overlay
+	#resetForm.modal.fade(tabindex='-1', role='dialog', aria-hidden='true', class= 'form-modal')
+		.modal-dialog.modal-dialog-centered.modal(role='document')
+			.modal-content
+				.modal-header.modal-title 
+					h5.dp-title-text Reset Password
+				form(method='POST', action='/user/resetPassword', class='form')
+					.modal-body
+						.container
+							.row.justify-content-md-center
+								.form-group
+									label.dp-secondary-text Enter New Password:
+									input#new-password.form-control.dp-form-fields(name='password', type='password', placeholder="Password", class='form-group')
+							.row.justify-content-md-center
+								.form-group
+									label.dp-secondary-text Confirm Password:
+									input#confirm-password.form-control.dp-form-fields(name='confirmPassword',type='password', placeholder="Password", class='form-group')
+					.modal-footer
+						button.btn.btn-outline-danger(type='button', data-dismiss='modal', id='cancle-admin') Cancel
+						input.btn.dp-btn-primary(type='submit', value='Submit', id='submit-admin')
+	//-Change privilege overlay
+	#changePrivilege.modal.fade(tabindex='-1', role='dialog',aria-hidden='true', class= 'form-modal')
+		.modal-dialog.modal-dialog-centered.modal(role='document')
+			.modal-content
+				.modal-header.modal-title 
+					h5.dp-title-text Change Privilege
+				form(method='POST', action='/users/changePrivilege', class='form')
+					.modal-body
+						.container
+							.row.justify-content-md-center
+								.form-group.col-md-7
+									label.dp-secondary-text Set New Privilege:
+							.row.justify-content-md-center
+								.form-group.col-md-7
+									select.form-control.dp-form-fields(name='userType', required)
+										option(value='volunteer') Volunteer
+										option(value='administrator') Administrator				
+					.modal-footer
+						button.btn.btn-outline-danger(type='button', data-dismiss='modal', id='cancle-admin') Cancel
+						input.btn.dp-btn-primary(type='submit', value='Submit', id='submit-admin')
+	br
+	h4.dp-secondary-text Active Users
+	hr
+	br
+	.form-row
+		.form-group.col-md-2
+			input.form-control.dp-form-fields.mr-sm-2(id='filterInput', onkeyup='search()', type='text', placeholder='Search', class='form-group')
+		.form-group.col-md-2
+			.dropdown
+				select.form-control.dp-form-fields(id='sortBar', name='SortBar', onchange='sortList()', class='selection-drop')
+					option(value='0') Sort By
+					option(value='1') Sort A-Z
+					option(value='2') Sort Z-A
+	table.table.dp-table(class='rounded')
+		//-caption Available Ingredients
+		thead
+			tr
+				th(scope='col') User Name
+				th(scope='col') User Type
+				th(scope='col') Change Privilege
+				th(scope='col') Reset Password
+				th(scope='col') Remove User
+		tbody
+			for item in userData
+				tr(class='value-row', data-id=item.user_id)
+					td.user-name= item.username
+					td= item.user_type
+					td
+						a.btn.btn-outline-danger(data-toggle='modal', data-target='#changePrivilege', id= 'change-admin') Change Privilege
+					td
+						a.btn.btn-outline-danger(data-toggle='modal', data-target='#resetForm', id= 'reset-admin') Reset Password
+					td
+						a.btn.btn-outline-danger(class="delete-user", data-id=item.user_id, id= 'delete-admin') Remove User
+	br
+	h4.dp-secondary-text Add New User
+	hr
+	br
+	form(method= 'POST', action= '/users/add', class= 'form')
+		.form-row
+			.col-md-3
+				input.form-control.dp-form-fields(name='userName', type='emial', placeholder='Email', class= 'input-form')
+			.col-md-3
+				input.form-control.dp-form-fields(name="confirmUserName", type='email', placeholder="Confirm Email", class='input-form')
+			.col-md-3
+				.dropdown-inline
+				select.form-control.dp-form-fields(name='userType', required)
+					option(value='volunteer') Volunteer
+					option(value='administrator') Administrator
+			.col-md-2
+				button.btn.dp-btn-primary(type='submit', id='add-admin') Add New User
+
+	script.
+		localStorage.clear()
+		function edit(){
+			document.getElementById('name').setAttribute("contenteditable", "true");
+			document.getElementById('name').focus()
+			document.getElementById('edit-btn').classList.add("disabled");
+			document.getElementById('save-pantryName-btn').classList.remove("disabled");
+		}
+		function cancelEdit(){
+			document.getElementById('name').setAttribute("contenteditable", "false");
+			document.getElementById('edit-btn').classList.remove("disabled");
+			document.getElementById('save-pantryName-btn').classList.add("disabled");
+		}
+		var loadFile = function(event) {
+			// Get 
+			var output = document.getElementById('pantry-image');
+			output.src = URL.createObjectURL(event.target.files[0]);
+		}
+		//T his will trigger once user stars to type text into a search bar
+		function search() {
+			// Declare variables
+			var input, filter, row, i, txtValue;
+			// get the search bar input
+			input = document.getElementById('filterInput');
+			// Set all letters to upper case
+			filter = input.value.toUpperCase();
+			// get all table values where user name is stored
+			table_cell = document.getElementsByClassName('user-name');
+			// get individual rows, this is what will get hidden
+			row = document.getElementsByClassName('value-row');
+
+			// Loop through all list items, and hide those who don't match the search query
+			for (i = 0; i < row.length; i++) {
+				txtValue = table_cell[i].textContent || table_cell[i].innerText;
+				console.log(txtValue);
+				if (txtValue.toUpperCase().indexOf(filter) > -1) {
+					// show
+					row[i].style.display = "";
+				} 
+				else {
+					// hide
+					row[i].style.display = "none";
+				}
+			}
+		}
+		// Function based on sort select dropdown box
+		function sortList() {
+			var list, i, switching, b, shouldSwitch;
+			// get all cards
+			list = document.getElementsByClassName('value-row');
+			switching = true;
+			var e = document.getElementById("sortBar");
+			var optionValue = e.options[e.selectedIndex].value;
+			/* Make a loop that will continue until
+			no switching has been done: */
+			while (switching && optionValue != 0) {
+				// Start by saying: no switching is done:
+				switching = false;
+				b = document.getElementsByClassName('user-name');
+				// Loop through all list items:
+				for (i = 0; i < (b.length - 1); i++) {
+					// Initial condition (no switches)
+					shouldSwitch = false;
+					/* Check if the next item should
+					switch place with the current item: */
+					// If sort by A-Z is selected
+					if(optionValue == 1){
+						if (b[i].innerHTML.toLowerCase() > b[i + 1].innerHTML.toLowerCase()) {
+							/* If next item is alphabetically lower than current item,
+							mark as a switch and break the loop: */
+							shouldSwitch = true;
+							break;
+						}
+					}
+					// If sort by Z-A is selected
+					else if(optionValue == 2){
+						if (b[i].innerHTML.toLowerCase() < b[i + 1].innerHTML.toLowerCase()) {
+							/* If next item is alphabetically higher than current item,
+							mark as a switch and break the loop: */
+							shouldSwitch = true;
+							break;
+						}
+					}
+				}
+					if (shouldSwitch) {
+						list[i].parentNode.insertBefore(list[i + 1], list[i]);
+						switching = true;
+					}
+			}
+		}

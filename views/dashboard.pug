@@ -1,0 +1,222 @@
+//-Home Page. Shows user upcoming expiring ingredients and
+//-and recipe suggestions for each ingredient.
+//-Created by: Jon
+//-Date: 02/02/19
+//-Last modified by: Jon
+//-Date Modified: 04/16/19
+//-Created new classes for 'Missing Ingredients'
+//-and 'Time Expiry Window' Cards.
+
+extends main_layout_template
+
+//- NOTE: CSS FOR BUTTONS IS LOCATED UNDER THE layout_template
+
+block content
+	style.
+		.card-container{
+			padding-top:10px;
+			padding-bottom:20px;
+		}
+		.btn_card{
+			/*Defines CSS for butons on the dashboard*/
+			margin: 0px 10px 10px 10px;
+		}
+		.card{
+			color:#570573
+		}
+	link(rel='stylesheet' href='/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css')
+	link(rel='stylesheet' type='text/css' href='/css/digital_pantry.css')
+	//- Stores a variable passed in, which defines an image path
+	- card1_image= recipe_image_path
+	- card2_image= stir_fry_image
+	- card3_image= pot_pie_image
+	- rid_variable= rid
+	br
+	div(class='container-fluid', class='rounded', style='width: 90%')
+		//- Overlay form start. In other words view recipe form
+		#viewRecipeDetails.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
+			.modal-dialog.modal-dialog-centered.modal-lg(role='document')
+				.modal-content
+					.modal-header
+						h4.modal-title.dp-secondary-text Recipe details
+					.modal-body
+						h5.dp-title-text RECIPE NAME HERE
+						br
+						table.table.rounded.table-hover
+							thead
+								tr
+									th(scope='col', style="background-color:white;border:none;") 
+									th.dp-secondary-header(scope='col') Requires
+									th.dp-secondary-header(scope='col') On-hand
+									th(scope='col', style="background-color:white; border:none;")
+							tbody
+								#ingredientRow
+						h4.modal-title.dp-title-text Recipe steps
+						hr
+						br
+						#recipeStepsOverlay
+					.modal-footer
+						form#modalFooter(action='')
+							button.btn.dp-btn-primary(type='submit') Cook It!
+		//-Top card row. Shows 'Expiry Window', 'Undo Last Cooked Recipe' Cards
+		.row
+			.col-sm-3
+				.card(style='height:150px').text-center.dp-card-background-orange
+					.card-body
+						p.card-text.mb-2 Show me recipes for ingredients expiring in 
+							btn-toolbar(role='toolbar', aria-label='Toolbar with button groups')
+								.btn-group.btn-group-sm.mr-2(role='group', aria-label='First group')
+									button.btn.dp-btn-group(class='combo-box' type='button') 1
+									button.btn.dp-btn-group(class='combo-box' type='button') 5
+									button.btn.dp-btn-group(class='combo-box' type='button') 10
+									button.btn.dp-btn-group(class='combo-box' type='button') 15
+							p.mt-1.card-text days
+			.col-sm-3
+				.card(style='height:150px').text-center.dp-option-card-green
+					.card-body
+						p.mb-2.card-text Show me recipes where i am missing a few ingredients. 
+						button.btn.btn-sm.dp-btn-white-green#ingredientFilterBtn(type='button') Yes
+			.col-sm-3
+				.card(style='height:150px').text-center.dp-card-background-purple
+					.card-body.text-center
+						p.mb-3.card-text I am cooking for
+						.col.align-self-center
+							input.form-control(id='cookForNumberOfPeople' style="text-align:center;valign:middle;" type='text') 
+						p.mt-2.card-text people
+			.col-sm-3#undoCooking(style='display:none')
+				.card.dp-card-yellow(style='height:150px').text-center
+					.card-body.text-center
+						p.card-text Undo cooked recipe
+						a(href='')
+							i(style='color:white !important;').fas.fa-2x.fa-undo
+		//-Define cards to display under ingredients for different scenarios
+		//-If no recipes, display 'Add some recipes'
+		//-If no expiring ingredients, display 'Try adjusting the expiration window'
+		br
+		!= messages('message', locals)
+		- var test;
+		//-chech to see if we have any ingredients in the window.
+		//-if we do
+		if (data.length > 0) 
+			for i in data
+				div.dp-background.card-container(class='container-fluid', class='rounded')
+					h3.dp-title-text
+						|  #{i.ingredient_amount} #{i.ingredient_unit_of_measurement} of #{i.ingredient_name} is expiring in #{(i.ingredient_expiration_date)} 
+					div(class='row')
+						if (i.recipe_data.length > 0)
+							for recipe in i.recipe_data
+								if recipe.num_of_ingredients_on_hand == recipe.num_of_ingredients
+									- test = "div class='col-3 haveAllIngredientsRecipe'";
+								else
+									.col-3.placeholderCard
+										.card.h-100(recipe-id=recipe.recipe_id , style='width: 100%').dp-invert-primary-card
+											.card-body
+												p Not enough ingredients to cook this recipe.
+												p To see this recipe enable "Show recipes with missing ingredients"
+									- test = "div class='col-3 dontHaveAllIngredients' style='display: none;'";
+								#{test}
+									div.card.h-100(recipe-id=recipe.recipe_id , style='width: 100%')
+										img.image(class='card-img-top', src=recipe.recipe_image_path, alt="#{(recipe.recipe_name)}")
+										.card-body
+											h4(id='recipeName', lass='card-title') #{recipe.recipe_name}
+											br
+											p(class="card-text") Cooked #{recipe.num_of_times_cooked} times.
+											p(class='card-text') You have #{(recipe.num_of_ingredients_on_hand)} out of #{recipe.num_of_ingredients} ingredients
+
+											//- For each steps inside of the array of steps
+											for step in recipe.recipe_directions
+												p(style='display:none').card-text.recipeStep= step
+											//- btn_card is a custom class used for CSS for buttons
+										.card-footer
+											.container
+												.row
+													.col
+														.text-center
+															form(action='/recipes/recipeDetails/'+recipe.recipe_id)
+																button.btn.btn-primary.dp-btn-secondary.mr-3(class='test', id='showRecipeDetails', type='button', data-toggle='modal', data-target='#viewRecipeDetails') Details
+																button.btn.dp-btn-primary(type='submit') Cook It!
+						else
+							.col-3.placeholderCardn
+								.card.h-100(style='width: 100%').dp-card-background-purple
+									.card-body
+										p No recipes for #{i.ingredient_name}, add some!
+										button.btn.dp-btn-white-purple(type='button') Add
+											a(href="/recipes/add" )
+					br
+		else
+			div.dp-background.card-container(class='container-fluid', class='rounded')
+				.col-3.placeholderCardn
+					.card.h-100(style='width: 100%').dp-invert-secondary-card
+						.card-body
+							p No Ingredients are expiring within #{expirationTimeFrame} days.
+							p Hint: Try changing your expiration window
+
+
+
+	script(src='/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js')
+	script(src="/js/viewRecipeDetailsDashboard.js")
+	script(src="/js/cookingRecipe.js")
+	script(type='text/javascript').
+		var allData = '!{storedData}'
+		var people_feeding = '#{people_cooking_for}'
+		allData = JSON.parse(allData)
+		$(window).on('load', function() {
+			console.log(people_feeding);
+			document.getElementById("cookForNumberOfPeople").setAttribute('value', people_feeding)
+			// This gets passed in from the route
+			$('.combo-box').removeClass('active')
+			expirationTimeFrame = '#{expirationTimeFrame}'
+			$elements = $(`.combo-box:contains(${expirationTimeFrame})`).eq(0).addClass('active')
+
+			$('.combo-box').click(function printExpirationValue(){
+				let value = $(this).text()
+				$('.combo-box').removeClass('active')
+				$(this).addClass('active')
+				$.ajax({
+					type: 'POST',
+					url: '/pantry/setExpirationTimeFrame',
+					data: { expirationTimeFrameValue: value },
+					success: function () {
+						location.reload()
+					},
+					error: function (err) {
+						console.log(err)
+					}
+				})
+			})
+
+			$('#ingredientFilterBtn').click(function filter(){
+				buttonText = $(this).text()
+				if (buttonText == 'Yes'){
+					$(this).text('No')
+					$(this).closest('.card').removeClass('dp-option-card-green')
+					$(this).removeClass('dp-btn-white-green')
+					$('.placeholderCard').hide()
+					$(this).addClass('dp-btn-white-red')
+					$(this).closest('.card').addClass('dp-option-card-red')
+					$('.dontHaveAllIngredients').show()
+				}else{
+					$(this).text('Yes')
+					$(this).removeClass('dp-btn-white-red')
+					$(this).closest('.card').removeClass('dp-option-card-red')
+					$('.placeholderCard').show()
+					$(this).addClass('dp-btn-white-green')
+					$(this).closest('.card').addClass('dp-option-card-green')
+					$('.dontHaveAllIngredients').hide()
+				}
+
+			})
+		})
+		function edit(){
+			document.getElementById('name').setAttribute("contenteditable", "true");
+			document.getElementById('name').focus()
+			document.getElementById('edit-btn').classList.add("disabled");
+			document.getElementById('save-pantryName-btn').classList.remove("disabled");
+		}
+	script(type='text/javascript').
+		//Check if user has cooked a recipe. This is used for the undo button
+		let cookedRecipeData = ""
+		if(localStorage.getItem("recipe") !== null){
+			cookedRecipeData = localStorage.getItem('recipe')
+			$('#undoCooking').show()
+		}

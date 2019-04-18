@@ -1,0 +1,10 @@
+Chicken = https://www.pexels.com/photo/calories-chicken-chopping-board-cooked-616353/
+black_beans = https://www.freeimages.com/photo/black-beans-1527234
+bsalsa = https://www.freeimages.com/photo/salsa-it-s-done-time-to-eat-1559800
+bean_salsa = https://pixabay.com/en/salad-whole-meal-real-food-2098580/
+salsa = https://pixabay.com/en/california-san-diego-mexican-food-2357953/
+corn = https://www.pexels.com/photo/corn-kernels-on-strainer-1359315/
+tortilla_chips = https://pixabay.com/en/food-mexican-tacos-mexican-food-2580200/
+condensed_chicken = https://unsplash.com/photos/Vl78eNdiJaQ
+mixed_veggies = https://www.pexels.com/photo/garlic-beside-ginger-and-pepper-on-brown-wooden-table-161723/
+water = https://www.pexels.com/photo/water-pouring-on-glass-1615011/
