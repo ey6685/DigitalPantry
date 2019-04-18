@@ -476,7 +476,7 @@ router.post('/undo', async function undoCooking(req, res) {
     // Get ingredients amount needed for the recipe
     amountNeeded = ingredientInfo.amount_of_ingredient_needed
     //Add amount of used ingredient back into tables since user decided to undo cooked recipe.
-    query = `UPDATE ingredients_in_pantry SET ingredient_amount = ingredient_amount + ${amountNeeded}, ingredient_expiration_date = '${ingredientExpirationDate}' WHERE ingredient_id=${ingrdientId};`
+    query = `UPDATE ingredients_in_pantry SET ingredient_amount = ingredient_amount + ${amountNeeded}, ingredient_expiration_date = '${ingredientExpirationDate}' WHERE ingredient_id=${ingrdientId} LIMIT 1;`
     await db.query(query, function dbResponse(err) {
       if (err) {
         throw err
