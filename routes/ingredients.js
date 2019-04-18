@@ -39,20 +39,20 @@ router.get('/showall', async function(req, res) {
       user_id: currentUserId
     }
   })
-  ////////////////////////////////
-  // need to add pantry id feching//
-  /////////////////////////////////
+  //inner join to grab all the data we need for the page
   db.query(
     'select ingredients.ingredient_image_path, ingredients.ingredient_id, ingredients.ingredient_name, ingredients.priority, ingredients_in_pantry.ingredient_amount, ingredients_in_pantry.ingredient_unit_of_measurement, ingredients_in_pantry.ingredient_expiration_date from ingredients_in_pantry inner join ingredients on ingredients_in_pantry.ingredient_id = ingredients.ingredient_id and ingredients_in_pantry.ingredient_expiration_date is not null AND ingredient_expiration_date >= CURDATE() and pantry_id=' +
       currentPantryId.pantry_id +
       ';',
     function(err, results) {
       for (key in results) {
+        //convert it to a normal looking date for normal people
         results[key]['ingredient_expiration_date'] = moment(
           results[key]['ingredient_expiration_date']
         ).format('LL')
       }
       if (err) throw err
+      //render page
       res.render('showall_ingredients', {
         title: 'Your Ingredients',
         results: results
@@ -65,6 +65,7 @@ router.get('/showall', async function(req, res) {
 // Render page with data from database
 // GET request to localhost:3000/users/login
 router.get('/expired', function(req, res) {
+  //grab pantry id
   userPantryId =req.user.pantry_id
   // renders showall_recipes with all the available ingredients
   const query = `
@@ -77,11 +78,13 @@ router.get('/expired', function(req, res) {
     query,
     function(err, results) {
       for (key in results) {
+        //change the dates to normal looking ones
         results[key]['ingredient_expiration_date'] = moment(
           results[key]['ingredient_expiration_date']
         ).format('LL')
       }
       if (err) throw err
+      //rend page
       res.render('expired_ingredients_np', {
         title: 'Your Expired Ingredients',
         results: results
@@ -132,15 +135,8 @@ router.get('/expiredAdmin', function expiredTable(req, res) {
 router.post('/add', upload.array('image'), async function addIngredient(req, res) {
   console.log("++++++++++++++++++++++++++++++++")
   console.log("adding ingredients");
-  console.log(req.originalUrl)
-
-  var currentUserId = req.session.passport['user']
-  var PantryId = await User.findOne({
-    attributes: ['pantry_id'],
-    where:{
-      user_id: currentUserId
-    }
-  })
+  //grab pantry id
+  var userPantryId =req.user.pantry_id
   var currentPantryId = PantryId.pantry_id
   var imagePath = new Array()
   var imagePathSys = new Array()
@@ -152,25 +148,33 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
     
   }
   try{
+    //start a loop for all the elements on the page
+    //page sends the data starting at 1
     for (var i =1; i < req.body.ingredientProperties.length;i++) {
       if(imagePathSys[i-1])
       {
         console.log("system image path: "+ imagePathSys[i-1])
+        //the old path is the full path to the image on the computer
         const old_path = imagePathSys[i-1];
-        //rename
+        //making the image name/path for storing onthe sever
         var currentDate =  Date.now()
         const new_path = "./public/images/" + currentDate + ".jpg"
+        //this path is forthe db
         var no_dot = "/images/" + currentDate + ".jpg"
         
         console.log("new_path: " + new_path )
+        
         imagePath.push(no_dot)
       var writing= await gm(old_path).resize(1024,575,'!').write(old_path,err =>{
         if(err){
+          //if an error occurs in writing the pic to the sever set the path to the image 
+          //to the placehold so an image shows ups
           console.log(err)
           imagePath[i] = '/images/placeholder.jpg'
           }
           console.log("in function sys path: " + old_path)
           console.log("in function new path:" +new_path)
+          //write to the sever
           fs.renameSync(old_path, new_path)
           
         
@@ -180,54 +184,14 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
       console.log("----------")
       console.log(imagePath)  
     
-      }  // if (req.files) {
-    //   console.log("the file data")
-    //   console.log("==============")
-    //   console.log(req.files[i-1])
-    //   console.log(req.files.length)
-    //   console.log('File Uploaded Successfully')
-    //   var e 
-    //     try{
-    //     var currentDate = Date.now()
-    //     imagePath[i-1] = currentDate  + '.jpg'
-        
-    //       e = false
-    //       console.log(i + " " )
-    //       console.log("pic magic " + req.files[i-1].path)
-    //       console.log("===========================")
-    //     await gm(req.files[i-1].path) // uses graphicsmagic and takes in image path
-    //       .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
-    //       .write(req.files[i-1].path, err => {
-    //         fs.rename(req.files[i-1].path, './public/images/' + currentDate + '.jpg', function(err) {
-    //           if (err) throw err
-    //           console.log('File Renamed.')
-    //           fs.close(req.files[i-1].path)
-    //         })
-
-    //         if (err) {
-    //           console.log(err)
-    //           imagePath[i-1] = 'placeholder.jpg'
-    //         }
-    //       })
-        
-    //   }
-    //     catch(e){
-    //       imagePath[i-1] = 'placeholder.jpg'
-    //     }
-      
-    //   }
-    //   else {
-        
-    //       imagePath[i-1] = 'placeholder.jpg'
-    //       console.log('File Upload Failed')
-    //     }
-      //////////////////////////////////////
-      
-      
+      }  
+      //show the ingredients properties array
     console.log(req.body.ingredientProperties[i])
-    
+      //take a slot out of it
       var block_oF_data = req.body.ingredientProperties[i];
-      if(block_oF_data != null){
+      //if the user didnt delete the row onthe page
+      if(block_oF_data != null)
+      {
         console.log(block_oF_data)
         console.log("i is " + i)
         console.log('0 is ' + block_oF_data[0])
@@ -236,23 +200,25 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
         console.log('3 is ' + block_oF_data[3])
         console.log('4 is ' + block_oF_data[4])
         console.log("path: " + imagePath[i-1])
-        //seperate the data
+        //seperate and clean the data the data
         var ingredient_name =  await input_cleaner.string_cleaning(block_oF_data[0])
         var ingredient_amount = await input_cleaner.num(block_oF_data[1])
         var ingredient_unit = await block_oF_data[2]
         var ingredient_date = await input_cleaner.string_cleaning(block_oF_data[3])
         var priority = await input_cleaner.string_cleaning(block_oF_data[4])
         var final_id
-
+        //check db if the ingredient exists
         var does_ingredient_exist = await ingredient_t.findOne({
           where: {
             ingredient_name: ingredient_name
           }
         })
 
+        //if it does exist then grab the id
         if (does_ingredient_exist != null) {
           final_id = does_ingredient_exist.ingredient_id
         } else {
+          //if it does NOT exist then create a new row in the ingredietns table
           var new_weight = await aw.auto_weight(ingredient_name)
           var new_ingredient = await ingredient_t.create({
             ingredient_name: ingredient_name,
@@ -288,7 +254,7 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
         else{
           //just add a new entry
           var new_inv = await ing_in_stock.create({
-            pantry_id: currentPantryId, //change to get this from the sesson
+            pantry_id: currentPantryId, 
             ingredient_id: final_id,
             ingredient_amount: ingredient_amount,
             ingredient_unit_of_measurement: ingredient_unit,
@@ -354,10 +320,12 @@ router.get('/ingredientsWithSameName/:id', function showCards(req, res) {
 
 // This route gets called from dashboard when users change ingredient amount on-hand
 router.post('/editIngredientAmount', async function editIngredientAmount(req, res) {
+  //grab user and pantry id
   const currentUserId = req.session.passport['user']
   currentPantryId = await User.findOne({
     where: { user_id: currentUserId }
   })
+  //make sure they are numebrs
   if(val.isNumeric(req.body.ingredient_id) && val.isNumeric(req.body.ingredient_amount))
   {
   const ingredientId = req.body.ingredient_id
@@ -372,7 +340,8 @@ router.post('/editIngredientAmount', async function editIngredientAmount(req, re
   console.log("DONE!")
   res.send('success')
   }
-  res.send("error")
+  else
+    res.send("error")
 })
 
 router.post('/edit',upload.single('image'),async function editIngredientInfo(req, res){
@@ -412,7 +381,7 @@ router.post('/edit',upload.single('image'),async function editIngredientInfo(req
       }
     })
   }
-
+  //make new ingredient object 
   ingredientData = new Object()
   ingredientData.ingredientNewExpirationDate = req.body.ingredientDate
   ingredientData.ingredientCurrentExpirationDate = await moment(new Date(req.body.ingredientCurrentExpirationDate)).format('YYYY-MM-DD')
