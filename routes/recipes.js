@@ -1,3 +1,5 @@
+// THIS FILE DEALS WITH RECIPE MANIPULATIONS
+
 const express = require('express')
 const router = express.Router()
 const recipe_t = require('../DB_models/Recipes')
@@ -42,8 +44,6 @@ router.get('/showall', async function(req, res) {
     console.log('the recipes: \n' + JSON.stringify(recipe_res))
     console.log('length: ' + recipe_res.length)
     if (recipe_res.length > 0) {
-      // var IiR_res = await IiR_t.findAll({});
-      // console.log("Iir_res: \n" + JSON.stringify(IiR_res));
       //make string array that we will be storeing the ingredient  sting
       var ingredient_list = new Array(recipe_res.length).fill('')
       console.log('starting ingreditents list: \n' + ingredient_list)
@@ -57,6 +57,7 @@ router.get('/showall', async function(req, res) {
       //each ingredient is seperated by a #
 
       console.log('starting for loop')
+      // finnd all ingredients that belong to the recipe
       for (var i = 0; i < recipe_res.length; i++) {
         var IiR_res = await IiR_t.findAll({
           where: {
@@ -67,12 +68,14 @@ router.get('/showall', async function(req, res) {
           '\ningredients for recipe ' + recipe_res[i].recipe_id + '\n' + JSON.stringify(IiR_res)
         )
         for (var o = 0; o < IiR_res.length; o++) {
+          // find ingredient which belong to the recipe
           var new_ingredient = await ingredient_t.findOne({
             attributes: ['ingredient_name'],
             where: {
               ingredient_id: IiR_res[o].ingredient_id
             }
           })
+          // generate recipe array with all recipe information, which will be displayed on the page
           if (ingredient_list[i] != '') ingredient_list[i] = ingredient_list[i] + '#'
           ingredient_list[i] =
             ingredient_list[i] +
@@ -83,11 +86,14 @@ router.get('/showall', async function(req, res) {
             IiR_res[o].ingredient_unit_of_measurement
         }
       }
+
       for (var i = 0; i < ingredient_list.length; i++) {
         ingredient_list[i] = ingredient_list[i].split('#')
       }
+      // get all ingredient data
       var data = await ingredient_t.findAll({})
     }
+    // redner the showall recipes page with table
     res.render('showall_recipes', {
       title: 'Your Recipes',
       results: recipe_res,
@@ -99,11 +105,13 @@ router.get('/showall', async function(req, res) {
   }
 })
 
+//Renders show recipes page with card view
 router.get('/showRecipes', async function showRecipes(req, res) {
   userPantryId = req.user.pantry_id
   // Get all available recipes
   const results = await recipe_t.findAll({ where: { pantry_id: userPantryId } })
   const recipeStepsArray = []
+  // if recipes exist
   if (results.length > 0) {
     for (every_recipe_directions in results) {
       const recipe_steps = await steps.parse_recipe_directions_by_string(
@@ -133,6 +141,7 @@ router.get('/showRecipes', async function showRecipes(req, res) {
             ingredient_id: IiR_res[o].ingredient_id
           }
         })
+        //create array with recipe data
         if (ingredient_list[i] != '') ingredient_list[i] = ingredient_list[i] + '#'
         ingredient_list[i] =
           ingredient_list[i] +
@@ -173,12 +182,15 @@ router.get('/showCommunityRecipes', async function showCommunityRecipes(req, res
     }
   })
   const recipeStepsArray = []
+  // get recipe directions
   for (every_recipe_directions in results) {
     var recipe_steps = await steps.parse_recipe_directions_by_string(
       results[every_recipe_directions].recipe_directions
     )
+    //add each direction into array
     recipeStepsArray.push(recipe_steps.split('${<br>}'))
   }
+  //render the page
   res.render('comunity_recipes', {
     title: 'Community Recipes',
     recipe_steps: recipeStepsArray,
@@ -213,16 +225,19 @@ BODY_PARAMS:
 */
 // calls upload function for images
 router.post('/add', upload.single('image'), async function addRecipe(req, res) {
+  const recipeDirections = (req.body.recipeDirections)
+  const recipeShareable = req.body.recipeShareable
+  // get recipe name that is being added, also clean the string
   var recipe_name = await input_cleaner.string_cleaning(req.body.recipeName)
   var name_is_open = await recipe_t.findAll({
     where: {
       recipe_name:await recipe_name
     }
   })
-  //check if it is already in the database.
   console.log('++++++++++')
   console.log(JSON.stringify(name_is_open))
   console.log("++++++++++")
+  //check if it is already in the database.
   if(name_is_open.length> 0)
   {
     req.flash('error',"Recipe " + recipe_name + " already exist. please rename your new recipe")
@@ -243,8 +258,10 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
   if (req.file) {
     console.log('File Uploaded Successfully')
     var currentDate = Date.now()
+    // create image path
     var imagePath = currentDate + '.jpg'
-    gm(req.file.path) // uses graphicsmagic and takes in image path
+    // uses graphicsmagic and takes in image path
+    gm(req.file.path) 
       .resize(1024, 576, '!') // Sets custom weidth and height, and ! makes it ignore aspect ratio, thus changing it. Then overwrites the origional file.
       .write(req.file.path, err => {
         fs.rename(req.file.path, './public/images/' + currentDate + '.jpg', function(err) {
@@ -256,17 +273,20 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
         }
       })
   } else {
+    // if image was not uploaded assign a placeholder to it
     var imagePath = 'placeholder.jpg'
     console.log('File Upload Failed')
   }
   // recipe_name and recipe_size are unique form fields, so they do not require any recursion to grab all of them
   //const recipeName = input_cleaner.string_cleaning(req.body.recipeName)
   const recipeServingSize = (req.body.recipeServingSize)
-  if (recipeServingSize == null)
+  if (recipeServingSize == null){
     recipeServingSize == 4
-  else input_cleaner.num(recipeServingSize)
-  const recipeDirections = (req.body.recipeDirections)
-  const recipeShareable = req.body.recipeShareable
+  }
+  else {
+    input_cleaner.num(recipeServingSize)
+  }
+  //speifify the replace symbol, because all recipe steps get stored as a giants string
   let replaceNewLine = '#'
   for (char in recipeDirections) {
     replaceNewLine = replaceNewLine.concat(
@@ -291,7 +311,6 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
   const recipe_id_inserted = result['null']
 
   // Iterate over every key_name inside JSON request
-  // var key = req.body
   // When Ingredient key_name is found
   // For every ingredient in recipe defined by user in the form do the following
   for(var i =1; i < req.body.ingredientProperties.length; i++)
@@ -367,44 +386,35 @@ router.get('/getPantryRecipes', async function getPantryRecipes(req, res) {
   res.json(result)
 })
 
+//get recipe directions API call
 router.get('/getRecipeDirections/:id', async function getDirections(req, res) {
+  //get recipe id
   const recipeId = req.params.id
+  //get recipe directions
   const directions = await recipe_t.findOne({
     attributes: ['recipe_directions'],
     where: { recipe_id: recipeId }
   })
+  //parse the directions string
   const recipe_steps = await steps.parse_recipe_directions_by_string(directions.recipe_directions)
   let recipeStepsArray = recipe_steps.split('${<br>}')
+  //return recipe directions
   res.json(recipeStepsArray)
 })
 
 //Share a recipe into community
 router.post('/share', async function(req, res){
+  //create query
     share_query=`UPDATE recipes SET sharable=1 WHERE recipe_name='${req.body.recipe_name}';`
     await db.query(share_query, function(err, results){
         if (err) throw err;
         console.log(results);
     });
-
-  //note to others : dont really want to delete this chunch of code just in case, k thanks///////
-
-  // await db.query("SELECT * FROM recipes WHERE recipe_name='"+req.body.recipe_name+"';", async function(err, results){
-  //     if (err) throw err;
-  //     var r_name = results[0].recipe_name;
-  //     var r_serving_size = results[0].recipe_serving_size;
-  //     var r_directions = results[0].recipe_directions;
-  //     var r_image_path = results[0].recipe_image_path
-  //     values = "('"+r_name+"',"+r_serving_size+",'"+r_directions+"','"+r_image_path+"');"
-  //     add_to_community_query="INSERT INTO community_recipes (c_recipe_name,c_recipe_serving_size,c_recipe_directions,c_recipe_image_path) VALUES " + values;
-  //     console.log(add_to_community_query);
-  //     await db.query(add_to_community_query, function(err, results){
-  //         if (err) throw err;
-  //         console.log("Recipe Shared to Community");
-  //     })
-  // })
+  //respond to Jquery call
   res.send('success')
 })
 
+//get recipe details API call
 router.get('/recipeDetails/:id', async function showDetails(req, res) {
   // Get current user from session auth
   const userId = req.session.passport['user']
@@ -415,7 +425,7 @@ router.get('/recipeDetails/:id', async function showDetails(req, res) {
       user_id: userId
     }
   })
-
+  //get number of people user is cookign for
   peopleToCookFor = await Pantry.findOne({
     attributes: ['people_cooking_for'],
     where: {
@@ -428,10 +438,11 @@ router.get('/recipeDetails/:id', async function showDetails(req, res) {
   recipeData = await recipe_t.findOne({
     where: { recipe_id: recipeId }
   })
-
+  //parse recipe steps string
   recipe_steps = await steps.parse_recipe_directions_by_string(recipeData.recipe_directions)
   recipe_steps = recipe_steps.split('${<br>}')
 
+  //create inner joing query with ingredients_in_pantry and ingredients tables with same id ingredients and specific recipe
   query = `select ingredients_in_pantry.ingredient_expiration_date, ingredients_in_pantry.ingredient_id, ingredients.ingredient_name, ingredients.ingredient_image_path,ingredients_in_a_recipe.pantry_id,ingredients_in_a_recipe.amount_of_ingredient_needed,ingredients_in_a_recipe.ingredient_unit_of_measurement 
   FROM ingredients
   INNER JOIN ingredients_in_a_recipe
@@ -452,13 +463,13 @@ router.get('/recipeDetails/:id', async function showDetails(req, res) {
       console.log(peopleToCookFor.people_cooking_for / recipeData.num_people_it_feeds)
       
     }
-
+    //create JSON object which will be used for the undo button to keep track of which ingredinents and recipes were used
     var JSONObj = {
       recipeId: recipeId,
       recipeData: recipeData,
       ingredientData: ingredientsInRecipe
     }
-
+    //render page
     res.render('cooked_recipe_details', {
       wholeRecipe: JSON.stringify(JSONObj),
       peopleToCookeFor: peopleToCookFor.people_cooking_for,
@@ -639,45 +650,32 @@ COMMENTS: This block gets executed by AJAX script located under public/js/main.j
 URL_PARAMS:
     id
 */
-//DELETE request to localhost:3000/recipes/remove
-//this will delete recipe from database based on its ID
-
-//CURRENT BEHAVIOR
-//This will delete recipe from recipe table and from recipe ingredient table
-//HOWEVER it will not delete ingredient inside that recipe from ignredients table
 
 router.delete('/remove/:id', async function(req, res) {
   const recipe = req.params.id
-  // const delete_query = "DELETE FROM recipes WHERE recipe_id ='"+recipe+"'";
-  // db.query(delete_query, function(err, results) {
-  //     if (err) throw err
-
-    //first need to get rid of all the foriegn keys
-    try
-    {
-        var del_IiR = await IiR_t.destroy({
-            where:
-            {
-                recipe_id: recipe
-            }
-        });
-        console.log("delete from ingredients in a recipe table: \n" + JSON.stringify(del_IiR));
-        var del_recipe = await recipe_t.destroy({
-            where:{
-                recipe_id : recipe
-            }
-        });
-        console.log("delete from recieps table: \n" + JSON.stringify(del_recipe));
-        res.send("Success");
-    }
-    catch(err)
-    {
-        console.log(err);
-        res.send("no?")// i dont know ajax calls............
-    }
-        //Since AJAX under /js/main.js made a request we have to respond back
-        
-    // });
+  //first need to get rid of all the foriegn keys
+  try
+  {
+      var del_IiR = await IiR_t.destroy({
+          where:
+          {
+              recipe_id: recipe
+          }
+      });
+      console.log("delete from ingredients in a recipe table: \n" + JSON.stringify(del_IiR));
+      var del_recipe = await recipe_t.destroy({
+          where:{
+              recipe_id : recipe
+          }
+      });
+      console.log("delete from recieps table: \n" + JSON.stringify(del_recipe));
+      res.send("Success");
+  }
+  catch(err)
+  {
+      console.log(err);
+      res.send("no?")
+  }
 })
 
 module.exports = router
