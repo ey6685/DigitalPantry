@@ -1,5 +1,5 @@
 /*
-this file containt cookit2.5?
+this file containt cookit2.5
 
 description:
 this function will take a recipe_id and cook it. this meaning it will:
@@ -30,6 +30,7 @@ const in_pantry_t = require('../DB_models/ingredients_in_pantry');
 const unit_converter = require('../algorithm/Convert_unts');
 const ing_totaler = require('../algorithm/total_of_ingredient');
 
+//easier to use raw sql by building a query string
 const mysql = require('mysql');
 const db = mysql.createConnection ({
     host: 'localhost',
@@ -168,17 +169,10 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
             //});//end of for each
         //end of checking if the flag has been fliped
         
-        console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
-        console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
-        console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
-        console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
+
         console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
         console.log("the string:\n" +query_str);
         console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
-        console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
-        console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
-        console.log("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+")
-        
         db.query(query_str,(err,res)=>{
             if(err) throw err;
             console.log(JSON.stringify(res));

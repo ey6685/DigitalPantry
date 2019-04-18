@@ -1,13 +1,4 @@
-/*
-=========================================================================================================
-variant_recipe_id | ingredient_id | amount_of_ingredient_needed | ingredient_unit_of_measurement        |
-  int pf autoin   |  int fk ref   |     float                   |    emun("tsp.","tbsp.","fl oz","cup",)|
-                  | ingredients   |                             |        "quart","ml","lb","oz"         |
-=========================================================================================================
-
-*/
-
-
+//modele for the sequilized ingredients in the recipe
 
 const Sequelize = require('sequelize');
 const ingredient = require('../DB_models/Ingredients');
@@ -45,8 +36,6 @@ const recipe_ingredient = db.define('ingredients_in_a_recipe', {
 },
 );
 
-// //FKs
-// recipe_ingredient.belongsTo(ingredient, {foreignKey: "ingredient_id", targetKey: "ingredient_id"});
-// recipe_ingredient.belongsTo(rec_var, {foreignKey: "variant_recipe_id", targetKey: "variant_recipe_id"});
+//api auto adds the id need to takeit out for there are no plain id
 recipe_ingredient.removeAttribute('id');
 module.exports = recipe_ingredient;

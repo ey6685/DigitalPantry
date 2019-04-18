@@ -86,19 +86,21 @@ async function ingredient(ingredient_id,pantry_id)
 
     //data good then lets get started
     //var declarations
-    var today = new Date();
-    today = today.getTime();
+    var today = new Date();//today
+    today = today.getTime();//set it to ms
     var sum = 0.0;
     console.log("todays date: " + today + " MS \n=============================");
     console.log("\nquerying the db\n===============");
     try{
-        var ingredient_weight_factor = await ingredient_table.findOne({
+        //grab the weight for from the ingredients table
+            var ingredient_weight_factor = await ingredient_table.findOne({
             attributes : ["ingredient_weight"],
             where :{
                 ingredient_id: ingredient_id
                 
             }
         });
+        //greb the rest of the ingredient data
         var ingredient_list = await ingredient_in_pantry.findAll({
             where :{
                 ingredient_id: ingredient_id,
@@ -150,7 +152,7 @@ async function ingredient(ingredient_id,pantry_id)
             console.log("CURRENT SUM: " + sum + "\n=====================")
         }
         console.log("\nDONE WITH INGREDIENT: " + ingredient_id + " CALCULATIONS\n===================================\n");
-        return sum;//change to sum
+        return sum;
     }
     catch(err) 
     {
@@ -199,7 +201,7 @@ async function just_one(ingredient_id,pantry_id)
     //var declarations)
     var today = new Date()
     today = today.getTime()
-    var wieght;
+    
     console.log("todays date: " + today + " MS \n=============================");
     console.log("\nquerying the db\n===============");
     try{
@@ -259,6 +261,8 @@ async function just_one(ingredient_id,pantry_id)
 module.exports.just_one = just_one
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /*
+
+///this funtion was left in the code for future sen projects
 recipe()
 
 inputs:
@@ -362,6 +366,6 @@ async function recipe(recipe_id, pantry_id)
     }
 
 }
-
+module.exports.recipe= recipe
 //testing code for recipes
 //recipe(2,1);

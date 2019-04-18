@@ -1,18 +1,13 @@
-/*
-this file contains the function to scan names of ingredients and auto assign weight to indredients.
-if the auto assign is wrong the user may edit the weight with the editing functions
 
-inputs
-1) string: name
+//this file contains the function to scan names of ingredients and auto assign weight to indredients.
+//if the auto assign is wrong the user may edit the weight with the editing functions
 
-outputs
+//inputs
+//1) string: name
 
-return
-int: weight
 
-requires
-*/
-
+//return
+//int: weight
 function auto_weight(name)
 {
     //data valadations
@@ -25,20 +20,20 @@ function auto_weight(name)
         name = name.toUpperCase();
 
         console.log(name);
-        //weght 1 buzz word
+        //weight 1 buzz word
         if(
             (name.includes("FROZEN"))
-            ||
+            ||//or
             (name.includes("CANNED"))
-            ||
+            ||//or
             (name.includes("CAN"))
-            ||
+            ||//or
             (name.includes("GROUND PEPPER"))
-            ||
+            ||//or
             (name.includes("BROTH"))
-            ||
+            ||//or
             (name.includes("STOCK"))
-            ||
+            ||//or
             (name.includes("PICKEL"))
           )//then
         {
@@ -49,9 +44,9 @@ function auto_weight(name)
     //weight 2    
     else if(
             (name.includes("CARROT"))
-            ||
+            ||//or
             (name.includes("CELERY"))
-            ||
+            ||//or
             (name.includes("CUCUMBERS"))
            )//then
         {
@@ -63,25 +58,25 @@ function auto_weight(name)
         //MEATS
         //includes
         (name.includes("CHICKEN"))
-        ||
+        ||//or
         (name.includes("TURKEY"))
-        ||
+        ||//or
         (name.includes("BREAST"))
-        ||
+        ||//or
         (name.includes("BEEF"))
-        ||
+        ||//or
         //SEAFOOD
         (name.includes("FISH"))
-        ||
+        ||//or
         (name.includes("SALMON"))
-        ||
+        ||//or
         (name.includes("COD"))
-        ||
+        ||//or
         //FRESH FRUIT
         (name.includes("BANANA"))
-        ||
+        ||//or
         (name.includes("APPLE"))
-        ||
+        ||//or
         (name.includes("FRUIT"))
     )//THEN
     {

@@ -1,17 +1,9 @@
 // setting up the models for useing the database
 // this is the model for the  table ingredients_in_pantry the digital_pantry db
 
-/*
-===============================================================================================
-|ingredient_id | ingredient_amount | ingredient_unit_of_measurement | ingredient_expiration_date|
-| int fk       | float             |    enum                        | date
-| ref          |
-| ingredients  |
-==================================================================================================
-*/
 
 const sequelize = require('sequelize')
-// const ingredients = require('./Ingredients')
+
 const db = require('../databaseMySQL.js')
 
 const ingredients_in_pantry = db.define('ingredients_in_pantry', {
@@ -43,9 +35,10 @@ const ingredients_in_pantry = db.define('ingredients_in_pantry', {
   }
 )
 
-// relationsshipes
 
 
+//api puts in an id field.
+//using ingredient id instead
 ingredients_in_pantry.removeAttribute('id')
 
 module.exports = ingredients_in_pantry

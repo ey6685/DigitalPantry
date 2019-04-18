@@ -3,23 +3,13 @@ it has:
 1)weight_total     : totals the weight for a recipe
 2)ing_is_greatest  : checkes to see what the greatest ingredient weight provided and return
 3)recipe_is_greatest: checks to see if the first recipe id's weight is greater then the second
-
 */
-
-
 //requires
-
 const ingredient_t           = require('../DB_models/Ingredients');
 const recipe_t               = require('../DB_models/Recipes');
 const ingredient_in_recipe_t = require('../DB_models/ingredients_in_a_recipe');
 const ingrediet_in_pan       = require('../DB_models/ingredients_in_pantry');
 const op                     = require('sequelize').Op;
-const logger = require('../functions/logger');
-
-
-
-
-
 /*
 weight total
 
@@ -99,20 +89,10 @@ async function weight_total(recipe_id)
 
 module.exports.weight_total = weight_total;
 
-//test wieght code
-// for(var i=2; i<=8;i++)
-// {
-// //test wieght code
-//     console.log("recipe id: " + i);
-//     if(i !=3)
-//     {
-//         weight_total(i);
-//     }
-// }
-
 /*
-ing_is_greatest
 
+//keep ALL of the code BELOW for future use maybe in later terms of this class
+//ps hi students tell jon, patrick says hi
 description:
 this function is takes an array of ids and returns the one with the greatest weight.
 ties will be broken by ingredient amount.

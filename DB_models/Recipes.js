@@ -1,12 +1,6 @@
-/*
-=========================================================================================
-recipe_id | recipe_name | recipe_image_path | recipe_num_times_cooked | pantry_id
-int pf    | varchar 32  | text              | int                     | int fk ref pantry
-==========================================================================================
-*/
+
 
 const Sequelize = require('sequelize')
-const pantry = require('./Pantry')
 const db = require('../databaseMySQL.js')
 
 const Recipes = db.define(
@@ -47,9 +41,5 @@ const Recipes = db.define(
     timestamps: false
   }
 )
-// Recipes.removeAttribute('id');
 
-//define relations
-// Recipes.hasMany(rec_vars, {foreignKey: "recipe_id", sourceKey: "recipe_id"});
-// Recipes.belongsTo(pantry, {foreignKey: "pantry_id", targetKey: "pantry_id"});
 module.exports = Recipes

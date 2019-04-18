@@ -21,6 +21,7 @@ var transporter = mail.createTransport({
 
 function send_mail(email,subject,msg){
     try{
+        //do nothing if nothing is sent
         if(email == null || msg == null)
         {
             throw "can't send mail"
@@ -33,6 +34,7 @@ function send_mail(email,subject,msg){
             html: msg
         }
 
+        //send msg from our email  to given email with the info provided
         transporter.sendMail(options,function(error,info){
             if (error) {
               console.log(error);
@@ -46,14 +48,15 @@ function send_mail(email,subject,msg){
         console.log(e)
     }
 }
-
+//function to call for password change
+//made for code readablity
 function password_change(email){
     try{
         if(email == null)
         {
             throw "can't send mail"
         }
-
+        //clean options
         var options = {
             from: 'wsu.digital.pantry@gmail.com',
             to: email,
@@ -61,7 +64,7 @@ function password_change(email){
             html: "Hello " + email +
             ",<br>Your pasword has been changed."
         }
-
+        //sends the mail with ^^
         transporter.sendMail(options,function(error,info){
             if (error) {
               console.log(error);
@@ -77,6 +80,7 @@ function password_change(email){
 
 }
 
+//email sent when password is reset
 function password_reset(email,pass){
     try{
         if(email == null || pass == null)
@@ -105,6 +109,8 @@ function password_reset(email,pass){
         console.log(e)
     }
 }
+
+//email sent on sign up
 function signup(email){
     try{
         if(email == null)
@@ -131,6 +137,7 @@ function signup(email){
         console.log(e)
     }
 }
+//email sent when a user is added to a pantry
 function add_user(email,pass)
 {
     try{

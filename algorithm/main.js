@@ -4,22 +4,17 @@
 // window and find recipes that are the best fit to use those ingredients     //
 ///////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////inputs/////////////////////////////////////////////////////////////
+//inputs
 // today's date: date : take from computer, later? report to a master clock                //
 // the window  : date : taken from the user, how far away for $today"s date we need to look//
 // pantry id   : int  : to limit the search through all the recipes                        //
-////////////////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////outputs///////////////////////////////////////
+//outputs
 // JSON object with all the recipes to cook                       //
-///////////////////////////////////////////////////////////////////
+
 // requires
 const ingredient_finder = require('./find_ingredients');
 const recipe_id_finder = require('./find_recipes');
-const recipe_t = require('../DB_models/Recipes');
 const op = require('sequelize').Op;
-const wieght_finder= require('./recipe_weight_functions');
-const logger = require('../functions/logger');
 const ingredient_t = require('../DB_models/Ingredients.js')
 const ingredients_pan_t = require('../DB_models/ingredients_in_pantry')
 const weight = require('../algorithm/weight_calc')

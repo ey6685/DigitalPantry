@@ -8,24 +8,26 @@
 // JSON array with ingredient ids
 
 // requires
-const ingredient_t = require('../DB_models/Ingredients'); // link to ingredients tables
 const ingredients_in_pan = require('../DB_models/ingredients_in_pantry');
 const logger = require('../functions/logger');
 
 const op = require('sequelize').Op; /// handles
 
 async function find_ingredients(window,pantry_id) {
- 
   // if no window passed, assume today
   console.log("STARTING FIND INGREDIENTS")
   console.log("=========================")
+  //set of two dates. one for being today and one used for finding finding ingredients that are expiring in the 
   var window_date = new Date();
   var today = await new Date();
+  //check if the window is a number 
   if(window == null || typeof window !='number')
     {
+      //if not just use todat
       console.log("no window using todays date: " + window_date);
     }
   else{
+    //get the date plus  window amount of days
       window_date.setDate(window_date.getDate() + window);
        
       var dd = window_date.getDate();
@@ -37,14 +39,14 @@ async function find_ingredients(window,pantry_id) {
       window_date = new Date(d_str);
   }
   try {
-    // SELECT ingredient_name
+    // SELECT ingredient_id
     // FROM   ingredients
     // WHERE ingrdient_exiration_date BETWEEN today and window
-    logger.info("")
+    
     var today = new Date();
     logger.info("today: " + today + "\nwindow: " + window_date);
     
-
+    //query for the ids
     var expiring_ings = await ingredients_in_pan.findAll({
       attributes: ['ingredient_id'],
       where: 
@@ -60,7 +62,9 @@ async function find_ingredients(window,pantry_id) {
     return expiring_ings;
   } catch (err) {
     logger.info('error in find_ingredients\n' + err);
+    return 0
   }
 }
+//testing code
 // find_ingredients(12,1);
 module.exports.find_ingredients = find_ingredients;

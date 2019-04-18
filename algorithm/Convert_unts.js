@@ -1,37 +1,36 @@
-/*
-File: Convert_units
-Created by: Patrick Veltri
-*/
 
-/*
+//File: Convert_units
+//Created by: Patrick Veltri
+
+
+
 /////////////////////////////////////////////////////////////////////////////////////
-Function 1: converter raw
+//Function 1: converter raw
 
-inputs:
-1)# to be converted
-2)what unit it is in
-3)what it needs to be converted to
+//inputs:
+//1)# to be converted
+//2)what unit it is in
+//3)what it needs to be converted to
+//returns:
+//1)float of the # passed to this function that has been converted to
+//2)0 if can not convert
 
-outputs:
-
-returns:
-1)float of the # passed to this function that has been converted to
-2)0 if can not convert
-
-descrition:
-after checking to make sure allthe data is there,give a raw double to ofa conversion
-of the unit. NOTE this is for db checking.
+//descrition:
+//after checking to make sure allthe data is there,give a raw double to ofa conversion
+//of the unit. NOTE this is for db checking.
 //////NOT//////
 /////FOR//////
 /////FRONT////
 ////END//////
-The second funtion in this file is for the front end
-*/
+//The second funtion in this file is for the front end
+
 
 /////requires////
-const ing_t = require('../DB_models/Ingredients');
 const logger = require('../functions/logger');
 function converter_raw(num, unit, con_unit) {
+  //num is the amount of the food we are trying to convert
+  //unit is what it is measured in
+  //con_unit is the unit we are coverting to
   try {
     // checking data
     if (num == null) throw 'need num';
@@ -49,6 +48,7 @@ function converter_raw(num, unit, con_unit) {
       logger.info("water, most likely\n");
       return num;
     }
+    //return the num sent in if the unit and the convert unit are the some
     if(unit == con_unit)
     {
       return num;
@@ -149,7 +149,7 @@ function converter_raw(num, unit, con_unit) {
                 return (num * 16);
             }
             else if(unit == "oz" && con_unit == "lb")
-            {//make sure this doesnet do int math int math bad
+            {
                 return (num / 16.0);
             }
             else
@@ -247,13 +247,6 @@ returns:2d array
 
 /////or///////
 just a converted number if the covert is less than 1 or converted to a whole number
-
-
-///THIS///
-////IS///
-///FOR//
-///FRONT////
-///END DISPLACES////
 */
 
 async function converter_whole(num, unit, con_unit) {

@@ -4,11 +4,7 @@
 // This file contains a model for the Users table in SQL database
 // This file also contains functions required to communicate with the database
 
-/*
-==============================================================================
-username   | user_password | user_email |pantry_id
-varchar(32)| string        |  string    | int fk ref pantry
-*/
+
 const Sequelize = require('sequelize')
 const bcrypt = require('bcryptjs')
 const db = require('../databaseMySQL.js')
