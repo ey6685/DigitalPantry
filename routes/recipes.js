@@ -442,10 +442,6 @@ router.get('/recipeDetails/:id', async function showDetails(req, res) {
       throw err
     }
 
-    for(ingredient in ingredientsInRecipe){
-      ingredientsInRecipe[ingredient].amount_of_ingredient_needed = ingredientsInRecipe[ingredient].amount_of_ingredient_needed * peopleToCookFor.people_cooking_for
-    }
-
     var JSONObj = {
       recipeId: recipeId,
       recipeData: recipeData,
