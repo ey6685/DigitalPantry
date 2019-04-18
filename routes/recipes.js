@@ -262,6 +262,9 @@ router.post('/add', upload.single('image'), async function addRecipe(req, res) {
   // recipe_name and recipe_size are unique form fields, so they do not require any recursion to grab all of them
   //const recipeName = input_cleaner.string_cleaning(req.body.recipeName)
   const recipeServingSize = (req.body.recipeServingSize)
+  if (recipeServingSize == null)
+    recipeServingSize == 4
+  else input_cleaner.num(recipeServingSize)
   const recipeDirections = (req.body.recipeDirections)
   const recipeShareable = req.body.recipeShareable
   let replaceNewLine = '#'
@@ -489,6 +492,8 @@ router.post('/edit', async function editRecipe(req, res) {
   //UPDATE
   const recipeName = await input_cleaner.string_cleaning(req.body.recipeName)
   const recipeSize = await input_cleaner.string_cleaning(req.body.recipeSize)
+  if(recipeSize == null)
+    recipeSize = 1
   const recipeId = await input_cleaner.string_cleaning(req.body.recipeId)
   const recipeDirections = await input_cleaner.string_cleaning(req.body.recipeDirections)
   const ingredientNamesArray = req.body.ingredientName

@@ -288,7 +288,7 @@ router.post('/add', upload.array('image'), async function addIngredient(req, res
         else{
           //just add a new entry
           var new_inv = await ing_in_stock.create({
-            pantry_id: 1, //change to get this from the sesson
+            pantry_id: currentPantryId, //change to get this from the sesson
             ingredient_id: final_id,
             ingredient_amount: ingredient_amount,
             ingredient_unit_of_measurement: ingredient_unit,
