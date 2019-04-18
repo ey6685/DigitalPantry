@@ -54,7 +54,7 @@ block content
 							.card-body.dp-form-fields
 								h6(class='card-title') #{ingredient.ingredient_name}
 							.card-footer
-								p#ingredientRequired Amount needed: #{ingredient.amount_of_ingredient_needed*peopleToCookeFor} #{ingredient.ingredient_unit_of_measurement}
+								p#ingredientRequired Amount needed: #{ingredient.amount_of_ingredient_needed} #{ingredient.ingredient_unit_of_measurement}
 				- previousCardImage = ingredient.ingredient_image_path
 		br
 		h2.dp-secondary-text Directions

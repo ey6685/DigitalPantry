@@ -84,12 +84,7 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
             
             scale = parseInt((people_to_fed / recipe_scale.num_people_it_feeds));
             console.log("scale before convertered: " + scale)
-            if(people_to_fed < recipe_scale.num_people_it_feeds)
-                {scale = 1;}
-            else if(people_to_fed % recipe_scale.num_people_it_feeds >0)
-                {scale++;}
-            if(scale == NaN)
-                scale = 1;
+
             console.log("recipe_scale: " + JSON.stringify(recipe_scale));
         }
         console.log("scale: " + scale + '\n');

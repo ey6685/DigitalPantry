@@ -443,7 +443,14 @@ router.get('/recipeDetails/:id', async function showDetails(req, res) {
     }
 
     for(ingredient in ingredientsInRecipe){
-      ingredientsInRecipe[ingredient].amount_of_ingredient_needed = ingredientsInRecipe[ingredient].amount_of_ingredient_needed * peopleToCookFor.people_cooking_for
+      ingredientsInRecipe[ingredient].amount_of_ingredient_needed = ingredientsInRecipe[ingredient].amount_of_ingredient_needed * (peopleToCookFor.people_cooking_for / recipeData.num_people_it_feeds)
+      console.log("ingredient calc:")
+      console.log("================")
+      console.log("ingredientsInRecipe[ingredient]: " + ingredientsInRecipe[ingredient].amount_of_ingredient_needed)
+      console.log("peopleToCookFor.people_cooking_for: " + peopleToCookFor.people_cooking_for)
+      console.log("recipeData.num_people_it_feeds: " + recipeData.num_people_it_feeds)
+      console.log(peopleToCookFor.people_cooking_for / recipeData.num_people_it_feeds)
+      
     }
 
     var JSONObj = {
@@ -468,6 +475,7 @@ router.get('/recipeDetails/:id', async function showDetails(req, res) {
 
 router.post('/undo', async function undoCooking(req, res) {
   cookedRecipeData = JSON.parse(req.body.cookedRecipe)
+  console.log("cooked recipe data " + JSON.stringify(cookedRecipeData))
   counter = 0
   for (ingredient in cookedRecipeData.ingredientData) {
     counter = counter + 1
