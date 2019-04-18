@@ -178,6 +178,7 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
             console.log(JSON.stringify(res));
         });
      }//if we have all
+     return flag_have_all
     }//try
     catch(err)
     {
