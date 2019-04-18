@@ -42,7 +42,7 @@ mysql -u <your_username> -p
 create database digital_pantry;
 
 //Exit mysql shell and run
-mysql -u <your_username> -p digital_pantry < mySQL.sql
+mysql -u <your_username> -p digital_pantry < DESIGN_DAY.sql
 //It will promnt you for your password
 ```
 
