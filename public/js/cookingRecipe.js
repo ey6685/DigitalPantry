@@ -33,9 +33,10 @@ $(document).on('click', '#undoCooking', function (e) {
     type: 'POST',
     data: {'cookedRecipe': cookedRecipeData},
     url: '/recipes/undo/',
-    success: function (response) {
-      // Reload the page to update cards
+    success: function () {
+      // Clear storage so the undo button dissapears
       localStorage.clear()
+      // Reload the page to update cards
       location.reload()
     },
     error: function (err) {
@@ -61,6 +62,7 @@ $('#servingSizeField').change(function updateIngredientAmount () {
   }
 })
 
+// if user doesnt finish cooking a recipe clear storage so undo button is not showing
 $(document).on('click', '#backButton', function (e) {
   localStorage.clear()
 })

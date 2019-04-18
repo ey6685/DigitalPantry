@@ -1,5 +1,5 @@
 // CREATED BY OSKARS DAUKSTS
-// THIS FILE HAS ALL THE JQUERY AND AJAX CALLS
+// THIS FILE HAS ALL THE JQUERY AND AJAX CALLS FOR DIFFERENT PAGES
 
 // DELETE ingredient request
 // On document ready start
@@ -10,12 +10,14 @@ $(document).ready(function() {
     $target = $(e.target)
     // get data-id from the button
     const id = $target.attr('data-id')
+    // get ingredient expiration date
     const ex = $target.attr('data-ex')
+    // get ingredient measurement
     const unit = $target.attr('data-unit')
+    // get ingredient quantity
     const qty = $target.attr('data-qty')
 
-    console.log(id + '|' + ex + '|' + unit + '|' + qty)
-    // Start AJAX
+    // Send request
     $.ajax({
       type: 'DELETE',
       // This route is defined under ingredients.js
@@ -27,7 +29,7 @@ $(document).ready(function() {
         qty: qty
       },
       success: function(response) {
-        // route user back to results
+        // reload page with new data
         location.reload()
       },
       error: function(err) {
@@ -229,22 +231,25 @@ $('#editRecipe').on('show.bs.modal', async function(event) {
     )
     $('#ingredient-rows').append($ingredientRow)
   }
+  // hide input field with additional data which wont be displayed to the user but will be used on the route
   var $input = $('<input>')
     .attr('type', 'hidden')
     .attr('name', 'recipeId')
     .val(values[0])
+    // add input button defined above
   $('#ingredient-rows').append($input)
+  // Send request to get recipe directions
   $.ajax({
     type: 'GET',
     url: '/recipes//getRecipeDirections/' + values[0],
     success: function(response) {
       // Reload the page to update cards
-      console.log(response)
       let recipeSteps = ''
       for (step in response) {
         recipeSteps = recipeSteps + response[step] + '\n'
         $('#currentRecipeSteps').append(`<p>${response[step]}</p>`)
       }
+      // add recipe steps to the textarea on the form
       $('#textarea').attr('placeholder', recipeSteps)
     },
     error: function(err) {
@@ -252,14 +257,12 @@ $('#editRecipe').on('show.bs.modal', async function(event) {
     }
   })
 })
-//////////////////////
 //this will trigger ediding recipes on the card view
 $('#editRecipeCard').on('show.bs.modal', function (event) {
   console.log("it worked");
   // Button that triggered the display card
   var button = $(event.relatedTarget)
-  console.log("button: " + JSON.stringify(button))
-  // Get the recipe row based on the button clicked and its closest tr element
+  // get recipe information from the page to later display it ont he overlay card
   $recipe_id  = button.closest('.card').attr('id')
   $recipe_img = button.closest('.card').attr('image_p')
   $recipe_name = button.closest('.card').attr('r_name')
@@ -268,23 +271,17 @@ $('#editRecipeCard').on('show.bs.modal', function (event) {
   $ingredient_list = button.closest('.card').attr('ing');
   $ingredient_list = JSON.parse($ingredient_list)
 
-  console.log("recipe id: "+ $recipe_id)
-  console.log("Img: " + $recipe_img)
-  console.log("recipe_name: " + $recipe_name)
-  console.log("Idirectionsmg: " + $directions)
-  console.log("people: " + $people)
-  console.log("ingredient_list: " + $ingredient_list)
-  //pop up menu time
+  // add recipe information to the overlay recipe details
   $('h4').text('Editing Recipe - ' + $recipe_name)
   $('h4').addClass('data-id')
   $('#recipe-name').attr('placeholder', $recipe_name)
   $('#recipe-size').attr('placeholder', $people)
+  // clear the overlay form from previous data
   $('#ingredient-rows').html('')
+  // clear the overlay form from previous data
   $('#dynamic-ingredient-row').html('')
 
   for (ingredient in $ingredient_list) {
-    let ingredientCounter = 'ingredient' + ingredient
-    console.log($ingredient_list[ingredient])
     // split Ingredient name and QtyMeasurement
     var ingredientsSplit = $ingredient_list[ingredient].split(',')
     // get ingredientName
@@ -321,10 +318,14 @@ $('#editRecipeCard').on('show.bs.modal', function (event) {
                 <button type="button" data-id="${$recipe_id}" class="btn btn-danger delete-current-ingredient">X</button>
             </div>
         </div>`
+    //Make sure the dropdown has a value selected
     $ingredientRow = $ingredientRow.replace('value="' + ingredientMeasurement + '"', `value ="${ingredientMeasurement}" selected`)
+    // append new row
     $('#ingredient-rows').append($ingredientRow)
   }
+  // hide input field with recipe id which will be sent in with the form
   var $input = $('<input>').attr('type', 'hidden').attr('name', 'recipeId').val($recipe_id)
+  // append hidden recipe_id row
   $('#ingredient-rows').append($input)
 })
 
@@ -375,18 +376,23 @@ $(document).on('click', '.saveRecipe', function() {
   })
 })
 
+// While on the show recipes page, table view.
+// Once any recipe row is clicked display ingredient information for that recipe
 $('#recipeInformation').on('show.bs.modal', function(event) {
+  // clear the overlay modal from previous data if any
   $('#recipe-ingredients').html('')
+  // get the object of the row that was pressed
   $button = $(event.relatedTarget)
+  // get recipe id which is being viewed
   $recipeId = $button.closest('tr').find('td')[1].innerText
   ingredients = ""
+  // retrieve ingredients based on the recipe id
   $.ajax({
     type: 'GET',
     url: '/ingredients/ingredientsForRecipe/'+$recipeId,
     success: function(response) {
-      // Reload the page to update cards
       ingredients = response
-      console.log(response)
+      // create table with all ingredients to display inside the modal
       html = `
       <table class='table dp-table'>
         <tr>
@@ -401,6 +407,7 @@ $('#recipeInformation').on('show.bs.modal', function(event) {
         </tr>`
       }
       html = html + `</table>`
+      // append the table to the form
       $('#recipe-ingredients').append(html)
     },
     error: function(err) {
@@ -469,9 +476,11 @@ $(document).on('click', '.individual-recipe', function() {
 
 // Once admin clicks change privillege on admin panel this gets called
 $('#changePrivilege').on('show.bs.modal', function(event) {
+  // get the button object that was clicked
   $button = $(event.relatedTarget)
+  // get user id
   user_id = $button.closest('tr').attr('data-id')
-
+  // add a URL where the request will be sent to change users privillege based on users id
   $(this)
     .find('form')
     .attr('action', '/users/changePrivilege/' + user_id)
@@ -479,20 +488,24 @@ $('#changePrivilege').on('show.bs.modal', function(event) {
 
 // Once admin click reset password on admin panel this gets called
 $('#resetForm').on('show.bs.modal', function(event) {
+  // get the button object that was clicked
   $button = $(event.relatedTarget)
+  // get user id
   user_id = $button.closest('tr').attr('data-id')
-
+  // add a URL where the request will be sent to reset users password
   $(this)
     .find('form')
     .attr('action', '/users/resetPassword/' + user_id)
 })
 
+// Handle image upload for pantry image
 $('#OpenImgUpload').click(function() {
   $('#imgupload').trigger('click')
 })
 
 // Triggered when admin clicks save button on the admin panel for the new name of the pantry
 $('#save-pantryName-btn').click(function savePantryName() {
+  // get the name that the user is trying to change pantry name to
   $newName = $('#name').text()
 
   // Send request to update pantry name in the database
@@ -539,8 +552,12 @@ $(document).on('click', '#cancelPassEdit', function cancelPasswordEdit() {
   $('#saveEmailButton').hide()
 })
 
+// While on the dashboard user can select expiration window to sort their ingredients by
+// Once user makes their selections update sort value in the database
 $('#sortByTimeFrameBtn').click(function sortByTimeFrame() {
+  // get the time frame value that the user has selected
   $timeFrameValue = $('input[data-slider-value]').val()
+  // send request to the route to update that value
   $.ajax({
     type: 'POST',
     url: '/pantry/setExpirationTimeFrame',
@@ -552,13 +569,17 @@ $('#sortByTimeFrameBtn').click(function sortByTimeFrame() {
   })
 })
 
+// While on the dashboard/homepage user can specify the number of people they want to cook for
 $(document).on('change', '#cookForNumberOfPeople', function updateCookForNumberOfPeople() {
+  // get the number of people to cook for
   numberOfPeopleToCookFor = $(this).val()
+  // update the number of people to cook for in the database by sending request to middleware
   $.ajax({
     type: 'POST',
     url: '/pantry/setNumberOfPeopleToCookFor',
     data: { numberOfPeople: numberOfPeopleToCookFor },
     success: function() {
+      // reload the page to reflect the changes on the UI
       location.reload()
     },
     error: function(err) {
@@ -615,18 +636,3 @@ $('#editIngredient').on('show.bs.modal', async function(event) {
   $('#ingredientCurrentExpirationDate').attr('value', new Date(ingredientData.expirationDate))
   document.getElementById("dateSelector").valueAsDate = new Date(ingredientData.expirationDate)
 })
-
-
-// //this is the call for editing the pantry id
-
-// $('#save-pantryName-btn').on('click', function(e) {
-//   // get button object clicked
-//   $target = $(e.target)
-
-//   console.log("target of button click:" + $target)
-//   // Start AJAX
-//   $newName = $target.closest('.new_name').val()
-//   console.log("name in text box: " + $newName)
-
-// })
-

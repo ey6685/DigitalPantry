@@ -1,5 +1,5 @@
 // CREATED BY OSKARS DAUKSTS
-// This file contains logic for viewing recipe details
+// This file contains logic for viewing recipe details overlay
 // These details are shown once user clicks View button on the dashboard
 
 $(document).on('click', '#showRecipeDetails', async function() {
@@ -20,8 +20,11 @@ $(document).on('click', '#showRecipeDetails', async function() {
   var recipeId = $(this)
     .closest('.card')
     .attr('recipe-id')
+    // create a route which will be called once user decides to cook this recipe
   $('#modalFooter').attr('action','/recipes/recipeDetails/'+recipeId)
+  // Show recipe name on the details card
   $('h5').text($recipeName)
+  // create rows for each ingredient step
   for (step in recipeStepsArray) {
     $('#recipeStepsOverlay').append(
       `<p style="color:#570573">${recipeStepsArray[step].innerText}</p>`
@@ -40,6 +43,7 @@ $(document).on('click', '#showRecipeDetails', async function() {
       // make entire row red
       ingredientStatus = `<tr data-id=${item.ingredient_id} style="background-color:#f2d43b">`
     }
+    // create table row
     var $tr = $(ingredientStatus).append(
       $('<td id="ingredient_name" style="color:white;">').text(item.ingredient_name),
       $('<td id="ingredient_amount_required" style="color:white;">').text(
@@ -49,7 +53,7 @@ $(document).on('click', '#showRecipeDetails', async function() {
         item.ingredient_sum + ' ' + item.ingredient_unit_of_measurement
       )
     )
-    // if available amount of ingredient is less than required amount of ingredient
+    // if available amount of ingredient is less than required amount of ingredient create a row with a button to add ingredient quantity
     if (item.ingredient_amount_required > item.ingredient_sum) {
       $tr.append(
         $('<td style="background-color:white; border:none;">').append(
@@ -58,9 +62,12 @@ $(document).on('click', '#showRecipeDetails', async function() {
           ).text('Add Missing Ingredient')
         )
       )
-    } else {
+    }
+    // if user has enough ingredients do not show add button 
+    else {
       $tr.append('<td style="background-color:white; border:none;">')
     }
+    // add row to table
     $tr.appendTo('tbody')
   })
 })
