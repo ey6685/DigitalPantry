@@ -150,7 +150,7 @@ async function cook_it2(recipe_id, pantry_id, people_to_fed)
                         amount = await unit_converter.converter_raw(amount, current_ingredient[o].ingredient_unit_of_measurement,ingredients_in_the_recipe[i].ingredient_unit_of_measurement);
                     }
                     console.log(amount + " >= " + amount_need)
-                    if(amount >= amount_need)
+                    if(amount > amount_need)
                     {
                         console.log('current_ingredient - amount needed: ' + current_ingredient[o].ingredient_amount + ' - ' + amount_need)
                         query_str = query_str+  "UPDATE ingredients_in_pantry SET ingredient_amount = " + (current_ingredient[o].ingredient_amount - amount_need) + " WHERE ingredient_id = " + current_ingredient[o].ingredient_id + " AND ingredient_expiration_date = '" + current_ingredient[o].ingredient_expiration_date +"'; ";
