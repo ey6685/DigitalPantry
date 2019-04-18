@@ -47,8 +47,7 @@ async function total_ingredients(ing_id, pantry_id,unit)
         var sum = 0.0; 
         for(var i = 0; i< the_stock.length;i++)
         {   
-            if(the_stock[i].ingredient_expiration_date == null || the_stock[i].ingredient_expiration_date >= Date('9999-12-30'))
-                return 9999
+            
             // the ingredient unit is the same just add it to the total
             if(unit == the_stock[i].ingredient_unit_of_measurement) 
             { 
