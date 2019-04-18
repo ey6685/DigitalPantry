@@ -1,21 +1,56 @@
-extends layout_template
+//-Registration page for New Pantries.
+//-Created by: Oskars
+//-Date: 02/06/19
+//-Last modified by: Jon
+//-Date modified: 04/13/19
+//-Complete overhaul of page.
+//-Page now uses 70/30 split.
+
+extends layout_template_for_register
 
 block content
-        .col-md-8.offset-md-4
-            //- This will print whatever you have sent from app.js
-            h1.mb-3 #{title}
-            //- TODO Create Register form
-            form(method='POST', action='/users/register')
-                .col-md-6.mb-3
-                    #form-group
-                        label Email:
-                        input.form-control(name='email', type='text')
-                    #form-group
-                        label Password:
-                        input.form-control(name='password', type='password')
-                    #form-group
-                        label Confirm Password:
-                        input.form-control(name='confirm_password', type='password')
-                    br
-                    input.btn.btn-primary(type='submit', value='Submit')
-            a(href='/Login') Already have an account?
+	style.
+		.alert{
+			z-index: 1 !important;
+			width: 50%;
+			left: 780px;
+		}
+	!= messages('message', locals)
+	if errors
+		div.dp-alert-fixed(class='alert alert-danger') #{errors[0].msg}
+	br
+	br
+	br
+	br
+	br
+	div.dp-split-left(class='container-fluid')
+		br
+		br
+		br
+		br
+		br
+		img.img-fluid.dp-table(src='/images/RegisterImage.png', alt='image', class='rounded mx-auto d-block' style='max-width: 80%')
+	div.dp-split-right(class='container-fluid')
+		h1(style='color: #570573').text-center.mb-3 #{title}
+		br
+		hr
+		br
+		div(class='row')
+			div.mx-auto(class='col-8')
+				form(method='POST', action='/users/Register', class= 'form')
+					#form-group
+						input.form-control.dp-title-text.mb-3.mt-3(name='email', type='text', id='email-register', placeholder='Email')
+					br
+					#form-group
+						input.form-control.dp-title-text.mb-3(name='password', type='password', id='password-register', placeholder='Password')
+					br
+					#form-group
+						input.form-control.dp-title-text.mb-3(name='confirm_password', type='password', id='password2-register', placeholder='Confirm Password')
+						br
+						div(class='text-center')
+							a.dp-primary-text.mt-3(href='/users/Login') Already Have an Acccount?
+							br
+							br
+							input.btn.col-md-5.dp-btn-orange-white-text.mt-3(type='submit', value='Register', id='submit-register')
+	script.
+		localStorage.clear()

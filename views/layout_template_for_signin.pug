@@ -1,0 +1,99 @@
+//-Layout Template used for Login Page.
+//-Created by: Jon
+//-Date: 04/13/19
+
+doctype html
+html
+	head
+		//-Style for the sticky footer
+		style.
+			.footer {
+				position: fixed;
+				left: 0;
+				height: 60px;
+				bottom: 0;
+				width: 100%;
+				text-align: center;
+				box-shadow: 0 50vh 0 50vh #570573;
+				background-color: #570573 !important;
+				color: white !important;
+				flex-shrink: 0;
+			}
+			.body{
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+			}
+			.container{
+				flex: 1 0 auto;
+			}
+			main{
+				margin-bottom:100px;
+			}
+			.btn{
+				/*Adds button separation so they are not glued to each other
+				Used for the signin and register pages*/
+				margin: 0px 10px 0px 0px;
+			}
+			a{
+				color:#eeaf2c !important
+			}
+			.nav{
+				background-color: #570573 !important;
+			}
+			@media screen and (max-width: 992px){
+				.nav{
+					width: 100%;
+					height: auto;
+					position: relative;
+				}
+				.nav a {float: left;}
+				div.content {
+					margin-left: 0;
+					padding-left: 16px;
+				}
+				.filler{
+					display: collapse;
+				}
+				.nav-item{
+					width: 100px;
+				}
+			}
+		title Digital Pantry
+		link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+		script(defer='', src='https://use.fontawesome.com/releases/v5.0.13/js/solid.js', integrity='sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ', crossorigin='anonymous')
+		script(defer='', src='https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js', integrity='sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY', crossorigin='anonymous')
+		link(rel='stylesheet' type='text/css' href='/css/digital_pantry.css')
+
+	body.body
+		//- Navigation section
+		//- TODO when window is small navigation should display a dropdown
+		//- Have to include some javascript files from bootstrap folder and i dont know which ones
+		nav.nav.navbar.navbar-expand-md.pt-0
+			a.navbar-brand(href='/')
+				img.ml-2(src='/images/dp_logo.png', alt='image', width='90px')
+			button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
+				span.navbar-toggler-icon
+			#navbarCollapse.collapse.navbar-collapse
+				if !user
+					a.nav-link(href='/users/register')
+						| Register
+				else
+					a.nav-link(href='/users/logout')
+						| Logout
+		.container
+			main.ml-sm-auto.col-lg-10.px-4(role='main')
+				block content
+			footer.footer
+				p.mb-1.mt-1 © 2019 Digital Pantry
+				ul.list-inline
+					//- TODO link these to proper files
+					li.list-inline-item
+						a(href='/users/privacy') Privacy
+					li.list-inline-item
+						a(href='/users/terms') Terms
+					li.list-inline-item
+						a(href='/users/support') Support
+		script(src='/bower_components/jquery/dist/jquery.min.js')
+		script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
+		script(src="/js/main.js")

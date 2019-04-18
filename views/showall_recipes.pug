@@ -1,34 +1,231 @@
-extends layout_template
+extends main_layout_template
 
-//- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
 
 block content
-    .col-md-12
-        br
-        br
-        h1.mb-3 #{title}
-        br
-        br
-        table.table.table-dark
-            caption Available recipes
-            thead
-                tr
-                    th(scope='col') Recipe ID
-                    th(scope='col') Pantry ID
-                    th(scope='col') Recipe name
-                    th(scope='col') Serving size
-                    th(scope='col') Ingredients needed
-                    th(scope='col') Action
-            tbody
-                for item in results
-                    tr
-                        th(scope='row')= item.recipeID
-                            td= item.pantryID
-                            td= item.recipeName
-                            td= item.servingSize
-                            td= item.ingredients
-                            td
-                                //- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
-                                a.btn.btn-danger.delete-recipe(href='#', data-id=item.recipeID) DELETE
-        form(method='GET', action='/recipes/add')
-            input.btn.btn-primary(type='submit', value='ADD RECIPES')
+	//- Style used for removing different border color within a table
+	style.
+		table,thead,tr{
+			border:1px double #570573 !important
+		}
+		#example_length{
+			display:none
+		}
+		#example_paginate{
+
+		}
+		.page-item.active .page-link{
+			background-color: #eeaf2c !important;
+			border-color:#eeaf2c !important;
+			z-index:0
+		}
+		th{
+			border-top: 1px double #570573 !important;
+			border-bottom:1px double #570573 !important;
+		}
+		td{
+			border-bottom:1px double #570573 !important;
+			border-top: none !important;
+		}
+		.page-link{
+			color:#570573 !important;
+		}
+		.dataTables_filter {
+			display: none;
+		}
+		.table.dataTable{
+			margin-top: 0px !important;
+		}
+		div.dataTables_wrapper div.dataTables_info{
+			color:#570573 !important;
+		}
+		table.dataTable thead span.sort-icon {
+			display: inline-block;
+			padding-left: 5px;
+			width: 16px;
+			height: 16px;
+		}
+		th.sorting::before{
+			display:none;
+		}
+
+		table.dataTable thead .sorting span { background: url('http://cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/images/sort_both.png') no-repeat center right; }
+		table.dataTable thead .sorting_asc span { background: url('http://cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/images/sort_asc.png') no-repeat center right; }
+		table.dataTable thead .sorting_desc span { background: url('http://cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/images/sort_desc.png') no-repeat center right; }
+
+	br
+	!= messages('message', locals)
+	div(class='container-fluid', class='rounded', style='width: 90%')
+		br
+		br
+		br
+		h1.dp-title-text #{title}
+		br
+		a.btn.dp-change-view(href='/recipes/showRecipes')
+			i.dp-change-view.fa.fa-th-large.fa-lg.mr-1
+			| Card View
+		a.btn.btn-primary.dp-btn-secondary.ml-2(href='/recipes/add', class='h-75')
+			| Add Recipe
+		input.btn#myInputTextField.dp-search.pull-right(type='text', placeholder='Search')
+		br
+		br
+		#recipeInformation.modal.fade(tabindex='-1', role='dialog', aria-hidden='true', class= 'form-modal')
+			.modal-dialog.modal-dialog-centered.modal-lg(role='document')
+				.modal-content
+					.modal-header.modal-title 
+						h4.dp-secondary-text Required Ingredients
+					.modal-body
+						.container-fluid
+							#recipe-ingredients
+					.modal-footer
+						button.btn.dp-btn-secondary(type='button', data-dismiss='modal', id='close-community') Close
+		//- Overlay form start. In other words edit recipe form
+		#editRecipe.modal.fade(tabindex='-1', role='dialog', aria-hidden='true', class= 'form-modal')
+			.modal-dialog.modal-dialog-centered.modal-lg(role='document')
+				.modal-content
+					.modal-body
+						form(method= 'POST', action='/recipes/edit', class='form')
+							h4.dp-secondary-text
+							hr
+							br
+							//- Edit recipe information fields
+							.form-row
+								.form-group.col-md-4
+									label.dp-primary-text(for='recipe-name') Recipe name
+									input.form-control.dp-form-fields(name="recipeName", type='text', placeholder="Recipe name", class='form-group', id='recipe-name')
+								.form-group.col-md-4
+									label.dp-primary-text(for='serving-size') Serving size
+									input.form-control.dp-form-fields(name="recipeSize", type='text', placeholder="Serving Size", class='form-group', id='recipe-size')
+								.form-group.col-md-4
+									label.dp-primary-text(for='sharable') Shared?
+									dropdown-inline
+									select.form-control.dp-form-fields(name='recipeShareable', class='selection-drop')
+										option(value='1') Share My Recipe
+										option(value='0') Don't Share My Recipe							
+							h5.dp-secondary-text Ingredients
+							hr
+							br
+							//- Edit ingredient information fields
+							.form-row
+								.form-group.col-md-4.dp-primary-text
+									| Name
+								.form-group.col-md-3.dp-primary-text
+									| Qty
+								.form-group.col-md-3.dp-primary-text
+									| Measurement
+							//- Although it might seem like ingredient row does nothing
+							//- #ingredient-rows is used for Jquery 
+							#ingredient-rows
+							#dynamic-ingredient-row
+							button.btn.dp-btn-yellow(type='button', onclick='addIngredient()', id='add-showall-rec') Add Ingredient
+							br
+							br
+							h5.dp-secondary-text Current recipe steps
+							hr
+							br
+							#currentRecipeSteps.dp-primary-text
+							h5.dp-secondary-text Recipe steps
+							hr
+							br
+							.form-group
+								textarea#textarea.form-control.dp-form-fields(name='recipeDirections', placeholder= 'Describe first step\nDescribe second step \nContinue with each step on new line', rows='8', class='form-group')
+							hr
+							br
+							div.float-right
+								button.btn.dp-btn-secondary.mr-2(type='button', data-dismiss='modal', id='close-showall-rec') Close
+								button.btn.dp-btn-primary(type='submit', id='save-showall-rec') Save Changes
+		//-Alert form end
+		//- Page content start
+		table.table.table-hover.dp-table.mt-0#example
+			thead
+				tr
+					th(scope='col')
+					th(scope='col') Recipe ID
+					th(scope='col') Recipe name
+					th(scope='col') Serves
+					th(scope='col') Shared?
+					th(class="text-center") Action
+			tbody
+				for item,i in results
+					tr
+						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()')
+							//- i.fa.fa-plus
+							img.ml-3(src=item.recipe_image_path, alt='image', width='50', height='50')
+						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()')= item.recipe_id
+						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()')= item.recipe_name
+						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()')= item.num_people_it_feeds
+						td.clickable(data-toggle='modal', data-target='#recipeInformation' onclick='getIngredients()')= item.sharable
+						td(align='middle')
+							//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
+							a.btn.btn-outline-danger.delete-recipe.mr-2(href='#', data-id=item.recipe_id, id= 'delete-button') REMOVE
+							if user.user_type == "Administrator"
+								a.btn.dp-btn-edit(type='button', data-toggle='modal', data-target='#editRecipe', id= 'edit-button') EDIT
+	script(src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js')
+	script(src='https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js')
+	link(rel='stylesheet', type='text/css', href='//cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css')
+	script(src='https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js')
+	script.
+		$('#example').dataTable( {
+			"dom": '<lf<t>ip>',
+			"order":[1, 'asc'],
+			"columns": [
+				{ "orderable": false },
+				null,
+				null,
+				null,
+				null,
+				{ "orderable": false },
+			]
+		} );
+		oTable = $('#example').DataTable();   //pay attention to capital D, which is mandatory to retrieve "api" datatables' object, as @Lionel said
+		$('#myInputTextField').keyup(function(){
+			oTable.search($(this).val()).draw() ;
+		})
+		oTable.columns().iterator( 'column', function (ctx, idx) {
+			$( oTable.column(idx).header() ).prepend('<span class="sort-icon"/>');
+		} );
+		var textAreas = document.getElementsByTagName('textarea');
+			Array.prototype.forEach.call(textAreas, function(elem) {
+				elem.placeholder = elem.placeholder.replace(/\\n/g, '\n');
+			});
+		var allData = '!{data}'
+		allData = JSON.parse(allData)
+		//i is used for numbering new dynamic rows
+		let i = 0;
+		//When editing a recipe addIngredient function
+		//adds an extra row for an additional ingredient
+		function addIngredient(){
+			let template = `
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<input class="form-control dp-form-fields" name="newIngredientName" type="text" placeholder="Ingredient = Chicken" required>
+				</div>
+				<div class="form-group col-md-3">
+					<input class="form-control dp-form-fields" name="newIngredientQty" type="text" placeholder="Quantity = 2" required>
+				</div>
+				<div class="dropdown-inline col-md-4">
+					<select class="form-control dp-form-fields" name="newIngredientMeasurement" required>
+						<option value="">Measurement</option>
+						<option value="fl oz">fluid ounce</option>
+						<option value="ml">Mililliter</option>
+						<option value="quart">Quart</option>
+						<option value="lb">Pound</option>
+						<option value="oz">Ounce</option>
+						<option value="cup">Cup</option>
+						<option value="tbsp.">Tablespoon</option>
+						<option value="tsp.">Teaspoon</option>
+					</select>
+					</div>
+				<div class="form-group col-1">
+					<button type="button" class="btn btn-outline-danger delete-row">X</button>
+				</div>
+			</div>`;
+			let container = document.getElementById('dynamic-ingredient-row');
+			let element = document.createElement('div');
+			element.innerHTML = template;
+			container.appendChild(element);
+			i++
+		}
+		localStorage.clear()
+		function getIngredients(){
+			console.log("Click")
+		}

@@ -1,0 +1,127 @@
+//-Add Recipe Page.
+//-Created by: Jon
+//-Date: 01/27/19
+//-Last modified by: Jon
+//-Date modified: 04/14/19
+//-Added 'Shareable' field for adding new recipe.
+//-Value is 'Share my Recipe' by default. If this
+//-value is kept it will automatically be shared
+//-to the Community Recipes page.
+
+extends main_layout_template
+
+//- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
+
+block content
+	!= messages('message', locals)
+	br
+	br
+	br
+	br
+	div(class='container-fluid', class='rounded', style='width: 90%')
+		h1.dp-title-text #{title}
+		hr
+		br
+		form(method= 'POST', action= '/recipes/add', class= 'form', enctype="multipart/form-data")
+			//-First row in the form
+			.form-row
+				.form-group.col-md-4
+					input.form-control.dp-form-fields(name='recipeName', type='text', placeholder='Recipe = Chicken Soup', class= 'input-form')
+				.form-group.col-md-4
+					input.form-control.dp-form-fields(name='recipeServingSize', type='text', placeholder='Serving Size = 2', class= 'input-form')
+				.form-group.col-md-3
+					dropdown-inline
+					select.form-control.dp-form-fields(name='recipeShareable', class='selection-drop')
+						option(value='1') Share My Recipe
+						option(value='0') Don't Share My Recipe
+			//-Add Ingredient row. First row is static, additional rows are dynamically added.
+			.form-row
+				.form-group.col-md-4
+					input.form-control.dp-add-recipe-ingredient-rows(name='ingredientProperties[1]', type='text', placeholder='Ingredient = Chicken', class= 'input-form')
+				.form-group.col-md-4
+					input.form-control.dp-add-recipe-ingredient-rows(name='ingredientProperties[1]', type='text', placeholder='Quantity = 2', class= 'input-form')
+				.form-group.col-md-3
+					.dropdown-inline
+					select.form-control.dp-add-recipe-ingredient-rows(name='ingredientProperties[1]', required, class= 'selection-drop')
+						option(value='') Measurement
+						option(value='cup') Cup
+						option(value='fl oz') Fl oz
+						option(value='ml') Milliliter
+						option(value='oz') Ounce
+						option(value='lb') Pound
+						option(value='quart') Quart
+						option(value='tbsp.') Tablespoon
+						option(value='tsp.') Teaspoon
+			//-Dynamically add additional ingredients to the Recipe.
+			#recipe-container
+			button.btn.dp-btn-secondary(type='button' onclick='addIngredient()', id='add-ingredient-recipe') <b>+</b>
+			.form-row
+				.col-md-7
+					br
+					h3.dp-secondary-text Add Instructions
+					hr
+					br
+					.form-group
+						textarea.form-control.dp-form-fields(name='recipeDirections', placeholder= 'Describe first step\nDescribe second step \nContinue with each step on new line', rows='8', class='form-group')
+				.col-md-1
+				.col-md-4
+					br
+					h3.dp-secondary-text Add An Image
+					hr
+					br
+					.form-group
+						img#output(width='200', height='200')
+					.form-group
+						label.btn.btn-primary.dp-btn-secondary.btn.btn-file Choose Image
+							input(name='image', accept='image/*' ,type='file', style='display: none;', onchange='loadFile(event)', class='form-group', id='image')
+			input.btn.dp-btn-primary(type='submit', value='Add Recipe', class='form-group', id='submit-recipe')
+
+
+		script.
+			localStorage.clear()
+			//break
+			var textAreas = document.getElementsByTagName('textarea');
+			Array.prototype.forEach.call(textAreas, function(elem) {
+				elem.placeholder = elem.placeholder.replace(/\\n/g, '\n');
+			});
+			var loadFile = function(event) {
+							var output = document.getElementById('output');
+							output.src = URL.createObjectURL(event.target.files[0]);
+							output.classList.add("img-thumbnail");
+							document.getElementById("output").style.display = 'block';
+							document.getElementById("output").style.width = '200px';
+							document.getElementById("output").style.height = '200px';
+							}
+			let i = 2;
+				function addIngredient(){
+				let template = `
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<input class="form-control  dp-add-recipe-ingredient-rows" name="ingredientProperties[${i}]" type="text" placeholder="Ingredient = Chicken">
+					</div>
+					<div class="form-group col-md-4">
+						<input class="form-control dp-add-recipe-ingredient-rows" name="ingredientProperties[${i}]" type="text" placeholder="Quantity = 2">
+					</div>
+					<div class="dropdown-inline col-md-3">
+						<select class="form-control dp-add-recipe-ingredient-rows" name="ingredientProperties[${i}]" required="required">
+							<option value="">Measurement</option>
+							<option value="cup">Cup</option>
+							<option value="fl oz">Fl oz				
+							<option value='ml'> Milliliter</option>
+							<option value="oz">Ounce</option>
+							<option value="lb">Pound</option>
+							<option value="quart">Quart</option>
+							<option value="tbsp.">Tablespoon</option>
+							<option value="tsp.">Teaspoon</option>
+						</select>
+						</div>
+					<div class="form-group col-md-1 text-center">
+						<button type="button" class="btn btn-outline-danger delete-row" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					</div>
+				</div>`;
+				let container = document.getElementById('recipe-container');
+				let element = document.createElement('element');
+				element.innerHTML = template;
+				container.appendChild(element);
+				i++
+			}

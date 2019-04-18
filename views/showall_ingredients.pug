@@ -1,34 +1,229 @@
-extends layout_template
+extends main_layout_template
 
 //- Replaces 'block content' inside layout_template with whatever Renders parameter 'title'
 
 block content
-    .col-md-12
-        br
-        br
-        h1.mb-3 #{title}
-        br
-        br
-        table.table.table-dark
-            caption Available Ingredients
-            thead
-                tr
-                    th(scope='col') #
-                    th(scope='col') Name
-                    th(scope='col') Size
-                    th(scope='col') Expiration Date
-                    th(scope='col') qty
-                    th(scope='col') Action
-            tbody
-                for item in results
-                    tr
-                        th(scope='row') #
-                            td= item.ingredientName
-                            td= item.size
-                            td= item.expirationDate
-                            td= item.qty
-                            td 
-                                //- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
-                                a.btn.btn-danger.delete-ingredient(href='#', data-id=item.ingredientName) DELETE
-        form(method='GET', action='/ingredients/add')
-            input.btn.btn-primary(type='submit', value='ADD INGREDIENTS')
+	style.
+		#example_length{
+			display:none
+		}
+		#example_paginate{
+
+		}
+		.page-item.active .page-link{
+			background-color: #eeaf2c !important;
+			border-color:#eeaf2c !important;
+			z-index:0
+		}
+		th{
+			border-top: 1px double #570573 !important;
+			border-bottom:1px double #570573 !important;
+		}
+		td{
+			border-bottom:1px double #570573 !important;
+			border-top: none !important;
+		}
+		.page-link{
+			color:#570573 !important;
+		}
+		.dataTables_filter {
+			display: none;
+		}
+		.table.dataTable{
+			margin-top: 0px !important;
+		}
+		div.dataTables_wrapper div.dataTables_info{
+			color:#570573 !important;
+		}
+
+		table.dataTable thead span.sort-icon {
+			display: inline-block;
+			padding-left: 5px;
+			width: 16px;
+			height: 16px;
+		}
+		th.sorting::before{
+			display:none;
+		}
+
+		table.dataTable thead .sorting span { background: url('http://cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/images/sort_both.png') no-repeat center right; }
+		table.dataTable thead .sorting_asc span { background: url('http://cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/images/sort_asc.png') no-repeat center right; }
+		table.dataTable thead .sorting_desc span { background: url('http://cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/images/sort_desc.png') no-repeat center right; }
+
+		
+	br
+	br
+	br
+	br
+	div(class='container-fluid', class='rounded', style='width: 90%')
+		h1.dp-title-text #{title}
+		br
+		a.btn.dp-change-view(href='/ingredients/cards')
+			i.dp-change-view.fa.fa-th-large.fa-lg.mr-1
+			| Card View
+		a.btn.btn-primary.dp-btn-secondary.ml-2(href='/ingredients/add', class='h-75')
+			| Add Multiple Ingredients
+		input.btn#myInputTextField.dp-search.pull-right(,type='text', placeholder='Search')
+		p
+		#editIngredient.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', class= 'form-modal')
+			.modal-dialog.modal-dialog-centered.modal-lg(role='document')
+				.modal-content
+					.modal-body
+						form(method= 'POST', action='/ingredients/edit', class='form', enctype="multipart/form-data")
+							h4#title-field.dp-secondary-text
+							hr
+							br
+							.row.align-items-center
+								.form-group.col-md-4
+									.form-group.col-md-12
+										img#newImage.img-thumbnail(src='', alt='Ingredient Image')
+									.form-row
+										.col-md-12.text-center
+											label.btn.btn-primary.dp-btn-secondary.btn.btn-file Change Image
+												input(name='image', accept='image/*' ,type='file', style='display: none;', onchange='changeImage(event)')
+								.form-group.col-md-8
+									.row
+										.form-group.col-md-12
+											label.dp-primary-text(for='ingredientName') Name
+											input.form-control.dp-form-fields(name="ingredientName", type='text', placeholder="Ingredient name", class='form-group', id='ingredientNameField')
+									.row
+										.form-group.col-md-6
+											label.dp-primary-text(for='ingredientTotal') Total
+											input.form-control.dp-form-fields(name="ingredientTotal", type='text', placeholder="Ingredient Total", class='form-group', id='ingredientTotalField')
+										.measurementDiv.form-group.col-md-6
+											label.dp-primary-text(for='ingredientMeasurement') Measurement
+											select.form-control.dp-form-fields(name='ingredientMeasurement')
+												option(value='tsp.') Teaspoon
+												option(value='tbsp.') Tablespoon
+												option(value='fl oz') Fluid Ounce
+												option(value='cup') Cup
+												option(value='quart') Quart
+												option(value='ml') Millilitre
+												option(value='lb') Pound
+												option(value='oz') Dry Ounce
+									.row
+										.form-group.col-md-6
+											label.dp-primary-text(for='ingredientExpirationDate') Expires On
+											input#dateSelector.form-control.dp-form-fields(name='ingredientDate', type='date')
+										.priorityDiv.form-group.col-md-6
+											label.dp-primary-text(for='ingredientPriority') Priority
+											select.form-control.dp-form-fields(name='ingredientPriority')
+												option(value='Low') Low
+												option(value='High') High
+									input#ingredientIdField(name='ingredientId', style='display:none', type='text')
+									input#ingredientCurrentExpirationDate(name='ingredientCurrentExpirationDate', style='display:none', type='text')
+							br
+							hr
+							br
+							div.float-right
+								button.btn.dp-btn-secondary.mr-2(type='button', data-dismiss='modal', id='close-showall-rec') Close
+								button.btn.dp-btn-primary(type='submit', id='save-showall-rec') Save Changes
+		#accordion
+			.card
+				#headingTwo.card-header
+					h5.mb-0
+					button.btn.btn-primary.dp-btn-primary.collapsed.ml-2(data-toggle='collapse', data-target='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
+						| Add Ingredient
+				#collapseTwo.collapse(aria-labelledby='headingTwo', data-parent='#accordion')
+					.card-body
+						form(method= 'POST', action= '/ingredients/add', class= 'form', enctype="multipart/form-data")
+							.form-row(class='rounded')
+								.col-md-1.mt-3.mr-0
+									img#output(width='40', height='40')
+								.form-group.col-md-2.mt-3.mr-0.ml-0
+									label.btn.btn-primary.dp-btn-secondary.btn.btn-file Choose Image
+										input(name='image', accept='image/*' ,type='file', style='display: none;', onchange='loadFile(event)')
+								//- .form-group.col-md-4
+								//- 	img#output.mr-2.ml-2.mt-2(width='40', height='40')
+								//- 	input(type='file', id='image', name='image', accept='image/*', onchange='loadFile(event)', class='align-middle')
+								.form-group.col-md-2.ml-0
+									input.form-control.mt-3.dp-form-fields(name='ingredientProperties[1]', type='text', placeholder='Name = Tuna')
+								.form-group.col-md-1
+									input.form-control.mt-3.dp-form-fields(name='ingredientProperties[1]', type='text', placeholder='Total = 2')
+								.form-group.col-md-2
+									.dropdown-inline
+									select.form-control.mt-3.dp-form-fields(name='ingredientProperties[1]', required)
+										option(value='') Measurement
+										option(value='tsp.') Teaspoon
+										option(value='tbsp.') Tablespoon
+										option(value='fl oz') Fluid Ounce
+										option(value='cup') Cup
+										option(value='quart') Quart
+										option(value='ml') Millilitre
+										option(value='lb') Pound
+										option(value='oz') Dry Ounce
+								.form-group.col-md-2
+									input.form-control.mt-3.dp-form-fields(name='ingredientProperties[1]', type='date')
+								.form-group.col-md-1
+									.dropdown-inline
+									select.form-control.mt-3.dp-form-fields(name='ingredientProperties[1]', required)
+										option(value='') Priority Item?
+										option(value='High') Yes
+										option(value='Low') No
+								.col-md-1
+									input.btn.btn-primary.dp-btn-primary.mt-3(type='submit', value='Add', class='form-group')
+		table.table.dp-table.mt-0#example
+			//-caption Available Ingredients
+			thead
+				tr
+					th(scope='col') 
+					th(scope='col') Name
+					th(scope='col') Total
+					th(scope='col') Measurement
+					th(scope='col') Expiration Date
+					th(scope='col') Item Priority
+					th.text-center(scope='col') Action
+			tbody
+				for item in results
+					tr
+						td
+							img.ml-3(src=item.ingredient_image_path, alt='image', width='50', height='50')
+						td(class='align-middle')= item.ingredient_name
+						td(class='align-middle')= item.ingredient_amount
+						td(class='align-middle')= item.ingredient_unit_of_measurement
+						td(class='align-middle')= item.ingredient_expiration_date
+						td(class='align-middle')= item.priority
+						td(class='align-middle') 
+							//- Set a button with data-id that will be used for AJAX trigger defines in /js/main.js
+							a.btn.btn-outline-danger.delete-ingredient.mr-2(data-id=item.ingredient_id,data-ex=item.ingredient_expiration_date, data-unit=item.ingredient_unit_of_measurement, data-qty=item.ingredient_amount) REMOVE
+							if user.user_type == "Administrator"
+								a.btn.dp-btn-edit(data-id=item.ingredient_id, type='button', data-toggle='modal', data-target='#editIngredient', id= 'edit-button') EDIT
+		script(src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js')
+		link(rel='stylesheet', type='text/css', href='//cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css')
+		script(src='https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js')
+		script(src='https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js')
+		script.
+			var loadFile = function(event) {
+				var output = document.getElementById('output');
+				output.src = URL.createObjectURL(event.target.files[0]);
+				output.classList.add("img-thumbnail");
+				document.getElementById("output").style.display = 'block';
+				document.getElementById("output").style.width = '40px';
+				document.getElementById("output").style.height = '40px';
+				}
+			var changeImage = function(event) {
+				var output = document.getElementById('newImage');
+				output.src = URL.createObjectURL(event.target.files[0]);
+				output.classList.add("img-thumbnail");
+				}
+			$('#example').dataTable( {
+				"dom": '<lf<t>ip>',
+				"order":[1, 'asc'],
+				"columns": [
+					{ "orderable": false },
+					null,
+					null,
+					null,
+					null,
+					null,
+					{ "orderable": false },
+				]
+			} );
+			oTable = $('#example').DataTable();   //pay attention to capital D, which is mandatory to retrieve "api" datatables' object, as @Lionel said
+			$('#myInputTextField').keyup(function(){
+				oTable.search($(this).val()).draw() ;
+			})
+			oTable.columns().iterator( 'column', function (ctx, idx) {
+				$( oTable.column(idx).header() ).prepend('<span class="sort-icon"/>');
+			} );
+			localStorage.clear()

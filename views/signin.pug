@@ -1,18 +1,58 @@
-extends layout_template
+//-Sign In Page for users Registered in the system.
+//-Created by: Oskars
+//-Date: 02/06/19
+//-Last Modified by: Jon
+//-Date modified: 04/13/19
+//-Complete overhaul of page.
+//-Page is now split 70/30.
+
+extends layout_template_for_signin
 
 block content
-        .col-md-8.offset-md-4
-            //- Below will print whatever you have sent from app.js
-            h1.mb-3 #{title}
-            //- TODO create signin form
-            form(method='POST', action='users/signin')
-                .col-md-6.mb-3
-                    #form-group
-                            label Email:
-                            input.form-control(name='email', type='text')
-                    #form-group
-                            label Password:
-                            input.form-control(name='password', type='password')
-                    br
-                    input.btn.btn-primary(type='submit', value='Submit')
-            a(href='/register') Don't have an account?
+	style.
+		.alert{
+			z-index: 1 !important;
+			width: 50%;
+			left: 780px;
+		}
+	!= messages('message', locals)
+	if errors
+		div.alert #{error.msg}
+	br
+	br
+	br
+	br
+	br
+	div.dp-split-left(class='container-fluid')
+		br
+		br
+		br
+		br
+		br
+		img.img-fluid.dp-table(src='/images/SigninImage.png', alt='image', class='rounded mx-auto d-block' style='max-width: 80%')
+	div.dp-split-right(class='container-fluid')
+		h1(style='color: #570573').text-center.mb-3 #{title}
+		br
+		hr
+		br
+		div(class='row')
+			div.mx-auto(class='col-8')
+				form(method='POST', action='/users/login', class= 'form')
+					br
+					br
+					#form-group
+						input.form-control.dp-title-text(name='username', type='text', class='form-group', id='username-signin', placeholder='Name')
+					br
+					#form-group
+						input.form-control.dp-title-text(name='password', type='password', class='form-group', id='password-signin', placeholder='Password')
+						br
+						div(class='text-center')
+							a.dp-primary-text(href='/users/register') Don't Have an Account?
+							br
+							br
+							a.dp-primary-text.mt-3(href='/users/forgotpass') Forgot Password?
+							br
+							br
+							input.btn.col-md-5.dp-btn-orange-white-text.mt-3(type='submit', value='Log In', class='form-group text-center', id='submit-signin')
+	script.
+		localStorage.clear()
