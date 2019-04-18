@@ -1,3 +1,5 @@
+// THIS FILE CONTAINS ALL OF THE USER ROUTES
+
 const express = require('express')
 
 const router = express.Router()
@@ -159,8 +161,10 @@ router.get('/adminPanel', async function showAdminPanelPage(req, res) {
       }
     }
   }).then(function returnResults(results) {
+    // return the results to a variable
     return results
   })
+  // get pantry name and pantry image from database
   var pantry_data = await Pantry.findOne({
     attributes: ["pantry_name",'pantry_image_path'],
     where :{
@@ -180,8 +184,6 @@ router.get('/adminPanel', async function showAdminPanelPage(req, res) {
 })
 
 // Get request to localhost:3000/users/login
-// router.get('/dashboard',checkAuthentication,async function(req, res){
-// Get request to localhost:3000/users/login
 router.get('/dashboard', async function showDashboard(req, res) {
   const currentUserId = req.session.passport['user']
   //need pantry id
@@ -198,9 +200,6 @@ router.get('/dashboard', async function showDashboard(req, res) {
       pantry_id: currentPantryID.pantry_id
     }
   })
-  // console.log("pantry data for main:")
-  // console.log("=====================")
-  // console.log(JSON.stringify())
   //grabing data for the page
   var data = await algorithm.main2(
     window.expire_window,
@@ -211,6 +210,7 @@ router.get('/dashboard', async function showDashboard(req, res) {
   console.log('=======================')
   console.log(JSON.stringify(data))
   console.log(typeof data)
+  // render dashboard with give information
   res.render('dashboard', {
     title: 'Dashboard',
     data: data,
@@ -218,44 +218,23 @@ router.get('/dashboard', async function showDashboard(req, res) {
     storedData: JSON.stringify(data),
     people_cooking_for: window.people_cooking_for
   })
-  //Send individual recipe steps inside the array
-  // res.render('dashboard',{
-  //     title:"Dashboard",
-  //     results: results,
-  //     i_total: i_total,
-  //     i_measurement: i_measurement,
-  //     i_name: i_name,
-  //     i_expire: i_expire,
-  //     //pulls recipe_name into recipe_name for referencing in dashboard
-  //     recipe_name: recipe_name,
-  //     recipe_steps: recipe_steps,
-  //     rid: rid,
-  //     recipe_image_path: recipe_info[0]['recipe_image_path'],
-  //     //Send individual recipe steps inside the array
-  //     chicken_stir_fry_image: chicken_stir_fry_image,
-  //     pot_pie_image: chicken_pot_pie_image,
-  //     expirationTimeFrame: pantryExpirationTimeFrame.expire_window
-  //     //cook_it: cookit
-  // });
 })
 
-// catch(err){
-//   console.log("routes/users/dashboard err: " + err);
-// }
-// })
-
-// router.get('/cook/:id', checkAuthentication, async function(req, res) {
+// route for cooking ingredients. this gets called from jquery
 router.get('/cook/:id', async function(req, res) {
+  // get recipe ID being cooked
   const recipe = req.params.id
   console.log(
     '\n==================\ncook it route to with ' + recipe + ' id\n========================\n'
   )
+  // get current pantry ID
   var currentPantryID = await User.findOne({
     attributes: ['pantry_id'],
     where: {
       user_id: req.session.passport['user']
     }
   })
+  // get number of people we are cooking the recipe for
   var people = await Pantry.findOne({
     attributes: ['people_cooking_for']
   })
@@ -267,6 +246,7 @@ router.get('/cook/:id', async function(req, res) {
   var info = await cook_it.cook_it2(recipe, currentPantryID.pantry_id, people.people_cooking_for)
 
   console.log('REFRESH!')
+  // return to Jquery call
   res.redirect(req.get('referer'))
 })
 
@@ -338,10 +318,15 @@ router.post('/register', async function registerUser(req, res) {
   }
 })
 
+//User logout route
 router.get('/logout', function logout(req, res) {
+  //Destroy sessions
   req.logOut()
+  //show message on home page
   req.flash('success', 'Log Out Successful!')
+  // remove local cookies for user
   res.locals.user = null
+  // take user to login page
   res.redirect('/users/login')
 })
 
@@ -352,12 +337,14 @@ router.post('/saveCommunityRecipe', async function(req, res) {
   var recipe_id_to_be_copied = req.body['community_recipe_id']
   console.log(recipe_id_to_be_copied)
   try {
-    //grab data we need
+    // get recipe data that user is copying
     var recipe_data = await recipe_t.findOne({
       where: {
         recipe_id: recipe_id_to_be_copied
       }
     })
+
+    //get ingredients data of that recipe
     var ingredin_needed_data = await ingredients_in_a_recipe.findAll({
       where: {
         recipe_id: recipe_id_to_be_copied
@@ -369,8 +356,7 @@ router.post('/saveCommunityRecipe', async function(req, res) {
     console.log(JSON.stringify(recipe_data))
     console.log(JSON.stringify(ingredin_needed_data))
     var new_recipe_id
-    // var query =`INSERT INTO recipes (recipe_name,recipe_image_path,recipe_directions,pantry_id,num_people_it_feeds) VALUES ("${recipe_data.recipe_name}","${recipe_data.recipe_image_path}", "${recipe_data.recipe_directions}",${userPantryId},${recipe_data.num_people_it_feeds})`
-    // console.log(query)
+    // get recipe id of newly created recipe with current users pantry
     var recipe_id = await recipe_t.create({
       recipe_name: recipe_data.recipe_name,
       recipe_image_path: recipe_data.recipe_image_path,
@@ -380,10 +366,11 @@ router.post('/saveCommunityRecipe', async function(req, res) {
     })
 
     new_recipe_id = recipe_id['null']
-    // new_recipe_id = await db.query(query)
     console.log('new recipe')
     console.log('==========')
 
+    // create ingredients which were used in the copied recipe from community page
+    // link these ingredients with the user who is copyint the recipe
     for (var i = 0; i < ingredin_needed_data.length; i++) {
       await ingredients_in_a_recipe.create({
         recipe_id: new_recipe_id,
@@ -394,6 +381,7 @@ router.post('/saveCommunityRecipe', async function(req, res) {
       })
     }
 
+    //respond to Jquery event
     res.send('Success')
   } catch (e) {
     console.log(e)
@@ -402,30 +390,38 @@ router.post('/saveCommunityRecipe', async function(req, res) {
 
 // Add new user from admin panel
 router.post('/add', async function addNewUser(req, res) {
+  // get username
   const userName = await input_cleaner.email_cleaning(req.body.userName)
+  // get confirm username field
   const confirmUserName = await input_cleaner.email_cleaning(req.body.confirmUserName)
+  // make sure email is valid otherwise show error
   if(!(val.isEmail(userName)) && !(val.isEmail(confirmUserName))){
     req.flash('error', 'Please enter an email!')
     res.redirect('/users/adminPanel')
   }
   else{
+    //check if email matches confirm email fields if not show error
     if(userName != confirmUserName)
     {
       req.flash("error", "Emails do not match!")
       res.redirect('/users/adminPanel')
     }
     else{
-  
+      // check if email is already in use
       var does_user_exitst = await User.findAll({
         where: {
           user_email: userName
         }
       })
+      // if user exist show error
       if (does_user_exitst.length > 0) {
         req.flash('error', 'User has an account already!')
         res.redirect('/users/adminPanel')
       } else {
+        // sanitize input
         let userType = await input_cleaner.string_cleaning(req.body.userType)
+
+        // change usertype so the value can be rendered in the table and user can understant it
         switch (userType) {
           case 'volunteer':
             userType = 'Volunteer'
@@ -436,6 +432,7 @@ router.post('/add', async function addNewUser(req, res) {
           default:
             userType = 'N/A'
         }
+        // create new random users password
         var userPassword = await str_generater.generate({
           length: 8,
           charset: 'alphanumeric'
@@ -478,7 +475,9 @@ router.post('/add', async function addNewUser(req, res) {
 
 // Delete user from admin panel
 router.delete('/delete/:id', async function deleteUser(req, res) {
+  // get user id
   const userID = req.params.id
+  // create delete query
   const query = `DELETE FROM users WHERE user_id=${userID};`
   await db.query(query,err=>{
     if(err){
@@ -521,6 +520,7 @@ router.post('/resetPassword/:id', async function resetPassword(req, res) {
   const userId = req.params.id
   const userPassword = await input_cleaner.password_cleaning(req.body.password)
 
+  // get users email based on their password
   var email_address = await User.findOne({
     attributes: ['user_email'],
     where: {
@@ -542,8 +542,11 @@ router.post('/resetPassword/:id', async function resetPassword(req, res) {
   res.redirect('/users/adminPanel')
 })
 
+// show users settins page
 router.get('/settings', function showSettings(req, res) {
+  // get user id
   const currentUserId = req.session.passport['user']
+  // create query to get user data
   const query = `SELECT * FROM users WHERE user_id=${currentUserId};`
   db.query(query, function getUser(err, results) {
     if (err) throw err
@@ -558,9 +561,7 @@ router.post('/changeUsername', async function changeUsername(req, res) {
   // get currently logged in user
   const currentUserId = req.session.passport['user']
   // get passed in username
-  
   const newUsername = await input_cleaner.email_cleaning(req.body.newUsername)
-  
   //check if there is anything in the textbox
   if(newUsername.length > 0 && val.isEmail(req.body.newUsername))
   {
@@ -570,9 +571,10 @@ router.post('/changeUsername', async function changeUsername(req, res) {
         user_email: newUsername
       }
     })
-    // create sql query\
+    // check if email is taken
     if (is_email_taken == 0)
     {
+      // create query
       const query = `UPDATE users SET user_email='${newUsername}' WHERE user_id=${currentUserId}`
       db.query(query, function updateUser(err) {
         if (err) throw err
@@ -644,10 +646,10 @@ router.post('/addImg', upload.single('image'), async function addImg(req, res) {
   console.log("addoing image to pantry")
   console.log("++__+_+_+_+_+_+_+_+_+_+_+_+_+_+_")
   if (req.file) {
-    console.log(req.file)
+    // get the path where image was stored
     var imagePath = req.file.path
     var pantry = req.user.pantry_id
-    console.log('File Uploaded Successfully')
+    // generate current date to assing to the new image
     var currentDate =  Date.now()
     const new_path = "./public/images/" + currentDate + ".jpg"
     const no_dot = "/images/" + currentDate + ".jpg"
@@ -657,14 +659,12 @@ router.post('/addImg', upload.single('image'), async function addImg(req, res) {
         if (err) {
           console.log(err)
         }  
-      
+      // rename saved image
       fs.renameSync(imagePath, new_path)
-      
-      console.log('File Renamed.')
+      // create query
       query = `update pantry set pantry_image_path = "${no_dot}" where pantry_id = ${pantry};`
       await db.query(query,(results,err) =>{
         res.redirect('/users/adminPanel')
-
       })
     })
   } else {
@@ -673,14 +673,14 @@ router.post('/addImg', upload.single('image'), async function addImg(req, res) {
     req.flash("error", "Please choose a new image!")
     res.redirect('/users/adminPanel')
   }
-  
-  // res.redirect('/users/adminPanel')
 })
 
+// show forgot password page
 router.get('/forgotpass', function(req, res) {
   res.render('password_reset', {
     title: 'Reset Password'
   })
+  
 })
 router.post('/forgotpass', async function(req, res) {
   //pull email from the page

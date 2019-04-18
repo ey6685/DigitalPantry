@@ -152,7 +152,7 @@ async function main2(window, pantry_id,scale)
   {
     scale = -1;
   }
-  
+    
   console.log("Dates for pulling info");
   console.log("======================");
   console.log("today: " + today + "\nwindow: " + window_date);
